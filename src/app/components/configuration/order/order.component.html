@@ -24,7 +24,7 @@
   <div class="panel" #panel>
     <div class="row">
       <div class="col-md-12">
-        <div class="information">
+        <div *ngIf="order.machineOrder.length > 1" class="information">
           Abarbeitungsreihenfolge per Drag & Drop ändern:
         </div>
 
