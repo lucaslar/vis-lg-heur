@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="row justify-content-center align-items-center">
+    <form class="col-md-12">
+      <div class="form-group">
+        <label for="machineNrSelect">Example select</label>
+        <select class="form-control"
+                id="machineNrSelect"
+                [(ngModel)]="nrOfMachines"
+                name="nrOfMachines"
+                (change)="onMachineNrChange()">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <hr>
+
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-12">
+      <form (submit)="createNewOrder()">
+        <div class="input-group">
+          <input type="text"
+                 class="form-control"
+                 placeholder="Neuer Auftrag"
+                 name="orderNameInput"
+                 [(ngModel)]="orderNameInput"
+          >
+          <span class="input-group-btn">
+          <button class="btn btn-default sameline-button" type="submit" [disabled]="!orderNameInput || orderNameInput.trim().length === 0">
+            <i class="fa fa-plus-circle"></i>
+          </button>
+        </span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <app-order *ngFor="let order of orders"
+             [order]="order"
+             (deleteEmitter)="deleteOrder(order)"
+             (copyEmitter)="copyOrder(order)"
+             #orderComponent>
+  </app-order>
+</div>

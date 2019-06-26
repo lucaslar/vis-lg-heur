@@ -1,0 +1,56 @@
+<!--TODO on window resize -->
+<div class="card" (window:resize)="1">
+
+  <div class="accordion" #accordion (click)="showOrHideOrder()">
+    <div class="row align-items-center">
+      <div class="col-12">
+        <button class="triangle_expand_collapse" #button_expand_collapse>
+          <i class="fas fa-angle-right"></i>
+        </button>
+        {{order.name}}
+        <span class="information">
+          ({{order.id}})
+        </span>
+        <button class="pull-right" (click)="deleteOrder()">
+          <i class="fa fa-trash"></i>
+        </button>
+        <button class="pull-right" (click)="copyOrder()">
+          <i class="fa fa-clone"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" #panel>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="information">
+          Abarbeitungsreihenfolge per Drag & Drop ändern:
+        </div>
+
+        <div cdkDropList class="machines-list" (cdkDropListDropped)="drop($event)">
+          <div class="machine-box row" *ngFor="let machineNr of order.machineOrder" cdkDrag>
+            <div class="col-sm-8">
+              Maschine {{machineNr}}
+            </div>
+
+            <!--TODO on number change-->
+
+            <div class="col-sm-4 input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fas fa-stopwatch"></i>
+                  </span>
+              </div>
+              <input class="form-control" type="number" value="{{order.timesOnMachines.get(machineNr)}}"
+                     id="example-number-input">
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
