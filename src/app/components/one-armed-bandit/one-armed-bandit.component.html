@@ -1,0 +1,73 @@
+<div class="page">
+  <div class="container">
+    <div class="row h-100 align-items-center">
+      <div class="col-sm-12 text-center my-auto">
+        <div class="row justify-content-center">
+          <div class="col-sm-6 col-md-5 col-lg-4 paramsBox">
+
+            <div class="text-center">
+              <h4>Parameter festlegen</h4>
+            </div>
+            <hr>
+
+            <div class="text-left params" #params>
+              <div class="icon-holder"
+                   (click)="onParamClicked(0)"
+                   (mouseenter)="onParamHover(0)"
+                   (mouseleave)="onParamHover(0)">
+                <div class="text-center">
+                  <i class="fas fa-tasks"></i>
+                </div>
+                Alpha
+              </div>
+              <br>
+              <div class="icon-holder"
+                   (click)="onParamClicked(1)"
+                   (mouseenter)="onParamHover(1)"
+                   (mouseleave)="onParamHover(1)">
+                <div class="text-center">
+                  <i class="fas fa-calendar-times"></i>
+                </div>
+                Beta
+              </div>
+              <br>
+              <div class="icon-holder"
+                   (click)="onParamClicked(2)"
+                   (mouseenter)="onParamHover(2)"
+                   (mouseleave)="onParamHover(2)">
+                <div class="text-center">
+                  <i class="fas fa-stopwatch"></i>
+                </div>
+                Gamma
+              </div>
+            </div>
+
+            <div class="text-center status">
+              <div #statusicons [hidden]="isSubmitShown">
+                <i class="fas fa-tasks"
+                   (click)="onParamClicked(0)"
+                   (mouseenter)="onParamHover(0)"
+                   (mouseleave)="onParamHover(0)">
+                </i>
+                <i class="fas fa-calendar-times"
+                  (click)="onParamClicked(1)"
+                  (mouseenter)="onParamHover(1)"
+                  (mouseleave)="onParamHover(1)">
+                </i>
+                <i class="fas fa-stopwatch"
+                  (click)="onParamClicked(2)"
+                  (mouseenter)="onParamHover(2)"
+                  (mouseleave)="onParamHover(2)">
+                </i>
+              </div>
+              <div #submit [hidden]="!isSubmitShown" class="submit">
+                <a>Weiter</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+hr {
+  border-top: 1px solid var(--color-grey-font);
+}
+
+h4, .icon-holder {
+  color: var(--color-grey-font);
+}
+
+.page {
+  background: lightblue;
+  -webkit-background-size: cover;
+  background-size: cover;
+}
+
+.container {
+  height: 100vh;
+  font-size: 1.5em;
+}
+
+.params, .icon-holder, .icon-holder div {
+  display: inline-block;
+}
+
+.icon-holder div {
+  width: 1.5em;
+}
+
+.paramsBox {
+  background-color: var(--color-white-container);
+  padding: 0.75em;
+  border-radius: 1em;
+  margin: 1.5em;
+}
+
+.icon-holder, .submit, i {
+  cursor: pointer;
+}
+
+.submit:hover, .hover {
+  color: var(--color-grey-font) !important;
+}
+
+.submit {
+  transition: 200ms !important;
+}
+
+.icon-holder, .status * {
+  transition: 0.5s;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.status {
+  margin-top: 1em;
+  background-color: var(--color-white-container);
+  border-radius: 2em;
+  color: transparent;
+}
+
+.status div i {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+}
