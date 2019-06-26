@@ -2,3 +2,54 @@
 @import "~font-awesome/css/font-awesome.css";
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+html, body {
+  height: 100%;
+}
+
+:root {
+  --color-main: #224470;
+  --color-okay: #006b1c;
+  --color-warning: #9c0500;
+  --color-grey-font: #636363;
+  --color-black-container: rgba(0, 0, 0, 0.7);
+  --color-light-black-container: rgba(0, 0, 0, 0.3);
+  --color-white-container: rgba(255, 255, 255, 0.7);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  top: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.status-ok {
+  color: var(--color-okay) !important;
+}
+
+.status-warn {
+  color: var(--color-warning) !important;
+}
+
+button {
+  border: none;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+  padding: 0.5em;
+  background: transparent;
+  color: var(--color-main);
+}
+
+button, button span {
+  transition: 200ms;
+}
