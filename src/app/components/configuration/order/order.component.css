@@ -1,9 +1,9 @@
 .information {
   color: grey !important;
-  font-size: small;
 }
 
 .panel .information {
+  font-size: small;
   padding-left: 0.75em;
 }
 

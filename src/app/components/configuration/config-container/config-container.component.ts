@@ -32,6 +32,7 @@ export class ConfigContainerComponent {
 
   createNewOrder(): void {
     const order = new Order(this.orderNameInput);
+    this.orderNameInput = undefined;
     this.generateRandomOrderData(order);
     this.addOrder(order);
   }
