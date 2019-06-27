@@ -2,8 +2,7 @@
 <div class="card" (window:resize)="1">
 
   <div class="accordion" #accordion (click)="showOrHideOrder()">
-    <div class="row align-items-center">
-      <div class="col-12">
+    <div class="align-items-center">
         <button class="triangle_expand_collapse" #button_expand_collapse>
           <i class="fas fa-angle-right"></i>
         </button>
@@ -18,12 +17,9 @@
           <i class="fa fa-clone"></i>
         </button>
       </div>
-    </div>
   </div>
 
   <div class="panel" #panel>
-    <div class="row">
-      <div class="col-md-12">
         <div *ngIf="order.machineOrder.length > 1" class="information">
           Abarbeitungsreihenfolge per Drag & Drop ändern:
         </div>
@@ -49,8 +45,6 @@
           </div>
         </div>
 
-      </div>
-    </div>
   </div>
 
 </div>
