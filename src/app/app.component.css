@@ -1,0 +1,32 @@
+div.navbar-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+
+mat-toolbar, mat-toolbar i {
+  background-color: var(--color-main);
+  color: white;
+}
+
+.text-right {
+  width: 100%;
+}
+
+.navbar-toggle+* {
+  padding-left: 0.5em;
+}
+
+.is-mobile mat-toolbar {
+  position: fixed;
+  z-index: 2;
+}
+
+mat-sidenav-container {
+  flex: 1;
+}

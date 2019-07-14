@@ -9,13 +9,19 @@ import {FormsModule} from '@angular/forms';
 import {ConfigContainerComponent} from './components/configuration/config-container/config-container.component';
 import {OrderComponent} from './components/configuration/order/order.component';
 import {MaterialModule} from './modules/material.module';
+import { HeaderComponent } from './components/layout/header/header.component';
+import { InfoPopUpComponent } from './components/layout/info-pop-up/info-pop-up.component';
+import { NavListContentComponent } from './components/layout/nav-list-content/nav-list-content.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OneArmedBanditComponent,
     ConfigContainerComponent,
-    OrderComponent
+    OrderComponent,
+    HeaderComponent,
+    InfoPopUpComponent,
+    NavListContentComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +31,8 @@ import {MaterialModule} from './modules/material.module';
     MaterialModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [InfoPopUpComponent]
 })
 export class AppModule {
 }

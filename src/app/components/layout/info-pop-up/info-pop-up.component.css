@@ -1,0 +1,18 @@
+button {
+  padding: 0;
+}
+
+table {
+  width: 100%;
+}
+
+table tr td:first-child {
+  vertical-align: top;
+  width: 1px;
+  padding-right: 1em;
+}
+
+h2, h3 {
+  color: var(--color-main);
+}
+

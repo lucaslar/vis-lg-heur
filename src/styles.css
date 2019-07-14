@@ -16,22 +16,6 @@ html, body {
   --color-white-container: rgba(255, 255, 255, 0.7);
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  top: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-  -webkit-border-radius: 2em;
-  -moz-border-radius: 2em;
-  border-radius: 2em;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
 .status-ok {
   color: var(--color-okay) !important;
 }
@@ -52,4 +36,8 @@ button {
 
 button, button span {
   transition: 200ms;
+}
+
+a i {
+  padding-right: 0.5em;
 }
