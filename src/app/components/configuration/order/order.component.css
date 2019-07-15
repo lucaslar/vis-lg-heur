@@ -1,5 +1,5 @@
 .information {
-  color: grey !important;
+  color: var(--color-grey-font) !important;
 }
 
 .panel .information {

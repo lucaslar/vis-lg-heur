@@ -1,4 +1,4 @@
 .nav-group-description {
-  color: grey;
+  color: var(--color-grey-font);
   padding: 12px 1em;
 }
