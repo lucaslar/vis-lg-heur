@@ -12,17 +12,22 @@ mat-toolbar {
   background-color: var(--color-main);
 }
 
-mat-toolbar * {
-  color: white;
-}
-
 mat-toolbar button i {
+  color: white;
   font-size: large;
 }
 
-mat-toolbar span {
-  padding-left: 8px;
+.config {
+  background: white;
+  border: none;
+  padding: 0 1em;
+  border-radius: 2em;
   font-size: small;
+}
+
+.config, .config span {
+  color: var(--color-grey-font);
+
 }
 
 .text-right {
