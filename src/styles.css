@@ -16,6 +16,7 @@ html, body {
   --color-white-container: rgba(255, 255, 255, 0.7);
 }
 
+/* TODO Used? */
 .status-ok {
   color: var(--color-okay) !important;
 }
@@ -24,18 +25,8 @@ html, body {
   color: var(--color-warning) !important;
 }
 
-button {
-  border: none;
-  -webkit-border-radius: 2em;
-  -moz-border-radius: 2em;
-  border-radius: 2em;
-  padding: 0.5em;
-  background: transparent;
+button, button span, button i {
   color: var(--color-main);
-}
-
-button, button span {
-  transition: 200ms;
 }
 
 a i {

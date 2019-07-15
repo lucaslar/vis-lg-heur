@@ -9,7 +9,6 @@ import {FormsModule} from '@angular/forms';
 import {ConfigContainerComponent} from './components/configuration/config-container/config-container.component';
 import {OrderComponent} from './components/configuration/order/order.component';
 import {MaterialModule} from './modules/material.module';
-import { HeaderComponent } from './components/layout/header/header.component';
 import { InfoPopUpComponent } from './components/layout/info-pop-up/info-pop-up.component';
 import { NavListContentComponent } from './components/layout/nav-list-content/nav-list-content.component';
 
@@ -19,7 +18,6 @@ import { NavListContentComponent } from './components/layout/nav-list-content/na
     OneArmedBanditComponent,
     ConfigContainerComponent,
     OrderComponent,
-    HeaderComponent,
     InfoPopUpComponent,
     NavListContentComponent
   ],
