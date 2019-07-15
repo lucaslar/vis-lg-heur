@@ -7,18 +7,21 @@
     </button>
 
     <!-- TODO: Add action -->
-    <button matTooltip="Aktuelle Konfiguration als Formel"
-            class="config">
-      <span>&alpha;</span>
-      |
-      <span>&beta;</span>
-      |
-      <span>&gamma;</span>
-    </button>
+    <!-- TODO: Colorize -->
+    <div>
+      <button matTooltip="Aktuelle Konfiguration als Formel"
+              class="config">
+        <span>&alpha;</span>
+        |
+        <span>&beta;</span>
+        |
+        <span>&gamma;</span>
+      </button>
+    </div>
 
     <div class="text-right">
-      <!-- TODO: Nav home -->
       <button mat-icon-button
+              routerLink="welcome"
               matTooltip="Zur Startseite">
         <i class="fas fa-home"></i>
       </button>

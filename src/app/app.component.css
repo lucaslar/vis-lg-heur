@@ -17,6 +17,10 @@ mat-toolbar button i {
   font-size: large;
 }
 
+.navbar-toggle+div {
+  padding-left: 0.5em;
+}
+
 .config {
   background: white;
   border: none;

@@ -10,6 +10,7 @@ import {OrderComponent} from './components/configuration/order/order.component';
 import {MaterialModule} from './modules/material.module';
 import { InfoPopUpComponent } from './components/layout/info-pop-up/info-pop-up.component';
 import { NavListContentComponent } from './components/layout/nav-list-content/nav-list-content.component';
+import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { NavListContentComponent } from './components/layout/nav-list-content/na
     ConfigContainerComponent,
     OrderComponent,
     InfoPopUpComponent,
-    NavListContentComponent
+    NavListContentComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
