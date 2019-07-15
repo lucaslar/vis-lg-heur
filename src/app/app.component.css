@@ -8,18 +8,25 @@ div.navbar-container {
   right: 0;
 }
 
-
-mat-toolbar, mat-toolbar i {
+mat-toolbar {
   background-color: var(--color-main);
+}
+
+mat-toolbar * {
   color: white;
+}
+
+mat-toolbar button i {
+  font-size: large;
+}
+
+mat-toolbar span {
+  padding-left: 8px;
+  font-size: small;
 }
 
 .text-right {
   width: 100%;
-}
-
-.navbar-toggle+* {
-  padding-left: 0.5em;
 }
 
 .is-mobile mat-toolbar {
@@ -30,3 +37,4 @@ mat-toolbar, mat-toolbar i {
 mat-sidenav-container {
   flex: 1;
 }
+

@@ -1,23 +1,33 @@
 <div [class.is-mobile]="mobileQuery.matches" class="navbar-container">
   <mat-toolbar>
-    <button
-      class="navbar-toggle"
-      (click)="snav.toggle()">
+    <button mat-icon-button
+            class="navbar-toggle"
+            (click)="snav.toggle()">
       <i class="fas fa-bars"></i>
     </button>
+
+    <!-- TODO Add text or delete-->
+    <span>Add text</span>
+
     <div class="text-right">
+      <!-- TODO: Nav home -->
+      <button mat-icon-button
+              matTooltip="Zur Startseite">
+        <i class="fas fa-home"></i>
+      </button>
       <!-- TODO: Extract to info pop up? -->
-      <button matTooltip="Projekt auf GitHub öffnen"
+      <button mat-icon-button
+              matTooltip="Projekt auf GitHub öffnen"
               (click)="openGithubPage()">
         <i class="fab fa-github"></i>
       </button>
-      <button matTooltip="Über dieses Programm"
+      <button mat-icon-button
+              matTooltip="Über dieses Programm"
               (click)="openInfoDialog()">
         <i class="fas fa-info-circle"></i>
       </button>
     </div>
   </mat-toolbar>
-
   <mat-sidenav-container
     [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
