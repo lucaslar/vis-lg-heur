@@ -14,6 +14,7 @@ import { MachineNrPopupComponent } from './components/dialogs/machine-nr-popup/m
 import { AboutThisAppComponent } from './components/dialogs/about-this-app/about-this-app.component';
 import { YesNoPopUpComponent } from './components/dialogs/yes-no-pop-up/yes-no-pop-up.component';
 import { IconNumberInputComponent } from './components/shared/icon-number-input/icon-number-input.component';
+import { JobsTerminationComponent } from './components/pages/beta/jobs-termination/jobs-termination.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { IconNumberInputComponent } from './components/shared/icon-number-input/
     MachineNrPopupComponent,
     AboutThisAppComponent,
     YesNoPopUpComponent,
-    IconNumberInputComponent
+    IconNumberInputComponent,
+    JobsTerminationComponent
   ],
   imports: [
     BrowserModule,

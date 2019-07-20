@@ -4,6 +4,8 @@ export class Job {
   name: string;
   machineTimes: MachineTimeForJob[];
 
+  dueDate: number;
+
   constructor(_name: string) {
     this.name = _name;
   }
