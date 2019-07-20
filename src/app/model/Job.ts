@@ -1,5 +1,4 @@
 export class Job {
-  // TODO: Make private
 
   id: number;
   name: string;
@@ -13,7 +12,6 @@ export class Job {
 
 export class MachineTimeForJob {
 
-  // TODO: Make private
   machineNr: number;
   timeOnMachine: number;
 
