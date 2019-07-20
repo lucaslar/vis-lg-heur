@@ -14,6 +14,7 @@ export class IconNumberInputComponent implements OnInit {
   @Input() readonly value: number;
   @Input() readonly min: number;
   @Input() readonly max: number;
+  @Input() readonly isShowValueTooltip: string;
   @Input() readonly minErrorText: string;
   @Input() readonly maxErrorText: string;
   @Input() readonly placeholder: string;
@@ -77,6 +78,8 @@ export class IconNumberInputComponent implements OnInit {
         } else {
           message = 'Bitte geben Sie einen positiven Wert ein';
         }
+      } else if (this.isShowValueTooltip) {
+        message += this.placeholder ? (this.placeholder + ': ' + value) : value;
       }
 
       return message;
