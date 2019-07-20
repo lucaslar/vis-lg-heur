@@ -1,10 +1,8 @@
-<h1 mat-dialog-title>
-  <!-- TODO: Add colors, too? -->
+<h1 mat-dialog-title [ngClass]="{'status-warning' : data.type === type.ERROR}">
   <span class="pull-right">
     <mat-icon *ngIf="data.type === type.INFO" class="align-middle">info_outline</mat-icon>
     <mat-icon *ngIf="data.type === type.QUESTION" class="align-middle">help_outline</mat-icon>
-    <!-- TODO: Outline instead of filled: -->
-    <mat-icon *ngIf="data.type === type.WARNING" class="align-middle">warning_outline</mat-icon>
+    <mat-icon *ngIf="data.type === type.ERROR" class="align-middle">error_outline</mat-icon>
   </span>
   {{data.header}}
 </h1>

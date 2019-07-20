@@ -13,12 +13,12 @@ html, body {
   --color-grey-font: #747474; /* Material grey */
 }
 
-/* TODO classes and thus colors used? */
+/* TODO class and color used? */
 .status-ok {
   color: var(--color-okay) !important;
 }
 
-.status-warn {
+.status-warning {
   color: var(--color-warning) !important;
 }
 
