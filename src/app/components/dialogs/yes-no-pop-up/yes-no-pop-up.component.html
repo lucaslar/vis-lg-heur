@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>
+  <!-- TODO: Add colors, too? -->
+  <span class="pull-right">
+    <mat-icon *ngIf="data.type === type.INFO" class="align-middle">info_outline</mat-icon>
+    <mat-icon *ngIf="data.type === type.QUESTION" class="align-middle">help_outline</mat-icon>
+    <!-- TODO: Outline instead of filled: -->
+    <mat-icon *ngIf="data.type === type.WARNING" class="align-middle">warning_outline</mat-icon>
+  </span>
+  {{data.header}}
+</h1>
+
+<!-- content as paragraphs-->
+<mat-dialog-content class="mat-typography">
+  <p *ngFor="let t of data.text">
+    {{t}}
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Nein</button>
+  <button mat-button [mat-dialog-close]="true">Ja</button>
+</mat-dialog-actions>
