@@ -7,7 +7,7 @@ import {JobsExistGuard} from '../guards/jobs-exist.guard';
 
 const routes: Routes = [
   {path: 'alpha', component: JobsAndMachinesComponent},
-  {path: 'beta/jobs-termination', canLoad: [JobsExistGuard], component: JobsTerminationComponent},
+  {path: 'beta/jobs-termination', canActivate: [JobsExistGuard], component: JobsTerminationComponent},
   {path: '', component: WelcomeComponent},
   {path: '**', redirectTo: ''}
 ];
