@@ -44,6 +44,11 @@ button:disabled span, button:disabled i {
   text-align: left !important;
 }
 
+.mat-checkbox.mat-accent.small .mat-checkbox-inner-container {
+  margin: 4px 8px auto 0;
+  border-color: #9c0500;
+}
+
 .mat-content {
   padding-right: 0.75em;
 }
