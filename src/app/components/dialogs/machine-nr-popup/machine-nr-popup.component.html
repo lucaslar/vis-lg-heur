@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Maschinenzahl ändern</h1>
+
+<mat-form-field>
+  <mat-label>Maschinenzahl</mat-label>
+  <mat-select [(value)]="machineNr">
+    <mat-option *ngFor="let mNr of machines" [value]="mNr">
+      {{mNr}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Verwerfen</button>
+  <button mat-button
+          [mat-dialog-close]="machineNr"
+          [disabled]="storage.nrOfMachines === machineNr">
+    Speichern
+  </button>
+</mat-dialog-actions>
