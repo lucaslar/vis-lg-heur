@@ -38,7 +38,7 @@ export class JobsAndMachinesComponent implements OnInit {
   createNewJob(): void {
     const job = new Job(this.jobNameInput);
     this.jobNameInput = undefined;
-    this.generateRandomMachineTimesForJob(job);
+    this.generateMachineOrderForJob(job);
     if (this.storage.nrOfMachines > 1 && this.isShuffleMachineOrder) {
       job.machineTimes = job.machineTimes.sort(() => Math.random() - 0.5);
     }
@@ -205,7 +205,7 @@ export class JobsAndMachinesComponent implements OnInit {
     this.storage.jobs = this.jobs;
   }
 
-  private generateRandomMachineTimesForJob(job: Job): void {
+  private generateMachineOrderForJob(job: Job): void {
     job.machineTimes = [];
     for (let i = 1; i <= this.storage.nrOfMachines; i++) {
       job.machineTimes.push(new MachineTimeForJob(
