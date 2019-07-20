@@ -10,10 +10,10 @@ html, body {
   --color-main: #224470;
   --color-okay: #006b1c;
   --color-warning: #9c0500;
-  --color-grey-font: #636363;
+  --color-grey-font: #747474; /* Material grey */
 }
 
-/* TODO Used? */
+/* TODO classes and thus colors used? */
 .status-ok {
   color: var(--color-okay) !important;
 }
@@ -24,8 +24,35 @@ html, body {
 
 button, button span, button i {
   color: var(--color-main);
+  -webkit-transition: .5s ;
+  -moz-transition: .5s;
+  -ms-transition: .5s;
+  -o-transition: .5s;
+  transition: .5s;
 }
 
-a i {
-  padding-right: 0.5em;
+button:disabled span, button:disabled i {
+  color: var(--color-grey-font)
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+  color: var(--color-main) !important;
+}
+
+.mat-checkbox-layout {
+  white-space: normal !important;
+  text-align: left !important;
+}
+
+.mat-content {
+  padding-right: 0.75em;
+}
+
+.larger-icon {
+  font-size: larger !important;
+}
+
+.left-top-corner-button {
+  /* For 24x24 icons in 40x40 buttons */
+  transform: translate(-8px, -8px);
 }
