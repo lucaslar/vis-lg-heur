@@ -56,10 +56,14 @@ export class IconNumberInputComponent implements OnInit {
       const value: number = +this.inputFieldRef.nativeElement.value;
       let message = '';
 
+      if (!this.isLegalValue) {
+        message = 'Dieser Wert wird nicht gespeichert! ';
+      }
+
       if (value && this.max && value > this.max && this.maxErrorText) {
-        message = this.maxErrorText + ' - ';
+        message += this.maxErrorText + ' - ';
       } else if (value && this.min && value < this.min && this.minErrorText) {
-        message = this.minErrorText + ' - ';
+        message += this.minErrorText + ' - ';
       }
 
       if (!value || !this.isLegalValue) {
