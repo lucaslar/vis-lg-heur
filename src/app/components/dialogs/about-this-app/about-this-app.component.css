@@ -1,0 +1,9 @@
+table {
+  width: 100%;
+}
+
+table tr td:first-child {
+  vertical-align: top;
+  width: 1px;
+  padding-right: 16px;
+}
