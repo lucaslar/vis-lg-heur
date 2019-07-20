@@ -1,4 +1,5 @@
-<div class="input-group">
+<div class="input-group"
+     matTooltip="{{currentTooltip}}">
   <div class="input-group-prepend">
   <span class="input-group-text"
         [ngClass]="{'status-warning' : !isLegalValue}">
@@ -15,5 +16,6 @@
                           event.charCode === 13) ?
                           null : event.charCode >= 48 && event.charCode <= 57"
          (change)="onNumberChange()"
+         [ngClass]="{'status-warning' : !isLegalValue}"
          #inputField/>
 </div>
