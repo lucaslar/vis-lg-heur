@@ -11,11 +11,12 @@ export class IconNumberInputComponent implements OnInit {
   @ViewChild('icon', {static: true}) icon: ElementRef;
 
   @Input() readonly iconClasses: string[];
+  @Input() readonly value: number;
   @Input() readonly min: number;
   @Input() readonly max: number;
   @Input() readonly minErrorText: string;
   @Input() readonly maxErrorText: string;
-  @Input() readonly value: number;
+  @Input() readonly placeholder: string;
 
   @Output() newValue: EventEmitter<number> = new EventEmitter();
 

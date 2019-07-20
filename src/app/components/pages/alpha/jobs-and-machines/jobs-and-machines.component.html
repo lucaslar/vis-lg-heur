@@ -140,9 +140,10 @@
                   [value]="machine.timeOnMachine"
                   [iconClasses]="['fas', 'fa-stopwatch']"
                   [min]="1"
+                  [placeholder]="'Dauer'"
                   (newValue)="onTimeOnMachineChange(machine, $event)"
                 ></app-icon-number-input>
-                <!-- TODO: Max = termination - sum-->
+                <!-- TODO: Max = due date - sum-->
               </div>
             </div>
           </div>
