@@ -1,55 +1,69 @@
 import {Injectable} from '@angular/core';
-import {Alpha} from '../model/params/Alpha';
-import {Gamma} from '../model/params/Gamma';
-import {Beta} from '../model/params/Beta';
+import {Job} from '../model/Job';
+import {MachineConfig} from '../model/MachineConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  // TODO: Rename?
-  private readonly PREFIX_KEY = 'VISLGHEUR_PARAM_';
+  private readonly PREFIX_KEY = 'VISLGHEUR_';
+  private readonly NR_OF_MACHINES = 'NR_OF_MACHINES';
+  private readonly JOBS = 'JOBS';
 
-  private readonly KEY_ALPHA = 'ALPHA';
-  private readonly KEY_BETA = 'BETA';
-  private readonly KEY_GAMMA = 'GAMMA';
-
-  // TODO Update this class using <T>?
-
-  areAllParamsConfigured(): boolean {
-    return !!this.getAlpha() && !!this.getBeta() && !!this.getGamma();
+  get nrOfMachines(): number {
+    return +localStorage.getItem(this.PREFIX_KEY + this.NR_OF_MACHINES);
   }
 
-  setAlpha(alpha: Alpha): void {
-    const value = JSON.stringify(alpha);
-    localStorage.setItem(this.storageKey(this.KEY_ALPHA), value);
+  set nrOfMachines(nrOfMachines: number) {
+    localStorage.setItem(this.PREFIX_KEY + this.NR_OF_MACHINES, nrOfMachines.toString());
   }
 
-  setBeta(beta: Beta): void {
-    const value = JSON.stringify(beta);
-    localStorage.setItem(this.storageKey(this.KEY_BETA), value);
+  get jobs(): Job[] {
+    return JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.JOBS));
   }
 
-  setGamma(gamma: Gamma): void {
-    const value = JSON.stringify(gamma);
-    localStorage.setItem(this.storageKey(this.KEY_GAMMA), value);
+  set jobs(jobs: Job[]) {
+    localStorage.setItem(this.PREFIX_KEY + this.JOBS, JSON.stringify(jobs));
   }
 
-  getAlpha(): Alpha {
-    return JSON.parse(localStorage.getItem(this.storageKey(this.KEY_ALPHA)));
+  get machineConfigParam(): MachineConfig {
+    if (this.jobs.length === 0) {
+      return MachineConfig.NONE;
+    } else if (this.nrOfMachines === 1) {
+      return MachineConfig.ONE_MACHINE;
+    } else if (this.isSameMachineOrderForEachJob()) {
+      return MachineConfig.FLOWSHOP;
+    } else {
+      return MachineConfig.JOBSHOP;
+    }
   }
 
-  getBeta(): Beta {
-    return JSON.parse(localStorage.getItem(this.storageKey(this.KEY_BETA)));
-  }
+  private isSameMachineOrderForEachJob(): boolean {
+    let lastCheckedIndex = 0;
+    // cannot be undefined in this place
+    const jobs = this.jobs;
+    // last item has already been checked
+    while (lastCheckedIndex < jobs.length - 1) {
 
-  getGamma(): Gamma {
-    return JSON.parse(localStorage.getItem(this.storageKey(this.KEY_GAMMA)));
-  }
+      const jobMachines = jobs[lastCheckedIndex].machineTimes.map(
+        machineTime => machineTime.machineNr
+      );
 
-  private storageKey(key: string): string {
-    return this.PREFIX_KEY + key;
+      for (let i = 1 + lastCheckedIndex; i < jobs.length; i++) {
+        const jobMachinesCompare = jobs[i].machineTimes.map(
+          machineTime => machineTime.machineNr
+        );
+        // Arrays have same length, assured by design
+        for (let j = 0; j < jobMachines.length; j++) {
+          if (jobMachines[j] !== jobMachinesCompare[j]) {
+            return false;
+          }
+        }
+      }
+      lastCheckedIndex++;
+    }
+    return true;
   }
 
 }
