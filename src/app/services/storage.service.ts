@@ -12,7 +12,8 @@ export class StorageService {
   private readonly JOBS = 'JOBS';
 
   get nrOfMachines(): number {
-    return +localStorage.getItem(this.PREFIX_KEY + this.NR_OF_MACHINES);
+    const nrOfMachines = localStorage.getItem(this.PREFIX_KEY + this.NR_OF_MACHINES);
+    return nrOfMachines ? +nrOfMachines : 1;
   }
 
   set nrOfMachines(nrOfMachines: number) {
@@ -20,7 +21,8 @@ export class StorageService {
   }
 
   get jobs(): Job[] {
-    return JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.JOBS));
+    const jobs = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.JOBS));
+    return jobs ? jobs : [];
   }
 
   set jobs(jobs: Job[]) {
@@ -28,7 +30,7 @@ export class StorageService {
   }
 
   get machineConfigParam(): MachineConfig {
-    if (this.jobs.length === 0) {
+    if (!this.jobs || this.jobs.length === 0) {
       return MachineConfig.NONE;
     } else if (this.nrOfMachines === 1) {
       return MachineConfig.ONE_MACHINE;

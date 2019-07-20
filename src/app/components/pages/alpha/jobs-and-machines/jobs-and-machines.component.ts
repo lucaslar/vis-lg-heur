@@ -29,8 +29,7 @@ export class JobsAndMachinesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const jobs = this.storage.jobs;
-    this._jobs = !jobs ? [] : jobs;
+    this._jobs = this.storage.jobs;
     this.isAutomaticallyGenerateTimes = true;
     this.isShuffleMachineOrder = false;
   }
