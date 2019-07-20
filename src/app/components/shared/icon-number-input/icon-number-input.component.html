@@ -1,0 +1,19 @@
+<div class="input-group">
+  <div class="input-group-prepend">
+  <span class="input-group-text">
+    <i #icon></i>
+  </span>
+  </div>
+  <!-- TODO: Alternative to onkeypress -->
+  <input class="form-control"
+         type="number"
+         value="{{value}}"
+         onkeypress="return(event.charCode === 8 ||
+                          event.charCode === 0 ||
+                          event.charCode === 13) ?
+                          null : event.charCode >= 48 && event.charCode <= 57"
+         (change)="onNumberChange()"
+         min="{{min}}"
+         max="{{max}}"
+         #inputField/>
+</div>
