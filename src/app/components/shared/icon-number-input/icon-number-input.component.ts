@@ -7,11 +7,15 @@ import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, O
 })
 export class IconNumberInputComponent implements OnInit {
 
+  isLegalValue = true;
+  _value: number;
+
   @ViewChild('inputField', {static: false}) inputFieldRef: ElementRef;
   @ViewChild('icon', {static: true}) icon: ElementRef;
 
+  @Output() newValue: EventEmitter<number> = new EventEmitter();
+
   @Input() readonly iconClasses: string[];
-  @Input() readonly value: number;
   @Input() readonly min: number;
   @Input() readonly max: number;
   @Input() readonly isShowValueTooltip: string;
@@ -19,9 +23,11 @@ export class IconNumberInputComponent implements OnInit {
   @Input() readonly maxErrorText: string;
   @Input() readonly placeholder: string;
 
-  @Output() newValue: EventEmitter<number> = new EventEmitter();
-
-  isLegalValue = true;
+  // Input setter in order to avoid 'expression has changed after it was checked' (tooltips).
+  @Input() set value(value) {
+    this._value = value;
+    this.changeDetector.detectChanges();
+  }
 
   constructor(private changeDetector: ChangeDetectorRef) {
   }
@@ -81,7 +87,6 @@ export class IconNumberInputComponent implements OnInit {
       } else if (this.isShowValueTooltip) {
         message += this.placeholder ? (this.placeholder + ': ' + value) : value;
       }
-
       return message;
     } else {
       return undefined;

@@ -9,7 +9,7 @@
   <!-- TODO: Alternative to onkeypress -->
   <input class="form-control"
          type="number"
-         value="{{value}}"
+         value="{{_value}}"
          placeholder="{{placeholder}}"
          (keyup)="checkValidityOfNumber()"
          onkeypress="return(event.charCode === 8 ||
