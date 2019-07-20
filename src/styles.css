@@ -61,3 +61,7 @@ button:disabled span, button:disabled i {
   /* For 24x24 icons in 40x40 buttons */
   transform: translate(-8px, -8px);
 }
+
+.job-id {
+  color: var(--color-grey-font);
+}

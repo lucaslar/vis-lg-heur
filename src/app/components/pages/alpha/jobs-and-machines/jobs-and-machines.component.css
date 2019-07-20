@@ -23,9 +23,9 @@ mat-expansion-panel-header div {
 }
 
 .job-id {
+  /* additional to global style */
   /* 13.2 = width of trash icon. Calc: space from trash icon to clone icon (40px = button width) */
   margin-left: calc((40px - 13.2px) / 2);
-  color: var(--color-grey-font);
 }
 
 .machine-config-container {
