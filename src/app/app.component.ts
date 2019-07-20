@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
-import {MatDialog} from '@angular/material';
-import {InfoPopUpComponent} from './components/layout/info-pop-up/info-pop-up.component';
+import {MatDialog, MatSidenav} from '@angular/material';
+import {AboutThisAppComponent} from './components/dialogs/about-this-app/about-this-app.component';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +10,7 @@ import {InfoPopUpComponent} from './components/layout/info-pop-up/info-pop-up.co
 })
 export class AppComponent {
 
+  @ViewChild('snav', {static: false}) private sideNav: MatSidenav;
   mobileQuery: MediaQueryList;
 
   constructor(media: MediaMatcher,
@@ -19,7 +20,7 @@ export class AppComponent {
   }
 
   openInfoDialog(): void {
-    this.dialog.open(InfoPopUpComponent);
+    this.dialog.open(AboutThisAppComponent);
   }
 
   // TODO: Extract to info pop up?

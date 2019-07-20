@@ -17,21 +17,16 @@ mat-toolbar button i {
   font-size: large;
 }
 
-.navbar-toggle+div {
-  padding-left: 0.5em;
+.navbar-toggle + div {
+  padding-left: 8px;
 }
 
 .config {
   background: white;
   border: none;
-  padding: 0 1em;
-  border-radius: 2em;
+  padding: 0 16px;
+  border-radius: 32px;
   font-size: small;
-}
-
-.config, .config span {
-  color: var(--color-grey-font);
-
 }
 
 .text-right {
@@ -47,3 +42,10 @@ mat-sidenav-container {
   flex: 1;
 }
 
+::ng-deep .mat-focused .mat-form-field-label {
+  color: var(--color-main) !important;
+}
+
+::ng-deep.mat-form-field-ripple {
+  background-color: var(--color-main) !important;;
+}

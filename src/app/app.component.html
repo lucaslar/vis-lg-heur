@@ -11,11 +11,7 @@
     <div>
       <button matTooltip="Aktuelle Konfiguration als Formel"
               class="config">
-        <span>&alpha;</span>
-        |
-        <span>&beta;</span>
-        |
-        <span>&gamma;</span>
+        &alpha; | &beta; | &gamma;
       </button>
     </div>
 
@@ -40,16 +36,19 @@
   </mat-toolbar>
   <mat-sidenav-container
     [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
-                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+    <mat-sidenav #snav
+                 [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches"
+                 fixedTopGap="56"
+                 [opened]="!mobileQuery.matches">
       <mat-nav-list>
         <!-- Sidenav list: -->
         <app-nav-list-content></app-nav-list-content>
       </mat-nav-list>
     </mat-sidenav>
 
+    <!-- App content: -->
     <mat-sidenav-content>
-      <!-- App content: -->
       <router-outlet></router-outlet>
     </mat-sidenav-content>
 
