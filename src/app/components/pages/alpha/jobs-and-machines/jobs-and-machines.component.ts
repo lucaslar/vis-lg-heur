@@ -222,7 +222,7 @@ export class JobsAndMachinesComponent implements OnInit {
         }
       );
     });
-    this.openSnackBar(2, 'Abarbeitungsreihenfolge sortiert');
+    this.openSnackBar(2, 'Abarbeitungsreihenfolgen sortiert');
     this.storage.jobs = this.jobs;
   }
 
