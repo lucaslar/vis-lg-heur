@@ -2,13 +2,12 @@
   &alpha;: Maschinenumgebung
 </div>
 
-<a mat-list-item routerLink="alpha">
+<a mat-list-item routerLink="alpha" (click)="onListItemTapped()">
   <i class="fas fa-tasks"></i>
   Maschinen und Aufträge
 </a>
 
 <!-- TODO: Add symbols for each status? -->
-<!-- TODO: Close view after successful click if view is 'over' -->
 
 <mat-divider></mat-divider>
 
@@ -16,7 +15,7 @@
   &beta;: Ablaufeigenschaften
 </div>
 
-<a mat-list-item routerLink="beta/jobs-termination">
+<a mat-list-item routerLink="beta/jobs-termination" (click)="onListItemTapped()">
   <i class="far fa-calendar-alt"></i>
   Aufträge terminieren
 </a>
@@ -27,7 +26,7 @@
   &gamma;: Zielfunktion
 </div>
 
-<a mat-list-item routerLink=".">
+<a mat-list-item routerLink="." (click)="onListItemTapped()">
   <i class="fas fa-chart-line"></i>
   Zielfunktion festlegen
 </a>

@@ -10,7 +10,7 @@ import {AboutThisAppComponent} from './components/dialogs/about-this-app/about-t
 })
 export class AppComponent {
 
-  @ViewChild('snav', {static: false}) private sideNav: MatSidenav;
+  @ViewChild('snav', {static: false}) private snav: MatSidenav;
   mobileQuery: MediaQueryList;
 
   constructor(media: MediaMatcher,
@@ -26,5 +26,11 @@ export class AppComponent {
   // TODO: Extract to info pop up?
   openGithubPage(): void {
     window.open('https://github.com/lucaslar/vis-lg-heur');
+  }
+
+  onListItemTapped(): void {
+    if (this.snav.mode === 'over') {
+      this.snav.close().then();
+    }
   }
 }
