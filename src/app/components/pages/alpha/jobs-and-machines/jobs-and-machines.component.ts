@@ -14,7 +14,7 @@ import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 @Component({
   selector: 'app-jobs-and-machines',
   templateUrl: './jobs-and-machines.component.html',
-  styleUrls: ['./jobs-and-machines.component.css']
+  styleUrls: ['./jobs-and-machines.component.css', '../../pages-styles.css']
 })
 export class JobsAndMachinesComponent implements OnInit {
 

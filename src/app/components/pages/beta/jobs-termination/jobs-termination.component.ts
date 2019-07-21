@@ -11,7 +11,7 @@ import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 @Component({
   selector: 'app-jobs-termination',
   templateUrl: './jobs-termination.component.html',
-  styleUrls: ['./jobs-termination.component.css']
+  styleUrls: ['./jobs-termination.component.css', '../../pages-styles.css']
 })
 export class JobsTerminationComponent implements OnInit {
 
