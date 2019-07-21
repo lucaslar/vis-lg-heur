@@ -1,9 +1,14 @@
-table {
-  width: 100%;
+.thesis-information {
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  background-color: #eeeeee;
 }
 
-table tr td:first-child {
-  vertical-align: top;
-  width: 1px;
-  padding-right: 16px;
+.thesis-information .row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.thesis-information .row :first-child {
+  font-weight: bolder;
 }
