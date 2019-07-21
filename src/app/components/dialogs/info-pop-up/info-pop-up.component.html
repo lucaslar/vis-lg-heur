@@ -9,11 +9,25 @@
 
 <!-- content as paragraphs-->
 <mat-dialog-content class="mat-typography">
-  <p *ngFor="let t of data.text">
-    {{t}}
-  </p>
+
+  <div *ngIf="data.listingHeader && data.listingHeader.length; else text">
+    <h3>{{data.listingHeader}}:</h3>
+    <ul>
+      <li *ngFor="let t of data.text">
+        {{t}}
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #text>
+    <p *ngFor="let t of data.text">
+      {{t}}
+    </p>
+  </ng-template>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Schließen</button>
 </mat-dialog-actions>
+<!-- TODO: Unify with Yes no?-->
