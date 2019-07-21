@@ -293,6 +293,7 @@ export class JobsAndMachinesComponent implements OnInit {
   }
 
   private addNewMachineTimesToJob(job: Job): string | undefined {
+    const previousDueDate = job.dueDate;
     const nrOfMachines = this.storage.nrOfMachines;
     let currentTotalTime = job.machineTimes
       .map(m => m.timeOnMachine ? m.timeOnMachine : 1)
@@ -320,7 +321,7 @@ export class JobsAndMachinesComponent implements OnInit {
     }
 
     if (job.dueDate && !isDueDateStillPossible) {
-      return 'Auftrag \'' + job.name + '\' (ID: ' + job.id + '): aktualisiert auf: ' + job.dueDate + '';
+      return 'Auftrag \'' + job.name + '\' (ID: ' + job.id + '): von ' + previousDueDate + ' aktualisiert auf ' + job.dueDate;
     }
   }
 
