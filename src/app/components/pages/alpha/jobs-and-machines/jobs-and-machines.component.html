@@ -1,82 +1,80 @@
-<div class="container">
+<!-- TODO: Specify more rows? -->
+<!-- TODO: Own Job component -->
+<!-- TODO: Implement locked functions -->
 
-  <!-- TODO: Specify more rows? -->
-  <!-- TODO: Own Job component -->
-  <!-- TODO: Implement locked functions -->
+<div class="row">
+  <div class="col-12 text-center">
 
-  <div class="row">
-    <div class="col-12 text-center">
-
-      <!-- Change machine number pop-up and information about current config. -->
-      <div class="machine-config-container">
-        <button mat-icon-button
-                matTooltip="Weitere Informationen zur aktuellen Maschinenumgebung"
-                (click)="openMachinesDescription()"
-                class="pull-left align-top left-top-corner-button">
-          <mat-icon class="material-icons">
-            help_outline
-          </mat-icon>
-        </button>
-        <span matTooltip="Anzahl an Maschinen (aktuell {{storage.nrOfMachines}}) ändern"
-              class="machine-number-container"
-              (click)="openMachinePopUp()">
+    <!-- Change machine number pop-up and information about current config. -->
+    <div class="machine-config-container">
+      <button mat-icon-button
+              matTooltip="Weitere Informationen zur aktuellen Maschinenumgebung"
+              (click)="openMachinesDescription()"
+              class="pull-left align-top left-top-corner-button">
+        <mat-icon class="material-icons">
+          help_outline
+        </mat-icon>
+      </button>
+      <span matTooltip="Anzahl an Maschinen (aktuell {{storage.nrOfMachines}}) ändern"
+            class="machine-number-container"
+            (click)="openMachinePopUp()">
           <!-- One line in order to avoid additional spaces in document: -->
           <span class="machine-number">Maschinenanzahl: {{storage.nrOfMachines}}</span><span class="information">(zum Ändern auswählen)</span>
         </span>
-        <div class="information">
-          Derzeitiger Wert für &alpha;:
-          {{storage.machineConfigParam}}<sub
-          *ngIf="storage.nrOfMachines > 1 && jobs.length">{{storage.nrOfMachines}}</sub>
+      <div class="information">
+        Derzeitiger Wert für &alpha;:
+        {{storage.machineConfigParam}}<sub
+        *ngIf="storage.nrOfMachines > 1 && jobs.length">{{storage.nrOfMachines}}</sub>
+      </div>
+    </div>
+
+    <!-- Add new job and configuration -->
+    <form (submit)="createNewJob()">
+      <mat-divider></mat-divider>
+      <mat-form-field>
+        <input matInput
+               placeholder="Neuer Auftrag"
+               name="jobNameInput"
+               [(ngModel)]="jobNameInput">
+
+        <button mat-icon-button
+                matSuffix
+                type="submit"
+                matTooltip="Auftrag hinzufügen"
+                [disabled]="!jobNameInput || jobNameInput.trim().length === 0">
+          <mat-icon class="material-icons larger-icon">
+            add_circle_outline
+          </mat-icon>
+        </button>
+      </mat-form-field>
+      <br>
+      <div class="text-left row">
+        <div class="col-md-6">
+          <mat-checkbox name="checkboxAutoGenerateTimes"
+                        [(ngModel)]="isAutomaticallyGenerateTimes"
+                        class="small">
+            Automatisch zufällige Zeiten für Arbeitsgänge generieren
+          </mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox name="checkboxShuffleMachineOrder"
+                        [(ngModel)]="isShuffleMachineOrder"
+                        [disabled]="storage.nrOfMachines < 2"
+                        matTooltip="{{shuffleBox.disabled ? 'Diese Option ist nur bei mehreren Maschinen wählbar' : ''}}"
+                        #shuffleBox
+                        class="small">
+            Zufällige Reihenfolge der Arbeitsgänge
+          </mat-checkbox>
         </div>
       </div>
+    </form>
 
-      <!-- Add new job and configuration -->
-      <form (submit)="createNewJob()">
-        <mat-divider></mat-divider>
-        <mat-form-field>
-          <input matInput
-                 placeholder="Neuer Auftrag"
-                 name="jobNameInput"
-                 [(ngModel)]="jobNameInput">
-
-          <button mat-icon-button
-                  matSuffix
-                  type="submit"
-                  matTooltip="Auftrag hinzufügen"
-                  [disabled]="!jobNameInput || jobNameInput.trim().length === 0">
-            <mat-icon class="material-icons larger-icon">
-              add_circle_outline
-            </mat-icon>
-          </button>
-        </mat-form-field>
-        <br>
-        <div class="text-left row">
-          <div class="col-md-6">
-            <mat-checkbox name="checkboxAutoGenerateTimes"
-                          [(ngModel)]="isAutomaticallyGenerateTimes"
-                          class="small">
-              Automatisch zufällige Zeiten für Arbeitsgänge generieren
-            </mat-checkbox>
-          </div>
-          <div class="col-md-6">
-            <mat-checkbox name="checkboxShuffleMachineOrder"
-                          [(ngModel)]="isShuffleMachineOrder"
-                          [disabled]="storage.nrOfMachines < 2"
-                          matTooltip="{{shuffleBox.disabled ? 'Diese Option ist nur bei mehreren Maschinen wählbar' : ''}}"
-                          #shuffleBox
-                          class="small">
-              Zufällige Reihenfolge der Arbeitsgänge
-            </mat-checkbox>
-          </div>
-        </div>
-      </form>
-
-      <!-- actions concerning existing jobs -->
-      <div class="text-left existing-jobs-actions">
-        <mat-divider></mat-divider>
-        <button mat-stroked-button
-                [disabled]="jobs.length < 1 || storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.COMPLETELY_DEFINED"
-                (click)="addRandomTimesForUndefined()">
+    <!-- actions concerning existing jobs -->
+    <div class="text-left existing-jobs-actions">
+      <mat-divider></mat-divider>
+      <button mat-stroked-button
+              [disabled]="jobs.length < 1 || storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.COMPLETELY_DEFINED"
+              (click)="addRandomTimesForUndefined()">
           <span class="align-middle"
                 matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst mindestens einen Auftrag hinzu'
                   : storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) !== configurationStatus.COMPLETELY_DEFINED ? 'Alle fehlenden Zeiten der Arbeitsgänge der einzelnen Aufträge automatisch erzeugen'
@@ -85,10 +83,10 @@
             <i class="fas fa-random"></i>
             Zufällige Zeiten für undefinierte Arbeitsgänge
           </span>
-        </button>
-        <button mat-stroked-button
-                [disabled]="storage.machineConfigParam !== machineConfig.JOBSHOP"
-                (click)="sortEachJobMachineOrder()">
+      </button>
+      <button mat-stroked-button
+              [disabled]="storage.machineConfigParam !== machineConfig.JOBSHOP"
+              (click)="sortEachJobMachineOrder()">
           <span class="align-middle"
                 matTooltip="{{storage.machineConfigParam === machineConfig.JOBSHOP ? 'Reihenfolge der Arbeitsgänge aller Aufträge vereinheitlichen und somit zu Flowshop wechseln'
                   : storage.machineConfigParam === machineConfig.FLOWSHOP ? 'Bei der aktuellen Konfiguration handelt es sich bereits um einen Flowshop'
@@ -100,64 +98,63 @@
             <mat-icon class="align-middle">arrow_right_alt</mat-icon>
             Flowshop
           </span>
-        </button>
-      </div>
+      </button>
+    </div>
 
-      <!-- List existing jobs -->
-      <mat-accordion *ngIf="jobs.length > 0; else noJobs">
-        <mat-expansion-panel *ngFor="let job of jobs">
-          <mat-expansion-panel-header #header>
-            <div class="text-left job-header">
-              <button mat-icon-button
-                      (click)="deleteJob(job)"
-                      matTooltip="Auftrag löschen">
-                <i class="fa fa-trash"></i>
-              </button>
-              <button mat-icon-button
-                      (click)="copyJob(job, header)"
-                      matTooltip="Auftrag kopieren">
-                <i class="fa fa-clone"></i>
-              </button>
-              <span class="job-id">(ID: {{job.id}})</span>
-              <!-- Tooltip, since long job names may be cut off on smaller devices. -->
-              <span matTooltip="{{job.name}}">
+    <!-- List existing jobs -->
+    <mat-accordion *ngIf="jobs.length > 0; else noJobs">
+      <mat-expansion-panel *ngFor="let job of jobs">
+        <mat-expansion-panel-header #header>
+          <div class="text-left job-header">
+            <button mat-icon-button
+                    (click)="deleteJob(job)"
+                    matTooltip="Auftrag löschen">
+              <i class="fa fa-trash"></i>
+            </button>
+            <button mat-icon-button
+                    (click)="copyJob(job, header)"
+                    matTooltip="Auftrag kopieren">
+              <i class="fa fa-clone"></i>
+            </button>
+            <span class="job-id">(ID: {{job.id}})</span>
+            <!-- Tooltip, since long job names may be cut off on smaller devices. -->
+            <span matTooltip="{{job.name}}">
                 {{job.name}}
               </span>
-            </div>
-          </mat-expansion-panel-header>
-
-          <div *ngIf="job.machineTimes.length > 1" class="information text-left">
-            Abarbeitungsreihenfolge per Drag & Drop ändern:
           </div>
-          <div cdkDropList class="machines-list" (cdkDropListDropped)="changeMachineOrderOfJob(job, $event)">
-            <div class="row machine-box" *ngFor="let machine of job.machineTimes" cdkDrag>
-              <div class="col-sm-5 col-md-7 col-lg-9 col-xl-10 text-left">
-                Maschine {{machine.machineNr}}
-              </div>
-              <div class="col-sm-7 col-md-5 col-lg-3 col-xl-2">
-                <app-icon-number-input
-                  [value]="machine.timeOnMachine"
-                  [iconClasses]="['fas', 'fa-stopwatch']"
-                  [min]="1"
-                  [max]="calculateMaxMachineTimeForJob(job, machine)"
-                  [maxErrorText]="'Für diesen Auftrag wurde ein Fertigstellungszeitpunkt angegeben, den die Summe der Zeiten aller Arbeitsgänge (bei keiner Angabe wird eine Zeiteinheit angenommen) nicht überschreiten darf'"
-                  [placeholder]="'Dauer'"
-                  (newValue)="onTimeOnMachineChange(machine, $event)"
-                ></app-icon-number-input>
-              </div>
-            </div>
-          </div>
+        </mat-expansion-panel-header>
 
-        </mat-expansion-panel>
-      </mat-accordion>
-
-      <!-- Information shown in case of no configured jobs -->
-      <ng-template #noJobs>
-        <div class="no-jobs-info information font-italic small">
-          Bisher keine Aufträge konfiguriert.
+        <div *ngIf="job.machineTimes.length > 1" class="information text-left">
+          Abarbeitungsreihenfolge per Drag & Drop ändern:
         </div>
-      </ng-template>
+        <div cdkDropList class="machines-list" (cdkDropListDropped)="changeMachineOrderOfJob(job, $event)">
+          <div class="row machine-box" *ngFor="let machine of job.machineTimes" cdkDrag>
+            <div class="col-sm-5 col-md-7 col-lg-9 col-xl-10 text-left">
+              Maschine {{machine.machineNr}}
+            </div>
+            <div class="col-sm-7 col-md-5 col-lg-3 col-xl-2">
+              <app-icon-number-input
+                [value]="machine.timeOnMachine"
+                [iconClasses]="['fas', 'fa-stopwatch']"
+                [min]="1"
+                [max]="calculateMaxMachineTimeForJob(job, machine)"
+                [maxErrorText]="'Für diesen Auftrag wurde ein Fertigstellungszeitpunkt angegeben, den die Summe der Zeiten aller Arbeitsgänge (bei keiner Angabe wird eine Zeiteinheit angenommen) nicht überschreiten darf'"
+                [placeholder]="'Dauer'"
+                (newValue)="onTimeOnMachineChange(machine, $event)"
+              ></app-icon-number-input>
+            </div>
+          </div>
+        </div>
 
-    </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <!-- Information shown in case of no configured jobs -->
+    <ng-template #noJobs>
+      <div class="no-jobs-info information font-italic small">
+        Bisher keine Aufträge konfiguriert.
+      </div>
+    </ng-template>
+
   </div>
 </div>

@@ -66,3 +66,8 @@ mat-sidenav-container {
 ::ng-deep.mat-form-field-ripple {
   background-color: var(--color-main) !important;;
 }
+
+.container {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}

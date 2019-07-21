@@ -1,56 +1,53 @@
-<div class="container">
+<!-- TODO: add help pop-up? -->
 
-  <!-- TODO: add help pop-up? -->
-
-  <div class="row">
-    <div class="col-md-12">
-      <button mat-stroked-button
-              [disabled]="isDueDateOfEachJobConfigured()"
-              (click)="addRandomDueDates()">
+<div class="row">
+  <div class="col-md-12">
+    <button mat-stroked-button
+            [disabled]="isDueDateOfEachJobConfigured()"
+            (click)="addRandomDueDates()">
           <span class="align-middle"
                 matTooltip="{{!isDueDateOfEachJobConfigured() ? 'Automatisch zufällige Fertigstellungstermine für alle Aufträge generieren'
                 : 'Es sind bereits Fertigstellungstermine für alle Aufträge definiert'}}">
             <i class="fas fa-random"></i>
             Zufällige Fertigstellungstermine
           </span>
-      </button>
-    </div>
+    </button>
   </div>
+</div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <mat-divider></mat-divider>
-    </div>
+<div class="row">
+  <div class="col-md-12">
+    <mat-divider></mat-divider>
   </div>
+</div>
 
-  <div *ngFor="let job of jobs" class="row">
-    <div class="col-md-12">
-      <mat-card>
-        <div class="job-header">
-          <span class="job-id">Auftrag mit ID: {{job.id}}</span>
-          <!-- Tooltip, since long job names may be cut off on smaller devices. -->
-          <span matTooltip=" {{job.name}}">
+<div *ngFor="let job of jobs" class="row">
+  <div class="col-md-12">
+    <mat-card>
+      <div class="job-header">
+        <span class="job-id">Auftrag mit ID: {{job.id}}</span>
+        <!-- Tooltip, since long job names may be cut off on smaller devices. -->
+        <span matTooltip=" {{job.name}}">
             {{job.name}}
           </span>
-        </div>
-        <mat-card-content>
-          <div class="row">
-            <div class="col-md-6 job-config-input-container">
-              <app-icon-number-input
-                [iconClasses]="['fas', 'fa-calendar-times']"
-                [placeholder]="'Fertigstellungstermin'"
-                [isShowValueTooltip]="true"
-                [min]="calculateMinimumDueDateForJob(job)"
-                [minErrorText]="'Der gewünschte Fertigstellungstermin muss realistisch sein, d.h. er darf nicht unterhalb der Summe der Bearbeitungszeiten des Auftrags liegen (ist für einen Arbeitsgang keine Zeit definiert, wird hierfür eine Zeiteinheit angenommen)'"
-                [value]="job.dueDate"
-                (newValue)="onDueDateChanged(job, $event)"
-              >
-              </app-icon-number-input>
-            </div>
-            <!-- TODO: add more configs? -->
+      </div>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-6 job-config-input-container">
+            <app-icon-number-input
+              [iconClasses]="['fas', 'fa-calendar-times']"
+              [placeholder]="'Fertigstellungstermin'"
+              [isShowValueTooltip]="true"
+              [min]="calculateMinimumDueDateForJob(job)"
+              [minErrorText]="'Der gewünschte Fertigstellungstermin muss realistisch sein, d.h. er darf nicht unterhalb der Summe der Bearbeitungszeiten des Auftrags liegen (ist für einen Arbeitsgang keine Zeit definiert, wird hierfür eine Zeiteinheit angenommen)'"
+              [value]="job.dueDate"
+              (newValue)="onDueDateChanged(job, $event)"
+            >
+            </app-icon-number-input>
           </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+          <!-- TODO: add more configs? -->
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
