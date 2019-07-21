@@ -1,5 +1,7 @@
 <div class="container">
 
+  <!-- TODO: add help pop-up? -->
+
   <div class="row">
     <div class="col-md-12">
       <button mat-stroked-button
@@ -7,7 +9,7 @@
               (click)="addRandomDueDates()">
           <span class="align-middle"
                 matTooltip="{{!isDueDateOfEachJobConfigured() ? 'Automatisch zufällige Fertigstellungstermine für alle Aufträge generieren'
-                : 'Es sind bereits Fertigstellungstermine für alle Aufträge erstellt'}}">
+                : 'Es sind bereits Fertigstellungstermine für alle Aufträge definiert'}}">
             <i class="fas fa-random"></i>
             Zufällige Fertigstellungstermine
           </span>
