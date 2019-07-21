@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {StorageService} from '../../../../services/storage.service';
 import {Job, MachineTimeForJob} from '../../../../model/Job';
-import {MatDialog, MatExpansionPanelHeader} from '@angular/material';
+import {MatDialog, MatExpansionPanelHeader, MatSnackBar} from '@angular/material';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {MachineNrPopupComponent} from '../../../dialogs/machine-nr-popup/machine-nr-popup.component';
 import {YesNoPopUpComponent} from '../../../dialogs/yes-no-pop-up/yes-no-pop-up.component';
@@ -30,7 +30,11 @@ export class JobsAndMachinesComponent implements OnInit {
   private _isShuffleMachineOrder: boolean;
   private _isAutomaticallyGenerateTimes: boolean;
 
-  constructor(private dialog: MatDialog, public storage: StorageService) {
+  constructor(
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    public storage: StorageService
+  ) {
   }
 
   ngOnInit(): void {
@@ -49,8 +53,7 @@ export class JobsAndMachinesComponent implements OnInit {
     this.addJob(job);
   }
 
-  deleteJob(job: Job): void {
-    /* TODO: message with 'undo' */
+  deleteJob(job: Job, isMessageToBeHidden?: boolean): void {
     this._jobs = this.jobs.filter(j => j !== job);
 
     let i = 0;
@@ -60,13 +63,18 @@ export class JobsAndMachinesComponent implements OnInit {
       }
     });
     this.storage.jobs = this.jobs;
+    if (!isMessageToBeHidden) {
+      this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') gelöscht!', 'Rückgängig')
+        .onAction().subscribe(() => this.addJob(job, true));
+    }
   }
 
   copyJob(job: Job, header: MatExpansionPanelHeader): void {
-    /* TODO: message with 'undo' */
     header._toggle();
     const copy: Job = <Job>JSON.parse(JSON.stringify(job));
-    this.addJob(copy);
+    this.addJob(copy, true);
+    this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') kopiert!', 'Rückgängig')
+      .onAction().subscribe(() => this.deleteJob(copy, true));
   }
 
   changeMachineOrderOfJob(job: Job, event: CdkDragDrop<string[]>): void {
@@ -77,6 +85,7 @@ export class JobsAndMachinesComponent implements OnInit {
   openMachinePopUp(): void {
     this.dialog.open(MachineNrPopupComponent).afterClosed().subscribe(result => {
       if (result) {
+        const messages = [];
         this.storage.nrOfMachines = result;
         this.jobs.forEach(job => {
           if (job.machineTimes.length > result) {
@@ -84,10 +93,15 @@ export class JobsAndMachinesComponent implements OnInit {
               machineTime => machineTime.machineNr <= result
             );
           } else {
-            this.addNewMachineTimesToJob(job);
+            const message = this.addNewMachineTimesToJob(job);
+            if (message) {
+              messages.push(message);
+            }
           }
         });
+        this.openChangedDueDatesInfoIfNeeded(messages);
         this.storage.jobs = this.jobs;
+        this.openSnackBar(5, 'Maschinenzahl aktualisiert', 'OK');
       }
     });
   }
@@ -191,7 +205,7 @@ export class JobsAndMachinesComponent implements OnInit {
         );
       }
     });
-    // TODO: Info Message
+    this.openSnackBar(2, 'Zufällige Zeiten genereriert');
     this.storage.jobs = this.jobs;
   }
 
@@ -208,7 +222,7 @@ export class JobsAndMachinesComponent implements OnInit {
         }
       );
     });
-    // TODO: Info Message
+    this.openSnackBar(2, 'Abarbeitungsreihenfolge sortiert');
     this.storage.jobs = this.jobs;
   }
 
@@ -232,10 +246,26 @@ export class JobsAndMachinesComponent implements OnInit {
     }
   }
 
-  private addJob(job): void {
-    job.id = this.jobs.length + 1;
-    this.jobs.push(job);
+  private addJob(job: Job, isMessageToBeHidden?: boolean): void {
+
+    if (job.id) {
+      console.log(job.id);
+      this.jobs.forEach(jobInList => {
+        if (jobInList.id >= job.id) {
+          jobInList.id++;
+        }
+      });
+      this.jobs.push(job);
+      this.jobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
+    } else {
+      job.id = this.jobs.length + 1;
+      this.jobs.push(job);
+    }
     this.storage.jobs = this.jobs;
+    if (!isMessageToBeHidden) {
+      this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') hinzugefügt!', 'Rückgängig')
+        .onAction().subscribe(() => this.deleteJob(job, true));
+    }
   }
 
   private openAutoGenDialogIfNeeded(): void {
@@ -263,7 +293,7 @@ export class JobsAndMachinesComponent implements OnInit {
     return Math.floor(Math.random() * max) + 1;
   }
 
-  private addNewMachineTimesToJob(job: Job) {
+  private addNewMachineTimesToJob(job: Job): string | undefined {
     const nrOfMachines = this.storage.nrOfMachines;
     let currentTotalTime = job.machineTimes
       .map(m => m.timeOnMachine ? m.timeOnMachine : 1)
@@ -291,15 +321,38 @@ export class JobsAndMachinesComponent implements OnInit {
     }
 
     if (job.dueDate && !isDueDateStillPossible) {
-      // TODO: inform user
-      console.log('Fertigstellungstermin für Auftrag \'' + job.name + '\' (ID: ' + job.id +
-        ') nicht mehr einhaltbar und auf ' + job.dueDate + ' aktualisiert.');
+      return 'Auftrag \'' + job.name + '\' (ID: ' + job.id + '): aktualisiert auf: ' + job.dueDate + '';
     }
+  }
 
+  private openChangedDueDatesInfoIfNeeded(messages: string[]) {
+    if (messages.length > 0) {
+      this.dialog.open(InfoPopUpComponent, {
+        data: new DialogContent(
+          'Geänderte Fertigstellungstermine',
+          messages,
+          DialogType.INFO,
+          'Die Fertigstellungstermine folgender Aufträge konnten nicht eingehalten werden und wurden aktualisiert'
+        )
+      });
+    }
+  }
+
+  private openSnackBar(seconds: number, message: string, actionMessage?: string) {
+    return this.snackBar.open(message, actionMessage ? actionMessage : 'OK',
+      {
+        panelClass: 'color-white',
+        duration: seconds * 1000
+      }
+    );
   }
 
   get jobs(): Job[] {
     return this._jobs;
+  }
+
+  set jobs(jobs: Job[]) {
+    this._jobs = jobs;
   }
 
   get jobNameInput(): string {

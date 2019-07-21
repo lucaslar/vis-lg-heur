@@ -65,3 +65,7 @@ button:disabled span, button:disabled i {
 .job-id {
   color: var(--color-grey-font);
 }
+
+.color-white .mat-simple-snackbar-action button span {
+  color: white !important;
+}
