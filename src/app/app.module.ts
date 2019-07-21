@@ -14,6 +14,7 @@ import { AboutThisAppComponent } from './components/dialogs/about-this-app/about
 import { IconNumberInputComponent } from './components/shared/icon-number-input/icon-number-input.component';
 import { JobsTerminationComponent } from './components/pages/beta/jobs-termination/jobs-termination.component';
 import { PopUpComponent } from './components/dialogs/pop-up/pop-up.component';
+import { PriorityRulesDefinitionComponent } from './components/pages/priority-rules-definition/priority-rules-definition.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { PopUpComponent } from './components/dialogs/pop-up/pop-up.component';
     AboutThisAppComponent,
     IconNumberInputComponent,
     JobsTerminationComponent,
-    PopUpComponent
+    PopUpComponent,
+    PriorityRulesDefinitionComponent
   ],
   imports: [
     BrowserModule,
