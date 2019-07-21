@@ -79,7 +79,7 @@ export class StorageService {
   get nrOfMachines(): number {
     if (!this._nrOfMachines) {
       const nrOfMachines = localStorage.getItem(this.PREFIX_KEY + this.NR_OF_MACHINES);
-      this._nrOfMachines = nrOfMachines ? nrOfMachines : 1;
+      this._nrOfMachines = nrOfMachines ? +nrOfMachines : 1;
     }
     return this._nrOfMachines;
   }
