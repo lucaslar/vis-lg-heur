@@ -71,6 +71,7 @@ export class JobsAndMachinesComponent implements OnInit {
   copyJob(job: Job, header: MatExpansionPanelHeader): void {
     header._toggle();
     const copy: Job = <Job>JSON.parse(JSON.stringify(job));
+    copy.id = undefined;
     this.addJob(copy, true);
     this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') kopiert!', 'Rückgängig')
       .onAction().subscribe(() => this.deleteJob(copy, true));
@@ -100,7 +101,7 @@ export class JobsAndMachinesComponent implements OnInit {
         });
         this.openChangedDueDatesInfoIfNeeded(messages);
         this.storage.jobs = this.jobs;
-        this.openSnackBar(5, 'Maschinenzahl aktualisiert', 'OK');
+        this.openSnackBar(5, 'Maschinenzahl auf ' + result + ' aktualisiert', 'OK');
       }
     });
   }
