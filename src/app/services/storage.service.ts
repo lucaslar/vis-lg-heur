@@ -1,44 +1,52 @@
 import {Injectable} from '@angular/core';
 import {Job} from '../model/Job';
 import {MachineConfig} from '../model/enums/MachineConfig';
+import {DefinableValue} from '../model/internal/DefinableValues';
+import {DefinitionStatus} from '../model/internal/DefinitionStatus';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
+  private _jobs: Job[];
+  private _nrOfMachines: number;
+
   private readonly PREFIX_KEY = 'VISLGHEUR_';
   private readonly NR_OF_MACHINES = 'NR_OF_MACHINES';
   private readonly JOBS = 'JOBS';
 
-  get nrOfMachines(): number {
-    const nrOfMachines = localStorage.getItem(this.PREFIX_KEY + this.NR_OF_MACHINES);
-    return nrOfMachines ? +nrOfMachines : 1;
-  }
+  getValueDefinitionStatus(definableValue: DefinableValue): DefinitionStatus {
+    let expectedDefinitions: number;
+    let existingDefinitions: number;
 
-  set nrOfMachines(nrOfMachines: number) {
-    localStorage.setItem(this.PREFIX_KEY + this.NR_OF_MACHINES, nrOfMachines.toString());
-  }
-
-  get jobs(): Job[] {
-    const jobs = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.JOBS));
-    return jobs ? jobs : [];
-  }
-
-  set jobs(jobs: Job[]) {
-    localStorage.setItem(this.PREFIX_KEY + this.JOBS, JSON.stringify(jobs));
-  }
-
-  get machineConfigParam(): MachineConfig {
-    if (!this.jobs || this.jobs.length === 0) {
-      return MachineConfig.NONE;
-    } else if (this.nrOfMachines === 1) {
-      return MachineConfig.ONE_MACHINE;
-    } else if (this.isSameMachineOrderForEachJob()) {
-      return MachineConfig.FLOWSHOP;
+    if (definableValue === DefinableValue.ALPHA_JOB_TIMES) {
+      expectedDefinitions = this.jobs.length * this.nrOfMachines;
+      existingDefinitions = this.getJobTimesDefinitions();
+    } else if (definableValue === DefinableValue.BETA_DUE_DATES) {
+      expectedDefinitions = this.jobs.length;
+      existingDefinitions = this.jobs.filter(job => job.dueDate).length;
     } else {
-      return MachineConfig.JOBSHOP;
+      console.log('Define: ' + definableValue + '!');
     }
+
+    return expectedDefinitions === existingDefinitions ? DefinitionStatus.COMPLETELY_DEFINED
+      : existingDefinitions === 0 ? DefinitionStatus.NOT_DEFINED
+        : DefinitionStatus.PARTLY_DEFINED;
+  }
+
+  private getJobTimesDefinitions(): number {
+    let existingDefinitions = 0;
+    this.jobs
+      .map(job => job.machineTimes)
+      .forEach(
+        m => m.forEach(machine => {
+          if (machine.timeOnMachine) {
+            existingDefinitions++;
+          }
+        })
+      );
+    return existingDefinitions;
   }
 
   private isSameMachineOrderForEachJob(): boolean {
@@ -66,6 +74,44 @@ export class StorageService {
       lastCheckedIndex++;
     }
     return true;
+  }
+
+  get nrOfMachines(): number {
+    if (!this._nrOfMachines) {
+      const nrOfMachines = localStorage.getItem(this.PREFIX_KEY + this.NR_OF_MACHINES);
+      this._nrOfMachines = nrOfMachines ? nrOfMachines : 1;
+    }
+    return this._nrOfMachines;
+  }
+
+  set nrOfMachines(nrOfMachines: number) {
+    this._nrOfMachines = nrOfMachines;
+    localStorage.setItem(this.PREFIX_KEY + this.NR_OF_MACHINES, nrOfMachines.toString());
+  }
+
+  get jobs(): Job[] {
+    if (!this._jobs) {
+      const jobs = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.JOBS));
+      this._jobs = jobs ? jobs : [];
+    }
+    return this._jobs;
+  }
+
+  set jobs(jobs: Job[]) {
+    this._jobs = jobs;
+    localStorage.setItem(this.PREFIX_KEY + this.JOBS, JSON.stringify(jobs));
+  }
+
+  get machineConfigParam(): MachineConfig {
+    if (!this.jobs || this.jobs.length === 0) {
+      return MachineConfig.NONE;
+    } else if (this.nrOfMachines === 1) {
+      return MachineConfig.ONE_MACHINE;
+    } else if (this.isSameMachineOrderForEachJob()) {
+      return MachineConfig.FLOWSHOP;
+    } else {
+      return MachineConfig.JOBSHOP;
+    }
   }
 
 }
