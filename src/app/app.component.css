@@ -12,9 +12,26 @@ mat-toolbar {
   background-color: var(--color-main);
 }
 
-mat-toolbar button i {
+mat-toolbar button.mat-icon-button i {
   color: white;
   font-size: large;
+}
+
+button span, button span mat-icon {
+  font-size: larger;
+}
+
+button span mat-icon {
+  width: 1%;
+  height: 1%;
+}
+
+button span i {
+  padding-left: 24px;
+}
+
+button span mat-icon {
+  color: var(--color-main);
 }
 
 .navbar-toggle + div {
