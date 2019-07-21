@@ -9,6 +9,8 @@ import {DialogContent} from '../../../../model/internal/DialogContent';
 import {MachineConfig} from '../../../../model/enums/MachineConfig';
 import {InfoPopUpComponent} from '../../../dialogs/info-pop-up/info-pop-up.component';
 import {DialogType} from '../../../../model/internal/DialogType';
+import {DefinableValue} from '../../../../model/internal/DefinableValues';
+import {DefinitionStatus} from '../../../../model/internal/DefinitionStatus';
 
 @Component({
   selector: 'app-jobs-and-machines',
@@ -16,6 +18,9 @@ import {DialogType} from '../../../../model/internal/DialogType';
   styleUrls: ['./jobs-and-machines.component.css']
 })
 export class JobsAndMachinesComponent implements OnInit {
+
+  private _definableValue: DefinableValue = DefinableValue;
+  private _configurationStatus: DefinitionStatus = DefinitionStatus;
 
   private readonly _machineConfig = MachineConfig;
 
@@ -161,14 +166,6 @@ export class JobsAndMachinesComponent implements OnInit {
     this.storage.jobs = this.jobs;
   }
 
-  isJobWithUndefinedTimeExisting(): boolean {
-    return this.jobs.some(
-      job => job.machineTimes.some(
-        machineTime => !machineTime.timeOnMachine
-      )
-    );
-  }
-
   addRandomTimesForUndefined(): void {
     this.jobs.forEach(job => {
       let nrOfUndefinedTimes = job.machineTimes.filter(m => m.timeOnMachine === undefined).length;
@@ -242,7 +239,7 @@ export class JobsAndMachinesComponent implements OnInit {
   }
 
   private openAutoGenDialogIfNeeded(): void {
-    if (this.isJobWithUndefinedTimeExisting()) {
+    if (this.storage.getValueDefinitionStatus(DefinableValue.ALPHA_JOB_TIMES) !== DefinitionStatus.COMPLETELY_DEFINED) {
       this.dialog.open(YesNoPopUpComponent, {
         data: new DialogContent(
           'Zeiten fehlender Arbeitsgänge automatisch generieren',
@@ -295,7 +292,8 @@ export class JobsAndMachinesComponent implements OnInit {
 
     if (job.dueDate && !isDueDateStillPossible) {
       // TODO: inform user
-      console.log('Fertigstellungstermin für Auftrag \'' + job.name + '\' nicht mehr einhaltbar und auf ' + job.dueDate + ' aktualisiert.');
+      console.log('Fertigstellungstermin für Auftrag \'' + job.name + '\' (ID: ' + job.id +
+        ') nicht mehr einhaltbar und auf ' + job.dueDate + ' aktualisiert.');
     }
 
   }

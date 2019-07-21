@@ -76,11 +76,11 @@
       <div class="text-left existing-jobs-actions">
         <mat-divider></mat-divider>
         <button mat-stroked-button
-                [disabled]="jobs.length < 1 || !isJobWithUndefinedTimeExisting()"
+                [disabled]="jobs.length < 1 || storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.COMPLETELY_DEFINED"
                 (click)="addRandomTimesForUndefined()">
           <span class="align-middle"
                 matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst mindestens einen Auftrag hinzu'
-                  : isJobWithUndefinedTimeExisting() ? 'Alle fehlenden Zeiten der Arbeitsgänge der einzelnen Aufträge automatisch erzeugen'
+                  : storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) !== configurationStatus.COMPLETELY_DEFINED ? 'Alle fehlenden Zeiten der Arbeitsgänge der einzelnen Aufträge automatisch erzeugen'
                   : 'Aktuell sind die Zeiten für die Arbeitsgänge aller Aufträge definiert'
                 }}">
             <i class="fas fa-random"></i>

@@ -5,6 +5,8 @@ import {Job} from '../../../../model/Job';
 import {YesNoPopUpComponent} from '../../../dialogs/yes-no-pop-up/yes-no-pop-up.component';
 import {DialogContent} from '../../../../model/internal/DialogContent';
 import {DialogType} from '../../../../model/internal/DialogType';
+import {DefinitionStatus} from '../../../../model/internal/DefinitionStatus';
+import {DefinableValue} from '../../../../model/internal/DefinableValues';
 
 @Component({
   selector: 'app-jobs-termination',
@@ -66,9 +68,9 @@ export class JobsTerminationComponent implements OnInit {
   }
 
   isDueDateOfEachJobConfigured(): boolean {
-    return !this.jobs.some(
-      job => !job.dueDate
-    );
+    return this.storage
+      .getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES)
+      === DefinitionStatus.COMPLETELY_DEFINED;
   }
 
   addRandomDueDates(): void {
