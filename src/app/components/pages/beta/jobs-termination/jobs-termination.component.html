@@ -1,4 +1,26 @@
 <div class="container">
+
+  <div class="row">
+    <div class="col-md-12">
+      <button mat-stroked-button
+              [disabled]="isDueDateOfEachJobConfigured()"
+              (click)="addRandomDueDates()">
+          <span class="align-middle"
+                matTooltip="{{!isDueDateOfEachJobConfigured ? 'Automatisch zufällige Fertigstellungstermine für alle Aufträge generieren'
+                : 'Es sind bereits Fertigstellungstermine für alle Aufträge erstellt'}}">
+            <i class="fas fa-random"></i>
+            Zufällige Fertigstellungstermine
+          </span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+
   <div *ngFor="let job of jobs" class="row">
     <div class="col-md-12">
       <mat-card>
