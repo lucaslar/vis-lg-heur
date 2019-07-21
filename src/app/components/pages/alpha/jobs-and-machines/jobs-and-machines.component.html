@@ -50,7 +50,6 @@
           </button>
         </mat-form-field>
         <br>
-        <!-- TODO Change color of checkboxes -->
         <div class="text-left row">
           <div class="col-md-6">
             <mat-checkbox name="checkboxAutoGenerateTimes"
@@ -145,7 +144,6 @@
                   [placeholder]="'Dauer'"
                   (newValue)="onTimeOnMachineChange(machine, $event)"
                 ></app-icon-number-input>
-                <!-- TODO: Max = due date - sum-->
               </div>
             </div>
           </div>
@@ -154,7 +152,6 @@
       </mat-accordion>
 
       <!-- Information shown in case of no configured jobs -->
-      <!-- TODO: Center this? -->
       <ng-template #noJobs>
         <div class="no-jobs-info information font-italic small">
           Bisher keine Aufträge konfiguriert.
