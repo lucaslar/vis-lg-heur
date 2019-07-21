@@ -215,6 +215,17 @@ export class JobsAndMachinesComponent implements OnInit {
     this.storage.jobs = this.jobs;
   }
 
+  calculateMaxMachineTimeForJob(job: Job, machine: MachineTimeForJob): number | undefined {
+    if (job.dueDate) {
+      return job.dueDate - job.machineTimes
+        .filter(m => m !== machine)
+        .map(m => m.timeOnMachine ? m.timeOnMachine : 1)
+        .reduce((a, b) => a + b, 0);
+    } else {
+      return undefined;
+    }
+  }
+
   private generateMachineOrderForJob(job: Job): void {
     job.machineTimes = [];
     for (let i = 1; i <= this.storage.nrOfMachines; i++) {
@@ -322,5 +333,13 @@ export class JobsAndMachinesComponent implements OnInit {
 
   get machineConfig(): any {
     return this._machineConfig;
+  }
+
+  get definableValue(): DefinableValue {
+    return this._definableValue;
+  }
+
+  get configurationStatus(): DefinitionStatus {
+    return this._configurationStatus;
   }
 }

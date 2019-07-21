@@ -140,6 +140,8 @@
                   [value]="machine.timeOnMachine"
                   [iconClasses]="['fas', 'fa-stopwatch']"
                   [min]="1"
+                  [max]="calculateMaxMachineTimeForJob(job, machine)"
+                  [maxErrorText]="'Für diesen Auftrag wurde ein Fertigstellungszeitpunkt angegeben, den die Summe der Zeiten aller Arbeitsgänge (bei keiner Angabe wird eine Zeiteinheit angenommen) nicht überschreiten darf'"
                   [placeholder]="'Dauer'"
                   (newValue)="onTimeOnMachineChange(machine, $event)"
                 ></app-icon-number-input>
