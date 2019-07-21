@@ -19,8 +19,8 @@ import {DefinitionStatus} from '../../../../model/internal/DefinitionStatus';
 })
 export class JobsAndMachinesComponent implements OnInit {
 
-  private _definableValue: DefinableValue = DefinableValue;
-  private _configurationStatus: DefinitionStatus = DefinitionStatus;
+  private _definableValue = DefinableValue;
+  private _configurationStatus = DefinitionStatus;
 
   private readonly _machineConfig = MachineConfig;
 
@@ -333,11 +333,11 @@ export class JobsAndMachinesComponent implements OnInit {
     return this._machineConfig;
   }
 
-  get definableValue(): DefinableValue {
+  get definableValue(): any {
     return this._definableValue;
   }
 
-  get configurationStatus(): DefinitionStatus {
+  get configurationStatus(): any {
     return this._configurationStatus;
   }
 }

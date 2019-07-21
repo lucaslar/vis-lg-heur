@@ -10,14 +10,14 @@ import {DialogType} from '../../../model/internal/DialogType';
 })
 export class InfoPopUpComponent {
 
-  private readonly _type: DialogType = DialogType;
+  private readonly _type = DialogType;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogContent
   ) {
   }
 
-  get type(): DialogType {
+  get type(): any {
     return this._type;
   }
 
