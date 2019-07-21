@@ -1,3 +1,27 @@
-<p>
-  jobs-termination works!
-</p>
+<div class="container">
+  <div *ngFor="let job of jobs" class="row">
+    <div class="col-md-12">
+      <mat-card>
+        <div class="job-header">
+          <span class="job-id">Auftrag mit ID: {{job.id}}</span>
+          <!-- Tooltip, since long job names may be cut off on smaller devices. -->
+          <span matTooltip=" {{job.name}}">
+            {{job.name}}
+          </span>
+        </div>
+        <mat-card-content>
+          <app-icon-number-input
+            [iconClasses]="['fas', 'fa-calendar-times']"
+            [placeholder]="'Fertigstellungstermin'"
+            [isShowValueTooltip]="true"
+            [min]="calculateMinimumDueDateForJob(job)"
+            [minErrorText]="'Der gewünschte Endtermin muss realistisch sein, d.h. er darf nicht unterhalb der Summe der Bearbeitungszeiten des Auftrags liegen (ist für einen Arbeitsgang keine Zeit definiert, wird hierfür eine Zeiteinheit angenommen)'"
+            [value]="job.dueDate"
+            (newValue)="onDueDateChanged(job, $event)"
+          >
+          </app-icon-number-input>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

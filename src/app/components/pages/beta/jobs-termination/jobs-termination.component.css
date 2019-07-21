@@ -1,0 +1,15 @@
+.container {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.row {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.job-header {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}

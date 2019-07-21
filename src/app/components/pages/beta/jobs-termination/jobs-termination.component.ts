@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material';
+import {StorageService} from '../../../../services/storage.service';
+import {Job} from '../../../../model/Job';
 
 @Component({
   selector: 'app-jobs-termination',
@@ -7,9 +10,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JobsTerminationComponent implements OnInit {
 
-  constructor() { }
+  private _jobs: Job[];
 
-  ngOnInit() {
+  constructor(public storage: StorageService) {
   }
 
+  ngOnInit(): void {
+    this._jobs = this.storage.jobs;
+  }
+
+  calculateMinimumDueDateForJob(job: Job): number {
+    let minDueDate = job.machineTimes.length;
+    job.machineTimes.forEach(
+      m => {
+        if (m.timeOnMachine) {
+          minDueDate += m.timeOnMachine - 1;
+        }
+      }
+    );
+    return minDueDate;
+  }
+
+  onDueDateChanged(job: Job, dueDate: number): void {
+    job.dueDate = dueDate;
+    this.storage.jobs = this.jobs;
+  }
+
+  get jobs(): Job[] {
+    return this._jobs;
+  }
 }

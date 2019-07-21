@@ -79,11 +79,7 @@ export class JobsAndMachinesComponent implements OnInit {
               machineTime => machineTime.machineNr <= result
             );
           } else {
-            for (let i = job.machineTimes.length + 1; i <= result; i++) {
-              job.machineTimes.push(new MachineTimeForJob(
-                i, this.isAutomaticallyGenerateTimes ? this.randomMachineTime() : undefined
-              ));
-            }
+            this.addNewMachineTimesToJob(job);
           }
         });
         this.storage.jobs = this.jobs;
@@ -175,13 +171,28 @@ export class JobsAndMachinesComponent implements OnInit {
 
   addRandomTimesForUndefined(): void {
     this.jobs.forEach(job => {
-      job.machineTimes.forEach(
-        machineTime => {
-          if (!machineTime.timeOnMachine) {
-            machineTime.timeOnMachine = this.randomMachineTime();
+      let nrOfUndefinedTimes = job.machineTimes.filter(m => m.timeOnMachine === undefined).length;
+      if (nrOfUndefinedTimes) {
+        job.machineTimes.forEach(
+          machineTime => {
+            if (!machineTime.timeOnMachine) {
+              let time: number;
+              if (job.dueDate) {
+                const currentTotalTime = job.machineTimes
+                  .map(m => m.timeOnMachine)
+                  .filter(t => t !== undefined)
+                  .reduce((a, b) => a + b, 0);
+                const maxTime = job.dueDate - currentTotalTime - nrOfUndefinedTimes;
+                time = this.randomTime(maxTime < 10 ? maxTime : 10);
+              } else {
+                time = this.randomTime(10);
+              }
+              nrOfUndefinedTimes--;
+              machineTime.timeOnMachine = time;
+            }
           }
-        }
-      );
+        );
+      }
     });
     // TODO: Info Message
     this.storage.jobs = this.jobs;
@@ -208,7 +219,7 @@ export class JobsAndMachinesComponent implements OnInit {
     job.machineTimes = [];
     for (let i = 1; i <= this.storage.nrOfMachines; i++) {
       job.machineTimes.push(new MachineTimeForJob(
-        i, this.isAutomaticallyGenerateTimes ? this.randomMachineTime() : undefined
+        i, this.isAutomaticallyGenerateTimes ? this.randomTime(10) : undefined
       ));
     }
   }
@@ -240,8 +251,42 @@ export class JobsAndMachinesComponent implements OnInit {
     }
   }
 
-  private randomMachineTime(): number {
-    return Math.floor(Math.random() * 10) + 1;
+  private randomTime(max: number): number {
+    return Math.floor(Math.random() * max) + 1;
+  }
+
+  private addNewMachineTimesToJob(job: Job) {
+    const nrOfMachines = this.storage.nrOfMachines;
+    let currentTotalTime = job.machineTimes
+      .map(m => m.timeOnMachine ? m.timeOnMachine : 1)
+      .reduce((a, b) => a + b, 0);
+    const isDueDateStillPossible = job.dueDate && job.dueDate >= currentTotalTime + nrOfMachines - job.machineTimes.length;
+
+    for (let i = job.machineTimes.length + 1; i <= nrOfMachines; i++) {
+      const machineTimeForJob = new MachineTimeForJob(i);
+      let time: number;
+
+      if ((!isDueDateStillPossible)) { // no due date or not possible due date
+        time = this.randomTime(10);
+        if (job.dueDate) { // due date exists, but is unrealistic
+          currentTotalTime += time;
+          job.dueDate = currentTotalTime;
+        }
+      } else { // due date exists and is still realistic
+        const maxTime = job.dueDate - currentTotalTime - nrOfMachines + i;
+        time = this.randomTime(maxTime < 10 ? maxTime : 10);
+        currentTotalTime += time;
+      }
+
+      machineTimeForJob.timeOnMachine = this.isAutomaticallyGenerateTimes ? time : undefined;
+      job.machineTimes.push(machineTimeForJob);
+    }
+
+    if (job.dueDate && !isDueDateStillPossible) {
+      // TODO: informate user
+      console.log('Fertigstellungstermin für Auftrag \'' + job.name + '\' nicht mehr einhaltbar und auf ' + job.dueDate + ' aktualisiert.');
+    }
+
   }
 
   get jobs(): Job[] {
@@ -278,5 +323,4 @@ export class JobsAndMachinesComponent implements OnInit {
   get machineConfig(): any {
     return this._machineConfig;
   }
-
 }

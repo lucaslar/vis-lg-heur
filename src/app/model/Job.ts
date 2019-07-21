@@ -17,7 +17,7 @@ export class MachineTimeForJob {
   machineNr: number;
   timeOnMachine: number;
 
-  constructor(machineNr: number, timeOnMachine: number) {
+  constructor(machineNr: number, timeOnMachine?: number) {
     this.machineNr = machineNr;
     this.timeOnMachine = timeOnMachine;
   }

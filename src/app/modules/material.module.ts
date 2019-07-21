@@ -1,10 +1,13 @@
 import {NgModule} from '@angular/core';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {
-  MatButtonModule, MatCheckboxModule,
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
   MatDialogModule,
   MatExpansionModule,
-  MatFormFieldModule, MatIconModule,
+  MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
   MatSelectModule,
@@ -17,6 +20,7 @@ import {
   exports: [
     DragDropModule,
     MatButtonModule,
+    MatCardModule,
     MatCheckboxModule,
     MatDialogModule,
     MatExpansionModule,
