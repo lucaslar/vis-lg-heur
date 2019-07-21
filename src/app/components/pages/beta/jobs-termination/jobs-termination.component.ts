@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {StorageService} from '../../../../services/storage.service';
 import {Job} from '../../../../model/Job';
-import {YesNoPopUpComponent} from '../../../dialogs/yes-no-pop-up/yes-no-pop-up.component';
 import {DialogContent} from '../../../../model/internal/DialogContent';
 import {DialogType} from '../../../../model/internal/DialogType';
 import {DefinitionStatus} from '../../../../model/internal/DefinitionStatus';
 import {DefinableValue} from '../../../../model/internal/DefinableValues';
+import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-jobs-termination',
@@ -23,7 +23,7 @@ export class JobsTerminationComponent implements OnInit {
   ngOnInit(): void {
     this._jobs = this.storage.jobs;
     if (!this.isDueDateOfEachJobConfigured()) {
-      this.dialog.open(YesNoPopUpComponent, {
+      this.dialog.open(PopUpComponent, {
         data: new DialogContent(
           'Fehlende Fertigstellungstermine automatisch generieren',
           [

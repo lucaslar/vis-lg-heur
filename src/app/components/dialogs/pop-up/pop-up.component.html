@@ -1,0 +1,33 @@
+<h1 mat-dialog-title [ngClass]="{'status-warning' : data.type === type.ERROR}">
+  <span class="pull-right">
+    <mat-icon *ngIf="data.type === type.INFO" class="align-middle">info_outline</mat-icon>
+    <mat-icon *ngIf="data.type === type.QUESTION" class="align-middle">help_outline</mat-icon>
+    <mat-icon *ngIf="data.type === type.ERROR || data.type === type.ERROR_CONFIRM"
+              class="align-middle">error_outline</mat-icon>
+  </span>
+  {{data.header}}
+</h1>
+
+<!-- content as paragraphs-->
+<mat-dialog-content class="mat-typography">
+  <p *ngFor="let t of data.text">
+    {{t}}
+  </p>
+  <ul *ngIf="data.listedElements && data.listedElements.length">
+    <li *ngFor="let t of data.listedElements">
+      {{t}}
+    </li>
+  </ul>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <div *ngIf="data.type === type.ERROR || data.type === type.INFO; else confirmButtons">
+    <button mat-button mat-dialog-close>Schließen</button>
+  </div>
+
+  <ng-template #confirmButtons>
+    <button mat-button mat-dialog-close>Nein</button>
+    <button mat-button [mat-dialog-close]="true">Ja</button>
+  </ng-template>
+
+</mat-dialog-actions>

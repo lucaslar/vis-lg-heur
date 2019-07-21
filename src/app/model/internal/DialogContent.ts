@@ -5,13 +5,13 @@ export class DialogContent {
   private _header: string;
   private _text: string[];
   private _type: DialogType;
-  private _listingHeader: string;
+  private _listedElements: string[];
 
-  constructor(header: string, text: string[], type: DialogType, listingHeader?: string) {
+  constructor(header: string, text: string[], type: DialogType, listedElements?: string[]) {
     this.header = header;
     this.text = text;
     this.type = type;
-    this.listingHeader = listingHeader;
+    this.listedElements = listedElements;
   }
 
   get header(): string {
@@ -38,12 +38,12 @@ export class DialogContent {
     this._type = type;
   }
 
-  get listingHeader(): string {
-    return this._listingHeader;
+  get listedElements(): string[] {
+    return this._listedElements;
   }
 
-  set listingHeader(listingHeader: string) {
-    this._listingHeader = listingHeader;
+  set listedElements(listedElements: string[]) {
+    this._listedElements = listedElements;
   }
 
 }

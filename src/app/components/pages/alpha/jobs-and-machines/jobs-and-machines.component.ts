@@ -4,13 +4,12 @@ import {Job, MachineTimeForJob} from '../../../../model/Job';
 import {MatDialog, MatExpansionPanelHeader, MatSnackBar} from '@angular/material';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {MachineNrPopupComponent} from '../../../dialogs/machine-nr-popup/machine-nr-popup.component';
-import {YesNoPopUpComponent} from '../../../dialogs/yes-no-pop-up/yes-no-pop-up.component';
 import {DialogContent} from '../../../../model/internal/DialogContent';
 import {MachineConfig} from '../../../../model/enums/MachineConfig';
-import {InfoPopUpComponent} from '../../../dialogs/info-pop-up/info-pop-up.component';
 import {DialogType} from '../../../../model/internal/DialogType';
 import {DefinableValue} from '../../../../model/internal/DefinableValues';
 import {DefinitionStatus} from '../../../../model/internal/DefinitionStatus';
+import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-jobs-and-machines',
@@ -166,7 +165,7 @@ export class JobsAndMachinesComponent implements OnInit {
     ];
     texts.push(...whatDoesConfigMean);
 
-    this.dialog.open(InfoPopUpComponent, {
+    this.dialog.open(PopUpComponent, {
       data: new DialogContent(
         'Maschinenumgebung',
         texts,
@@ -270,7 +269,7 @@ export class JobsAndMachinesComponent implements OnInit {
 
   private openAutoGenDialogIfNeeded(): void {
     if (this.storage.getValueDefinitionStatus(DefinableValue.ALPHA_JOB_TIMES) !== DefinitionStatus.COMPLETELY_DEFINED) {
-      this.dialog.open(YesNoPopUpComponent, {
+      this.dialog.open(PopUpComponent, {
         data: new DialogContent(
           'Zeiten fehlender Arbeitsgänge automatisch generieren',
           [
@@ -327,12 +326,12 @@ export class JobsAndMachinesComponent implements OnInit {
 
   private openChangedDueDatesInfoIfNeeded(messages: string[]) {
     if (messages.length > 0) {
-      this.dialog.open(InfoPopUpComponent, {
+      this.dialog.open(PopUpComponent, {
         data: new DialogContent(
           'Geänderte Fertigstellungstermine',
-          messages,
+          ['Die Fertigstellungstermine folgender Aufträge konnten nicht eingehalten werden und wurden aktualisiert:'],
           DialogType.INFO,
-          'Die Fertigstellungstermine folgender Aufträge konnten nicht eingehalten werden und wurden aktualisiert'
+          messages
         )
       });
     }

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { YesNoPopUpComponent } from './yes-no-pop-up.component';
+import { PopUpComponent } from './pop-up.component';
 
-describe('YesNoPopUpComponent', () => {
-  let component: YesNoPopUpComponent;
-  let fixture: ComponentFixture<YesNoPopUpComponent>;
+describe('PopUpComponent', () => {
+  let component: PopUpComponent;
+  let fixture: ComponentFixture<PopUpComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ YesNoPopUpComponent ]
+      declarations: [ PopUpComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(YesNoPopUpComponent);
+    fixture = TestBed.createComponent(PopUpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,14 +1,14 @@
 import {Component, Inject} from '@angular/core';
+import {DialogType} from '../../../model/internal/DialogType';
 import {MAT_DIALOG_DATA} from '@angular/material';
 import {DialogContent} from '../../../model/internal/DialogContent';
-import {DialogType} from '../../../model/internal/DialogType';
 
 @Component({
-  selector: 'app-yes-no-pop-up',
-  templateUrl: './yes-no-pop-up.component.html',
-  styleUrls: ['./yes-no-pop-up.component.css', '../shared-dialog-styles.css']
+  selector: 'app-pop-up',
+  templateUrl: './pop-up.component.html',
+  styleUrls: ['./pop-up.component.css', '../shared-dialog-styles.css']
 })
-export class YesNoPopUpComponent {
+export class PopUpComponent {
 
   private readonly _type = DialogType;
 
