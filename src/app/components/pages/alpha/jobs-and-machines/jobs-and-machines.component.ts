@@ -6,7 +6,7 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {MachineNrPopupComponent} from '../../../dialogs/machine-nr-popup/machine-nr-popup.component';
 import {YesNoPopUpComponent} from '../../../dialogs/yes-no-pop-up/yes-no-pop-up.component';
 import {DialogContent} from '../../../../model/internal/DialogContent';
-import {MachineConfig} from '../../../../model/MachineConfig';
+import {MachineConfig} from '../../../../model/enums/MachineConfig';
 import {InfoPopUpComponent} from '../../../dialogs/info-pop-up/info-pop-up.component';
 import {DialogType} from '../../../../model/internal/DialogType';
 

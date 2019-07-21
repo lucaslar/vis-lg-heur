@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Job} from '../model/Job';
-import {MachineConfig} from '../model/MachineConfig';
+import {MachineConfig} from '../model/enums/MachineConfig';
 
 @Injectable({
   providedIn: 'root'
