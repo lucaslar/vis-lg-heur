@@ -39,6 +39,10 @@ button:disabled span, button:disabled i {
   color: var(--color-main) !important;
 }
 
+::ng-deep.mat-form-field-ripple {
+  background-color: var(--color-main) !important;;
+}
+
 .mat-checkbox-layout {
   white-space: normal !important;
   text-align: left !important;
