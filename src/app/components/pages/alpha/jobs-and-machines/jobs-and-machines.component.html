@@ -15,32 +15,43 @@
 <div class="row">
   <div class="col-12 text-center">
 
+
     <!-- Change machine number pop-up and information about current config. -->
-    <div class="machine-config-container">
-      <button mat-icon-button
-              matTooltip="Weitere Informationen zur aktuellen Maschinenumgebung"
-              (click)="openMachinesDescription()"
-              class="pull-left align-top left-top-corner-button">
-        <mat-icon class="material-icons">
-          help_outline
-        </mat-icon>
-      </button>
-      <span matTooltip="Anzahl an Maschinen (aktuell {{storage.nrOfMachines}}) ändern"
-            class="machine-number-container"
-            (click)="openMachinePopUp()">
-          <!-- One line in order to avoid additional spaces in document: -->
-          <span class="machine-number">Maschinenanzahl: {{storage.nrOfMachines}}</span><span class="information">(zum Ändern auswählen)</span>
+    <mat-card class="machine-config-container">
+      <div>
+        <button mat-icon-button
+                matTooltip="Weitere Informationen zur aktuellen Maschinenumgebung"
+                (click)="openMachinesDescription()"
+                class="pull-left">
+          <mat-icon class="material-icons">
+            help_outline
+          </mat-icon>
+        </button>
+        <span class="machine-number-container">
+          <span class="machine-number">
+            Maschinenanzahl: {{storage.nrOfMachines}}
+          </span>
+          <button mat-stroked-button
+                  (click)="openMachinePopUp()"
+                  matTooltip="{{'Machinenzahl (aktuell '+storage.nrOfMachines+') ändern'}}">
+            <i class="fas fa-tools"></i>
+            Ändern
+          </button>
         </span>
-      <div class="information">
-        Derzeitiger Wert für &alpha;:
-        {{storage.machineConfigParam}}<sub
-        *ngIf="storage.nrOfMachines > 1 && jobs.length">{{storage.nrOfMachines}}</sub>
       </div>
-    </div>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-12 text-center information">
+              Derzeitiger Wert für &alpha;:
+              {{storage.machineConfigParam}}<sub
+              *ngIf="storage.nrOfMachines > 1 && jobs.length">{{storage.nrOfMachines}}</sub>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
     <!-- Add new job and configuration -->
     <form (submit)="createNewJob()">
-      <mat-divider></mat-divider>
       <mat-form-field>
         <input matInput
                placeholder="Neuer Auftrag"

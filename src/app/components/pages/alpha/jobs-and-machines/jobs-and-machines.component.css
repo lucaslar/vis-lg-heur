@@ -32,8 +32,12 @@ mat-expansion-panel-header div {
   margin-bottom: 8px;
 }
 
-.machine-number-container {
-  cursor: pointer;
+.machine-config-container button.mat-icon-button {
+  -webkit-transform: translate(-2px, -2px);
+  -moz-transform: translate(-2px, -2px);
+  -ms-transform: translate(-2px, -2px);
+  -o-transform: translate(-2px, -2px);
+  transform: translate(-2px, -2px);
 }
 
 .machine-number {
@@ -41,7 +45,6 @@ mat-expansion-panel-header div {
 }
 
 .information {
-  margin: 8px; /* same as for drag and drop component */
   color: var(--color-grey-font);
 }
 
@@ -98,7 +101,7 @@ mat-expansion-panel-header div {
   font-size: larger;
 }
 
-.existing-jobs-actions, .existing-jobs-actions mat-divider, .no-jobs-info {
+.existing-jobs-actions, .existing-jobs-actions mat-divider, .information {
   padding-top: 8px;
 }
 
