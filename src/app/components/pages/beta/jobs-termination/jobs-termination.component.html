@@ -6,7 +6,7 @@
               [disabled]="isDueDateOfEachJobConfigured()"
               (click)="addRandomDueDates()">
           <span class="align-middle"
-                matTooltip="{{!isDueDateOfEachJobConfigured ? 'Automatisch zufällige Fertigstellungstermine für alle Aufträge generieren'
+                matTooltip="{{!isDueDateOfEachJobConfigured() ? 'Automatisch zufällige Fertigstellungstermine für alle Aufträge generieren'
                 : 'Es sind bereits Fertigstellungstermine für alle Aufträge erstellt'}}">
             <i class="fas fa-random"></i>
             Zufällige Fertigstellungstermine

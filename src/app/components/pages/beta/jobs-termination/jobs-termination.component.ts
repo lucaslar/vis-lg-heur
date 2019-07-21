@@ -28,6 +28,14 @@ export class JobsTerminationComponent implements OnInit {
             'Derzeit sind nicht für alle Aufträge Fertigstellungstermine festgelegt. ' +
             'Diese können automatisch generiert werden oder einzeln eingegeben werden. ' +
             'Änderungen sind nach der automatischen Generierung nichtsdestrotz möglich.',
+            'Es wird hierbei versucht, realistische Fertgstellungstermine zu erzeugen, indem für alle Aufträge ' +
+            'basierend auf aktuell konfigurierten Zeiten ihrer jeweiligen Arbeitsgänge die Gesamtbearbeitungsdauer ' +
+            'ermittelt und anschließend der Fertigstellungstermin als Summe dieser Gesamtbearbeitungsdauer und der ' +
+            'Zeit für die ersten Arbeitsgänge (6 wenn undefiniert) aller Aufträge mit Fertigstellungstermin festgelegt wird. ' +
+            'Sollten die Zeiten für Arbeitsgänge zur Berechnung der Gesamtbearbeitungsdauer eines Auftrags unvollständig ' +
+            'sein, so werden für sie anhand der existierenden Zeiten Durchschnitte angenommen, sodass eine erwartete ' +
+            'Gesamtbearbeitungsdauer ermittelt wird. Sollten gar keine Zeiten definiert sein, wird die Anzahl an ' +
+            'Arbeitsgängen mit 6 multipliziert.',
             'Möchten Sie die fehlenden Fertigstellungstermine automatisch generieren lassen? (Empfohlen)'
           ],
           DialogType.QUESTION
@@ -64,28 +72,33 @@ export class JobsTerminationComponent implements OnInit {
   }
 
   addRandomDueDates(): void {
+    let sumOfFirstSteps = this.jobs
+      .filter(job => job.dueDate)
+      .map(job => job.machineTimes[0].timeOnMachine ? job.machineTimes[0].timeOnMachine : 6)
+      .reduce((a, b) => a + b, 0);
+
     this.jobs.forEach(job => {
+      if (!job.dueDate) {
+        const nrOfDefinedTimes = job.machineTimes
+          .filter(m => m.timeOnMachine !== undefined).length;
+        let span: number;
 
-        if (!job.dueDate) {
-          const nrOfDefinedTimes = job.machineTimes
-            .filter(m => m.timeOnMachine !== undefined).length;
-
-          // Create due date by calculating average
-          if (nrOfDefinedTimes) {
-            job.dueDate = Math.ceil(job.machineTimes
-                .filter(m => m.timeOnMachine !== undefined)
-                .map(m => m.timeOnMachine)
-                .reduce((a, b) => a + b, 0) // sum of machine times
-              / nrOfDefinedTimes * job.machineTimes.length // calculate whole duration based on avg
-              * 1.1 // add 10%
-            ); // round to next higher number
-          } else {
-            // create due date by multiplying 6 * configured machines
-            job.dueDate = 6 * job.machineTimes.length;
-          }
+        // Create due date by calculating average
+        if (nrOfDefinedTimes) {
+          span = Math.ceil(job.machineTimes
+              .filter(m => m.timeOnMachine !== undefined)
+              .map(m => m.timeOnMachine)
+              .reduce((a, b) => a + b, 0) // sum of machine times
+            / nrOfDefinedTimes * job.machineTimes.length // calculate whole duration based on avg
+          ); // round to next higher number
+        } else {
+          // create due date by multiplying 6 * configured machines
+          span = 6 * job.machineTimes.length;
         }
+        job.dueDate = sumOfFirstSteps + span;
+        sumOfFirstSteps += job.machineTimes[0].timeOnMachine ? job.machineTimes[0].timeOnMachine : 6;
       }
-    );
+    });
     this.storage.jobs = this.jobs;
   }
 
