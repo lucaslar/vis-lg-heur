@@ -18,5 +18,7 @@
                           null : event.charCode >= 48 && event.charCode <= 57"
          (change)="onNumberChange()"
          [ngClass]="{'status-warning' : !isLegalValue}"
+         min="{{min}}"
+         max="{{max}}"
          #inputField/>
 </div>
