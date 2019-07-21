@@ -13,3 +13,7 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
+.job-config-input-container {
+  padding-top: 8px;
+}

@@ -283,7 +283,7 @@ export class JobsAndMachinesComponent implements OnInit {
     }
 
     if (job.dueDate && !isDueDateStillPossible) {
-      // TODO: informate user
+      // TODO: inform user
       console.log('Fertigstellungstermin für Auftrag \'' + job.name + '\' nicht mehr einhaltbar und auf ' + job.dueDate + ' aktualisiert.');
     }
 

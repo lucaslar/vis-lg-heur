@@ -10,16 +10,21 @@
           </span>
         </div>
         <mat-card-content>
-          <app-icon-number-input
-            [iconClasses]="['fas', 'fa-calendar-times']"
-            [placeholder]="'Fertigstellungstermin'"
-            [isShowValueTooltip]="true"
-            [min]="calculateMinimumDueDateForJob(job)"
-            [minErrorText]="'Der gewünschte Endtermin muss realistisch sein, d.h. er darf nicht unterhalb der Summe der Bearbeitungszeiten des Auftrags liegen (ist für einen Arbeitsgang keine Zeit definiert, wird hierfür eine Zeiteinheit angenommen)'"
-            [value]="job.dueDate"
-            (newValue)="onDueDateChanged(job, $event)"
-          >
-          </app-icon-number-input>
+          <div class="row">
+            <div class="col-md-6 job-config-input-container">
+              <app-icon-number-input
+                [iconClasses]="['fas', 'fa-calendar-times']"
+                [placeholder]="'Fertigstellungstermin'"
+                [isShowValueTooltip]="true"
+                [min]="calculateMinimumDueDateForJob(job)"
+                [minErrorText]="'Der gewünschte Fertigstellungstermin muss realistisch sein, d.h. er darf nicht unterhalb der Summe der Bearbeitungszeiten des Auftrags liegen (ist für einen Arbeitsgang keine Zeit definiert, wird hierfür eine Zeiteinheit angenommen)'"
+                [value]="job.dueDate"
+                (newValue)="onDueDateChanged(job, $event)"
+              >
+              </app-icon-number-input>
+            </div>
+            <!-- TODO: add more configs? -->
+          </div>
         </mat-card-content>
       </mat-card>
     </div>
