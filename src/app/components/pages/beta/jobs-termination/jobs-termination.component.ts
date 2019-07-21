@@ -23,7 +23,7 @@ export class JobsTerminationComponent implements OnInit {
     if (!this.isDueDateOfEachJobConfigured()) {
       this.dialog.open(YesNoPopUpComponent, {
         data: new DialogContent(
-          'Fertigstellungstermine automatisch generieren',
+          'Fehlende Fertigstellungstermine automatisch generieren',
           [
             'Derzeit sind nicht für alle Aufträge Fertigstellungstermine festgelegt. ' +
             'Diese können automatisch generiert werden oder einzeln eingegeben werden. ' +
@@ -80,8 +80,8 @@ export class JobsTerminationComponent implements OnInit {
               * 1.1 // add 10%
             ); // round to next higher number
           } else {
-            // create due date by multiplying 5 * configured machines
-            job.dueDate = 5 * job.machineTimes.length;
+            // create due date by multiplying 6 * configured machines
+            job.dueDate = 6 * job.machineTimes.length;
           }
         }
       }

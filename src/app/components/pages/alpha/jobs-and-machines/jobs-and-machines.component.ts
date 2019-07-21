@@ -234,7 +234,7 @@ export class JobsAndMachinesComponent implements OnInit {
     if (this.isJobWithUndefinedTimeExisting()) {
       this.dialog.open(YesNoPopUpComponent, {
         data: new DialogContent(
-          'Zeiten für Arbeitsgänge automatisch generieren',
+          'Zeiten fehlender Arbeitsgänge automatisch generieren',
           [
             'Derzeit sind nicht alle Zeiten für die Arbeitsgänge der einzelnen Aufträge ' +
             'festgelegt. Diese können automatisch generiert werden oder einzeln eingegeben werden. ' +
