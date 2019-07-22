@@ -31,10 +31,10 @@ export class BetaEnoughJobsGuard implements CanActivateChild {
         )
       });
 
-      // Unfortunately, this line had to be added due to Angular bug:
+      // Unfortunately, this line had to be added because of Angular bug:
       // https://github.com/angular/angular/issues/16211 (last called: 22.07.2019)
-      // Detected as type error, but doing what Guard is expected to do (nor errors logged).
-      this.router.navigate('');
+      // Doing what Guard is expected to do (no errors due to casting/unknown declaration).
+      this.router.navigate(<any[]><unknown>'');
     }
     return isEnoughJobsConfigured;
   }
