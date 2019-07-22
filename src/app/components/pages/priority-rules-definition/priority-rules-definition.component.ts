@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {PriorityRule} from '../../../model/enums/PriorityRule';
 
 @Component({
   selector: 'app-priority-rules-definition',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PriorityRulesDefinitionComponent implements OnInit {
 
-  constructor() { }
+  storedRules: PriorityRule[];
+  otherRules: PriorityRule[];
 
-  ngOnInit() {
+  ngOnInit(): void {
+  }
+
+  drop(event: CdkDragDrop<PriorityRule[]>): void {
+    if (event.container === event.previousContainer) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else if (event.container !== event.previousContainer) {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
   }
 
 }

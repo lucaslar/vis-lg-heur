@@ -1,3 +1,5 @@
+<!-- TODO: Add question mark -->
+
 <!-- Title -->
 <div class="row page-title">
   <div class="col-md-12 text-center">
@@ -6,4 +8,48 @@
     </h3>
     <mat-divider></mat-divider>
   </div>
+</div>
+
+<div class="row ">
+  <div class="col-6">
+    <div
+      cdkDropList
+      #storedList="cdkDropList"
+      [cdkDropListData]="storedList"
+      [cdkDropListConnectedTo]="[othersList]"
+      class="drag-drop-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="drag-drop-box" *ngFor="let rule of storedRules" cdkDrag>
+        <div class="text-left">
+          {{rule}}
+        </div>
+        <button mat-icon-button>
+          <i class="fas fa-trash larger-icon"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div
+      cdkDropList
+      #othersList="cdkDropList"
+      [cdkDropListData]="otherRules"
+      [cdkDropListConnectedTo]="[storedList]"
+      class="drag-drop-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="drag-drop-box" *ngFor="let rule of otherRules" cdkDrag>
+        <div class="text-left">
+          {{rule}}
+        </div>
+        <button mat-icon-button>
+          <mat-icon>
+            add_circle_outline
+          </mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
 </div>

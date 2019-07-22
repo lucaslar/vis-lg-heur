@@ -1,0 +1,7 @@
+.drag-drop-list {
+  min-height: 60px;
+}
+
+.drag-drop-box div {
+  width: 100%;
+}
