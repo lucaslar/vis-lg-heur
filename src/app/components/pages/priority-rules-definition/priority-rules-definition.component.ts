@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {PriorityRule} from '../../../model/enums/PriorityRule';
 import {StorageService} from '../../../services/storage.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-priority-rules-definition',
@@ -14,8 +15,9 @@ export class PriorityRulesDefinitionComponent implements OnInit {
   private _otherRules: PriorityRule[];
 
   @ViewChild('storedList', {static: false}) private storedList: CdkDropList<PriorityRule[]>;
+  @ViewChild('othersList', {static: false}) private othersList: CdkDropList<PriorityRule[]>;
 
-  constructor(private storage: StorageService) {
+  constructor(private storage: StorageService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -25,20 +27,74 @@ export class PriorityRulesDefinitionComponent implements OnInit {
     );
   }
 
-  drop(event: CdkDragDrop<PriorityRule[]>) {
-    if (event.previousContainer !== event.container) {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+  drop(event: CdkDragDrop<PriorityRule[]>): void {
+    this.changeArrays(
+      event.previousContainer,
+      event.container,
+      event.previousIndex,
+      event.currentIndex
+    );
+  }
+
+  add(index: number): void {
+    this.changeArrays(
+      this.othersList,
+      this.storedList,
+      index,
+      this.storedRules.length
+    );
+  }
+
+  delete(index: number): void {
+    this.changeArrays(
+      this.storedList,
+      this.othersList,
+      index,
+      this.otherRules.length
+    );
+  }
+
+  private changeArrays(previousContainer: CdkDropList<PriorityRule[]>,
+                       container: CdkDropList<PriorityRule[]>,
+                       previousIndex: number,
+                       currentIndex: number,
+                       isMessageToBeHidden?: boolean): void {
+    if (previousContainer !== container) {
+      transferArrayItem(previousContainer.data, container.data, previousIndex, currentIndex);
       this.storage.priorityRules = this.storedRules;
-    } else if (event.container === this.storedList) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else if (container === this.storedList && currentIndex !== previousIndex) {
+      moveItemInArray(container.data, previousIndex, currentIndex);
       this.storage.priorityRules = this.storedRules;
     }
-    // TODO: Message with 'undo'
-    // Ignore sorting of other list
+    if (!isMessageToBeHidden) {
+      this.openSnackBar(previousContainer, container, previousIndex, currentIndex);
+    }
   }
+
+  private openSnackBar(previousContainer: CdkDropList<PriorityRule[]>,
+                       container: CdkDropList<PriorityRule[]>,
+                       previousIndex: number,
+                       currentIndex: number) {
+    let message: string;
+
+    if (previousContainer !== container) {
+      message = '\'' + container.data[currentIndex] + '\' ' +
+        (container === this.storedList ? 'hinzugefügt' : 'entfernt');
+    } else if (currentIndex !== previousIndex && container === this.storedList) {
+      message = '\'' + container.data[currentIndex] + '\' an ' + (currentIndex + 1) + '. Stelle ' +
+        (previousIndex > currentIndex ? '(nach vorne)' : '(nach hinten)') + ' gestellt';
+    }
+
+    if (message) {
+      this.snackBar.open(message, 'Rückgängig',
+        {panelClass: 'color-white', duration: 3000}
+      ).onAction().subscribe(() => {
+        // reverse event
+        this.changeArrays(container, previousContainer, currentIndex, previousIndex, true);
+      });
+    }
+  }
+
 
   get storedRules(): PriorityRule[] {
     return this._storedRules;

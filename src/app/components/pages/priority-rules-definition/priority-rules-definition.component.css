@@ -2,6 +2,12 @@
   min-height: 60px;
 }
 
+.drag-drop-box button {
+  background: #fff;
+}
+
 .drag-drop-box div {
-  width: 100%;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

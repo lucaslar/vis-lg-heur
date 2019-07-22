@@ -1,13 +1,27 @@
-<!-- TODO: Add question mark -->
-<!-- TODO: Add Button actions -->
-
 <!-- Title -->
-<div class="row page-title">
+<div class="row title">
   <div class="col-md-12 text-center">
     <h3>
       Prioritätsregeln festlegen
     </h3>
     <mat-divider></mat-divider>
+  </div>
+</div>
+
+<div class="row">
+  <p class="col-md-12">
+    Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet.
+    Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet.
+    <!-- TODO: Add question mark and/or text? -->
+  </p>
+</div>
+
+<div class="row title">
+  <div class="col-6 text-center">
+    <h5>Gespeicherte Prioritätsregeln</h5>
+  </div>
+  <div class="col-6 text-center">
+    <h5>Weitere Prioritätsregeln</h5>
   </div>
 </div>
 
@@ -22,11 +36,13 @@
       [cdkDropListConnectedTo]="[othersList]"
       class="drag-drop-list"
       (cdkDropListDropped)="drop($event)">
-      <div class="drag-drop-box" *ngFor="let rule of storedRules" cdkDrag>
+      <div class="drag-drop-box" *ngFor="let rule of storedRules; let i = index" cdkDrag>
         <div class="text-left">
           {{rule}}
         </div>
-        <button mat-icon-button>
+        <button mat-icon-button
+                matTooltip="{{rule}} aus gespeicherten Prioritätsregeln entfernen"
+                (click)="delete(i)">
           <i class="fas fa-trash larger-icon"></i>
         </button>
       </div>
@@ -42,11 +58,13 @@
       [cdkDropListConnectedTo]="[storedList]"
       class="drag-drop-list"
       (cdkDropListDropped)="drop($event)">
-      <div class="drag-drop-box" *ngFor="let rule of otherRules" cdkDrag>
+      <div class="drag-drop-box" *ngFor="let rule of otherRules; let i = index" cdkDrag>
         <div class="text-left">
           {{rule}}
         </div>
-        <button mat-icon-button>
+        <button mat-icon-button
+                matTooltip="{{rule}} zu gespeicherten Prioritätsregeln hinzufügen"
+                (click)="add(i)">
           <mat-icon>
             add_circle_outline
           </mat-icon>
