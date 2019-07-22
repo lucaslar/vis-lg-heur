@@ -7,7 +7,7 @@ import {MachineNrPopupComponent} from '../../../dialogs/machine-nr-popup/machine
 import {DialogContent} from '../../../../model/internal/DialogContent';
 import {MachineConfig} from '../../../../model/enums/MachineConfig';
 import {DialogType} from '../../../../model/internal/DialogType';
-import {DefinableValue} from '../../../../model/internal/DefinableValues';
+import {DefinableValue} from '../../../../model/internal/DefinableValue';
 import {DefinitionStatus} from '../../../../model/internal/DefinitionStatus';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 

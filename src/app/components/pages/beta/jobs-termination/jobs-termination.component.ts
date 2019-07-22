@@ -5,7 +5,7 @@ import {Job} from '../../../../model/Job';
 import {DialogContent} from '../../../../model/internal/DialogContent';
 import {DialogType} from '../../../../model/internal/DialogType';
 import {DefinitionStatus} from '../../../../model/internal/DefinitionStatus';
-import {DefinableValue} from '../../../../model/internal/DefinableValues';
+import {DefinableValue} from '../../../../model/internal/DefinableValue';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 
 @Component({

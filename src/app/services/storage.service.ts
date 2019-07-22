@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Job} from '../model/Job';
 import {MachineConfig} from '../model/enums/MachineConfig';
-import {DefinableValue} from '../model/internal/DefinableValues';
+import {DefinableValue} from '../model/internal/DefinableValue';
 import {DefinitionStatus} from '../model/internal/DefinitionStatus';
 import {PriorityRule} from '../model/enums/PriorityRule';
 
