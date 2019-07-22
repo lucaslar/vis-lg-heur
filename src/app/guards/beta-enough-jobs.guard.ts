@@ -5,7 +5,6 @@ import {MatDialog} from '@angular/material';
 import {PopUpComponent} from '../components/dialogs/pop-up/pop-up.component';
 import {DialogContent} from '../model/internal/DialogContent';
 import {DialogType} from '../model/internal/DialogType';
-import {min} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ import {min} from 'rxjs/operators';
 export class BetaEnoughJobsGuard implements CanActivateChild {
 
   constructor(private router: Router,
-              private storage: StorageService,
+              public storage: StorageService,
               private dialog: MatDialog) {
   }
 
@@ -33,7 +32,7 @@ export class BetaEnoughJobsGuard implements CanActivateChild {
 
       // Unfortunately, this line had to be added because of Angular bug:
       // https://github.com/angular/angular/issues/16211 (last called: 22.07.2019)
-      // Doing what Guard is expected to do (no errors due to casting/unknown declaration).
+      // Expected routing after no access (no errors due to casting/unknown declaration).
       this.router.navigate(<any[]><unknown>'');
     }
     return isEnoughJobsConfigured;

@@ -17,7 +17,7 @@ export class PriorityRulesDefinitionComponent implements OnInit {
   @ViewChild('storedList', {static: false}) private storedList: CdkDropList<PriorityRule[]>;
   @ViewChild('othersList', {static: false}) private othersList: CdkDropList<PriorityRule[]>;
 
-  constructor(private storage: StorageService, private snackBar: MatSnackBar) {
+  constructor(public storage: StorageService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {

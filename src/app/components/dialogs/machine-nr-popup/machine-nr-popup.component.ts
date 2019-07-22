@@ -11,7 +11,7 @@ export class MachineNrPopupComponent implements OnInit {
   machineNr: number;
   machines: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-  constructor(private storage: StorageService) {
+  constructor(public storage: StorageService) {
   }
 
   ngOnInit(): void {
