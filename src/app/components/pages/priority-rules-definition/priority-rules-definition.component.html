@@ -1,4 +1,5 @@
 <!-- TODO: Add question mark -->
+<!-- TODO: Add Button actions -->
 
 <!-- Title -->
 <div class="row page-title">
@@ -11,11 +12,13 @@
 </div>
 
 <div class="row ">
+
+  <!-- Stored rules -->
   <div class="col-6">
     <div
       cdkDropList
       #storedList="cdkDropList"
-      [cdkDropListData]="storedList"
+      [cdkDropListData]="storedRules"
       [cdkDropListConnectedTo]="[othersList]"
       class="drag-drop-list"
       (cdkDropListDropped)="drop($event)">
@@ -30,6 +33,7 @@
     </div>
   </div>
 
+  <!-- Other rules -->
   <div class="col-6">
     <div
       cdkDropList
@@ -50,6 +54,4 @@
       </div>
     </div>
   </div>
-
-
 </div>

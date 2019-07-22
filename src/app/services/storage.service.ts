@@ -3,6 +3,7 @@ import {Job} from '../model/Job';
 import {MachineConfig} from '../model/enums/MachineConfig';
 import {DefinableValue} from '../model/internal/DefinableValues';
 import {DefinitionStatus} from '../model/internal/DefinitionStatus';
+import {PriorityRule} from '../model/enums/PriorityRule';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,12 @@ export class StorageService {
 
   private _jobs: Job[];
   private _nrOfMachines: number;
+  private _priorityRules: PriorityRule[];
 
   private readonly PREFIX_KEY = 'VISLGHEUR_';
   private readonly NR_OF_MACHINES = 'NR_OF_MACHINES';
   private readonly JOBS = 'JOBS';
+  private readonly PRIORITY_RULES = 'PRIORITY_RULES';
 
   getValueDefinitionStatus(definableValue: DefinableValue): DefinitionStatus {
     let expectedDefinitions: number;
@@ -26,6 +29,10 @@ export class StorageService {
     } else if (definableValue === DefinableValue.BETA_DUE_DATES) {
       expectedDefinitions = this.jobs.length;
       existingDefinitions = this.jobs.filter(job => job.dueDate).length;
+    } else if (definableValue === DefinableValue.PRIORITY_RULES) {
+      // Since not all rules have to be selected:
+      return this.priorityRules.length ?
+        DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
     } else {
       console.log('Define: ' + definableValue + '!');
     }
@@ -76,6 +83,18 @@ export class StorageService {
     return true;
   }
 
+  get machineConfigParam(): MachineConfig {
+    if (!this.jobs || this.jobs.length === 0) {
+      return MachineConfig.NONE;
+    } else if (this.nrOfMachines === 1) {
+      return MachineConfig.ONE_MACHINE;
+    } else if (this.isSameMachineOrderForEachJob()) {
+      return MachineConfig.FLOWSHOP;
+    } else {
+      return MachineConfig.JOBSHOP;
+    }
+  }
+
   get nrOfMachines(): number {
     if (!this._nrOfMachines) {
       const nrOfMachines = localStorage.getItem(this.PREFIX_KEY + this.NR_OF_MACHINES);
@@ -102,16 +121,17 @@ export class StorageService {
     localStorage.setItem(this.PREFIX_KEY + this.JOBS, JSON.stringify(jobs));
   }
 
-  get machineConfigParam(): MachineConfig {
-    if (!this.jobs || this.jobs.length === 0) {
-      return MachineConfig.NONE;
-    } else if (this.nrOfMachines === 1) {
-      return MachineConfig.ONE_MACHINE;
-    } else if (this.isSameMachineOrderForEachJob()) {
-      return MachineConfig.FLOWSHOP;
-    } else {
-      return MachineConfig.JOBSHOP;
+  get priorityRules(): PriorityRule[] {
+    if (!this._priorityRules) {
+      const priorityRules = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.PRIORITY_RULES));
+      this._priorityRules = priorityRules ? priorityRules : [];
     }
+    return this._priorityRules;
+  }
+
+  set priorityRules(priorityRules: PriorityRule[]) {
+    this._priorityRules = priorityRules;
+    localStorage.setItem(this.PREFIX_KEY + this.PRIORITY_RULES, JSON.stringify(priorityRules));
   }
 
 }

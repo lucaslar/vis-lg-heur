@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {PriorityRule} from '../../../model/enums/PriorityRule';
+import {StorageService} from '../../../services/storage.service';
 
 @Component({
   selector: 'app-priority-rules-definition',
@@ -9,21 +10,50 @@ import {PriorityRule} from '../../../model/enums/PriorityRule';
 })
 export class PriorityRulesDefinitionComponent implements OnInit {
 
-  storedRules: PriorityRule[];
-  otherRules: PriorityRule[];
+  private _storedRules: PriorityRule[];
+  private _otherRules: PriorityRule[];
 
-  ngOnInit(): void {
+  @ViewChild('storedList', {static: false}) private storedList: CdkDropList<PriorityRule[]>;
+
+  constructor(private storage: StorageService) {
   }
 
-  drop(event: CdkDragDrop<PriorityRule[]>): void {
-    if (event.container === event.previousContainer) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else if (event.container !== event.previousContainer) {
+  ngOnInit(): void {
+    this.storedRules = this.storage.priorityRules;
+    this.otherRules = Object.values(PriorityRule).filter(
+      rule => !this.storedRules.includes(rule)
+    );
+  }
+
+  drop(event: CdkDragDrop<PriorityRule[]>) {
+    if (event.previousContainer !== event.container) {
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex);
+      this.storage.priorityRules = this.storedRules;
+    } else if (event.container === this.storedList) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      this.storage.priorityRules = this.storedRules;
     }
+    // TODO: Message with 'undo'
+    // Ignore sorting of other list
+  }
+
+  get storedRules(): PriorityRule[] {
+    return this._storedRules;
+  }
+
+  set storedRules(storedRules: PriorityRule[]) {
+    this._storedRules = storedRules;
+  }
+
+  get otherRules(): PriorityRule[] {
+    return this._otherRules;
+  }
+
+  set otherRules(otherRules: PriorityRule[]) {
+    this._otherRules = otherRules;
   }
 
 }
