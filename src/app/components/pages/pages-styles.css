@@ -1,9 +1,9 @@
-.page-title h3 {
+.title {
   font-weight: lighter;
   color: var(--color-main);
 }
 
-.page-title mat-divider {
+.title mat-divider {
   padding-bottom: 8px;
 }
 
