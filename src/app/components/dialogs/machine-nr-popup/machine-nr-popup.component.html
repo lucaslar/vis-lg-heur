@@ -1,7 +1,12 @@
-<h1 mat-dialog-title>Maschinenzahl ändern</h1>
+<h1 mat-dialog-title>
+  <span class="pull-right">
+    <i class="fas fa-tools align-middle"></i>
+  </span>
+  Maschinenzahl
+</h1>
 
 <mat-form-field>
-  <mat-label>Maschinenzahl</mat-label>
+  <mat-label>Maschinenzahl festlegen:</mat-label>
   <mat-select [(value)]="machineNr">
     <mat-option *ngFor="let mNr of machines" [value]="mNr">
       {{mNr}}
