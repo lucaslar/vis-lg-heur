@@ -79,7 +79,7 @@ export class PriorityRulesDefinitionComponent implements OnInit {
 
     if (previousContainer !== container) {
       message = '\'' + container.data[currentIndex] + '\' ' +
-        (container === this.storedList ? 'hinzugefügt' : 'entfernt');
+        (container === this.storedList ? ' an ' + (currentIndex + 1) + '. Stelle hinzugefügt' : 'entfernt');
     } else if (currentIndex !== previousIndex && container === this.storedList) {
       message = '\'' + container.data[currentIndex] + '\' an ' + (currentIndex + 1) + '. Stelle ' +
         (previousIndex > currentIndex ? '(nach vorne)' : '(nach hinten)') + ' gestellt';
