@@ -44,10 +44,6 @@ mat-accordion mat-expansion-panel:last-child {
   color: var(--color-main);
 }
 
-.information {
-  color: var(--color-grey-font);
-}
-
 .machine-number .information {
   margin: 0;
 }

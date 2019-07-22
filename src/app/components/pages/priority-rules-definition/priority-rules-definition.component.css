@@ -11,3 +11,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+.information {
+  padding: 4px;
+}

@@ -10,7 +10,8 @@
 
 <div class="row">
   <p class="col-md-12">
-    Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet.
+    Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet.
+    Lorem ipsum dolor sid amet.
     Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet.
     <!-- TODO: Add question mark and/or text? -->
   </p>
@@ -46,6 +47,9 @@
           <i class="fas fa-trash larger-icon"></i>
         </button>
       </div>
+      <div *ngIf="!storedRules.length" class="information font-italic small text-center">
+        Prioritätsregeln zum Hinzufügen hierher ziehen
+      </div>
     </div>
   </div>
 
@@ -69,6 +73,9 @@
             add_circle_outline
           </mat-icon>
         </button>
+      </div>
+      <div *ngIf="!otherRules.length" class="information font-italic small text-center">
+        Prioritätsregeln zum Löschen hierher ziehen
       </div>
     </div>
   </div>
