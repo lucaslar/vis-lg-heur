@@ -23,7 +23,7 @@ export class HeuristicsGuard implements CanActivate {
 
     // Check if stated heuristic exists in enum:
     const errorDialog = Object.values(HeuristicDefiner).includes(statedHeuristic) ?
-      this.storage.isHeuristicApplicableAndSet(<HeuristicDefiner>statedHeuristic, true) :
+      this.storage.isHeuristicApplicable(<HeuristicDefiner>statedHeuristic, true) :
       this.noSuchHeuristicDialog();
 
     // no error dialog as feedback means the heuristic exists and is applicable:

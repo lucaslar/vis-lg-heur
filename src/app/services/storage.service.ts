@@ -46,11 +46,12 @@ export class StorageService {
         : DefinitionStatus.PARTLY_DEFINED;
   }
 
-  isHeuristicApplicableAndSet(definer: HeuristicDefiner, isDialogRequired?: boolean): boolean | DialogContent | undefined {
+  isHeuristicApplicable(definer: HeuristicDefiner, isDialogRequired?: boolean): boolean | DialogContent | undefined {
     // only schedule for at least five jobs:
     if (this.jobs.length >= 5) {
       let isApplicable = false;
       const heuristic = Heuristic.getHeuristicByDefiner(definer);
+
       /*
       return new DialogContent(
         'Header',
@@ -161,4 +162,3 @@ export class StorageService {
     this._priorityRules = priorityRules;
     localStorage.setItem(this.PREFIX_KEY + this.PRIORITY_RULES, JSON.stringify(priorityRules));
   }
-}
