@@ -33,7 +33,7 @@ export class Heuristic {
     return new Heuristic(
       'Prioritätsregeln',
       definer,
-      [DefinableValue.ALPHA_JOB_TIMES, DefinableValue.PRIORITY_RULES, DefinableValue.BETA_DUE_DATES],
+      [DefinableValue.PRIORITY_RULES, DefinableValue.ALPHA_JOB_TIMES, DefinableValue.BETA_DUE_DATES],
       [MachineConfig.ONE_MACHINE, MachineConfig.FLOWSHOP, MachineConfig.JOBSHOP]
     );
   }

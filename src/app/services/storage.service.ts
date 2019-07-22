@@ -49,17 +49,17 @@ export class StorageService {
   isHeuristicApplicable(definer: HeuristicDefiner, isDialogRequired?: boolean): boolean | DialogContent | undefined {
     // only schedule for at least five jobs:
     if (this.jobs.length >= 5) {
-      let isApplicable = false;
       const heuristic = Heuristic.getHeuristicByDefiner(definer);
+      const missingValue = this.checkValuesForHeuristic(heuristic);
+      const isApplicable = missingValue === undefined;
 
-      /*
-      return new DialogContent(
-        'Header',
-        ['Text'],
-        DialogType.ERROR
-      );
-      */
-      return isApplicable;
+      // TODO: implement special case: due dates not defined for priority rules but no priority rules needs due dates
+
+      if (isDialogRequired) {
+        return isApplicable ? undefined : this.getHeuristicNotApplicableDialog(missingValue);
+      } else {
+        return isApplicable;
+      }
     } else {
       return isDialogRequired ? new DialogContent(
         (this.jobs.length === 0 ? 'Keine' : 'Zu wenige') + ' Aufträge',
@@ -69,6 +69,32 @@ export class StorageService {
         DialogType.ERROR)
         : false;
     }
+  }
+
+  private checkValuesForHeuristic(heuristic: Heuristic): DefinableValue | undefined {
+    for (const value of heuristic.requiredValues) {
+      if (this.getValueDefinitionStatus(value) !== DefinitionStatus.COMPLETELY_DEFINED) {
+        return <DefinableValue>value;
+      }
+    }
+    return undefined;
+  }
+
+  private getHeuristicNotApplicableDialog(missingValue: DefinableValue): DialogContent {
+    return new DialogContent(
+      'Werte für Berechnung unvollständig',
+      [
+        'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren ' +
+        'nicht alle benötigten Werte vorliegen.',
+        'Konkret handelt es sich dabei um ' + (this.getValueDefinitionStatus(missingValue) === DefinitionStatus.NOT_DEFINED
+          ? '' : 'zum Teil ') + 'undefinierte ' + (
+          missingValue === DefinableValue.ALPHA_JOB_TIMES ? 'Zeiten für die Arbeitsgänge von Aufträgen'
+            : missingValue === DefinableValue.BETA_DUE_DATES ? 'gewünschte Fertigstellungstermine'
+            : 'Prioritätsregeln') + '.',
+        'Bitte sorgen Sie dafür, dass die genannten Werte vollständig sind, um fortfahren zu können.'
+      ],
+      DialogType.ERROR
+    );
   }
 
   private getJobTimesDefinitions(): number {
@@ -162,3 +188,4 @@ export class StorageService {
     this._priorityRules = priorityRules;
     localStorage.setItem(this.PREFIX_KEY + this.PRIORITY_RULES, JSON.stringify(priorityRules));
   }
+}
