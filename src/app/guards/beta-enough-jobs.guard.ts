@@ -30,9 +30,11 @@ export class BetaEnoughJobsGuard implements CanActivateChild {
         )
       });
 
-      // Unfortunately, this line had to be added because of Angular bug:
+      // Unfortunately, this line had to be added because of an Angular bug:
       // https://github.com/angular/angular/issues/16211 (last called: 22.07.2019)
-      // Expected routing after no access (no errors due to casting/unknown declaration).
+      // Expected routing after no access if not called from an app page.
+      // I presented this workaround under the issue on GitHub, see:
+      // https://github.com/angular/angular/issues/16211#issuecomment-513915425
       this.router.navigate(<any[]><unknown>'');
     }
     return isEnoughJobsConfigured;
