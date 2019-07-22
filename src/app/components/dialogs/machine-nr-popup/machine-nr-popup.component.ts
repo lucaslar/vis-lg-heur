@@ -8,14 +8,27 @@ import {StorageService} from '../../../services/storage.service';
 })
 export class MachineNrPopupComponent implements OnInit {
 
-  machineNr: number;
-  machines: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  private _machineNr: number;
+  private _machines: number[];
 
   constructor(public storage: StorageService) {
   }
 
   ngOnInit(): void {
     this.machineNr = this.storage.nrOfMachines;
+    this._machines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  }
+
+  get machineNr(): number {
+    return this._machineNr;
+  }
+
+  set machineNr(machineNr: number) {
+    this._machineNr = machineNr;
+  }
+
+  get machines(): number[] {
+    return this._machines;
   }
 
 }
