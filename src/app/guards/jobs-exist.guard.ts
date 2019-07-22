@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {StorageService} from '../services/storage.service';
-import {CanActivate} from '@angular/router';
+import {CanActivate, CanActivateChild} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {DialogContent} from '../model/internal/DialogContent';
 import {DialogType} from '../model/internal/DialogType';
@@ -9,12 +9,20 @@ import {PopUpComponent} from '../components/dialogs/pop-up/pop-up.component';
 @Injectable({
   providedIn: 'root'
 })
-export class JobsExistGuard implements CanActivate {
+export class JobsExistGuard implements CanActivateChild, CanActivate {
 
   constructor(private storage: StorageService, private dialog: MatDialog) {
   }
 
   canActivate(): boolean {
+    return this.isJobsConfigured();
+  }
+
+  canActivateChild(): boolean {
+    return this.isJobsConfigured();
+  }
+
+  private isJobsConfigured(): boolean {
     const isJobsConfigured = this.storage.jobs.length > 0;
     if (!isJobsConfigured) {
       this.dialog.open(PopUpComponent, {
@@ -28,5 +36,4 @@ export class JobsExistGuard implements CanActivate {
     }
     return isJobsConfigured;
   }
-
 }
