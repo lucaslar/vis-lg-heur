@@ -27,7 +27,7 @@ export class HeuristicsGuard implements CanActivate {
       this.noSuchHeuristicDialog();
 
     // no error dialog as feedback means the heuristic exists and is applicable:
-    const isApplicableHeuristic = !errorDialog;
+    const isApplicableHeuristic = errorDialog === undefined;
 
     if (!isApplicableHeuristic) {
       this.dialog.open(PopUpComponent, {data: <DialogContent>errorDialog});
