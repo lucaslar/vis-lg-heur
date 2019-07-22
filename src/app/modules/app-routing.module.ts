@@ -4,13 +4,14 @@ import {WelcomeComponent} from '../components/pages/welcome/welcome.component';
 import {JobsAndMachinesComponent} from '../components/pages/alpha/jobs-and-machines/jobs-and-machines.component';
 import {JobsTerminationComponent} from '../components/pages/beta/jobs-termination/jobs-termination.component';
 import {PriorityRulesDefinitionComponent} from '../components/pages/priority-rules-definition/priority-rules-definition.component';
+import {BetaEnoughJobsGuard} from '../guards/beta-enough-jobs.guard';
 
 const routes: Routes = [
   {path: 'alpha', component: JobsAndMachinesComponent},
   {path: 'priority-rules', component: PriorityRulesDefinitionComponent},
   {
-    path: 'beta', children: [
-      {path: 'jobs-termination', component: JobsTerminationComponent}
+    path: 'beta', canActivateChild: [BetaEnoughJobsGuard], children: [
+      {path: 'jobs-termination', component: JobsTerminationComponent, data: {minJobs: 1}}
     ]
   },
   {path: '', component: WelcomeComponent},
