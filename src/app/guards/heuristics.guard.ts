@@ -30,7 +30,7 @@ export class HeuristicsGuard implements CanActivate {
     const isApplicableHeuristic = !errorDialog;
 
     if (!isApplicableHeuristic) {
-      this.dialog.open(PopUpComponent, {data: errorDialog});
+      this.dialog.open(PopUpComponent, {data: <DialogContent>errorDialog});
       // Unfortunately, this line had to be added because of an Angular bug:
       // https://github.com/angular/angular/issues/16211 (last called: 22.07.2019)
       // Expected routing after no access if not called from an app page.
