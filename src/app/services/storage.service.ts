@@ -50,15 +50,18 @@ export class StorageService {
     // only schedule for at least five jobs:
     if (this.jobs.length >= 5) {
       const heuristic = Heuristic.getHeuristicByDefiner(definer);
-      const missingValue = this.checkValuesForHeuristic(heuristic);
-      const isApplicable = missingValue === undefined;
 
-      // TODO: implement special case: due dates not defined for priority rules but no priority rules needs due dates
-
-      if (isDialogRequired) {
-        return isApplicable ? undefined : this.getHeuristicNotApplicableDialog(missingValue);
+      if (!heuristic.requiredMachineConfigs.includes(this.machineConfigParam)) {
+        return isDialogRequired ? this.getNotApplicableDueToMachineConfigDialog(heuristic) : false;
       } else {
-        return isApplicable;
+        const missingValue = this.checkValuesForHeuristic(heuristic);
+        const isApplicable = missingValue === undefined;
+        // TODO: implement special case: due dates not defined for priority rules but no priority rules needs due dates
+        if (isDialogRequired) {
+          return isApplicable ? undefined : this.getNotApplicableDueToValueDialog(missingValue);
+        } else {
+          return isApplicable;
+        }
       }
     } else {
       return isDialogRequired ? new DialogContent(
@@ -80,7 +83,7 @@ export class StorageService {
     return undefined;
   }
 
-  private getHeuristicNotApplicableDialog(missingValue: DefinableValue): DialogContent {
+  private getNotApplicableDueToValueDialog(missingValue: DefinableValue): DialogContent {
     return new DialogContent(
       'Werte für Berechnung unvollständig',
       [
@@ -94,6 +97,31 @@ export class StorageService {
         'Bitte sorgen Sie dafür, dass die genannten Werte vollständig sind, um fortfahren zu können.'
       ],
       DialogType.ERROR
+    );
+  }
+
+  private getNotApplicableDueToMachineConfigDialog(heuristic: Heuristic) {
+    const possibleMachineConfigs = [];
+    heuristic.requiredMachineConfigs.forEach(config => {
+      if (config === MachineConfig.FLOWSHOP) {
+        possibleMachineConfigs.push('Flowshop');
+      } else if (config === MachineConfig.JOBSHOP) {
+        possibleMachineConfigs.push('Jobshop');
+      } else {
+        possibleMachineConfigs.push('Eine Maschine');
+      }
+    });
+
+    // TODO Check machine nr, too.
+    return new DialogContent(
+      'Falsche Maschinenkonfiguration für ' + heuristic.name,
+      [
+        'Für die aktuelle Maschinenkonfiguration ist die gewählte Heuristik nicht passend.',
+        'Bitte ändern Sie die Konfiguration zu' + (possibleMachineConfigs.length === 1 ?
+          ': ' + possibleMachineConfigs[0] : ' einer der folgenden gelisteten: ')
+      ],
+      DialogType.ERROR,
+      possibleMachineConfigs.length > 1 ? possibleMachineConfigs : undefined
     );
   }
 

@@ -6,13 +6,15 @@ import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
 import {DialogType} from '../model/internal/DialogType';
 import {PopUpComponent} from '../components/dialogs/pop-up/pop-up.component';
 import {DialogContent} from '../model/internal/DialogContent';
+import {CalculationService} from '../services/calculation.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeuristicsGuard implements CanActivate {
 
-  constructor(public storage: StorageService,
+  constructor(public calculation: CalculationService,
+              public storage: StorageService,
               private router: Router,
               private dialog: MatDialog) {
   }
@@ -20,17 +22,22 @@ export class HeuristicsGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): boolean {
 
     const statedHeuristic = route.paramMap.get('heuristic');
+    let responseDialog: DialogContent | undefined;
 
     // Check if stated heuristic exists in enum:
-    const errorDialog = Object.values(HeuristicDefiner).includes(statedHeuristic) ?
-      this.storage.isHeuristicApplicable(<HeuristicDefiner>statedHeuristic, true) :
-      this.noSuchHeuristicDialog();
+    if (Object.values(HeuristicDefiner).includes(statedHeuristic)) {
+      const exactlySolvableInfo = this.calculation.getMessageIfExactlySolvableProblem();
+      responseDialog = exactlySolvableInfo !== undefined ? exactlySolvableInfo :
+        <DialogContent | undefined> this.storage.isHeuristicApplicable(<HeuristicDefiner>statedHeuristic, true);
+    } else {
+      responseDialog = this.noSuchHeuristicDialog();
+    }
 
-    // no error dialog as feedback means the heuristic exists and is applicable:
-    const isApplicableHeuristic = errorDialog === undefined;
+    // no error or info dialog as feedback means the heuristic exists and is applicable:
+    const isApplicableHeuristic = responseDialog === undefined;
 
     if (!isApplicableHeuristic) {
-      this.dialog.open(PopUpComponent, {data: <DialogContent>errorDialog});
+      this.dialog.open(PopUpComponent, {data: <DialogContent>responseDialog});
       // Unfortunately, this line had to be added because of an Angular bug:
       // https://github.com/angular/angular/issues/16211 (last called: 22.07.2019)
       // Expected routing after no access if not called from an app page.
