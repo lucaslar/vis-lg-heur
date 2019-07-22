@@ -2,8 +2,7 @@
   <span class="pull-right">
     <mat-icon *ngIf="data.type === type.INFO" class="align-middle">info_outline</mat-icon>
     <mat-icon *ngIf="data.type === type.QUESTION" class="align-middle">help_outline</mat-icon>
-    <mat-icon *ngIf="data.type === type.ERROR || data.type === type.ERROR_CONFIRM"
-              class="align-middle">error_outline</mat-icon>
+    <mat-icon *ngIf="data.type === type.ERROR" class="align-middle">error_outline</mat-icon>
   </span>
   {{data.header}}
 </h1>
