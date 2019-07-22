@@ -148,8 +148,8 @@
         <div *ngIf="job.machineTimes.length > 1" class="information text-left">
           Abarbeitungsreihenfolge per Drag & Drop ändern:
         </div>
-        <div cdkDropList class="machines-list" (cdkDropListDropped)="changeMachineOrderOfJob(job, $event)">
-          <div class="row machine-box" *ngFor="let machine of job.machineTimes" cdkDrag>
+        <div cdkDropList class="drag-drop-list" (cdkDropListDropped)="changeMachineOrderOfJob(job, $event)">
+          <div class="row drag-drop-box" *ngFor="let machine of job.machineTimes" cdkDrag>
             <div class="col-sm-5 col-md-7 col-lg-9 col-xl-10 text-left">
               Maschine {{machine.machineNr}}
             </div>
