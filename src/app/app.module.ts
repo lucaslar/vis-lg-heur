@@ -6,15 +6,16 @@ import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from './modules/material.module';
-import { NavListContentComponent } from './components/layout/nav-list-content/nav-list-content.component';
-import { WelcomeComponent } from './components/pages/welcome/welcome.component';
-import { JobsAndMachinesComponent } from './components/pages/alpha/jobs-and-machines/jobs-and-machines.component';
-import { MachineNrPopupComponent } from './components/dialogs/machine-nr-popup/machine-nr-popup.component';
-import { AboutThisAppComponent } from './components/dialogs/about-this-app/about-this-app.component';
-import { IconNumberInputComponent } from './components/shared/icon-number-input/icon-number-input.component';
-import { JobsTerminationComponent } from './components/pages/beta/jobs-termination/jobs-termination.component';
-import { PopUpComponent } from './components/dialogs/pop-up/pop-up.component';
-import { PriorityRulesDefinitionComponent } from './components/pages/priority-rules-definition/priority-rules-definition.component';
+import {NavListContentComponent} from './components/layout/nav-list-content/nav-list-content.component';
+import {WelcomeComponent} from './components/pages/welcome/welcome.component';
+import {JobsAndMachinesComponent} from './components/pages/alpha/jobs-and-machines/jobs-and-machines.component';
+import {MachineNrPopupComponent} from './components/dialogs/machine-nr-popup/machine-nr-popup.component';
+import {AboutThisAppComponent} from './components/dialogs/about-this-app/about-this-app.component';
+import {IconNumberInputComponent} from './components/shared/icon-number-input/icon-number-input.component';
+import {JobsTerminationComponent} from './components/pages/beta/jobs-termination/jobs-termination.component';
+import {PopUpComponent} from './components/dialogs/pop-up/pop-up.component';
+import {PriorityRulesDefinitionComponent} from './components/pages/priority-rules-definition/priority-rules-definition.component';
+import {VisualizerComponent} from './components/pages/visualization/visualizer/visualizer.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { PriorityRulesDefinitionComponent } from './components/pages/priority-ru
     IconNumberInputComponent,
     JobsTerminationComponent,
     PopUpComponent,
-    PriorityRulesDefinitionComponent
+    PriorityRulesDefinitionComponent,
+    VisualizerComponent
   ],
   imports: [
     BrowserModule,
