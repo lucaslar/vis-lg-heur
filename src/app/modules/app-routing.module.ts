@@ -5,6 +5,8 @@ import {JobsAndMachinesComponent} from '../components/pages/alpha/jobs-and-machi
 import {JobsTerminationComponent} from '../components/pages/beta/jobs-termination/jobs-termination.component';
 import {PriorityRulesDefinitionComponent} from '../components/pages/priority-rules-definition/priority-rules-definition.component';
 import {BetaEnoughJobsGuard} from '../guards/beta-enough-jobs.guard';
+import {HeuristicsGuard} from '../guards/heuristics.guard';
+import {VisualizerComponent} from '../components/pages/visualization/visualizer/visualizer.component';
 
 const routes: Routes = [
   {path: 'alpha', component: JobsAndMachinesComponent},
@@ -14,6 +16,7 @@ const routes: Routes = [
       {path: 'jobs-termination', component: JobsTerminationComponent, data: {minJobs: 1}}
     ]
   },
+  {path: 'visualize/:heuristic', component: VisualizerComponent, canActivate: [HeuristicsGuard]},
   {path: '', component: WelcomeComponent},
   {path: '**', redirectTo: ''}
 ];

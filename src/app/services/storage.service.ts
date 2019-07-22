@@ -4,6 +4,10 @@ import {MachineConfig} from '../model/enums/MachineConfig';
 import {DefinableValue} from '../model/internal/DefinableValue';
 import {DefinitionStatus} from '../model/internal/DefinitionStatus';
 import {PriorityRule} from '../model/enums/PriorityRule';
+import {DialogContent} from '../model/internal/DialogContent';
+import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
+import {Heuristic} from '../model/Heuristic';
+import {DialogType} from '../model/internal/DialogType';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +44,30 @@ export class StorageService {
     return expectedDefinitions === existingDefinitions ? DefinitionStatus.COMPLETELY_DEFINED
       : existingDefinitions === 0 ? DefinitionStatus.NOT_DEFINED
         : DefinitionStatus.PARTLY_DEFINED;
+  }
+
+  isHeuristicApplicableAndSet(definer: HeuristicDefiner, isDialogRequired?: boolean): boolean | DialogContent | undefined {
+    // only schedule for at least five jobs:
+    if (this.jobs.length >= 5) {
+      let isApplicable = false;
+      const heuristic = Heuristic.getHeuristicByDefiner(definer);
+      /*
+      return new DialogContent(
+        'Header',
+        ['Text'],
+        DialogType.ERROR
+      );
+      */
+      return isApplicable;
+    } else {
+      return isDialogRequired ? new DialogContent(
+        (this.jobs.length === 0 ? 'Keine' : 'Zu wenige') + ' Aufträge',
+        ['Für das Visualisieren der Lösungsgüte von Heuristiken müssen mindestens fünf Aufträge angelegt sein.',
+          'Fügen Sie daher bitte ' + (this.jobs.length === 0 ? '' : 'weitere ') + 'Aufträge hinzu.'
+        ],
+        DialogType.ERROR)
+        : false;
+    }
   }
 
   private getJobTimesDefinitions(): number {
@@ -133,5 +161,4 @@ export class StorageService {
     this._priorityRules = priorityRules;
     localStorage.setItem(this.PREFIX_KEY + this.PRIORITY_RULES, JSON.stringify(priorityRules));
   }
-
 }
