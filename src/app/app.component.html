@@ -2,7 +2,8 @@
   <mat-toolbar>
     <button mat-icon-button
             class="navbar-toggle"
-            (click)="snav.toggle()">
+            (click)="snav.toggle()"
+            matTooltip="{{'Navigationsmenü ' + (snav.opened ? 'schließen' : 'öffnen')}}">
       <i class="fas fa-bars"></i>
     </button>
 

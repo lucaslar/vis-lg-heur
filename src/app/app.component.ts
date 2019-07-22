@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {MatDialog, MatSidenav} from '@angular/material';
 import {AboutThisAppComponent} from './components/dialogs/about-this-app/about-this-app.component';
@@ -8,15 +8,20 @@ import {AboutThisAppComponent} from './components/dialogs/about-this-app/about-t
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   @ViewChild('snav', {static: false}) private snav: MatSidenav;
   mobileQuery: MediaQueryList;
 
   constructor(media: MediaMatcher,
+              private changeDetector: ChangeDetectorRef,
               private dialog: MatDialog) {
     // See Bootstrap resizing
     this.mobileQuery = media.matchMedia('(max-width: 576px)');
+  }
+
+  ngOnInit(): void {
+    this.changeDetector.detectChanges();
   }
 
   openInfoDialog(): void {
