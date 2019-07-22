@@ -16,7 +16,7 @@ mat-accordion mat-expansion-panel:last-child {
   margin-bottom: 16px;
 }
 
-mat-expansion-panel-header div {
+.job-header {
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
