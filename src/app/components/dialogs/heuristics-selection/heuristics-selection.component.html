@@ -23,13 +23,13 @@
          routerLink="visualize/{{heuristic.heuristicDefiner}}">
 
         <i *ngIf="!getHeuristicMessage(heuristic); else notApplicable"
-           class="far fa-check-circle"></i>
+           class="far fa-check-circle"
+           matTooltip="Heuristik anwendbar"></i>
 
         <ng-template #notApplicable>
           <i class="fas fa-exclamation-triangle status-warning"
              matTooltip="{{getHeuristicMessage(heuristic)}}"></i>
         </ng-template>
-
         {{heuristic.name}}
       </a>
 
