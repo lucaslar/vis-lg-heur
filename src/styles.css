@@ -8,14 +8,8 @@ html, body {
 
 :root {
   --color-main: #224470;
-  --color-okay: #006b1c;
   --color-warning: #9c0500;
   --color-grey-font: #747474; /* Material grey */
-}
-
-/* TODO class and color used? */
-.status-ok {
-  color: var(--color-okay) !important;
 }
 
 .status-warning {
