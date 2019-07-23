@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>
+  <mat-icon class="pull-right align-middle">
+    <i class="far fa-bar-chart"></i>
+  </mat-icon>
+  Heuristiken
+</h1>
+
+<mat-dialog-content class="mat-typography">
+
+  <p>
+    <!-- TODO: Add descriptional text -->
+    Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet.
+    Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet.
+    Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet. Lorem ipsum dolor sid amet.
+    Lorem ipsum dolor sid amet.
+  </p>
+
+  <mat-nav-list>
+    <span *ngFor="let heuristic of getHeuristics()">
+
+      <a (click)="closeDialog()"
+         mat-list-item
+         routerLink="visualize/{{heuristic.heuristicDefiner}}">
+
+        <i *ngIf="!getHeuristicMessage(heuristic); else notApplicable"
+           class="far fa-check-circle"></i>
+
+        <ng-template #notApplicable>
+          <i class="fas fa-exclamation-triangle status-warning"
+             matTooltip="{{getHeuristicMessage(heuristic)}}"></i>
+        </ng-template>
+
+        {{heuristic.name}}
+      </a>
+
+    </span>
+  </mat-nav-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Schließen</button>
+</mat-dialog-actions>

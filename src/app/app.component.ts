@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {MatDialog, MatSidenav} from '@angular/material';
 import {AboutThisAppComponent} from './components/dialogs/about-this-app/about-this-app.component';
+import {HeuristicsSelectionComponent} from './components/dialogs/heuristics-selection/heuristics-selection.component';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.changeDetector.detectChanges();
+    this.openHeuristicsList();
+  }
+
+  openHeuristicsList(): void {
+    this.dialog.open(HeuristicsSelectionComponent);
   }
 
   openInfoDialog(): void {

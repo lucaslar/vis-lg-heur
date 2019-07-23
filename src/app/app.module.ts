@@ -16,6 +16,7 @@ import {JobsTerminationComponent} from './components/pages/beta/jobs-termination
 import {PopUpComponent} from './components/dialogs/pop-up/pop-up.component';
 import {PriorityRulesDefinitionComponent} from './components/pages/priority-rules-definition/priority-rules-definition.component';
 import {VisualizerComponent} from './components/pages/visualization/visualizer/visualizer.component';
+import { HeuristicsSelectionComponent } from './components/dialogs/heuristics-selection/heuristics-selection.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {VisualizerComponent} from './components/pages/visualization/visualizer/v
     JobsTerminationComponent,
     PopUpComponent,
     PriorityRulesDefinitionComponent,
-    VisualizerComponent
+    VisualizerComponent,
+    HeuristicsSelectionComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +45,7 @@ import {VisualizerComponent} from './components/pages/visualization/visualizer/v
   bootstrap: [AppComponent],
   entryComponents: [
     AboutThisAppComponent,
+    HeuristicsSelectionComponent,
     MachineNrPopupComponent,
     PopUpComponent
   ]
