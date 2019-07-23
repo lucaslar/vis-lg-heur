@@ -46,6 +46,27 @@ export class StorageService {
         : DefinitionStatus.PARTLY_DEFINED;
   }
 
+  getMessageIfExactlySolvableProblem(): DialogContent | undefined {
+
+    // TODO: Implement case: Exactly solvable but more than 2 machines!
+    // TODO Check Gamma after gamma being stored in StorageService.
+
+    // TODO: Do always return undefined for comparing priority rules to previous project
+    return this.nrOfMachines === 2 ?
+      new DialogContent(
+        'Reihenfolgeproblem exakt lösbar',
+        [
+          'Das aktuelle Reihenfolgeproblem (' + (this.machineConfigParam === MachineConfig.FLOWSHOP ?
+            'Flowshop' : 'Jobshop') + ' mit zwei Maschinen) ist mithilfe des ' +
+          'Johnson-Algorithmus in vertretbarer Zeit exakt lösbar.',
+          // TODO Correct calculating time?
+          'Der Rechenaufwand beträgt hierbei O(n log n). Es besteht also kein Bedarf, ein ' +
+          'heuristisches Verfahren zu verwenden.'
+        ],
+        DialogType.INFO
+      ) : undefined;
+  }
+
   isHeuristicApplicable(definer: HeuristicDefiner, isDialogRequired?: boolean): boolean | DialogContent | undefined {
     // only schedule for at least five jobs:
     if (this.jobs.length >= 5) {
@@ -88,7 +109,7 @@ export class StorageService {
       'Werte für Berechnung unvollständig',
       [
         'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
-          heuristicName + ') nicht alle benötigten Werte vorliegen.',
+        heuristicName + ') nicht alle benötigten Werte vorliegen.',
         'Konkret handelt es sich dabei um ' + (this.getValueDefinitionStatus(missingValue) === DefinitionStatus.NOT_DEFINED
           ? '' : 'zum Teil ') + 'undefinierte ' + (
           missingValue === DefinableValue.ALPHA_JOB_TIMES ? 'Zeiten für die Arbeitsgänge von Aufträgen'

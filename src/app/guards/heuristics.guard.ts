@@ -6,15 +6,13 @@ import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
 import {DialogType} from '../model/internal/DialogType';
 import {PopUpComponent} from '../components/dialogs/pop-up/pop-up.component';
 import {DialogContent} from '../model/internal/DialogContent';
-import {CalculationService} from '../services/calculation.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeuristicsGuard implements CanActivate {
 
-  constructor(public calculation: CalculationService,
-              public storage: StorageService,
+  constructor(public storage: StorageService,
               private router: Router,
               private dialog: MatDialog) {
   }
@@ -26,7 +24,7 @@ export class HeuristicsGuard implements CanActivate {
 
     // Check if stated heuristic exists in enum:
     if (Object.values(HeuristicDefiner).includes(statedHeuristic)) {
-      const exactlySolvableInfo = this.calculation.getMessageIfExactlySolvableProblem();
+      const exactlySolvableInfo = this.storage.getMessageIfExactlySolvableProblem();
       responseDialog = exactlySolvableInfo !== undefined ? exactlySolvableInfo :
         <DialogContent | undefined> this.storage.isHeuristicApplicable(<HeuristicDefiner>statedHeuristic, true);
     } else {
