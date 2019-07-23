@@ -58,7 +58,7 @@ export class StorageService {
         const isApplicable = missingValue === undefined;
         // TODO: implement special case: due dates not defined for priority rules but no priority rules needs due dates
         if (isDialogRequired) {
-          return isApplicable ? undefined : this.getNotApplicableDueToValueDialog(missingValue);
+          return isApplicable ? undefined : this.getNotApplicableDueToValueDialog(missingValue, heuristic.name);
         } else {
           return isApplicable;
         }
@@ -83,12 +83,12 @@ export class StorageService {
     return undefined;
   }
 
-  private getNotApplicableDueToValueDialog(missingValue: DefinableValue): DialogContent {
+  private getNotApplicableDueToValueDialog(missingValue: DefinableValue, heuristicName: string): DialogContent {
     return new DialogContent(
       'Werte für Berechnung unvollständig',
       [
-        'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren ' +
-        'nicht alle benötigten Werte vorliegen.',
+        'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
+          heuristicName + ') nicht alle benötigten Werte vorliegen.',
         'Konkret handelt es sich dabei um ' + (this.getValueDefinitionStatus(missingValue) === DefinitionStatus.NOT_DEFINED
           ? '' : 'zum Teil ') + 'undefinierte ' + (
           missingValue === DefinableValue.ALPHA_JOB_TIMES ? 'Zeiten für die Arbeitsgänge von Aufträgen'
