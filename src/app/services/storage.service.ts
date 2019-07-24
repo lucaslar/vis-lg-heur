@@ -51,7 +51,6 @@ export class StorageService {
     // TODO: Implement case: Exactly solvable but more than 2 machines!
     // TODO Check Gamma after gamma being stored in StorageService.
 
-    // TODO: Do always return undefined for comparing priority rules to previous project
     return this.nrOfMachines === 2 ?
       new DialogContent(
         'Reihenfolgeproblem exakt lösbar',
