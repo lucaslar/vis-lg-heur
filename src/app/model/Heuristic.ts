@@ -9,6 +9,7 @@ export class Heuristic {
   private readonly _requiredValues: DefinableValue[];
   private readonly _requiredMachineConfigs: MachineConfig[];
   // TODO: Required machine nr.
+  // TODO: For priority rules only: Add "does rule need due dates"-method
 
   constructor(name: string,
               heuristicDefiner: HeuristicDefiner,

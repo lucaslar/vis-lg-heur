@@ -1,4 +1,5 @@
 export enum PriorityRule {
+  // TODO: Rename identifiers?
   FCFS = 'First come, first serve',
   KOZ = 'Kürzeste-Operationszeit-Regel',
   KPZ = 'Kürzeste-Pufferzeit-Regel',

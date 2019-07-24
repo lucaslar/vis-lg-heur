@@ -20,6 +20,8 @@ export class JobsTerminationComponent implements OnInit {
   constructor(public storage: StorageService, private dialog: MatDialog) {
   }
 
+  // TODO: (low priority) Snackbar / undo action after auto generating flowshop/times?
+
   ngOnInit(): void {
     this._jobs = this.storage.jobs;
     if (!this.isDueDateOfEachJobConfigured()) {

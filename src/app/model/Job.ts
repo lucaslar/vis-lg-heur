@@ -3,13 +3,11 @@ export class Job {
   id: number;
   name: string;
   machineTimes: MachineTimeForJob[];
-
   dueDate: number;
 
   constructor(_name: string) {
     this.name = _name;
   }
-
 }
 
 export class MachineTimeForJob {
