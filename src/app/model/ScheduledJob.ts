@@ -116,7 +116,6 @@ export class ScheduledJob extends Job {
 
   private getRemainingMachiningTime(): number {
     let remainingMachiningTime = 0;
-    // TODO Is finishedOperationsCounter counted, too?
     for (let i = this.finishedOperationsCounter; i < this.machineTimes.length; i++) {
       remainingMachiningTime += this.machineTimes[i].timeOnMachine;
     }

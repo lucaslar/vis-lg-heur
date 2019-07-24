@@ -24,6 +24,8 @@ export class SchedulingService {
   scheduleUsingHeuristic(heuristicDefiner: HeuristicDefiner): Machine[] {
     this.initialize(heuristicDefiner);
 
+    // TODO Time duration?
+
     do {
       this.proceedScheduling();
       this.currentTimestamp++;
