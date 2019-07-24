@@ -16,7 +16,14 @@ import {JobsTerminationComponent} from './components/pages/beta/jobs-termination
 import {PopUpComponent} from './components/dialogs/pop-up/pop-up.component';
 import {PriorityRulesDefinitionComponent} from './components/pages/priority-rules-definition/priority-rules-definition.component';
 import {VisualizerComponent} from './components/pages/visualization/visualizer/visualizer.component';
-import { HeuristicsSelectionComponent } from './components/dialogs/heuristics-selection/heuristics-selection.component';
+import {HeuristicsSelectionComponent} from './components/dialogs/heuristics-selection/heuristics-selection.component';
+import {
+  SolutionQualityVisualizerComponent
+} from './components/pages/visualization/solution-quality-visualizer/solution-quality-visualizer.component';
+import {
+  JobsMachinesVisualizerComponent
+} from './components/pages/visualization/jobs-machines-visualizer/jobs-machines-visualizer.component';
+import { SolutionQualityDataComponent } from './components/pages/visualization/solution-quality-data/solution-quality-data.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +38,10 @@ import { HeuristicsSelectionComponent } from './components/dialogs/heuristics-se
     PopUpComponent,
     PriorityRulesDefinitionComponent,
     VisualizerComponent,
-    HeuristicsSelectionComponent
+    HeuristicsSelectionComponent,
+    SolutionQualityVisualizerComponent,
+    JobsMachinesVisualizerComponent,
+    SolutionQualityDataComponent,
   ],
   imports: [
     BrowserModule,

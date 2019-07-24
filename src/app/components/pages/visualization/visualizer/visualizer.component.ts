@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {StorageService} from '../../../../services/storage.service';
+import {SchedulingService} from '../../../../services/scheduling.service';
+import {ActivatedRoute} from '@angular/router';
+import {Heuristic} from '../../../../model/Heuristic';
+import {HeuristicDefiner} from '../../../../model/enums/HeuristicDefiner';
 
 @Component({
   selector: 'app-visualizer',
