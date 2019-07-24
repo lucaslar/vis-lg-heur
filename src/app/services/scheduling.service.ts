@@ -5,6 +5,13 @@ import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
 import {PriorityRule} from '../model/enums/PriorityRule';
 import {Machine} from '../model/Machine';
 import {ScheduledJob} from '../model/ScheduledJob';
+import {
+  GeneralSchedulingData, MachineVisualizableData,
+  SchedulingResult,
+  SolutionQualityData,
+  VisualizableSolutionQualityData
+} from '../model/internal/SchedulingResult';
+import {Heuristic} from '../model/Heuristic';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +22,12 @@ export class SchedulingService {
   private machines: Machine[];
   private heuristicType: HeuristicDefiner;
   private priorityRules: PriorityRule[];
-
   private currentTimestamp: number;
 
   constructor(public storage: StorageService) {
   }
 
-  scheduleUsingHeuristic(heuristicDefiner: HeuristicDefiner): Machine[] {
+  scheduleUsingHeuristic(heuristicDefiner: HeuristicDefiner): SchedulingResult {
     this.initialize(heuristicDefiner);
 
     // TODO Time duration?
@@ -31,21 +37,7 @@ export class SchedulingService {
       this.currentTimestamp++;
     } while (this.jobs.some(job => job.nextMachineNr !== undefined));
 
-    console.log(
-      this.machines.map(machine => this.jobs
-        .sort((j1, j2) =>
-          j1.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp
-          - j2.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp)
-        .map(job =>
-          job.operationsOnMachines
-            .filter(operation => operation.machineNr === machine.machineNr)
-            .map(o => job.name + ': ' + o.startTimestamp + '-' + o.finishTimestamp)
-        )
-      )
-    );
-
-    // TODO: Change return type and value (Object for visualization?)
-    return null;
+    return this.generateSchedulingResult();
   }
 
   private initialize(heuristicDefiner: HeuristicDefiner): void {
@@ -180,5 +172,137 @@ export class SchedulingService {
       return job.slipTime;
     }
 
+  }
+
+  // called after successful scheduling
+  private generateSchedulingResult(): SchedulingResult {
+    const result = new SchedulingResult();
+    result.generalData = this.generateGeneralSchedulingData();
+    result.solutionQualityData = this.generateSolutionQuality();
+    result.visualizableSolutionQualityData = this.generateVisualizableSolutionQualityData();
+    return result;
+  }
+
+  // result data generation starts here
+
+  private generateGeneralSchedulingData(): GeneralSchedulingData {
+    const data = new GeneralSchedulingData();
+    data.machineConfig = this.storage.machineConfigParam;
+    data.numberOfJobs = this.jobs.length;
+    data.numberOfMachines = this.machines.length;
+    data.usedHeuristic = Heuristic.getHeuristicByDefiner(this.heuristicType);
+    data.priorityRules = this.priorityRules; // may be undefined
+    return data;
+  }
+
+  private generateSolutionQuality(): SolutionQualityData {
+    const data = new SolutionQualityData();
+    data.totalDuration = this.currentTimestamp - 1;
+    data.meanCycleTime = this.calculateMeanCycleTime();
+    data.meanJobBacklog = this.calculateMeanJobBacklog();
+
+    // Either none or all jobs do have a due date here
+    if (this.jobs[0].dueDate) {
+      data.meanDelay = this.calculateMeanDelay();
+      data.standardDeviationOfDelay = this.calculateStandardDeviationOfDelay();
+      data.sumOfDelays = this.calculateSumOfDelays();
+      data.maximumDelay = this.calculateMaximumDelay();
+    }
+    return data;
+  }
+
+  private calculateMeanCycleTime(): number {
+    return +this.jobs
+        .map(job => job.finishedAtTimestamp)
+        .reduce((a, b) => a + b)
+      / this.jobs.length;
+  }
+
+  private calculateMeanJobBacklog(): number {
+    let sum = 0;
+    let maximum = 0;
+    this.jobs.forEach(job => {
+        sum += job.finishedAtTimestamp;
+        maximum = job.finishedAtTimestamp > maximum ? job.finishedAtTimestamp : maximum;
+      }
+    );
+    return +(sum / maximum);
+  }
+
+  private calculateMeanDelay(): number {
+    return +this.jobs
+        .map(job => job.delay)
+        .reduce((a, b) => a + b)
+      / this.jobs.length;
+  }
+
+  private calculateStandardDeviationOfDelay(): number {
+    const mean = this.calculateMeanDelay();
+    return +Math.sqrt(
+      this.jobs
+        .map(job => job.delay)
+        .map(delay => (delay - mean) * (delay - mean)
+        ).reduce((dev1, dev2) => dev1 + dev2
+      )
+      / (this.jobs.length - 1));
+  }
+
+  private calculateSumOfDelays(): number {
+    return +this.jobs
+      .map(job => job.delay)
+      .reduce((delay1, delay2) => delay1 + delay2);
+  }
+
+  private calculateMaximumDelay(): number {
+    return this.jobs
+      .map(job => job.delay)
+      .reduce((prevDelay, currentDelay) => prevDelay > currentDelay ? prevDelay : currentDelay);
+  }
+
+  private generateVisualizableSolutionQualityData(): VisualizableSolutionQualityData {
+    const data = new VisualizableSolutionQualityData();
+
+    // TODO Define these values
+    data.machineData = this.generateMachineData();
+    data.allMachineOperationStartsAtTimestamp = undefined;
+    data.cumulatedDelaysAtTimestamps = undefined;
+    data.percentageOfFinishedJobsAtTimestamp = undefined;
+    data.totalPercentageOfDelayedJobs = undefined;
+
+    return data;
+  }
+
+  private generateMachineData(): MachineVisualizableData[] {
+    /* Previous approach
+    const a = this.machines
+      .map(machine => this.jobs
+      // .sort((j1, j2) =>
+      //  j1.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp
+      //  - j2.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp)
+        .map(job => job.operationsOnMachines.find(operation => operation.machineNr === machine.machineNr)
+        ));
+     */
+    /*
+    const a = this.machines
+      .map(machine => this.jobs
+        .filter(job => job.operationsOnMachines
+          .find(operation => operation.machineNr === machine.machineNr)
+        ));
+        */
+
+    const a = [];
+    this.machines
+      .forEach(machine => {
+        // const b = new Map<number, ScheduledJob>();
+        const b = new Map<number, string>();
+        this.jobs.forEach(job =>
+          // b.set(job.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp, job)
+          b.set(job.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp, job.name)
+        );
+        a.push(b);
+      });
+
+    console.log(a);
+    return [];
   }
 }

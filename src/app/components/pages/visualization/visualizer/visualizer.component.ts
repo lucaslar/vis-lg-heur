@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {StorageService} from '../../../../services/storage.service';
 import {SchedulingService} from '../../../../services/scheduling.service';
 import {ActivatedRoute} from '@angular/router';
-import {Heuristic} from '../../../../model/Heuristic';
 import {HeuristicDefiner} from '../../../../model/enums/HeuristicDefiner';
+import {SchedulingResult} from '../../../../model/internal/SchedulingResult';
 
 @Component({
   selector: 'app-visualizer',
@@ -12,37 +11,22 @@ import {HeuristicDefiner} from '../../../../model/enums/HeuristicDefiner';
 })
 export class VisualizerComponent implements OnInit {
 
-  constructor(public storage: StorageService,
-              public scheduling: SchedulingService,
+  constructor(public scheduling: SchedulingService,
               private route: ActivatedRoute) {
   }
 
-  private _heuristic: Heuristic;
-  private _isLoading: boolean;
+  private _result: SchedulingResult;
 
   ngOnInit() {
     const heuristicDefiner = <HeuristicDefiner>this.route.snapshot.paramMap.get('heuristic');
-    this.heuristic = Heuristic.getHeuristicByDefiner(heuristicDefiner);
-
-    this.isLoading = true;
-    this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
-    this.isLoading = false;
+    this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
+    console.log(this._result.generalData);
+    console.log(this._result.solutionQualityData);
+    console.log(this._result.visualizableSolutionQualityData);
   }
 
-  get heuristic(): Heuristic {
-    return this._heuristic;
-  }
-
-  set heuristic(heuristic: Heuristic) {
-    this._heuristic = heuristic;
-  }
-
-  get isLoading(): boolean {
-    return this._isLoading;
-  }
-
-  set isLoading(isLoading: boolean) {
-    this._isLoading = isLoading;
+  get result(): SchedulingResult {
+    return this._result;
   }
 
 }

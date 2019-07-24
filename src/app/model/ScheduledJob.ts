@@ -133,12 +133,29 @@ export class ScheduledJob extends Job {
   // End of values needed for priority rule
 
   get nextMachineNr(): number | undefined {
+    // undefined means the order is finished and has no next machine
     return this.finishedOperationsCounter === this.machineTimes.length ?
       undefined : this.machineTimes[this.finishedOperationsCounter].machineNr;
   }
 
   get operationsOnMachines(): OperationOnMachine[] {
     return this._operationsOnMachines;
+  }
+
+  get finishedAtTimestamp(): number | undefined {
+    // undefined as return value means the order is not finished yet.
+    return this.nextMachineNr !== undefined ?
+      undefined : this.operationsOnMachines[this.finishedOperationsCounter - 1].finishTimestamp;
+  }
+
+  get delay(): number | undefined {
+    // Undefined if not yet finished or no due date specified
+    return this.nextMachineNr !== undefined || !this.dueDate ?
+      undefined :
+      // no delay if finished before due date
+      this.finishedAtTimestamp <= this.dueDate ? 0 :
+        this.finishedAtTimestamp - this.dueDate
+      ;
   }
 }
 
