@@ -37,7 +37,7 @@
 }
 
 .cdk-drag-preview button {
-  display: none;
+  visibility: hidden;
 }
 
 .cdk-drag-placeholder {
