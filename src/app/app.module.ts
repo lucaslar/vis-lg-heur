@@ -6,6 +6,7 @@ import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from './modules/material.module';
+import {ChartsModule, MDBBootstrapModule} from 'angular-bootstrap-md';
 import {NavListContentComponent} from './components/layout/nav-list-content/nav-list-content.component';
 import {WelcomeComponent} from './components/pages/welcome/welcome.component';
 import {JobsAndMachinesComponent} from './components/pages/alpha/jobs-and-machines/jobs-and-machines.component';
@@ -23,7 +24,7 @@ import {
 import {
   JobsMachinesVisualizerComponent
 } from './components/pages/visualization/jobs-machines-visualizer/jobs-machines-visualizer.component';
-import { SolutionQualityDataComponent } from './components/pages/visualization/solution-quality-data/solution-quality-data.component';
+import {SolutionQualityDataComponent} from './components/pages/visualization/solution-quality-data/solution-quality-data.component';
 
 @NgModule({
   declarations: [
@@ -47,8 +48,10 @@ import { SolutionQualityDataComponent } from './components/pages/visualization/s
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ChartsModule,
     FormsModule,
     MaterialModule,
+    MDBBootstrapModule,
     ReactiveFormsModule
   ],
   providers: [],
