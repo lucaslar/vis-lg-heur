@@ -23,7 +23,8 @@
     <div class="text-right">
       <button mat-icon-button
               routerLink="welcome"
-              matTooltip="Zur Startseite">
+              matTooltip="Zur Startseite"
+              (click)="onItemTapped()">
         <i class="fas fa-home"></i>
       </button>
       <!-- TODO: Extract to info pop up? -->
@@ -49,7 +50,7 @@
     >
       <mat-nav-list>
         <!-- Sidenav list: -->
-        <app-nav-list-content (tapEmitter)="onListItemTapped()">
+        <app-nav-list-content (tapEmitter)="onItemTapped()">
         </app-nav-list-content>
       </mat-nav-list>
     </mat-sidenav>

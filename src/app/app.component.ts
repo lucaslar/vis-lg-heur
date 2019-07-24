@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   }
 
   openHeuristicsList(): void {
+    this.onItemTapped();
     const possiblyExactSolvableMessage = this.storage.getMessageIfExactlySolvableProblem();
     if (possiblyExactSolvableMessage) {
       this.dialog.open(PopUpComponent, {data: possiblyExactSolvableMessage});
@@ -38,6 +39,7 @@ export class AppComponent implements OnInit {
   }
 
   openInfoDialog(): void {
+    this.onItemTapped();
     this.dialog.open(AboutThisAppComponent);
   }
 
@@ -46,7 +48,7 @@ export class AppComponent implements OnInit {
     window.open('https://github.com/lucaslar/vis-lg-heur');
   }
 
-  onListItemTapped(): void {
+  onItemTapped(): void {
     if (this.snav.mode === 'over') {
       this.snav.close().then();
     }
