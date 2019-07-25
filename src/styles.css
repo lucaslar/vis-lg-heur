@@ -9,7 +9,7 @@ html, body {
 :root {
   --color-main: #224470;
   --color-warning: #9c0500;
-  --color-grey-font: #747474; /* Material grey */
+  --color-grey-font: #747474;
 }
 
 .status-warning {
