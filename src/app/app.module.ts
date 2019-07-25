@@ -25,6 +25,7 @@ import {
   JobsMachinesVisualizerComponent
 } from './components/pages/visualization/jobs-machines-visualizer/jobs-machines-visualizer.component';
 import {SolutionQualityDataComponent} from './components/pages/visualization/solution-quality-data/solution-quality-data.component';
+import {ChartComponent} from './components/pages/visualization/chart/chart.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import {SolutionQualityDataComponent} from './components/pages/visualization/sol
     SolutionQualityVisualizerComponent,
     JobsMachinesVisualizerComponent,
     SolutionQualityDataComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,

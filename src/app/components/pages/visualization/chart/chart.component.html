@@ -1,0 +1,19 @@
+<div class="diagram-container">
+  <div class="text-center title">
+    <h4>{{title}}</h4>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="solution-diagram">
+    <canvas mdbChart
+            [title]="title"
+            [chartType]="type"
+            [datasets]="datasets"
+            [labels]="labels"
+            [colors]="chartColors"
+            [options]="options"
+            [legend]="true">
+    </canvas>
+  </div>
+</div>
