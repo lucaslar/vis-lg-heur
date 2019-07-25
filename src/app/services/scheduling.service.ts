@@ -6,12 +6,14 @@ import {PriorityRule} from '../model/enums/PriorityRule';
 import {Machine} from '../model/Machine';
 import {ScheduledJob} from '../model/ScheduledJob';
 import {
-  GeneralSchedulingData, MachineVisualizableData,
+  GeneralSchedulingData,
   SchedulingResult,
   SolutionQualityData,
+  VisualizableGeneralData,
   VisualizableSolutionQualityData
 } from '../model/internal/SchedulingResult';
 import {Heuristic} from '../model/Heuristic';
+import {ChartType, Dataset, VisualizableData} from '../model/internal/VisualizableData';
 
 @Injectable({
   providedIn: 'root'
@@ -178,6 +180,7 @@ export class SchedulingService {
   private generateSchedulingResult(): SchedulingResult {
     const result = new SchedulingResult();
     result.generalData = this.generateGeneralSchedulingData();
+    result.vizualizableGeneralData = this.generateVisualizableGeneralData();
     result.solutionQualityData = this.generateSolutionQuality();
     result.visualizableSolutionQualityData = this.generateVisualizableSolutionQualityData();
     return result;
@@ -193,6 +196,45 @@ export class SchedulingService {
     data.usedHeuristic = Heuristic.getHeuristicByDefiner(this.heuristicType);
     data.priorityRules = this.priorityRules; // may be undefined
     return data;
+  }
+
+  private generateVisualizableGeneralData(): VisualizableGeneralData {
+    const data = new VisualizableGeneralData();
+    data.totalDurationOnMachines = this.generateTotalDurationOnMachinesVisualization();
+    data.totalJobTimes = this.generateTotalJobTimesVisualization();
+    return data;
+  }
+
+  private generateTotalDurationOnMachinesVisualization(): VisualizableData {
+    const sortedMachines = this.machines.sort((m1, m2) => m1.machineNr - m2.machineNr);
+    const dataset = new Dataset();
+    dataset.data = sortedMachines
+      .map(machine => this.jobs
+        .map(job => job.machineTimes
+          .find(m => m.machineNr === machine.machineNr).timeOnMachine).reduce((m1, m2) => m1 + m2, 0));
+
+    const visualization = new VisualizableData();
+    visualization.visualizableAs = ChartType.DOUGHNUT;
+    visualization.title = 'Summierte Dauer der Arbeitsgänge pro Machine';
+    visualization.labels = sortedMachines.map(machine => 'Maschine ' + machine.machineNr);
+    visualization.datasets = [dataset];
+    return visualization;
+  }
+
+  private generateTotalJobTimesVisualization(): VisualizableData {
+    const sortedJobs = this.jobs.sort((j1, j2) => j2.id - j1.id);
+    const dataset = new Dataset();
+    dataset.data = sortedJobs
+      .map(job => job.machineTimes
+        .map(m => m.timeOnMachine)
+        .reduce((m1, m2) => m1 + m2));
+
+    const visualization = new VisualizableData();
+    visualization.visualizableAs = ChartType.DOUGHNUT;
+    visualization.title = 'Gesamtbearbeitungsdauer aller Aufträge';
+    visualization.labels = sortedJobs.map(job => job.name + ' (' + job.id + ')');
+    visualization.datasets = [dataset];
+    return visualization;
   }
 
   private generateSolutionQuality(): SolutionQualityData {
@@ -262,47 +304,48 @@ export class SchedulingService {
   private generateVisualizableSolutionQualityData(): VisualizableSolutionQualityData {
     const data = new VisualizableSolutionQualityData();
 
-    // TODO Define these values
-    data.machineData = this.generateMachineData();
+    // TODO Define this value after final type definition
     data.allMachineOperationStartsAtTimestamp = undefined;
-    data.cumulatedDelaysAtTimestamps = undefined;
     data.percentageOfFinishedJobsAtTimestamp = undefined;
-    data.totalPercentageOfDelayedJobs = undefined;
+
+    if (this.jobs[0].dueDate) {
+      data.cumulatedDelaysAtTimestamps = this.generateCumulatedDelaysVisualization();
+      data.totalPercentageOfDelayedJobs = undefined;
+    }
 
     return data;
   }
 
-  private generateMachineData(): MachineVisualizableData[] {
-    /* Previous approach
-    const a = this.machines
-      .map(machine => this.jobs
-      // .sort((j1, j2) =>
-      //  j1.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp
-      //  - j2.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp)
-        .map(job => job.operationsOnMachines.find(operation => operation.machineNr === machine.machineNr)
-        ));
-     */
-    /*
-    const a = this.machines
-      .map(machine => this.jobs
-        .filter(job => job.operationsOnMachines
-          .find(operation => operation.machineNr === machine.machineNr)
-        ));
-        */
+  private generateCumulatedDelaysVisualization(): VisualizableData {
 
-    const a = [];
-    this.machines
-      .forEach(machine => {
-        // const b = new Map<number, ScheduledJob>();
-        const b = new Map<number, string>();
-        this.jobs.forEach(job =>
-          // b.set(job.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp, job)
-          b.set(job.operationsOnMachines.find(o => o.machineNr === machine.machineNr).startTimestamp, job.name)
-        );
-        a.push(b);
-      });
+    const dataset = new Dataset();
+    const labels = [];
+    dataset.data = [];
+    dataset.label = 'Kummulierte Verspätungen';
+    labels.push('t = 0');
+    dataset.data.push(0);
 
-    console.log(a);
-    return [];
+    const sortedJobs = this.getJobsSortedByFinishingDate();
+    sortedJobs.forEach(job => {
+        if (job.delay || job === sortedJobs[sortedJobs.length - 1]) {
+          labels.push('t = ' + job.finishedAtTimestamp.toString());
+          dataset.data.push(
+            dataset.data.length > 1 ? // Any item except for 0 for beginning?
+              dataset.data[dataset.data.length - 1] + job.delay // add next delay to sum
+              : job.delay); // first delay
+        }
+      }
+    );
+
+    const visualization = new VisualizableData();
+    visualization.visualizableAs = ChartType.LINE;
+    visualization.title = 'Kummulierte Verspätungen';
+    visualization.labels = labels;
+    visualization.datasets = [dataset];
+    return visualization;
+  }
+
+  private getJobsSortedByFinishingDate(): ScheduledJob[] {
+    return this.jobs.sort((j1, j2) => j1.finishedAtTimestamp - j2.finishedAtTimestamp);
   }
 }
