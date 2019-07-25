@@ -18,6 +18,8 @@ import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 })
 export class JobsAndMachinesComponent implements OnInit {
 
+  // TODO: 'Undo' in snackbar for sorting and JS->FS?
+
   private _definableValue = DefinableValue;
   private _configurationStatus = DefinitionStatus;
 
