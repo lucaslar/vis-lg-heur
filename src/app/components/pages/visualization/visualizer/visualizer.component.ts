@@ -11,18 +11,19 @@ import {SchedulingResult} from '../../../../model/internal/SchedulingResult';
 })
 export class VisualizerComponent implements OnInit {
 
+  private _result: SchedulingResult;
+
   constructor(public scheduling: SchedulingService,
               private route: ActivatedRoute) {
   }
 
-  private _result: SchedulingResult;
-
   ngOnInit() {
     const heuristicDefiner = <HeuristicDefiner>this.route.snapshot.paramMap.get('heuristic');
     this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
-    console.log(this._result.generalData);
-    console.log(this._result.solutionQualityData);
-    console.log(this._result.visualizableSolutionQualityData);
+
+    console.log(this.result.generalData);
+    console.log(this.result.solutionQualityData);
+    console.log(this.result.visualizableSolutionQualityData);
   }
 
   get result(): SchedulingResult {
