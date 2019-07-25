@@ -3,11 +3,13 @@ import {Heuristic} from '../Heuristic';
 import {PriorityRule} from '../enums/PriorityRule';
 import {ScheduledJob} from '../ScheduledJob';
 import {Machine} from '../Machine';
+import {VisualizableData} from './VisualizableData';
 
 export class SchedulingResult {
 
   private _generalData: GeneralSchedulingData;
   private _solutionQualityData: SolutionQualityData;
+  private _vizualizableGeneralData: VisualizableGeneralData;
   private _visualizableSolutionQualityData: VisualizableSolutionQualityData;
 
   get generalData(): GeneralSchedulingData {
@@ -24,6 +26,14 @@ export class SchedulingResult {
 
   set solutionQualityData(value: SolutionQualityData) {
     this._solutionQualityData = value;
+  }
+
+  get vizualizableGeneralData(): VisualizableGeneralData {
+    return this._vizualizableGeneralData;
+  }
+
+  set vizualizableGeneralData(value: VisualizableGeneralData) {
+    this._vizualizableGeneralData = value;
   }
 
   get visualizableSolutionQualityData(): VisualizableSolutionQualityData {
@@ -81,6 +91,28 @@ export class GeneralSchedulingData {
 
   set numberOfJobs(value: number) {
     this._numberOfJobs = value;
+  }
+}
+
+export class VisualizableGeneralData {
+
+  private _totalDurationOnMachines: VisualizableData;
+  private _totalJobTimes: VisualizableData;
+
+  get totalDurationOnMachines(): VisualizableData {
+    return this._totalDurationOnMachines;
+  }
+
+  set totalDurationOnMachines(value: VisualizableData) {
+    this._totalDurationOnMachines = value;
+  }
+
+  get totalJobTimes(): VisualizableData {
+    return this._totalJobTimes;
+  }
+
+  set totalJobTimes(value: VisualizableData) {
+    this._totalJobTimes = value;
   }
 }
 
@@ -153,18 +185,17 @@ export class SolutionQualityData {
 
 export class VisualizableSolutionQualityData {
 
-  private _cumulatedDelaysAtTimestamps: Map<number, number>;
+  private _cumulatedDelaysAtTimestamps: VisualizableData;
   private _totalPercentageOfDelayedJobs: number;
-  private _percentageOfFinishedJobsAtTimestamp: Map<number, number>;
-  // TODO: Timestamp -> (machine -> Job) or better machine -> (ts -> Job)
-  private _allMachineOperationStartsAtTimestamp: Map<Machine, Map<number, SchedulingResult>>;
-  private _machineData: MachineVisualizableData[];
+  private _percentageOfFinishedJobsAtTimestamp: VisualizableData;
+  // TODO: Timestamp -> (machine -> Job) or better machine -> (ts -> Job) / Find type
+  private _allMachineOperationStartsAtTimestamp: Map<Machine, Map<number, ScheduledJob>>;
 
-  get cumulatedDelaysAtTimestamps(): Map<number, number> {
+  get cumulatedDelaysAtTimestamps(): VisualizableData {
     return this._cumulatedDelaysAtTimestamps;
   }
 
-  set cumulatedDelaysAtTimestamps(value: Map<number, number>) {
+  set cumulatedDelaysAtTimestamps(value: VisualizableData) {
     this._cumulatedDelaysAtTimestamps = value;
   }
 
@@ -176,49 +207,19 @@ export class VisualizableSolutionQualityData {
     this._totalPercentageOfDelayedJobs = value;
   }
 
-  get percentageOfFinishedJobsAtTimestamp(): Map<number, number> {
+  get percentageOfFinishedJobsAtTimestamp(): VisualizableData {
     return this._percentageOfFinishedJobsAtTimestamp;
   }
 
-  set percentageOfFinishedJobsAtTimestamp(value: Map<number, number>) {
+  set percentageOfFinishedJobsAtTimestamp(value: VisualizableData) {
     this._percentageOfFinishedJobsAtTimestamp = value;
   }
 
-  get allMachineOperationStartsAtTimestamp(): Map<Machine, Map<number, SchedulingResult>> {
+  get allMachineOperationStartsAtTimestamp(): Map<Machine, Map<number, ScheduledJob>> {
     return this._allMachineOperationStartsAtTimestamp;
   }
 
-  set allMachineOperationStartsAtTimestamp(value: Map<Machine, Map<number, SchedulingResult>>) {
+  set allMachineOperationStartsAtTimestamp(value: Map<Machine, Map<number, ScheduledJob>>) {
     this._allMachineOperationStartsAtTimestamp = value;
-  }
-
-  get machineData(): MachineVisualizableData[] {
-    return this._machineData;
-  }
-
-  set machineData(value: MachineVisualizableData[]) {
-    this._machineData = value;
-  }
-}
-
-export class MachineVisualizableData {
-
-  private _machine: Machine;
-  private _jobOperationStartsAtTimestamp: Map<number, ScheduledJob>;
-
-  get machine(): Machine {
-    return this._machine;
-  }
-
-  set machine(value: Machine) {
-    this._machine = value;
-  }
-
-  get jobOperationStartsAtTimestamp(): Map<number, ScheduledJob> {
-    return this._jobOperationStartsAtTimestamp;
-  }
-
-  set jobOperationStartsAtTimestamp(value: Map<number, ScheduledJob>) {
-    this._jobOperationStartsAtTimestamp = value;
   }
 }
