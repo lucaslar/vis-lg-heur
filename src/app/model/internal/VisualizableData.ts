@@ -1,40 +1,23 @@
 export class VisualizableData {
 
-  private _title: string;
-  private _visualizableAs: ChartType;
-  private _datasets: Dataset[];
-  private _labels: string[];
+  // TODO Make private
+  title: string;
+  visualizableAs: ChartType;
 
-  get title(): string {
-    return this._title;
-  }
+}
 
-  set title(value: string) {
-    this._title = value;
-  }
+export class ChartData extends VisualizableData {
+  // set for visualizableAs only here
+  datasets: Dataset[];
+  labels: string[];
+}
 
-  get visualizableAs(): ChartType {
-    return this._visualizableAs;
-  }
+export class TimelineData extends VisualizableData {
+  timelineData: [string, Date, Date][];
 
-  set visualizableAs(value: ChartType) {
-    this._visualizableAs = value;
-  }
-
-  get datasets(): Dataset[] {
-    return this._datasets;
-  }
-
-  set datasets(value: Dataset[]) {
-    this._datasets = value;
-  }
-
-  get labels(): string[] {
-    return this._labels;
-  }
-
-  set labels(value: string[]) {
-    this._labels = value;
+  constructor() {
+    super();
+    super.visualizableAs = ChartType.GC_TIMELINE;
   }
 }
 
@@ -44,7 +27,10 @@ export class Dataset {
 }
 
 export enum ChartType {
-  BAR = 'bar',
-  DOUGHNUT = 'doughnut',
-  LINE = 'line'
+  // Chart.js types:
+  CJS_LINE = 'line',
+  CJS_BAR = 'bar',
+
+// GOOGle Charts types:
+  GC_TIMELINE = 'Timeline'
 }
