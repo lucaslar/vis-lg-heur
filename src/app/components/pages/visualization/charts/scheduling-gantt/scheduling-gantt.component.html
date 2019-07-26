@@ -1,0 +1,30 @@
+<div class="diagram-container" #container>
+  <div class="text-center title">
+    <h4>Auftragsfolge-Gantt-Diagramm</h4>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="detectChartVisibility() !== true"
+       [style.height.px]="contentHeight"
+       class="loading-container">
+    <div class="loading-content">
+      <mat-spinner></mat-spinner>
+    </div>
+  </div>
+
+  <div class="solution-diagram no-legend">
+    <!-- TODO: Make responsive -->
+    <!-- TODO: Custom tooltips-->
+    <!-- TODO: Custom x axis descriptions? -->
+
+    <div #chart>
+      <google-chart [type]="'Timeline'"
+                    [data]="timelineData"
+                    [options]="options"
+                    [width]="container.offsetWidth - 16"
+                    [height]="contentHeight"
+      ></google-chart>
+    </div>
+  </div>
+</div>

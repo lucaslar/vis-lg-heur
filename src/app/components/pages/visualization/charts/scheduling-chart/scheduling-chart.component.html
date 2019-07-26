@@ -5,15 +5,15 @@
 
   <mat-divider></mat-divider>
 
-  <div class="solution-diagram">
+  <!-- TODO Doughnut or bar charts? -->
+  <div class="solution-diagram no-legend">
     <canvas mdbChart
-            [title]="title"
             [chartType]="type"
             [datasets]="datasets"
             [labels]="labels"
             [colors]="chartColors"
-            [options]="options"
-            [legend]="true">
+            [options]="options">
     </canvas>
   </div>
+
 </div>

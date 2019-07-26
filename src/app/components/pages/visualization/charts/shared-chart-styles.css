@@ -1,9 +1,13 @@
 .diagram-container {
   padding: 8px;
-  border: 1px solid rgba(0,0,0,.12);
+  border: 1px solid rgba(0, 0, 0, .12);
   border-radius: 8px;
 }
 
 .solution-diagram {
   display: block;
+}
+
+.no-legend {
+  padding-top: 8px;
 }
