@@ -29,5 +29,4 @@ export class VisualizerComponent implements OnInit {
   get result(): SchedulingResult {
     return this._result;
   }
-
 }

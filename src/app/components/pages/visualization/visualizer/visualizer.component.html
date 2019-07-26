@@ -1,12 +1,57 @@
+<!-- TODO text-->
 <p>
   Visualization lorem ipsum Visualization lorem ipsum Visualization lorem ipsum Visualization lorem ipsum
 </p>
 
-<p *ngIf="!result">
+<p *ngIf="!result; else solution"> <!-- TODO needed? -->
   I'm a test and only visible while applying the heuristic procedure on jobs and machines...
 </p>
 
 <!-- TODO Check which are needed and which are not -->
-<app-solution-quality-data></app-solution-quality-data>
-<app-solution-quality-visualizer></app-solution-quality-visualizer>
-<app-jobs-machines-visualizer></app-jobs-machines-visualizer>
+<ng-template #solution>
+  <!-- TODO: Rethink used components and add/delete/change -->
+  <app-solution-quality-data></app-solution-quality-data>
+  <app-jobs-machines-visualizer></app-jobs-machines-visualizer>
+  <app-solution-quality-visualizer></app-solution-quality-visualizer>
+
+  <app-scheduling-gantt [timelineData]="result.visualizableSolutionQualityData.allMachineOperationStartsAtTimestamp.timelineData"></app-scheduling-gantt>
+
+  <!-- TODO: Add card like layout in order to have flexible heights? -->
+  <!-- TODO: colors for jobs, not for machines -->
+
+  <!-- TODO Percentage for doughnuts? -->
+  <!-- TODO: Extract? Add colors? row padding -->
+  <div class="row">
+    <div class="col-md-8">
+      <app-chart [title]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.title"
+                 [type]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.visualizableAs"
+                 [labels]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.labels"
+                 [datasets]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.datasets"
+      ></app-chart>
+    </div>
+    <div class="col-md-8">
+      <app-chart [title]="result.vizualizableGeneralData.totalDurationOnMachines.title"
+                 [type]="result.vizualizableGeneralData.totalDurationOnMachines.visualizableAs"
+                 [labels]="result.vizualizableGeneralData.totalDurationOnMachines.labels"
+                 [datasets]="result.vizualizableGeneralData.totalDurationOnMachines.datasets"
+      ></app-chart>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <app-chart [title]="result.vizualizableGeneralData.totalJobTimes.title"
+                 [type]="result.vizualizableGeneralData.totalJobTimes.visualizableAs"
+                 [labels]="result.vizualizableGeneralData.totalJobTimes.labels"
+                 [datasets]="result.vizualizableGeneralData.totalJobTimes.datasets"
+      ></app-chart>
+    </div>
+    <div class="col-md-8">
+      <app-chart [title]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.title"
+                 [type]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.visualizableAs"
+                 [labels]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.labels"
+                 [datasets]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.datasets"
+      ></app-chart>
+    </div>
+  </div>
+
+</ng-template>
