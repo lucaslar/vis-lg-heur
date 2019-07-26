@@ -2,23 +2,20 @@ export class VisualizableData {
 
   // TODO Make private
   title: string;
-  visualizableAs: ChartType;
 
 }
 
 export class ChartData extends VisualizableData {
   // set for visualizableAs only here
+  visualizableAs: ChartType;
   datasets: Dataset[];
   labels: string[];
 }
 
+// TODO: Only chart js as object? (title not needed either)
+
 export class TimelineData extends VisualizableData {
   timelineData: [string, Date, Date][];
-
-  constructor() {
-    super();
-    super.visualizableAs = ChartType.GC_TIMELINE;
-  }
 }
 
 export class Dataset {
@@ -30,7 +27,4 @@ export enum ChartType {
   // Chart.js types:
   CJS_LINE = 'line',
   CJS_BAR = 'bar',
-
-// GOOGle Charts types:
-  GC_TIMELINE = 'Timeline'
 }
