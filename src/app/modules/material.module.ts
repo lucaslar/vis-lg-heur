@@ -10,6 +10,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule,
@@ -32,6 +33,7 @@ import {
     MatSelectModule,
     MatSidenavModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
     MatToolbarModule,
     MatTooltipModule
   ]

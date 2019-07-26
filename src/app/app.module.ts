@@ -25,8 +25,9 @@ import {
   JobsMachinesVisualizerComponent
 } from './components/pages/visualization/jobs-machines-visualizer/jobs-machines-visualizer.component';
 import {SolutionQualityDataComponent} from './components/pages/visualization/solution-quality-data/solution-quality-data.component';
-import {ChartComponent} from './components/pages/visualization/chart/chart.component';
+import {SchedulingChartComponent} from './components/pages/visualization/charts/scheduling-chart/scheduling-chart.component';
 import {GoogleChartsModule} from 'angular-google-charts';
+import { SchedulingGanttComponent } from './components/pages/visualization/charts/scheduling-gantt/scheduling-gantt.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {GoogleChartsModule} from 'angular-google-charts';
     SolutionQualityVisualizerComponent,
     JobsMachinesVisualizerComponent,
     SolutionQualityDataComponent,
-    ChartComponent
+    SchedulingChartComponent,
+    SchedulingGanttComponent
   ],
   imports: [
     BrowserModule,

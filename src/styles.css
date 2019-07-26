@@ -51,6 +51,10 @@ button:disabled span, button:disabled i {
   padding-right: 0.75em;
 }
 
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: var(--color-main);
+}
+
 .larger-icon {
   font-size: larger !important;
 }
