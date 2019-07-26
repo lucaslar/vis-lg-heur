@@ -16,7 +16,7 @@ export class MachineNrPopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.machineNr = this.storage.nrOfMachines;
-    this._machines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    this._machines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   }
 
   get machineNr(): number {
