@@ -13,7 +13,7 @@ import {
   VisualizableSolutionQualityData
 } from '../model/internal/SchedulingResult';
 import {Heuristic} from '../model/Heuristic';
-import {ChartType, Dataset, VisualizableData} from '../model/internal/VisualizableData';
+import {ChartData, ChartType, Dataset, TimelineData} from '../model/internal/VisualizableData';
 
 @Injectable({
   providedIn: 'root'
@@ -205,7 +205,7 @@ export class SchedulingService {
     return data;
   }
 
-  private generateTotalDurationOnMachinesVisualization(): VisualizableData {
+  private generateTotalDurationOnMachinesVisualization(): ChartData {
     const sortedMachines = this.machines.sort((m1, m2) => m1.machineNr - m2.machineNr);
     const dataset = new Dataset();
     dataset.data = sortedMachines
@@ -213,26 +213,26 @@ export class SchedulingService {
         .map(job => job.machineTimes
           .find(m => m.machineNr === machine.machineNr).timeOnMachine).reduce((m1, m2) => m1 + m2, 0));
 
-    const visualization = new VisualizableData();
-    visualization.visualizableAs = ChartType.DOUGHNUT;
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_BAR;
     visualization.title = 'Summierte Dauer der Arbeitsgänge pro Machine';
     visualization.labels = sortedMachines.map(machine => 'Maschine ' + machine.machineNr);
     visualization.datasets = [dataset];
     return visualization;
   }
 
-  private generateTotalJobTimesVisualization(): VisualizableData {
-    const sortedJobs = this.jobs.sort((j1, j2) => j2.id - j1.id);
+  private generateTotalJobTimesVisualization(): ChartData {
+    const sortedJobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
     const dataset = new Dataset();
     dataset.data = sortedJobs
       .map(job => job.machineTimes
         .map(m => m.timeOnMachine)
         .reduce((m1, m2) => m1 + m2));
 
-    const visualization = new VisualizableData();
-    visualization.visualizableAs = ChartType.DOUGHNUT;
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_BAR;
     visualization.title = 'Gesamtbearbeitungsdauer aller Aufträge';
-    visualization.labels = sortedJobs.map(job => job.name + ' (' + job.id + ')');
+    visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
     visualization.datasets = [dataset];
     return visualization;
   }
@@ -305,8 +305,8 @@ export class SchedulingService {
     const data = new VisualizableSolutionQualityData();
 
     // TODO Define this value after final type definition
-    data.allMachineOperationStartsAtTimestamp = undefined;
-    data.percentageOfFinishedJobsAtTimestamp = undefined;
+    data.allMachineOperationStartsAtTimestamp = this.generateAllMachineOperationsAtTimestamp();
+    data.percentageOfFinishedJobsAtTimestamp = this.generatePercentageOfFinishedJobsAtTimestampVisualization();
 
     if (this.jobs[0].dueDate) {
       data.cumulatedDelaysAtTimestamps = this.generateCumulatedDelaysVisualization();
@@ -316,12 +316,56 @@ export class SchedulingService {
     return data;
   }
 
-  private generateCumulatedDelaysVisualization(): VisualizableData {
+  // TODO Differet type?
+  private generateAllMachineOperationsAtTimestamp(): TimelineData {
+    const visualization = new TimelineData();
+    visualization.title = 'Prozentual fertiggestellte Jobs über die Gesambearbeitungszeit';
+    visualization.timelineData = [];
+    // TODO: Better way?
+    // TODO Sort machines?
+    this.jobs.map(job => job.operationsOnMachines)
+      .forEach(operations => operations
+        .sort((o1, o2) => o1.machineNr - o2.machineNr)
+        .forEach(operation => {
+            // noinspection TypeScriptValidateTypes
+            visualization.timelineData.push([
+              'Maschine ' + operation.machineNr,
+              new Date(operation.startTimestamp),
+              new Date(operation.finishTimestamp)
+            ]);
+          }
+        ));
+    return visualization;
+  }
+
+  private generatePercentageOfFinishedJobsAtTimestampVisualization(): ChartData {
+    const dataset = new Dataset();
+    const labels = [];
+    dataset.data = [];
+    dataset.label = 'Prozentual fertiggestellte Aufträge';
+    labels.push('t = 0');
+    dataset.data.push(0);
+
+    const sortedJobs = this.getJobsSortedByFinishingDate();
+    for (let i = 1; i <= sortedJobs.length; i++) {
+      dataset.data.push(((i / sortedJobs.length) * 100)); // TODO Round value
+      labels.push('t = ' + sortedJobs[i - 1].finishedAtTimestamp);
+    }
+
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_LINE;
+    visualization.title = 'Prozentual fertiggestellte Jobs über die Gesambearbeitungszeit';
+    visualization.labels = labels;
+    visualization.datasets = [dataset];
+    return visualization;
+  }
+
+  private generateCumulatedDelaysVisualization(): ChartData {
 
     const dataset = new Dataset();
     const labels = [];
     dataset.data = [];
-    dataset.label = 'Kummulierte Verspätungen';
+    dataset.label = 'Kumulierte Verspätungen';
     labels.push('t = 0');
     dataset.data.push(0);
 
@@ -337,13 +381,15 @@ export class SchedulingService {
       }
     );
 
-    const visualization = new VisualizableData();
-    visualization.visualizableAs = ChartType.LINE;
-    visualization.title = 'Kummulierte Verspätungen';
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_LINE;
+    visualization.title = 'Kumulierte Verspätungen';
     visualization.labels = labels;
     visualization.datasets = [dataset];
     return visualization;
   }
+
+  // TODO Percentage of all machines over time (0/1)
 
   private getJobsSortedByFinishingDate(): ScheduledJob[] {
     return this.jobs.sort((j1, j2) => j1.finishedAtTimestamp - j2.finishedAtTimestamp);
