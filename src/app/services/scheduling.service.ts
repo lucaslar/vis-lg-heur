@@ -228,12 +228,22 @@ export class SchedulingService {
       .map(job => job.machineTimes
         .map(m => m.timeOnMachine)
         .reduce((m1, m2) => m1 + m2));
+    dataset.label = 'Gesamtbearbeitungsdauer';
+
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
-    visualization.title = 'Gesamtbearbeitungsdauer aller Aufträge';
+    visualization.title = 'Gesamtbearbeitungsdauer ' + (sortedJobs[0].dueDate ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
     visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
     visualization.datasets = [dataset];
+
+    if (sortedJobs[0].dueDate) {
+      const dueDatesDataset = new Dataset();
+      dueDatesDataset.data = sortedJobs.map(job => job.dueDate);
+      dueDatesDataset.label = 'Gewünschte Fertigstellungstermine';
+      visualization.datasets.push(dueDatesDataset);
+    }
+
     return visualization;
   }
 
