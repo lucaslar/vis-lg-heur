@@ -26,6 +26,7 @@ import {
 } from './components/pages/visualization/jobs-machines-visualizer/jobs-machines-visualizer.component';
 import {SolutionQualityDataComponent} from './components/pages/visualization/solution-quality-data/solution-quality-data.component';
 import {ChartComponent} from './components/pages/visualization/chart/chart.component';
+import {GoogleChartsModule} from 'angular-google-charts';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import {ChartComponent} from './components/pages/visualization/chart/chart.compo
     BrowserAnimationsModule,
     ChartsModule,
     FormsModule,
+    GoogleChartsModule,
     MaterialModule,
     MDBBootstrapModule,
     ReactiveFormsModule
