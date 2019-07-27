@@ -1,5 +1,7 @@
-import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {StorageService} from '../../../../../services/storage.service';
+import TimelineOptions = google.visualization.TimelineOptions;
+import {OperationOnConsole} from '../../../../../model/internal/visualization/OperationOnConsole';
 
 @Component({
   selector: 'app-scheduling-gantt',
@@ -12,36 +14,74 @@ import {StorageService} from '../../../../../services/storage.service';
 })
 export class SchedulingGanttComponent {
 
-
-  // TODO:  x axis?
-  // TODO: Custom tool tips
-  // TODO Implement colors
-  options = {
-    colors: ['#e0440e', '#e6693e', '#38ec58', '#f3b49f', '#f6c7b6'],
+  @Input() timelineData: [string, Date, Date][];
+  // TODO Implement colors?
+  readonly options = <TimelineOptions>{
+    // colors: ['#e0440e', '#e6693e', '#38ec58', '#f3b49f', '#f6c7b6'],
+    timeline: {showBarLabels: false},
+    tooltip: {
+      trigger: 'none'
+    }
   };
 
-
+  // TODO Both needed?
   private isChartVisible = false;
+  private isChartActuallyShown = false;
+  private selectedOperation: OperationOnConsole;
+  private hoveredOperation: OperationOnConsole;
+  private _consoleText = 'Diagramm wird erstellt...'; // default text
 
-  @Input() timelineData: [string, Date, Date][];
-
-  @ViewChild('chart', {static: false}) chart: ElementRef;
+  @ViewChild('container', {static: false}) container: ElementRef;
+  @ViewChild('chartContainer', {static: false}) chartContainer: ElementRef;
+  @ViewChild('chartConsole', {static: false}) operationConsole: ElementRef;
 
   constructor(private changeDetector: ChangeDetectorRef,
               public storage: StorageService) {
   }
 
+  // TODO: Delete this method and observe chart?
   detectChartVisibility(): boolean {
-    if (!!this.chart !== this.isChartVisible) {
-      this.isChartVisible = !!this.chart;
+    if (!!this.chartContainer !== this.isChartVisible) {
+      this.isChartVisible = true;
       this.changeDetector.detectChanges();
     }
-    // Return true if chart is loaded and shown (height > 0)
-    return !!this.chart && !!(<HTMLDivElement>this.chart.nativeElement).offsetHeight;
+    return this.isChartActuallyShown;
+  }
+
+  onChartReady() {
+    if (!this.isChartActuallyShown) {
+      this.isChartActuallyShown = true;
+      this._consoleText = 'Fertig! Interagieren Sie für weitere Details mit dem Diagramm';
+    }
+  }
+
+  onJobOperationSelected(event): void {
+    const row = this.timelineData[event[0].row];
+    this.selectedOperation = new OperationOnConsole(row);
+  }
+
+  onJobOperationMouseEnter(event): void {
+    if (event.row) {
+      const row = this.timelineData[event.row];
+      this.hoveredOperation = new OperationOnConsole(row);
+    }
+  }
+
+  onJobOperationMouseLeave(): void {
+    delete this.hoveredOperation;
   }
 
   get contentHeight(): number {
-    return this.storage.nrOfMachines * 41 + 50;
+    return this.storage.nrOfMachines * 41 + 8 + 64; // rows, padding and console
+  }
+
+  get consoleText(): string {
+    return this._consoleText;
+  }
+
+  get displayedOperation(): OperationOnConsole {
+    return this.hoveredOperation ?
+      this.hoveredOperation : this.selectedOperation;
   }
 
 }

@@ -1,9 +1,33 @@
 .loading-container {
   position: relative;
 }
-.loading-container .loading-content {
+
+.loading-content {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% - 32px)); /* Half of console height */
+}
+
+.chart-console-container {
+  background-color: #fafafa; /* Color of the content pages */
+  position: absolute;
+  margin-top: -72px;
+  max-height: 50px;
+  padding-top: 8px;
+}
+
+.chart-console {
+  height: 64px; /* console container height - console container padding top*/
+  border: 1px solid rgba(0, 0, 0, .12);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 16px;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.chart-console i {
+  padding-right: 8px;
 }

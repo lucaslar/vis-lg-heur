@@ -5,26 +5,52 @@
 
   <mat-divider></mat-divider>
 
-  <div *ngIf="detectChartVisibility() !== true"
+  <div *ngIf="!detectChartVisibility()"
        [style.height.px]="contentHeight"
        class="loading-container">
     <div class="loading-content">
-      <mat-spinner></mat-spinner>
+      <mat-spinner [diameter]="contentHeight < 100 ? 40 : 100"></mat-spinner>
     </div>
   </div>
 
   <div class="solution-diagram no-legend">
-    <!-- TODO: Make responsive -->
-    <!-- TODO: Custom tooltips-->
-    <!-- TODO: Custom x axis descriptions? -->
+    <!-- TODO: on window nav bar hidden due to resizing: detect changes? -->
 
-    <div #chart>
-      <google-chart [type]="'Timeline'"
+    <div #chartContainer>
+
+      <google-chart (ready)="onChartReady()"
+                    (select)="onJobOperationSelected($event)"
+                    (mouseenter)="onJobOperationMouseEnter($event)"
+                    (mouseleave)="onJobOperationMouseLeave()"
+                    [type]="'Timeline'"
                     [data]="timelineData"
                     [options]="options"
                     [width]="container.offsetWidth - 16"
                     [height]="contentHeight"
+                    #chart
       ></google-chart>
+
+    </div>
+    <div class="chart-console-container"
+         [style.width.px]="container.offsetWidth - 16">
+
+      <div #chartConsole class="chart-console font-weight-light">
+        <div *ngIf="!displayedOperation; else operation" class="text-center">
+          <span class="information font-italic">{{consoleText}}</span>
+        </div>
+        <ng-template #operation>
+          <div>
+            <!-- TODO: Style further? -->
+            <i class="fas fa-stopwatch"></i>{{displayedOperation.start}} - {{displayedOperation.end}}
+            (Dauer: {{displayedOperation.duration}})
+            an {{displayedOperation.machine}}
+          </div>
+          <div>
+            <i class="fas fa-tools align-middle"></i>{{displayedOperation.job}}
+          </div>
+        </ng-template>
+      </div>
     </div>
   </div>
 </div>
+
