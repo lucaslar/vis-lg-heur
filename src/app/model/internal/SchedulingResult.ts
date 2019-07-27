@@ -1,7 +1,7 @@
 import {MachineConfig} from '../enums/MachineConfig';
 import {Heuristic} from '../Heuristic';
 import {PriorityRule} from '../enums/PriorityRule';
-import {VisualizableData} from './VisualizableData';
+import {ChartData, VisualizableData} from './VisualizableData';
 
 // TODO rename attributes and methods in scheduling service
 // TODO Specify types
@@ -53,7 +53,7 @@ export class VisualizableSolutionQualityData {
 
   // TODO Make private
   cumulatedDelaysAtTimestamps: VisualizableData;
-  totalPercentageOfDelayedJobs: number;
+  totalPercentageOfDelayedJobs: ChartData;
   percentageOfFinishedJobsAtTimestamp: VisualizableData;
   // TODO No any
   allMachineOperationStartsAtTimestamp: any;

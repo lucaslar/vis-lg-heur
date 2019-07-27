@@ -51,7 +51,7 @@ export class SchedulingGanttComponent {
   onChartReady() {
     if (!this.isChartActuallyShown) {
       this.isChartActuallyShown = true;
-      this._consoleText = 'Fertig! Interagieren Sie für weitere Details mit dem Diagramm';
+      this._consoleText = 'Geladen! Interagieren Sie für weitere Details mit dem Diagramm';
     }
   }
 

@@ -329,7 +329,7 @@ export class SchedulingService {
 
     if (this.jobs[0].dueDate) {
       data.cumulatedDelaysAtTimestamps = this.generateCumulatedDelaysVisualization();
-      data.totalPercentageOfDelayedJobs = undefined; // TODO implement
+      data.totalPercentageOfDelayedJobs = this.generateTotalPercentageOfDelayedJobs();
     }
 
     return data;
@@ -368,8 +368,8 @@ export class SchedulingService {
       const jobFinishedAtTimestamp = sortedJobs.find(job => job.finishedAtTimestamp === i);
       labels.push(jobFinishedAtTimestamp ? '' + i : '');
       dataset.data.push(jobFinishedAtTimestamp ?
-        ((sortedJobs.indexOf(jobFinishedAtTimestamp) + 1)
-          / this.jobs.length * 100) : undefined); // TODO Round value
+        Math.round((sortedJobs.indexOf(jobFinishedAtTimestamp) + 1)
+          / this.jobs.length * 10000) / 100 : undefined);
     }
 
     const visualization = new ChartData();
@@ -384,7 +384,6 @@ export class SchedulingService {
   }
 
   private generateCumulatedDelaysVisualization(): ChartData {
-
     const dataset = new Dataset();
     const labels = ['0'];
     dataset.data = [0];
@@ -408,6 +407,26 @@ export class SchedulingService {
     visualization.datasets = [dataset];
     visualization.xLabel = 'Zeiteinheiten';
     visualization.yLabel = 'Kumulierte Verspätungszeiten';
+    return visualization;
+  }
+
+  private generateTotalPercentageOfDelayedJobs(): ChartData {
+    const dataset = new Dataset();
+    const labels = ['Rechtzeitig', 'Verspätet'];
+    dataset.data = [];
+    dataset.label = 'Aufträge';
+
+    const nrDelayedJobs = this.jobs.filter(job => job.finishedAtTimestamp > job.dueDate).length;
+    dataset.data.push((Math.round((this.jobs.length - nrDelayedJobs ) / this.jobs.length * 10000) / 100));
+    dataset.data.push((Math.round(nrDelayedJobs / this.jobs.length * 10000) / 100));
+
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_BAR;
+    visualization.title = 'Prozentual rechtzeitig und verspätet fertiggestellte Aufträge';
+    visualization.labels = labels;
+    visualization.datasets = [dataset];
+    visualization.xLabel = 'Fertigstellungsstatus der Aufträge';
+    visualization.yLabel = 'Prozentuale Anzahl';
     return visualization;
   }
 

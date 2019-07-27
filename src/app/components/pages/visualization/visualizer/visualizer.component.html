@@ -60,6 +60,15 @@
                  [xLabel]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.xLabel"
       ></app-chart>
     </div>
+    <div class="col-md-12">
+      <app-chart [title]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.title"
+                 [type]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.visualizableAs"
+                 [labels]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.labels"
+                 [datasets]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.datasets"
+                 [yLabel]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.yLabel"
+                 [xLabel]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.xLabel"
+      ></app-chart>
+    </div>
   </div>
 
 </ng-template>
