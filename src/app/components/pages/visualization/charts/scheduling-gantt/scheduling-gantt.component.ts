@@ -61,7 +61,7 @@ export class SchedulingGanttComponent {
   }
 
   onJobOperationMouseEnter(event): void {
-    if (event.row) {
+    if (event.row > -1) {
       const row = this.timelineData[event.row];
       this.hoveredOperation = new OperationOnConsole(row);
     }
