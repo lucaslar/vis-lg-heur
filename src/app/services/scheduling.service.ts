@@ -215,7 +215,7 @@ export class SchedulingService {
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
-    visualization.title = 'Summierte Dauer der Arbeitsgänge pro Machine';
+    visualization.title = 'Summierte Dauer der Arbeitsgänge pro Maschine';
     visualization.labels = sortedMachines.map(machine => 'Maschine ' + machine.machineNr);
     visualization.datasets = [dataset];
     return visualization;
@@ -329,7 +329,6 @@ export class SchedulingService {
 
   private generateAllMachineOperationsAtTimestamp(): TimelineData {
     const visualization = new TimelineData();
-    visualization.title = 'Prozentual fertiggestellte Jobs über die Gesambearbeitungszeit';
     visualization.timelineData = [];
     this.jobs.forEach(job => {
       job.operationsOnMachines.sort((o1, o2) => o1.machineNr - o2.machineNr)
@@ -366,7 +365,7 @@ export class SchedulingService {
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_LINE;
-    visualization.title = 'Prozentual fertiggestellte Jobs über die Gesambearbeitungszeit';
+    visualization.title = 'Prozentual fertiggestellte Jobs über die Gesamtbearbeitungszeit';
     visualization.labels = labels;
     visualization.datasets = [dataset];
     return visualization;
