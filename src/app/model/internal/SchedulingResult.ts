@@ -23,6 +23,7 @@ export class GeneralSchedulingData {
   machineConfig: MachineConfig;
   numberOfMachines: number;
   numberOfJobs: number;
+  durationInMillis: number;
 
 }
 

@@ -24,22 +24,25 @@ export class SchedulingService {
   private machines: Machine[];
   private heuristicType: HeuristicDefiner;
   private priorityRules: PriorityRule[];
-  private currentTimestamp: number;
+  private currentTimestampInScheduling: number;
 
   constructor(public storage: StorageService) {
   }
 
+  // TODO Log procedure
+
   scheduleUsingHeuristic(heuristicDefiner: HeuristicDefiner): SchedulingResult {
     this.initialize(heuristicDefiner);
 
-    // TODO Time duration?
-
+    const tStart = performance.now();
     do {
       this.proceedScheduling();
-      this.currentTimestamp++;
+      this.currentTimestampInScheduling++;
     } while (this.jobs.some(job => job.nextMachineNr !== undefined));
 
-    return this.generateSchedulingResult();
+    const schedulingData = this.generateSchedulingResult();
+    schedulingData.generalData.durationInMillis = performance.now() - tStart;
+    return schedulingData;
   }
 
   private initialize(heuristicDefiner: HeuristicDefiner): void {
@@ -47,7 +50,7 @@ export class SchedulingService {
     const deepCopiedJobs: Job[] = JSON.parse(JSON.stringify(this.storage.jobs));
     this.jobs = deepCopiedJobs.map(job => new ScheduledJob(job));
     this.machines = this.jobs[0].machineTimes.map(m => new Machine(m.machineNr)).sort();
-    this.currentTimestamp = 0;
+    this.currentTimestampInScheduling = 0;
     this.heuristicType = heuristicDefiner;
     if (heuristicDefiner === HeuristicDefiner.PRIORITY_RULES) {
       this.priorityRules = <PriorityRule[]>JSON.parse(JSON.stringify(this.storage.priorityRules));
@@ -66,7 +69,7 @@ export class SchedulingService {
   private handleEachCurrentJobOfMachine(): void {
     this.machines
       .filter(machine => machine.currentJob)
-      .forEach(machine => machine.freeIfCurrentJobOperationFinished(this.currentTimestamp));
+      .forEach(machine => machine.freeIfCurrentJobOperationFinished(this.currentTimestampInScheduling));
   }
 
   // Called for any heuristic (before calling the heuristic itself)
@@ -87,7 +90,7 @@ export class SchedulingService {
   private setNextJobForEachFreeMachine(): void {
     this.machines
       .filter(machine => !machine.currentJob && machine.jobQueue.length)
-      .forEach(machine => machine.startProductionOfNext(this.currentTimestamp));
+      .forEach(machine => machine.startProductionOfNext(this.currentTimestampInScheduling));
   }
 
   // Implementation of heuristics starts here
@@ -141,34 +144,34 @@ export class SchedulingService {
       return job.currentProcessingTime;
 
     } else if (priorityRule === PriorityRule.KPZ) {
-      return job.getSlackTimeForTimestamp(this.currentTimestamp);
+      return job.getSlackTimeForTimestamp(this.currentTimestampInScheduling);
 
     } else if (priorityRule === PriorityRule.CRSPT) {
-      return job.getCriticalRatioOrProcessingTimeForTimestamp(this.currentTimestamp);
+      return job.getCriticalRatioOrProcessingTimeForTimestamp(this.currentTimestampInScheduling);
 
     } else if (priorityRule === PriorityRule.MOD) {
-      return job.getModifiedOperationalDueDateForTimestamp(this.currentTimestamp);
+      return job.getModifiedOperationalDueDateForTimestamp(this.currentTimestampInScheduling);
 
     } else if (priorityRule === PriorityRule.CR) {
-      return job.getCriticalValueForTimestamp(this.currentTimestamp);
+      return job.getCriticalValueForTimestamp(this.currentTimestampInScheduling);
 
     } else if (priorityRule === PriorityRule.EDD) {
       return job.dueDate;
 
     } else if (priorityRule === PriorityRule.FEZ) {
-      return job.getSoonestEndingTime(this.currentTimestamp);
+      return job.getSoonestEndingTime(this.currentTimestampInScheduling);
 
     } else if (priorityRule === PriorityRule.ODD) {
-      return job.getTCornerForTimestamp(this.currentTimestamp);
+      return job.getTCornerForTimestamp(this.currentTimestampInScheduling);
 
     } else if (priorityRule === PriorityRule.SOPN) {
-      return job.getSopnForTimestamp(this.currentTimestamp);
+      return job.getSopnForTimestamp(this.currentTimestampInScheduling);
 
     } else if (priorityRule === PriorityRule.SOPT) {
-      return job.getSoptForTimestamp(this.currentTimestamp);
+      return job.getSoptForTimestamp(this.currentTimestampInScheduling);
 
     } else if (priorityRule === PriorityRule.SPTT) {
-      return job.getSpttForTimestamp(this.currentTimestamp);
+      return job.getSpttForTimestamp(this.currentTimestampInScheduling);
 
     } else if (priorityRule === PriorityRule.SZ) {
       return job.slipTime;
@@ -250,7 +253,7 @@ export class SchedulingService {
 
   private generateSolutionQuality(): SolutionQualityData {
     const data = new SolutionQualityData();
-    data.totalDuration = this.currentTimestamp - 1;
+    data.totalDuration = this.currentTimestampInScheduling - 1;
     data.meanCycleTime = this.calculateMeanCycleTime();
     data.meanJobBacklog = this.calculateMeanJobBacklog();
 
