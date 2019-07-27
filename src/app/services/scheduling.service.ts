@@ -233,7 +233,8 @@ export class SchedulingService {
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
-    visualization.title = 'Gesamtbearbeitungsdauer ' + (sortedJobs[0].dueDate ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
+    visualization.title = 'Gesamtbearbeitungsdauer ' +
+      (sortedJobs[0].dueDate ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
     visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
     visualization.datasets = [dataset];
 
@@ -326,25 +327,26 @@ export class SchedulingService {
     return data;
   }
 
-  // TODO Differet type?
   private generateAllMachineOperationsAtTimestamp(): TimelineData {
     const visualization = new TimelineData();
     visualization.title = 'Prozentual fertiggestellte Jobs über die Gesambearbeitungszeit';
     visualization.timelineData = [];
-    // TODO: Better way?
-    // TODO Sort machines?
-    this.jobs.map(job => job.operationsOnMachines)
-      .forEach(operations => operations
-        .sort((o1, o2) => o1.machineNr - o2.machineNr)
+    this.jobs.forEach(job => {
+      job.operationsOnMachines.sort((o1, o2) => o1.machineNr - o2.machineNr)
         .forEach(operation => {
-            // noinspection TypeScriptValidateTypes
-            visualization.timelineData.push([
-              'Maschine ' + operation.machineNr,
-              new Date(operation.startTimestamp),
-              new Date(operation.finishTimestamp)
-            ]);
-          }
-        ));
+
+          // noinspection TypeScriptValidateTypes
+          visualization.timelineData.push([
+            'M' + operation.machineNr,
+            'Auftrag mit ID ' + job.id + ': \'' + job.name + '\'',
+            // Workaround in order to fix two problems in this context:
+            // 1. Errors on too small devices since not all labels can be shown
+            // 2. No or in case of many operations useful x-axis labels/categorizations/vertical lines
+            new Date(operation.startTimestamp),
+            new Date(operation.finishTimestamp)
+          ]);
+        });
+    });
     return visualization;
   }
 

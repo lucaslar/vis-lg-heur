@@ -15,7 +15,7 @@ export class ChartData extends VisualizableData {
 // TODO: Only chart js as object? (title not needed either)
 
 export class TimelineData extends VisualizableData {
-  timelineData: [string, Date, Date][];
+  timelineData: [string, string, Date, Date][];
 }
 
 export class Dataset {
