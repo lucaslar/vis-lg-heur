@@ -1,12 +1,6 @@
-.loading-container {
-  position: relative;
-}
-
 .loading-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, calc(-50% - 32px)); /* Half of console height */
+  /* Half of console height */
+  transform: translate(-50%, calc(-50% - 32px)) !important;
 }
 
 .chart-console-container {

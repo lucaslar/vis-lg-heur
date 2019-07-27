@@ -3,9 +3,11 @@
   Visualization lorem ipsum Visualization lorem ipsum Visualization lorem ipsum Visualization lorem ipsum
 </p>
 
-<p *ngIf="!result; else solution"> <!-- TODO needed? -->
-  I'm a test and only visible while applying the heuristic procedure on jobs and machines...
-</p>
+<div *ngIf="!result; else solution" class="loading-container">
+  <div class="loading-content">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>
 
 <!-- TODO Check which are needed and which are not -->
 <ng-template #solution>
