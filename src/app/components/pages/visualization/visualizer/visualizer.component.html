@@ -22,34 +22,42 @@
   <!-- TODO Percentage for doughnuts? -->
   <!-- TODO: Extract? Add colors? row padding -->
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
       <app-chart [title]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.title"
                  [type]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.visualizableAs"
                  [labels]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.labels"
                  [datasets]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.datasets"
+                 [yLabel]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.yLabel"
+                 [xLabel]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.xLabel"
       ></app-chart>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
       <app-chart [title]="result.vizualizableGeneralData.totalDurationOnMachines.title"
                  [type]="result.vizualizableGeneralData.totalDurationOnMachines.visualizableAs"
                  [labels]="result.vizualizableGeneralData.totalDurationOnMachines.labels"
                  [datasets]="result.vizualizableGeneralData.totalDurationOnMachines.datasets"
+                 [yLabel]="result.vizualizableGeneralData.totalDurationOnMachines.yLabel"
+                 [xLabel]="result.vizualizableGeneralData.totalDurationOnMachines.xLabel"
       ></app-chart>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
       <app-chart [title]="result.vizualizableGeneralData.totalJobTimes.title"
                  [type]="result.vizualizableGeneralData.totalJobTimes.visualizableAs"
                  [labels]="result.vizualizableGeneralData.totalJobTimes.labels"
                  [datasets]="result.vizualizableGeneralData.totalJobTimes.datasets"
+                 [yLabel]="result.vizualizableGeneralData.totalJobTimes.yLabel"
+                 [xLabel]="result.vizualizableGeneralData.totalJobTimes.xLabel"
       ></app-chart>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
       <app-chart [title]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.title"
                  [type]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.visualizableAs"
                  [labels]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.labels"
                  [datasets]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.datasets"
+                 [yLabel]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.yLabel"
+                 [xLabel]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.xLabel"
       ></app-chart>
     </div>
   </div>

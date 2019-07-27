@@ -10,6 +10,8 @@ export class ChartData extends VisualizableData {
   visualizableAs: ChartType;
   datasets: Dataset[];
   labels: string[];
+  xLabel: string;
+  yLabel: string;
 }
 
 // TODO: Only chart js as object? (title not needed either)

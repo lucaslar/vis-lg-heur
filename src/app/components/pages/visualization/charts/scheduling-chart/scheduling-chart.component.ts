@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ChartType, Dataset} from '../../../../../model/internal/VisualizableData';
 
 @Component({
@@ -11,30 +11,23 @@ import {ChartType, Dataset} from '../../../../../model/internal/VisualizableData
   ]
 })
 
-export class SchedulingChartComponent {
+export class SchedulingChartComponent implements OnInit {
 
   // TODO: Set relation for x axis in line charts
 
   // TODO: One color for all machines?
   // TODO: Same colors as in Google Chart for jobs?
 
+  private _options;
+
   @Input() title: string;
   @Input() type: ChartType;
   @Input() datasets: Dataset[];
   @Input() labels: string[];
+  @Input() yLabel: string;
+  @Input() xLabel: string;
 
-  readonly options = {
-    responsive: true,
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
-        }
-      }]
-    }
-  };
-
-  // TODO Add more / repeatable?
+  // TODO Add more / repeatable / Check for which types which colors are needed?
   private readonly barChartColors: Array<any> = [
     {
       backgroundColor: [
@@ -56,7 +49,29 @@ export class SchedulingChartComponent {
     }
   ];
 
-  private readonly _chartType = ChartType;
+  ngOnInit(): void {
+    this._options = {
+      responsive: true,
+      spanGaps: true,
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          scaleLabel: {
+            display: true,
+            labelString: this.yLabel
+          }
+        }],
+        xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: this.xLabel
+          }
+        }]
+      }
+    };
+  }
 
   get chartColors(): any[] {
     if (this.type === ChartType.CJS_LINE) {
@@ -66,8 +81,8 @@ export class SchedulingChartComponent {
     }
   }
 
-  get chartType(): any {
-    return this._chartType;
+  get options() {
+    return this._options;
   }
 
 }

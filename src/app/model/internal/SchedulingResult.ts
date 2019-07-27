@@ -4,6 +4,7 @@ import {PriorityRule} from '../enums/PriorityRule';
 import {VisualizableData} from './VisualizableData';
 
 // TODO rename attributes and methods in scheduling service
+// TODO Specify types
 
 export class SchedulingResult {
 

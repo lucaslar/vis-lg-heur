@@ -211,6 +211,7 @@ export class SchedulingService {
   private generateTotalDurationOnMachinesVisualization(): ChartData {
     const sortedMachines = this.machines.sort((m1, m2) => m1.machineNr - m2.machineNr);
     const dataset = new Dataset();
+    dataset.label = 'Summierte Dauer der Arbeitsgänge';
     dataset.data = sortedMachines
       .map(machine => this.jobs
         .map(job => job.machineTimes
@@ -221,6 +222,8 @@ export class SchedulingService {
     visualization.title = 'Summierte Dauer der Arbeitsgänge pro Maschine';
     visualization.labels = sortedMachines.map(machine => 'Maschine ' + machine.machineNr);
     visualization.datasets = [dataset];
+    visualization.xLabel = 'Maschinen';
+    visualization.yLabel = 'Zeiteinheiten';
     return visualization;
   }
 
@@ -240,11 +243,13 @@ export class SchedulingService {
       (sortedJobs[0].dueDate ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
     visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
     visualization.datasets = [dataset];
+    visualization.xLabel = 'Aufträge';
+    visualization.yLabel = 'Zeiteinheiten';
 
     if (sortedJobs[0].dueDate) {
       const dueDatesDataset = new Dataset();
       dueDatesDataset.data = sortedJobs.map(job => job.dueDate);
-      dueDatesDataset.label = 'Gewünschte Fertigstellungstermine';
+      dueDatesDataset.label = 'Gewünschter Fertigstellungstermin';
       visualization.datasets.push(dueDatesDataset);
     }
 
@@ -324,7 +329,7 @@ export class SchedulingService {
 
     if (this.jobs[0].dueDate) {
       data.cumulatedDelaysAtTimestamps = this.generateCumulatedDelaysVisualization();
-      data.totalPercentageOfDelayedJobs = undefined;
+      data.totalPercentageOfDelayedJobs = undefined; // TODO implement
     }
 
     return data;
@@ -354,52 +359,55 @@ export class SchedulingService {
 
   private generatePercentageOfFinishedJobsAtTimestampVisualization(): ChartData {
     const dataset = new Dataset();
-    const labels = [];
-    dataset.data = [];
+    const labels = ['0'];
+    dataset.data = [0];
     dataset.label = 'Prozentual fertiggestellte Aufträge';
-    labels.push('t = 0');
-    dataset.data.push(0);
 
     const sortedJobs = this.getJobsSortedByFinishingDate();
-    for (let i = 1; i <= sortedJobs.length; i++) {
-      dataset.data.push(((i / sortedJobs.length) * 100)); // TODO Round value
-      labels.push('t = ' + sortedJobs[i - 1].finishedAtTimestamp);
+    for (let i = 1; i <= sortedJobs[sortedJobs.length - 1].finishedAtTimestamp; i++) {
+      const jobFinishedAtTimestamp = sortedJobs.find(job => job.finishedAtTimestamp === i);
+      labels.push(jobFinishedAtTimestamp ? '' + i : '');
+      dataset.data.push(jobFinishedAtTimestamp ?
+        ((sortedJobs.indexOf(jobFinishedAtTimestamp) + 1)
+          / this.jobs.length * 100) : undefined); // TODO Round value
     }
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_LINE;
-    visualization.title = 'Prozentual fertiggestellte Jobs über die Gesamtbearbeitungszeit';
+    visualization.title = 'Prozentual fertiggestellte Aufträge über die Gesamtbearbeitungszeit';
     visualization.labels = labels;
     visualization.datasets = [dataset];
+    visualization.xLabel = 'Zeiteinheiten';
+    visualization.yLabel = 'Prozentual fertiggstellt';
+
     return visualization;
   }
 
   private generateCumulatedDelaysVisualization(): ChartData {
 
     const dataset = new Dataset();
-    const labels = [];
-    dataset.data = [];
-    dataset.label = 'Kumulierte Verspätungen';
-    labels.push('t = 0');
-    dataset.data.push(0);
+    const labels = ['0'];
+    dataset.data = [0];
+    dataset.label = 'Kumulierte Verspätungszeiten';
 
     const sortedJobs = this.getJobsSortedByFinishingDate();
-    sortedJobs.forEach(job => {
-        if (job.delay || job === sortedJobs[sortedJobs.length - 1]) {
-          labels.push('t = ' + job.finishedAtTimestamp.toString());
-          dataset.data.push(
-            dataset.data.length > 1 ? // Any item except for 0 for beginning?
-              dataset.data[dataset.data.length - 1] + job.delay // add next delay to sum
-              : job.delay); // first delay
-        }
-      }
-    );
+    const lastOperationEnd = sortedJobs[sortedJobs.length - 1].finishedAtTimestamp;
+    for (let i = 1; i <= lastOperationEnd; i++) {
+      const jobFinishedAtTimestamp = this.jobs.find(job => job.finishedAtTimestamp === i);
+      const isDataToBeAdded = jobFinishedAtTimestamp && (jobFinishedAtTimestamp.delay || i === lastOperationEnd);
+      labels.push(isDataToBeAdded ? '' + i : '');
+
+      dataset.data.push(isDataToBeAdded ?
+        Math.max(...dataset.data.filter(d => d !== undefined)) + jobFinishedAtTimestamp.delay : undefined);
+    }
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_LINE;
-    visualization.title = 'Kumulierte Verspätungen';
+    visualization.title = 'Kumulierte Verspätungszeiten';
     visualization.labels = labels;
     visualization.datasets = [dataset];
+    visualization.xLabel = 'Zeiteinheiten';
+    visualization.yLabel = 'Kumulierte Verspätungszeiten';
     return visualization;
   }
 
