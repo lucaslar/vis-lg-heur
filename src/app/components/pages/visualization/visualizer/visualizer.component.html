@@ -11,17 +11,15 @@
 
 <!-- TODO Check which are needed and which are not -->
 <ng-template #solution>
+  <app-scheduling-gantt
+    [timelineData]="result.visualizableSolutionQualityData.allMachineOperationStartsAtTimestamp.timelineData"></app-scheduling-gantt>
   <!-- TODO: Rethink used components and add/delete/change -->
   <app-solution-quality-data></app-solution-quality-data>
   <app-jobs-machines-visualizer></app-jobs-machines-visualizer>
   <app-solution-quality-visualizer></app-solution-quality-visualizer>
 
-  <app-scheduling-gantt [timelineData]="result.visualizableSolutionQualityData.allMachineOperationStartsAtTimestamp.timelineData"></app-scheduling-gantt>
-
   <!-- TODO: Add card like layout in order to have flexible heights? -->
-  <!-- TODO: colors for jobs, not for machines -->
 
-  <!-- TODO Percentage for doughnuts? -->
   <!-- TODO: Extract? Add colors? row padding -->
   <div class="row">
     <div class="col-md-12">
