@@ -1,3 +1,13 @@
+<!-- Title -->
+<div class="row title">
+  <div class="col-md-12 text-center">
+    <h3>
+      Visualisierung der Lösungsgüte bei Verwendung von {{result.generalData.usedHeuristic.name}}
+    </h3>
+    <mat-divider></mat-divider>
+  </div>
+</div>
+
 <!-- TODO text-->
 <p>
   Visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization
@@ -6,6 +16,7 @@
   lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum
   visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization
   lorem ipsum.
+  <!-- TODO: General data here -->
 </p>
 
 <div *ngIf="!result; else solution" class="loading-container">
@@ -19,7 +30,7 @@
   <app-scheduling-gantt
     [timelineData]="result.visualizableSolutionQualityData.allMachineOperationStartsAtTimestamp.timelineData"></app-scheduling-gantt>
   <!-- TODO: Rethink used components and add/delete/change -->
-  <app-solution-quality-data></app-solution-quality-data>
+  <app-solution-quality-data [data]="result.solutionQualityData"></app-solution-quality-data>
   <app-jobs-machines-visualizer></app-jobs-machines-visualizer>
   <app-solution-quality-visualizer></app-solution-quality-visualizer>
 

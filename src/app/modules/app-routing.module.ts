@@ -6,7 +6,7 @@ import {JobsTerminationComponent} from '../components/pages/beta/jobs-terminatio
 import {PriorityRulesDefinitionComponent} from '../components/pages/priority-rules-definition/priority-rules-definition.component';
 import {BetaEnoughJobsGuard} from '../guards/beta-enough-jobs.guard';
 import {HeuristicsGuard} from '../guards/heuristics.guard';
-import {VisualizerComponent} from '../components/pages/visualization/visualizer/visualizer.component';
+import {VisualizerComponent} from '../components/pages/visualization/content/visualizer/visualizer.component';
 
 const routes: Routes = [
   {path: 'alpha', component: JobsAndMachinesComponent},

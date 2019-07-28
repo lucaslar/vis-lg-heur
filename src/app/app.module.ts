@@ -16,15 +16,15 @@ import {IconNumberInputComponent} from './components/shared/icon-number-input/ic
 import {JobsTerminationComponent} from './components/pages/beta/jobs-termination/jobs-termination.component';
 import {PopUpComponent} from './components/dialogs/pop-up/pop-up.component';
 import {PriorityRulesDefinitionComponent} from './components/pages/priority-rules-definition/priority-rules-definition.component';
-import {VisualizerComponent} from './components/pages/visualization/visualizer/visualizer.component';
+import {VisualizerComponent} from './components/pages/visualization/content/visualizer/visualizer.component';
 import {HeuristicsSelectionComponent} from './components/dialogs/heuristics-selection/heuristics-selection.component';
 import {
   SolutionQualityVisualizerComponent
-} from './components/pages/visualization/solution-quality-visualizer/solution-quality-visualizer.component';
+} from './components/pages/visualization/content/solution-quality-visualizer/solution-quality-visualizer.component';
 import {
   JobsMachinesVisualizerComponent
-} from './components/pages/visualization/jobs-machines-visualizer/jobs-machines-visualizer.component';
-import {SolutionQualityDataComponent} from './components/pages/visualization/solution-quality-data/solution-quality-data.component';
+} from './components/pages/visualization/content/jobs-machines-visualizer/jobs-machines-visualizer.component';
+import {SolutionQualityDataComponent} from './components/pages/visualization/content/solution-quality-data/solution-quality-data.component';
 import {SchedulingChartComponent} from './components/pages/visualization/charts/scheduling-chart/scheduling-chart.component';
 import {GoogleChartsModule} from 'angular-google-charts';
 import { SchedulingGanttComponent } from './components/pages/visualization/charts/scheduling-gantt/scheduling-gantt.component';
@@ -48,7 +48,8 @@ import { SchedulingKpiComponent } from './components/pages/visualization/charts/
     JobsMachinesVisualizerComponent,
     SolutionQualityDataComponent,
     SchedulingChartComponent,
-    SchedulingGanttComponent
+    SchedulingGanttComponent,
+    SchedulingKpiComponent
   ],
   imports: [
     BrowserModule,

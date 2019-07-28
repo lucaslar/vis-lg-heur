@@ -452,7 +452,7 @@ export class SchedulingService {
     dataset.label = 'Aufträge';
 
     const nrDelayedJobs = this.jobs.filter(job => job.finishedAtTimestamp > job.dueDate).length;
-    dataset.data.push((Math.round((this.jobs.length - nrDelayedJobs ) / this.jobs.length * 10000) / 100));
+    dataset.data.push((Math.round((this.jobs.length - nrDelayedJobs) / this.jobs.length * 10000) / 100));
     dataset.data.push((Math.round(nrDelayedJobs / this.jobs.length * 10000) / 100));
 
     const visualization = new ChartData();

@@ -1,0 +1,22 @@
+<!-- Title -->
+<div class="row title">
+  <div class="col-md-12 text-center">
+    <h4>
+      Kennzahlen der ermittelten Lösung
+    </h4>
+    <mat-divider></mat-divider>
+  </div>
+</div>
+
+<!-- TODO Text -->
+<p>
+  Lorem ipsum
+</p>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card-columns">
+      <app-scheduling-kpi *ngFor="let kpi of data" [kpi]="kpi"></app-scheduling-kpi>
+    </div>
+  </div>
+</div>
