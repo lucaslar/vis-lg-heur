@@ -29,7 +29,6 @@ export class SchedulingService {
   constructor(public storage: StorageService) {
   }
 
-  // TODO: Keep percentage instead of concrete numbers?
   // TODO Log procedure
 
   scheduleUsingHeuristic(heuristicDefiner: HeuristicDefiner): SchedulingResult {
@@ -396,24 +395,23 @@ export class SchedulingService {
     const dataset = new Dataset();
     const labels = ['0'];
     dataset.data = [0];
-    dataset.label = 'Prozentual fertiggestellte Aufträge';
+    dataset.label = 'Fertiggestellte Aufträge';
 
     const sortedJobs = this.getJobsSortedByFinishingDate();
     for (let i = 1; i < this.currentTimestampInScheduling; i++) {
       const jobFinishedAtTimestamp = sortedJobs.find(job => job.finishedAtTimestamp === i);
       labels.push(jobFinishedAtTimestamp ? '' + i : '');
       dataset.data.push(jobFinishedAtTimestamp ?
-        Math.round((sortedJobs.indexOf(jobFinishedAtTimestamp) + 1)
-          / this.jobs.length * 10000) / 100 : undefined);
+        sortedJobs.indexOf(jobFinishedAtTimestamp) + 1 : undefined);
     }
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_LINE;
-    visualization.title = 'Prozentual fertiggestellte Aufträge über die Gesamtbearbeitungszeit';
+    visualization.title = 'Fertiggestellte Aufträge über die Gesamtbearbeitungszeit';
     visualization.labels = labels;
     visualization.datasets = [dataset];
     visualization.xLabel = 'Zeiteinheiten';
-    visualization.yLabel = 'Prozentual fertiggstellt';
+    visualization.yLabel = 'Anzahl';
 
     return visualization;
   }
@@ -450,20 +448,18 @@ export class SchedulingService {
     dataset.label = 'Aufträge';
 
     const nrDelayedJobs = this.jobs.filter(job => job.finishedAtTimestamp > job.dueDate).length;
-    dataset.data.push((Math.round((this.jobs.length - nrDelayedJobs) / this.jobs.length * 10000) / 100));
-    dataset.data.push((Math.round(nrDelayedJobs / this.jobs.length * 10000) / 100));
+    dataset.data.push(this.jobs.length - nrDelayedJobs);
+    dataset.data.push(nrDelayedJobs);
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
-    visualization.title = 'Prozentual rechtzeitig und verspätet fertiggestellte Aufträge';
+    visualization.title = 'Rechtzeitig und verspätet fertiggestellte Aufträge';
     visualization.labels = labels;
     visualization.datasets = [dataset];
     visualization.xLabel = 'Fertigstellungsstatus der Aufträge';
-    visualization.yLabel = 'Prozentuale Anzahl';
+    visualization.yLabel = 'Anzahl';
     return visualization;
   }
-
-  // TODO Percentage of all machines over time (0/1)
 
   private getJobsSortedByFinishingDate(): ScheduledJob[] {
     return this.jobs.sort((j1, j2) => j1.finishedAtTimestamp - j2.finishedAtTimestamp);
