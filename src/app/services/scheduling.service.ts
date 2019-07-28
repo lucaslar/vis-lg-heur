@@ -40,8 +40,9 @@ export class SchedulingService {
       this.currentTimestampInScheduling++;
     } while (this.jobs.some(job => job.nextMachineNr !== undefined));
 
+    const schedulingPerformance = performance.now() - tStart;
     const schedulingData = this.generateSchedulingResult();
-    schedulingData.generalData.durationInMillis = performance.now() - tStart;
+    schedulingData.generalData.durationInMillis = schedulingPerformance;
     return schedulingData;
   }
 
