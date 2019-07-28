@@ -312,7 +312,6 @@ export class SchedulingService {
 
   private calculateMeanDelayKpi(): Kpi {
     const kpi = new Kpi();
-    kpi.iconClasses = ['fas', 'fa-history'];
     kpi.title = 'Mittlere Verspätung';
     kpi.kpi = +this.jobs
         .map(job => job.delay)
@@ -349,7 +348,7 @@ export class SchedulingService {
 
   private calculateMaximumDelayKpi(): Kpi {
     const kpi = new Kpi();
-    kpi.iconClasses = ['fas', 'fa-tachometer-alt'];
+    kpi.iconClasses = ['fas', 'fa-history'];
     kpi.title = 'Maximale Verspätung';
     kpi.kpi = this.jobs
       .map(job => job.delay)

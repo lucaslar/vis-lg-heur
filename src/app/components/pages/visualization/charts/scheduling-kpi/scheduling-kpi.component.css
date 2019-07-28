@@ -4,7 +4,7 @@
   padding: 8px;
 }
 
-i {
+i, .average {
   font-size: xx-large;
 }
 
@@ -20,4 +20,10 @@ i {
 
 .kpi-value {
   font-size: x-large;
+}
+
+.average {
+  height: 32px;
+  width: 32px;
+  transform: translateY(-12px);
 }
