@@ -12,12 +12,14 @@ export class ChartData extends VisualizableData {
   labels: string[];
   xLabel: string;
   yLabel: string;
+  colors: string[];
 }
 
 // TODO: Only chart js as object? (title not needed either)
 
 export class TimelineData extends VisualizableData {
   timelineData: [string, string, Date, Date][];
+  colors: string[];
 }
 
 export class Dataset {

@@ -13,12 +13,8 @@ import {ChartType, Dataset} from '../../../../../model/internal/visualization/Vi
 
 export class SchedulingChartComponent implements OnInit {
 
-  // TODO: Set relation for x axis in line charts
-
-  // TODO: One color for all machines?
-  // TODO: Same colors as in Google Chart for jobs?
-
   private _options;
+  private _colors: Array<any>;
 
   @Input() title: string;
   @Input() type: ChartType;
@@ -27,19 +23,13 @@ export class SchedulingChartComponent implements OnInit {
   @Input() yLabel: string;
   @Input() xLabel: string;
 
-  // TODO Add more / repeatable / Check for which types which colors are needed?
-  private readonly barChartColors: Array<any> = [
-    {
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.8)',
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(255, 206, 86, 0.8)',
-        'rgba(75, 192, 192, 0.8)',
-        'rgba(153, 102, 255, 0.8)',
-        'rgba(255, 159, 64, 0.8)'
-      ],
-    }
-  ];
+  @Input() set colors(colors: string[]) {
+    this._colors = [
+      {
+        backgroundColor: colors
+      }
+    ];
+  }
 
   private readonly lineChartColor: Array<any> = [
     {
@@ -74,10 +64,10 @@ export class SchedulingChartComponent implements OnInit {
   }
 
   get chartColors(): any[] {
-    if (this.type === ChartType.CJS_LINE) {
+    if (this._colors) {
+      return this._colors;
+    } else if (this.type === ChartType.CJS_LINE) {
       return this.lineChartColor;
-    } else if (this.type === ChartType.CJS_BAR) {
-      return this.barChartColors;
     }
   }
 

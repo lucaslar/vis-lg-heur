@@ -11,7 +11,7 @@ export class SchedulingResult {
   // TODO Make private
   generalData: GeneralSchedulingData;
   solutionQualityData: Kpi[];
-  vizualizableGeneralData: VisualizableGeneralData;
+  visualizableGeneralData: VisualizableGeneralData;
   visualizableSolutionQualityData: VisualizableSolutionQualityData;
 
 }

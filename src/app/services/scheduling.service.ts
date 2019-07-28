@@ -185,7 +185,7 @@ export class SchedulingService {
   private generateSchedulingResult(): SchedulingResult {
     const result = new SchedulingResult();
     result.generalData = this.generateGeneralSchedulingData();
-    result.vizualizableGeneralData = this.generateVisualizableGeneralData();
+    result.visualizableGeneralData = this.generateVisualizableGeneralData();
     result.solutionQualityData = this.generateSolutionQuality();
     result.visualizableSolutionQualityData = this.generateVisualizableSolutionQualityData();
     return result;
@@ -238,9 +238,9 @@ export class SchedulingService {
         .reduce((m1, m2) => m1 + m2));
     dataset.label = 'Gesamtbearbeitungsdauer';
 
-
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
+    visualization.colors = this.getColorsAsSpecifiedInGanttWithLessOpacity();
     visualization.title = 'Gesamtbearbeitungsdauer ' +
       (sortedJobs[0].dueDate ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
     visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
@@ -388,13 +388,7 @@ export class SchedulingService {
         ]);
       }
     });
-    // TODO Colors here
-    console.log(
-      visualization.timelineData
-        .map(data => data[1])
-        .filter((value, i, arr) => arr.indexOf(value) === i)
-    );
-    // visualization.colors = this.generateUniqueJobColorValues().map(color => 'rgb(' + color + ')');
+    visualization.colors = this.generateUniqueJobColorValues().map(color => 'rgb(' + color + ')');
     return visualization;
   }
 
@@ -405,7 +399,7 @@ export class SchedulingService {
     dataset.label = 'Prozentual fertiggestellte Aufträge';
 
     const sortedJobs = this.getJobsSortedByFinishingDate();
-    for (let i = 1; i <= this.currentTimestampInScheduling - 1; i++) {
+    for (let i = 1; i < this.currentTimestampInScheduling; i++) {
       const jobFinishedAtTimestamp = sortedJobs.find(job => job.finishedAtTimestamp === i);
       labels.push(jobFinishedAtTimestamp ? '' + i : '');
       dataset.data.push(jobFinishedAtTimestamp ?
@@ -473,5 +467,62 @@ export class SchedulingService {
 
   private getJobsSortedByFinishingDate(): ScheduledJob[] {
     return this.jobs.sort((j1, j2) => j1.finishedAtTimestamp - j2.finishedAtTimestamp);
+  }
+
+  private generateUniqueJobColorValues(): string[] {
+
+    // Google Charts default colors
+    const baseRgbColors = [
+      [66, 133, 244],
+      [219, 68, 55],
+      [15, 157, 88],
+      [171, 71, 188],
+      [244, 180, 0],
+      [0, 121, 107],
+      [255, 112, 67],
+      [92, 107, 192],
+      [194, 24, 91],
+      [158, 157, 36],
+      [240, 98, 146],
+      [0, 172, 193]
+    ];
+    const newRgbColors: number[][] = [];
+
+    const totalIterationsWithNewColors = this.jobs.length > baseRgbColors.length ?
+      Math.ceil((this.jobs.length - baseRgbColors.length) / baseRgbColors.length) : 0;
+
+    for (let i = 0; i < this.jobs.length; i++) {
+      let percent = 0;
+      if (totalIterationsWithNewColors) {
+        const v = Math.ceil(((i < baseRgbColors.length ? 0 : i + 1 - baseRgbColors.length) / baseRgbColors.length));
+        percent = v / totalIterationsWithNewColors * 20;
+      }
+
+      newRgbColors[i] = [];
+      baseRgbColors[i % baseRgbColors.length].forEach(c => {
+        let newValue = parseInt(c * (100 + percent) / 100, 0);
+        newValue = (newValue < 255) ? newValue : 255;
+        newRgbColors[i].push(newValue);
+      });
+    }
+
+    return newRgbColors.map(rgb => rgb[0] + ', ' + rgb[1] + ', ' + rgb[2]);
+  }
+
+  private getColorsAsSpecifiedInGanttWithLessOpacity(): string[] {
+
+    let colors = this.generateUniqueJobColorValues()
+      .map(color => 'rgba(' + color + ',0.8)');
+
+    const sortedColors = [];
+    for (let i = 0; i < this.currentTimestampInScheduling; i++) {
+      const job = this.jobs.find(j => j.operationsOnMachines.find(o => o.machineNr === 1).startTimestamp === i);
+      if (job) {
+        sortedColors[job.id - 1] = colors[0];
+        colors = colors.filter(color => color !== colors[0]);
+      }
+    }
+
+    return sortedColors;
   }
 }

@@ -28,7 +28,8 @@
 <!-- TODO Check which are needed and which are not -->
 <ng-template #solution>
   <app-scheduling-gantt
-    [timelineData]="result.visualizableSolutionQualityData.allMachineOperationStartsAtTimestamp.timelineData"></app-scheduling-gantt>
+    [timelineData]="result.visualizableSolutionQualityData.allMachineOperationStartsAtTimestamp">
+  </app-scheduling-gantt>
   <!-- TODO: Rethink used components and add/delete/change -->
   <app-solution-quality-data [data]="result.solutionQualityData"></app-solution-quality-data>
   <app-jobs-machines-visualizer></app-jobs-machines-visualizer>
@@ -48,23 +49,24 @@
       ></app-chart>
     </div>
     <div class="col-md-12">
-      <app-chart [title]="result.vizualizableGeneralData.totalDurationOnMachines.title"
-                 [type]="result.vizualizableGeneralData.totalDurationOnMachines.visualizableAs"
-                 [labels]="result.vizualizableGeneralData.totalDurationOnMachines.labels"
-                 [datasets]="result.vizualizableGeneralData.totalDurationOnMachines.datasets"
-                 [yLabel]="result.vizualizableGeneralData.totalDurationOnMachines.yLabel"
-                 [xLabel]="result.vizualizableGeneralData.totalDurationOnMachines.xLabel"
+      <app-chart [title]="result.visualizableGeneralData.totalDurationOnMachines.title"
+                 [type]="result.visualizableGeneralData.totalDurationOnMachines.visualizableAs"
+                 [labels]="result.visualizableGeneralData.totalDurationOnMachines.labels"
+                 [datasets]="result.visualizableGeneralData.totalDurationOnMachines.datasets"
+                 [yLabel]="result.visualizableGeneralData.totalDurationOnMachines.yLabel"
+                 [xLabel]="result.visualizableGeneralData.totalDurationOnMachines.xLabel"
       ></app-chart>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <app-chart [title]="result.vizualizableGeneralData.totalJobTimes.title"
-                 [type]="result.vizualizableGeneralData.totalJobTimes.visualizableAs"
-                 [labels]="result.vizualizableGeneralData.totalJobTimes.labels"
-                 [datasets]="result.vizualizableGeneralData.totalJobTimes.datasets"
-                 [yLabel]="result.vizualizableGeneralData.totalJobTimes.yLabel"
-                 [xLabel]="result.vizualizableGeneralData.totalJobTimes.xLabel"
+      <app-chart [title]="result.visualizableGeneralData.totalJobTimes.title"
+                 [type]="result.visualizableGeneralData.totalJobTimes.visualizableAs"
+                 [labels]="result.visualizableGeneralData.totalJobTimes.labels"
+                 [datasets]="result.visualizableGeneralData.totalJobTimes.datasets"
+                 [yLabel]="result.visualizableGeneralData.totalJobTimes.yLabel"
+                 [xLabel]="result.visualizableGeneralData.totalJobTimes.xLabel"
+                 [colors]="result.visualizableGeneralData.totalJobTimes.colors"
       ></app-chart>
     </div>
     <div class="col-md-12">

@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, ElementRef, Input, ViewChild} from '@angul
 import {StorageService} from '../../../../../services/storage.service';
 import TimelineOptions = google.visualization.TimelineOptions;
 import {OperationOnConsole} from '../../../../../model/internal/visualization/OperationOnConsole';
+import {TimelineData} from '../../../../../model/internal/visualization/VisualizableData';
 
 @Component({
   selector: 'app-scheduling-gantt',
@@ -14,15 +15,19 @@ import {OperationOnConsole} from '../../../../../model/internal/visualization/Op
 })
 export class SchedulingGanttComponent {
 
-  @Input() timelineData: [string, Date, Date][];
-  // TODO Implement colors?
-  readonly options = <TimelineOptions>{
-    // colors: ['#e0440e', '#e6693e', '#38ec58', '#f3b49f', '#f6c7b6'],
-    timeline: {showBarLabels: false},
-    tooltip: {
-      trigger: 'none'
-    }
-  };
+  options: TimelineOptions;
+  data: [string, string, Date, Date][];
+
+  @Input() set timelineData(timelineData: TimelineData) {
+    this.data = timelineData.timelineData;
+    this.options = <TimelineOptions>{
+      timeline: {showBarLabels: false},
+      tooltip: {
+        trigger: 'none'
+      },
+      colors: timelineData.colors
+    };
+  }
 
   // TODO Both needed?
   private isChartVisible = false;
@@ -56,13 +61,13 @@ export class SchedulingGanttComponent {
   }
 
   onJobOperationSelected(event): void {
-    const row = this.timelineData[event[0].row];
+    const row = this.data[event[0].row];
     this.selectedOperation = new OperationOnConsole(row);
   }
 
   onJobOperationMouseEnter(event): void {
     if (event.row > -1) {
-      const row = this.timelineData[event.row];
+      const row = this.data[event.row];
       this.hoveredOperation = new OperationOnConsole(row);
     }
   }
