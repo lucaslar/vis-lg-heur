@@ -59,9 +59,17 @@ export class PriorityRulesDefinitionComponent implements OnInit {
                        previousIndex: number,
                        currentIndex: number,
                        isMessageToBeHidden?: boolean): void {
-    if (previousContainer !== container) {
+    if (previousContainer !== container && container === this.storedList) {
       transferArrayItem(previousContainer.data, container.data, previousIndex, currentIndex);
       this.storage.priorityRules = this.storedRules;
+
+    } else if (previousContainer !== container && container === this.othersList) {
+      const newIndex = Object.values(PriorityRule)
+          .filter(priorityRule => priorityRule === this.storedList.data[previousIndex] || this.othersList.data.includes(priorityRule))
+          .indexOf(previousContainer.data[previousIndex]);
+      transferArrayItem(previousContainer.data, container.data, previousIndex, newIndex);
+      this.storage.priorityRules = this.storedRules;
+
     } else if (container === this.storedList && currentIndex !== previousIndex) {
       moveItemInArray(container.data, previousIndex, currentIndex);
       this.storage.priorityRules = this.storedRules;
