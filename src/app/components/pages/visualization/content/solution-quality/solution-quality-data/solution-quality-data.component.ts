@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Kpi} from '../../../../../model/internal/visualization/SchedulingResult';
+import {Kpi} from '../../../../../../model/internal/visualization/SchedulingResult';
 
 @Component({
   selector: 'app-solution-quality-data',
   templateUrl: './solution-quality-data.component.html',
-  styleUrls: ['./solution-quality-data.component.css', '../../../pages-styles.css']
+  styleUrls: ['./solution-quality-data.component.css', '../../../../pages-styles.css']
 })
 export class SolutionQualityDataComponent implements OnInit {
 

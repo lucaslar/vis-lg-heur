@@ -20,15 +20,14 @@ import {VisualizerComponent} from './components/pages/visualization/content/visu
 import {HeuristicsSelectionComponent} from './components/dialogs/heuristics-selection/heuristics-selection.component';
 import {
   SolutionQualityVisualizerComponent
-} from './components/pages/visualization/content/solution-quality-visualizer/solution-quality-visualizer.component';
-import {
-  JobsMachinesVisualizerComponent
-} from './components/pages/visualization/content/jobs-machines-visualizer/jobs-machines-visualizer.component';
-import {SolutionQualityDataComponent} from './components/pages/visualization/content/solution-quality-data/solution-quality-data.component';
+} from './components/pages/visualization/content/solution-quality/solution-quality-visualizer/solution-quality-visualizer.component';
 import {SchedulingChartComponent} from './components/pages/visualization/charts/scheduling-chart/scheduling-chart.component';
 import {GoogleChartsModule} from 'angular-google-charts';
 import { SchedulingGanttComponent } from './components/pages/visualization/charts/scheduling-gantt/scheduling-gantt.component';
 import { SchedulingKpiComponent } from './components/pages/visualization/charts/scheduling-kpi/scheduling-kpi.component';
+import { GeneralDataComponent } from './components/pages/visualization/content/general/general-data/general-data.component';
+import {SolutionQualityDataComponent} from './components/pages/visualization/content/solution-quality/solution-quality-data/solution-quality-data.component';
+import {GeneralDataVisualizerComponent} from './components/pages/visualization/content/general/general-data-visualizer/general-data-visualizer.component';
 
 @NgModule({
   declarations: [
@@ -45,11 +44,12 @@ import { SchedulingKpiComponent } from './components/pages/visualization/charts/
     VisualizerComponent,
     HeuristicsSelectionComponent,
     SolutionQualityVisualizerComponent,
-    JobsMachinesVisualizerComponent,
     SolutionQualityDataComponent,
     SchedulingChartComponent,
     SchedulingGanttComponent,
-    SchedulingKpiComponent
+    SchedulingKpiComponent,
+    GeneralDataComponent,
+    GeneralDataVisualizerComponent
   ],
   imports: [
     BrowserModule,
