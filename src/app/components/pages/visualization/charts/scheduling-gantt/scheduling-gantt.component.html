@@ -9,7 +9,8 @@
        [style.height.px]="contentHeight"
        class="loading-container">
     <div class="loading-content">
-      <mat-spinner [diameter]="contentHeight < 100 ? 40 : 100"></mat-spinner>
+      <!-- Smaller spinner size for small Gantt charts -->
+      <mat-spinner [diameter]="contentHeight < 150 ? 40 : 100"></mat-spinner>
     </div>
   </div>
 
