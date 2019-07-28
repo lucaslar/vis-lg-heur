@@ -497,7 +497,7 @@ export class SchedulingService {
 
       newRgbColors[i] = [];
       baseRgbColors[i % baseRgbColors.length].forEach(c => {
-        let newValue = parseInt(c * (100 + percent) / 100, 0);
+        let newValue = Math.floor((c * (100 + percent)) / 100);
         newValue = (newValue < 255) ? newValue : 255;
         newRgbColors[i].push(newValue);
       });
