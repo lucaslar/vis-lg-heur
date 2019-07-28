@@ -61,7 +61,6 @@ export class SchedulingService {
   private proceedScheduling(): void {
     this.handleEachCurrentJobOfMachine();
     this.addJobsToMachineQueues();
-    // TODO: Only if queue changed? / For new queues?
     this.sortJobsInQueuesBasedOnHeuristic(); // Implementations of heuristics called in this method and its called methods
     this.setNextJobForEachFreeMachine();
   }
@@ -118,7 +117,6 @@ export class SchedulingService {
   private compareJobsByPriorityRules(jobA: ScheduledJob, jobB: ScheduledJob): number {
     for (const priorityRule of this.priorityRules) {
       if (priorityRule === PriorityRule.FCFS) {
-        // TODO: FCFS To getPriorityValueForJob?
         return 0;
       } else {
         const aPriorityValue = this.getPriorityValueForJob(jobA, priorityRule);
@@ -186,7 +184,7 @@ export class SchedulingService {
     const result = new SchedulingResult();
     result.generalData = this.generateGeneralSchedulingData();
     result.visualizableGeneralData = this.generateVisualizableGeneralData();
-    result.solutionQualityData = this.generateSolutionQuality();
+    result.solutionQualityData = this.generateSolutionQualityData();
     result.visualizableSolutionQualityData = this.generateVisualizableSolutionQualityData();
     return result;
   }
@@ -205,12 +203,12 @@ export class SchedulingService {
 
   private generateVisualizableGeneralData(): VisualizableGeneralData {
     const data = new VisualizableGeneralData();
-    data.totalDurationOnMachines = this.generateTotalDurationOnMachinesVisualization();
+    data.totalDurationsOnMachines = this.generateTotalDurationsOnMachinesVisualization();
     data.totalJobTimes = this.generateTotalJobTimesVisualization();
     return data;
   }
 
-  private generateTotalDurationOnMachinesVisualization(): ChartData {
+  private generateTotalDurationsOnMachinesVisualization(): ChartData {
     const sortedMachines = this.machines.sort((m1, m2) => m1.machineNr - m2.machineNr);
     const dataset = new Dataset();
     dataset.label = 'Summierte Dauer der Arbeitsgänge';
@@ -258,8 +256,11 @@ export class SchedulingService {
     return visualization;
   }
 
-  private generateSolutionQuality(): Kpi[] {
+  private generateSolutionQualityData(): Kpi[] {
     const data = [];
+
+    // TODO Mind start time here if implemented
+
     data.push(this.calculateTotalDurationKpi());
     data.push(this.calculateMeanCycleTimeKpi());
     data.push(this.calculateMeanJobBacklogKpi());
@@ -359,18 +360,18 @@ export class SchedulingService {
   private generateVisualizableSolutionQualityData(): VisualizableSolutionQualityData {
     const data = new VisualizableSolutionQualityData();
 
-    data.allMachineOperationStartsAtTimestamp = this.generateAllMachineOperationsAtTimestamp();
-    data.percentageOfFinishedJobsAtTimestamp = this.generatePercentageOfFinishedJobsAtTimestampVisualization();
+    data.allMachineOperationTimeline = this.generateAllMachineOperationsTimeline();
+    data.finishedJobsAtTimestamp = this.generateFinishedJobsAtTimestampVisualization();
 
     if (this.jobs[0].dueDate) {
       data.cumulatedDelaysAtTimestamps = this.generateCumulatedDelaysVisualization();
-      data.totalPercentageOfDelayedJobs = this.generateTotalPercentageOfDelayedJobs();
+      data.comparisonDelayedAndInTimeJobs = this.generateComparisonDelayedAndInTimeVisualization();
     }
 
     return data;
   }
 
-  private generateAllMachineOperationsAtTimestamp(): TimelineData {
+  private generateAllMachineOperationsTimeline(): TimelineData {
     const visualization = new TimelineData();
     visualization.timelineData = [];
     this.jobs.forEach(job => {
@@ -392,7 +393,7 @@ export class SchedulingService {
     return visualization;
   }
 
-  private generatePercentageOfFinishedJobsAtTimestampVisualization(): ChartData {
+  private generateFinishedJobsAtTimestampVisualization(): ChartData {
     const dataset = new Dataset();
     const labels = ['0'];
     dataset.data = [0];
@@ -442,7 +443,7 @@ export class SchedulingService {
     return visualization;
   }
 
-  private generateTotalPercentageOfDelayedJobs(): ChartData {
+  private generateComparisonDelayedAndInTimeVisualization(): ChartData {
     const dataset = new Dataset();
     const labels = ['Rechtzeitig', 'Verspätet'];
     dataset.data = [];

@@ -28,7 +28,7 @@
 <!-- TODO Check which are needed and which are not -->
 <ng-template #solution>
   <app-scheduling-gantt
-    [timelineData]="result.visualizableSolutionQualityData.allMachineOperationStartsAtTimestamp">
+    [timelineData]="result.visualizableSolutionQualityData.allMachineOperationTimeline">
   </app-scheduling-gantt>
   <!-- TODO: Rethink used components and add/delete/change -->
   <app-solution-quality-data [data]="result.solutionQualityData"></app-solution-quality-data>
@@ -49,12 +49,12 @@
       ></app-chart>
     </div>
     <div class="col-md-12">
-      <app-chart [title]="result.visualizableGeneralData.totalDurationOnMachines.title"
-                 [type]="result.visualizableGeneralData.totalDurationOnMachines.visualizableAs"
-                 [labels]="result.visualizableGeneralData.totalDurationOnMachines.labels"
-                 [datasets]="result.visualizableGeneralData.totalDurationOnMachines.datasets"
-                 [yLabel]="result.visualizableGeneralData.totalDurationOnMachines.yLabel"
-                 [xLabel]="result.visualizableGeneralData.totalDurationOnMachines.xLabel"
+      <app-chart [title]="result.visualizableGeneralData.totalDurationsOnMachines.title"
+                 [type]="result.visualizableGeneralData.totalDurationsOnMachines.visualizableAs"
+                 [labels]="result.visualizableGeneralData.totalDurationsOnMachines.labels"
+                 [datasets]="result.visualizableGeneralData.totalDurationsOnMachines.datasets"
+                 [yLabel]="result.visualizableGeneralData.totalDurationsOnMachines.yLabel"
+                 [xLabel]="result.visualizableGeneralData.totalDurationsOnMachines.xLabel"
       ></app-chart>
     </div>
   </div>
@@ -70,21 +70,21 @@
       ></app-chart>
     </div>
     <div class="col-md-12">
-      <app-chart [title]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.title"
-                 [type]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.visualizableAs"
-                 [labels]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.labels"
-                 [datasets]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.datasets"
-                 [yLabel]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.yLabel"
-                 [xLabel]="result.visualizableSolutionQualityData.percentageOfFinishedJobsAtTimestamp.xLabel"
+      <app-chart [title]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.title"
+                 [type]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.visualizableAs"
+                 [labels]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.labels"
+                 [datasets]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.datasets"
+                 [yLabel]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.yLabel"
+                 [xLabel]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.xLabel"
       ></app-chart>
     </div>
     <div class="col-md-12">
-      <app-chart [title]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.title"
-                 [type]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.visualizableAs"
-                 [labels]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.labels"
-                 [datasets]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.datasets"
-                 [yLabel]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.yLabel"
-                 [xLabel]="result.visualizableSolutionQualityData.totalPercentageOfDelayedJobs.xLabel"
+      <app-chart [title]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.title"
+                 [type]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.visualizableAs"
+                 [labels]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.labels"
+                 [datasets]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.datasets"
+                 [yLabel]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.yLabel"
+                 [xLabel]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.xLabel"
       ></app-chart>
     </div>
   </div>

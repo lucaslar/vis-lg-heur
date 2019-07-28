@@ -24,8 +24,6 @@ export class ScheduledJob extends Job {
     this.finishedOperationsCounter++;
   }
 
-  // TODO: Pipe for following priority rule methods?
-
   getSlackTimeForTimestamp(timestamp: number): number {
     return this.getRemainingTimeForTimestamp(timestamp) - this.getRemainingMachiningTime();
   }
@@ -63,7 +61,7 @@ export class ScheduledJob extends Job {
   }
 
   getSpttForTimestamp(timestamp: number): number {
-    const cot = this.currentProcessingTime; // TODO: Annahme ti = tik? -> Fehler im Buch
+    const cot = this.currentProcessingTime;
     const r = 99; // TODO: Discuss: which weight? r <-> sopn
     return Math.min(cot + r, this.getSopnForTimestamp(timestamp));
   }
@@ -95,23 +93,9 @@ export class ScheduledJob extends Job {
   }
 
   private getJobAvailabilityForTimestamp(timestamp: number): number {
-
-    return this.operationsOnMachines.length > 0 ? this.operationsOnMachines[this.operationsOnMachines.length - 1].finishTimestamp
-      : timestamp;
-
-    // TODO Delete this previously used code:
-    /*
-    const machineIndex = order.machineOrder.indexOf(machine.machineNr);
-    if (machineIndex > 0) {
-      const lastMachineNr = order.machineOrder[machineIndex - 1];
-      const lastMachine = this.machines.find(m => m.machineNr === lastMachineNr);
-      return Array.from(lastMachine.producedAtTime.keys())
-        .find(key => lastMachine.producedAtTime.get(key) === order);
-    } else {
-      // TODO: Discuss: Frühster Starttermin = Frühster möglicher Starttermin? Also timestamp (= jetzt) ?
-      return timestamp;
-    }
-    */
+    // Herrmann: no finished operation = soonest starting time = now (soonest possible)
+    return this.operationsOnMachines.length > 0 ?
+      this.operationsOnMachines[this.operationsOnMachines.length - 1].finishTimestamp : timestamp;
   }
 
   private getRemainingMachiningTime(): number {

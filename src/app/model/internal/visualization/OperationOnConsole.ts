@@ -1,8 +1,5 @@
 export class OperationOnConsole {
 
-  // TODO Add color as in timeline?
-
-  // TODO Make private
   private readonly _machine: string;
   private readonly _job: string;
   private readonly _start: number;
