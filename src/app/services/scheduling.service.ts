@@ -118,6 +118,7 @@ export class SchedulingService {
   private compareJobsByPriorityRules(jobA: ScheduledJob, jobB: ScheduledJob): number {
     for (const priorityRule of this.priorityRules) {
       if (priorityRule === PriorityRule.FCFS) {
+        // TODO: FCFS To getPriorityValueForJob?
         return 0;
       } else {
         const aPriorityValue = this.getPriorityValueForJob(jobA, priorityRule);
@@ -358,7 +359,6 @@ export class SchedulingService {
   private generateVisualizableSolutionQualityData(): VisualizableSolutionQualityData {
     const data = new VisualizableSolutionQualityData();
 
-    // TODO Define this value after final type definition
     data.allMachineOperationStartsAtTimestamp = this.generateAllMachineOperationsAtTimestamp();
     data.percentageOfFinishedJobsAtTimestamp = this.generatePercentageOfFinishedJobsAtTimestampVisualization();
 
@@ -374,21 +374,27 @@ export class SchedulingService {
     const visualization = new TimelineData();
     visualization.timelineData = [];
     this.jobs.forEach(job => {
-      job.operationsOnMachines.sort((o1, o2) => o1.machineNr - o2.machineNr)
-        .forEach(operation => {
-
-          // noinspection TypeScriptValidateTypes
-          visualization.timelineData.push([
-            'M' + operation.machineNr,
-            'Auftrag mit ID ' + job.id + ': \'' + job.name + '\'',
-            // Workaround in order to fix two problems in this context:
-            // 1. Errors on too small devices since not all labels can be shown
-            // 2. No or in case of many operations useful x-axis labels/categorizations/vertical lines
-            new Date(operation.startTimestamp),
-            new Date(operation.finishTimestamp)
-          ]);
-        });
+      for (let mnr = 1; mnr <= this.machines.length; mnr++) {
+        const operation = job.operationsOnMachines.find(o => o.machineNr === mnr);
+        // noinspection TypeScriptValidateTypes
+        visualization.timelineData.push([
+          'M' + operation.machineNr,
+          'Auftrag mit ID ' + job.id + ': \'' + job.name + '\'',
+          // Workaround in order to fix two problems in this context:
+          // 1. Errors on too small devices since not all labels can be shown
+          // 2. No or in case of many operations useful x-axis labels/categorizations/vertical lines
+          new Date(operation.startTimestamp),
+          new Date(operation.finishTimestamp)
+        ]);
+      }
     });
+    // TODO Colors here
+    console.log(
+      visualization.timelineData
+        .map(data => data[1])
+        .filter((value, i, arr) => arr.indexOf(value) === i)
+    );
+    // visualization.colors = this.generateUniqueJobColorValues().map(color => 'rgb(' + color + ')');
     return visualization;
   }
 
@@ -399,7 +405,7 @@ export class SchedulingService {
     dataset.label = 'Prozentual fertiggestellte Aufträge';
 
     const sortedJobs = this.getJobsSortedByFinishingDate();
-    for (let i = 1; i <= sortedJobs[sortedJobs.length - 1].finishedAtTimestamp; i++) {
+    for (let i = 1; i <= this.currentTimestampInScheduling - 1; i++) {
       const jobFinishedAtTimestamp = sortedJobs.find(job => job.finishedAtTimestamp === i);
       labels.push(jobFinishedAtTimestamp ? '' + i : '');
       dataset.data.push(jobFinishedAtTimestamp ?
@@ -424,11 +430,9 @@ export class SchedulingService {
     dataset.data = [0];
     dataset.label = 'Kumulierte Verspätungszeiten';
 
-    const sortedJobs = this.getJobsSortedByFinishingDate();
-    const lastOperationEnd = sortedJobs[sortedJobs.length - 1].finishedAtTimestamp;
-    for (let i = 1; i <= lastOperationEnd; i++) {
+    for (let i = 1; i < this.currentTimestampInScheduling; i++) {
       const jobFinishedAtTimestamp = this.jobs.find(job => job.finishedAtTimestamp === i);
-      const isDataToBeAdded = jobFinishedAtTimestamp && (jobFinishedAtTimestamp.delay || i === lastOperationEnd);
+      const isDataToBeAdded = jobFinishedAtTimestamp && (jobFinishedAtTimestamp.delay || i === this.currentTimestampInScheduling - 1);
       labels.push(isDataToBeAdded ? '' + i : '');
 
       dataset.data.push(isDataToBeAdded ?
