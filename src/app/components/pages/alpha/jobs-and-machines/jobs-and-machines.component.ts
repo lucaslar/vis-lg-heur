@@ -65,7 +65,7 @@ export class JobsAndMachinesComponent implements OnInit {
     });
     this.storage.jobs = this.jobs;
     if (!isMessageToBeHidden) {
-      this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') gelöscht!', 'Rückgängig')
+      this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') gelöscht', 'Rückgängig')
         .onAction().subscribe(() => this.addJob(job, true));
     }
   }
@@ -75,7 +75,7 @@ export class JobsAndMachinesComponent implements OnInit {
     const copy: Job = <Job>JSON.parse(JSON.stringify(job));
     copy.id = undefined;
     this.addJob(copy, true);
-    this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') kopiert!', 'Rückgängig')
+    this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') kopiert', 'Rückgängig')
       .onAction().subscribe(() => this.deleteJob(copy, true));
   }
 
@@ -265,7 +265,7 @@ export class JobsAndMachinesComponent implements OnInit {
     }
     this.storage.jobs = this.jobs;
     if (!isMessageToBeHidden) {
-      this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') hinzugefügt!', 'Rückgängig')
+      this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') hinzugefügt', 'Rückgängig')
         .onAction().subscribe(() => this.deleteJob(job, true));
     }
   }
