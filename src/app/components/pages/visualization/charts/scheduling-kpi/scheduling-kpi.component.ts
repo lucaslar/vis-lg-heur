@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import {Kpi} from '../../../../../model/internal/SchedulingResult';
+import {Kpi} from '../../../../../model/internal/visualization/SchedulingResult';
 
 @Component({
   selector: 'app-scheduling-kpi',

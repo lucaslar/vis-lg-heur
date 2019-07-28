@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Job} from '../model/Job';
 import {MachineConfig} from '../model/enums/MachineConfig';
-import {DefinableValue} from '../model/internal/DefinableValue';
-import {DefinitionStatus} from '../model/internal/DefinitionStatus';
+import {DefinableValue} from '../model/internal/value-definition/DefinableValue';
+import {DefinitionStatus} from '../model/internal/value-definition/DefinitionStatus';
 import {PriorityRule} from '../model/enums/PriorityRule';
-import {DialogContent} from '../model/internal/DialogContent';
+import {DialogContent} from '../model/internal/dialog/DialogContent';
 import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
 import {Heuristic} from '../model/Heuristic';
-import {DialogType} from '../model/internal/DialogType';
+import {DialogType} from '../model/internal/dialog/DialogType';
 
 @Injectable({
   providedIn: 'root'

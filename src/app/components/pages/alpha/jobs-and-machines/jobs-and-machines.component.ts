@@ -4,11 +4,11 @@ import {Job, MachineTimeForJob} from '../../../../model/Job';
 import {MatDialog, MatExpansionPanelHeader, MatSnackBar} from '@angular/material';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {MachineNrPopupComponent} from '../../../dialogs/machine-nr-popup/machine-nr-popup.component';
-import {DialogContent} from '../../../../model/internal/DialogContent';
+import {DialogContent} from '../../../../model/internal/dialog/DialogContent';
 import {MachineConfig} from '../../../../model/enums/MachineConfig';
-import {DialogType} from '../../../../model/internal/DialogType';
-import {DefinableValue} from '../../../../model/internal/DefinableValue';
-import {DefinitionStatus} from '../../../../model/internal/DefinitionStatus';
+import {DialogType} from '../../../../model/internal/dialog/DialogType';
+import {DefinableValue} from '../../../../model/internal/value-definition/DefinableValue';
+import {DefinitionStatus} from '../../../../model/internal/value-definition/DefinitionStatus';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 
 @Component({

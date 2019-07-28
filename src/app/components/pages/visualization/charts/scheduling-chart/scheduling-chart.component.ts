@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ChartType, Dataset} from '../../../../../model/internal/VisualizableData';
+import {ChartType, Dataset} from '../../../../../model/internal/visualization/VisualizableData';
 
 @Component({
   selector: 'app-chart',

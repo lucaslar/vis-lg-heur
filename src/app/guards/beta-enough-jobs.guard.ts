@@ -3,8 +3,8 @@ import {ActivatedRouteSnapshot, CanActivateChild, Router} from '@angular/router'
 import {StorageService} from '../services/storage.service';
 import {MatDialog} from '@angular/material';
 import {PopUpComponent} from '../components/dialogs/pop-up/pop-up.component';
-import {DialogContent} from '../model/internal/DialogContent';
-import {DialogType} from '../model/internal/DialogType';
+import {DialogContent} from '../model/internal/dialog/DialogContent';
+import {DialogType} from '../model/internal/dialog/DialogType';
 
 @Injectable({
   providedIn: 'root'

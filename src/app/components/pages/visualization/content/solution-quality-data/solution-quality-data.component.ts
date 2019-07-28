@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Kpi} from '../../../../../model/internal/SchedulingResult';
+import {Kpi} from '../../../../../model/internal/visualization/SchedulingResult';
 
 @Component({
   selector: 'app-solution-quality-data',

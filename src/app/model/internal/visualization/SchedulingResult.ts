@@ -1,6 +1,6 @@
-import {MachineConfig} from '../enums/MachineConfig';
-import {Heuristic} from '../Heuristic';
-import {PriorityRule} from '../enums/PriorityRule';
+import {MachineConfig} from '../../enums/MachineConfig';
+import {Heuristic} from '../../Heuristic';
+import {PriorityRule} from '../../enums/PriorityRule';
 import {ChartData, VisualizableData} from './VisualizableData';
 
 // TODO rename attributes and methods in scheduling service

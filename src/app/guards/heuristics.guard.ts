@@ -3,9 +3,9 @@ import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
 import {StorageService} from '../services/storage.service';
 import {MatDialog} from '@angular/material';
 import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
-import {DialogType} from '../model/internal/DialogType';
+import {DialogType} from '../model/internal/dialog/DialogType';
 import {PopUpComponent} from '../components/dialogs/pop-up/pop-up.component';
-import {DialogContent} from '../model/internal/DialogContent';
+import {DialogContent} from '../model/internal/dialog/DialogContent';
 
 @Injectable({
   providedIn: 'root'

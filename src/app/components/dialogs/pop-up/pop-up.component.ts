@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
-import {DialogType} from '../../../model/internal/DialogType';
+import {DialogType} from '../../../model/internal/dialog/DialogType';
 import {MAT_DIALOG_DATA} from '@angular/material';
-import {DialogContent} from '../../../model/internal/DialogContent';
+import {DialogContent} from '../../../model/internal/dialog/DialogContent';
 
 @Component({
   selector: 'app-pop-up',

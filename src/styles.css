@@ -10,6 +10,7 @@ html, body {
   --color-main: #224470;
   --color-warning: #9c0500;
   --color-grey-font: #747474;
+  --color-background: #fafafa; /* Color of the content pages */
 }
 
 .status-warning {

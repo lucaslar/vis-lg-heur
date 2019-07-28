@@ -3,7 +3,7 @@ import {Heuristic} from '../../../model/Heuristic';
 import {HeuristicDefiner} from '../../../model/enums/HeuristicDefiner';
 import {MatDialogRef} from '@angular/material';
 import {StorageService} from '../../../services/storage.service';
-import {DialogContent} from '../../../model/internal/DialogContent';
+import {DialogContent} from '../../../model/internal/dialog/DialogContent';
 
 @Component({
   selector: 'app-heuristics-selection',

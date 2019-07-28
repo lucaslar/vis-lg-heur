@@ -11,9 +11,9 @@ import {
   SchedulingResult,
   VisualizableGeneralData,
   VisualizableSolutionQualityData
-} from '../model/internal/SchedulingResult';
+} from '../model/internal/visualization/SchedulingResult';
 import {Heuristic} from '../model/Heuristic';
-import {ChartData, ChartType, Dataset, TimelineData} from '../model/internal/VisualizableData';
+import {ChartData, ChartType, Dataset, TimelineData} from '../model/internal/visualization/VisualizableData';
 
 @Injectable({
   providedIn: 'root'
