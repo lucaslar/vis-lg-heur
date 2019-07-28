@@ -40,13 +40,12 @@
           <span class="information font-italic">{{consoleText}}</span>
         </div>
         <ng-template #operation>
-          <div>
-            <!-- TODO: Style further? -->
+          <div [style.color]="displayedOperation.color">
             <i class="fas fa-stopwatch"></i>{{displayedOperation.start}} - {{displayedOperation.end}}
             (Dauer: {{displayedOperation.duration}})
             an {{displayedOperation.machine}}
           </div>
-          <div>
+          <div [style.color]="displayedOperation.color">
             <i class="fas fa-tools align-middle"></i>{{displayedOperation.job}}
           </div>
         </ng-template>

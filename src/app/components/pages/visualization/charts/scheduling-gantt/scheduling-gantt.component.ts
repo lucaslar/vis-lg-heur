@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {StorageService} from '../../../../../services/storage.service';
 import TimelineOptions = google.visualization.TimelineOptions;
 import {OperationOnConsole} from '../../../../../model/internal/visualization/OperationOnConsole';
@@ -13,7 +13,7 @@ import {TimelineData} from '../../../../../model/internal/visualization/Visualiz
     '../shared-chart-styles.css'
   ]
 })
-export class SchedulingGanttComponent {
+export class SchedulingGanttComponent implements OnInit {
 
   options: TimelineOptions;
   data: [string, string, Date, Date][];
@@ -34,6 +34,7 @@ export class SchedulingGanttComponent {
   private isChartActuallyShown = false;
   private selectedOperation: OperationOnConsole;
   private hoveredOperation: OperationOnConsole;
+  private colorMap: Map<number, string> = new Map<number, string>();
   private _consoleText = 'Diagramm wird erstellt...'; // default text
 
   @ViewChild('container', {static: false}) container: ElementRef;
@@ -42,6 +43,19 @@ export class SchedulingGanttComponent {
 
   constructor(private changeDetector: ChangeDetectorRef,
               public storage: StorageService) {
+  }
+
+  ngOnInit(): void {
+    const firstMachineOps = this.data.filter(operation => this.data.indexOf(operation) % this.storage.nrOfMachines === 0);
+
+    const sortedFirstMachineOps = this.data
+      .filter(operation => this.data.indexOf(operation) % this.storage.nrOfMachines === 0)
+      .sort((o1, o2) => (<Date>o1[3]).getMilliseconds() - (<Date>o2[3]).getMilliseconds());
+
+    for (let i = 0; i < firstMachineOps.length; i++) {
+      const index = firstMachineOps.indexOf(sortedFirstMachineOps[i]);
+      this.colorMap.set(index, this.options.colors[i]);
+    }
   }
 
   // TODO: Delete this method and observe chart?
@@ -62,19 +76,27 @@ export class SchedulingGanttComponent {
 
   onJobOperationSelected(event): void {
     const row = this.data[event[0].row];
-    this.selectedOperation = new OperationOnConsole(row);
+    const color = this.getColorOfRow(event[0].row);
+    this.selectedOperation = new OperationOnConsole(row, color);
   }
 
   onJobOperationMouseEnter(event): void {
     if (event.row > -1) {
       const row = this.data[event.row];
-      this.hoveredOperation = new OperationOnConsole(row);
+      const color = this.getColorOfRow(event.row);
+      this.hoveredOperation = new OperationOnConsole(row, color);
     }
   }
 
   onJobOperationMouseLeave(): void {
     delete this.hoveredOperation;
   }
+
+  private getColorOfRow(row: number): string {
+    const index = Math.floor(row / this.storage.nrOfMachines);
+    return this.colorMap.get(index);
+  }
+
 
   get contentHeight(): number {
     return this.storage.nrOfMachines * 41 + 8 + 64; // rows, padding and console
