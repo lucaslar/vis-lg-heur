@@ -28,6 +28,7 @@ import {SolutionQualityDataComponent} from './components/pages/visualization/sol
 import {SchedulingChartComponent} from './components/pages/visualization/charts/scheduling-chart/scheduling-chart.component';
 import {GoogleChartsModule} from 'angular-google-charts';
 import { SchedulingGanttComponent } from './components/pages/visualization/charts/scheduling-gantt/scheduling-gantt.component';
+import { SchedulingKpiComponent } from './components/pages/visualization/charts/scheduling-kpi/scheduling-kpi.component';
 
 @NgModule({
   declarations: [

@@ -10,10 +10,17 @@ export class SchedulingResult {
 
   // TODO Make private
   generalData: GeneralSchedulingData;
-  solutionQualityData: SolutionQualityData;
+  solutionQualityData: Kpi[];
   vizualizableGeneralData: VisualizableGeneralData;
   visualizableSolutionQualityData: VisualizableSolutionQualityData;
 
+}
+
+export class Kpi {
+  // TODO Make private
+  title: string;
+  kpi: number;
+  iconClasses: string[];
 }
 
 export class GeneralSchedulingData {
@@ -33,19 +40,6 @@ export class VisualizableGeneralData {
   // TODO Make private
   totalDurationOnMachines: VisualizableData;
   totalJobTimes: VisualizableData;
-
-}
-
-export class SolutionQualityData {
-
-  // TODO Make private
-  totalDuration: number;
-  meanCycleTime: number;
-  meanJobBacklog: number;
-  maximumDelay: number;
-  meanDelay: number;
-  standardDeviationOfDelay: number;
-  sumOfDelays: number;
 
 }
 

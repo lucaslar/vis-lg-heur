@@ -1,0 +1,18 @@
+<div class="card kpi-card text-center container" #card>
+
+  <div [ngClass]="{'row' : card.offsetHeight/card.offsetWidth < 0.5}">
+    <div class="centered" [ngClass]="{'col-5 right-line' : card.offsetHeight/card.offsetWidth < 0.5, 'col-12' : card.offsetHeight/card.offsetWidth >= 0.5}">
+      <i #icon></i>
+    </div>
+    <div [ngClass]="{'col-7' : card.offsetHeight/card.offsetWidth < 0.5}">
+      <div [ngClass]="{'row' : card.offsetHeight/card.offsetWidth < 0.5}">
+        <div class="col-12 kpi-value centered">
+          {{kpi.kpi | number : '1.0-2' :'fr'}}
+        </div>
+        <div class="font-weight-light font-small col-12 centered">
+          {{kpi.title}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

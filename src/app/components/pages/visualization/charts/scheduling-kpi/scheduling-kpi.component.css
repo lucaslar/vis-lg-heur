@@ -1,0 +1,23 @@
+.kpi-card {
+  background-color: var(--color-main);
+  color: white;
+  padding: 8px;
+}
+
+i {
+  font-size: xx-large;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-line {
+  border-right: 1px solid white;
+}
+
+.kpi-value {
+  font-size: x-large;
+}

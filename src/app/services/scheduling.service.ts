@@ -7,8 +7,8 @@ import {Machine} from '../model/Machine';
 import {ScheduledJob} from '../model/ScheduledJob';
 import {
   GeneralSchedulingData,
+  Kpi,
   SchedulingResult,
-  SolutionQualityData,
   VisualizableGeneralData,
   VisualizableSolutionQualityData
 } from '../model/internal/SchedulingResult';
@@ -29,6 +29,7 @@ export class SchedulingService {
   constructor(public storage: StorageService) {
   }
 
+  // TODO: Keep percentage instead of concrete numbers?
   // TODO Log procedure
 
   scheduleUsingHeuristic(heuristicDefiner: HeuristicDefiner): SchedulingResult {
@@ -256,30 +257,42 @@ export class SchedulingService {
     return visualization;
   }
 
-  private generateSolutionQuality(): SolutionQualityData {
-    const data = new SolutionQualityData();
-    data.totalDuration = this.currentTimestampInScheduling - 1;
-    data.meanCycleTime = this.calculateMeanCycleTime();
-    data.meanJobBacklog = this.calculateMeanJobBacklog();
+  private generateSolutionQuality(): Kpi[] {
+    const data = [];
+    data.push(this.calculateTotalDurationKpi());
+    data.push(this.calculateMeanCycleTimeKpi());
+    data.push(this.calculateMeanJobBacklogKpi());
 
     // Either none or all jobs do have a due date here
     if (this.jobs[0].dueDate) {
-      data.meanDelay = this.calculateMeanDelay();
-      data.standardDeviationOfDelay = this.calculateStandardDeviationOfDelay();
-      data.sumOfDelays = this.calculateSumOfDelays();
-      data.maximumDelay = this.calculateMaximumDelay();
+      data.push(this.calculateMeanDelayKpi());
+      data.push(this.calculateStandardDeviationOfDelayKpi());
+      data.push(this.calculateSumOfDelaysKpi());
+      data.push(this.calculateMaximumDelayKpi());
     }
     return data;
   }
 
-  private calculateMeanCycleTime(): number {
-    return +this.jobs
+  private calculateTotalDurationKpi(): Kpi {
+    const kpi = new Kpi();
+    kpi.iconClasses = ['fas', 'fa-stopwatch'];
+    kpi.title = 'Gesamte Durchlaufzeit';
+    kpi.kpi = this.currentTimestampInScheduling - 1;
+    return kpi;
+  }
+
+  private calculateMeanCycleTimeKpi(): Kpi {
+    const kpi = new Kpi();
+    kpi.iconClasses = ['fas', 'fa-hourglass-half'];
+    kpi.title = 'Mittlere Durchlaufzeit';
+    kpi.kpi = +this.jobs
         .map(job => job.finishedAtTimestamp)
         .reduce((a, b) => a + b)
       / this.jobs.length;
+    return kpi;
   }
 
-  private calculateMeanJobBacklog(): number {
+  private calculateMeanJobBacklogKpi(): Kpi {
     let sum = 0;
     let maximum = 0;
     this.jobs.forEach(job => {
@@ -287,37 +300,59 @@ export class SchedulingService {
         maximum = job.finishedAtTimestamp > maximum ? job.finishedAtTimestamp : maximum;
       }
     );
-    return +(sum / maximum);
+
+    const kpi = new Kpi();
+    kpi.iconClasses = ['fas', 'fa-cubes'];
+    kpi.title = 'Mittlerer Auftragsbestand';
+    kpi.kpi = +(sum / maximum);
+    return kpi;
   }
 
-  private calculateMeanDelay(): number {
-    return +this.jobs
+  private calculateMeanDelayKpi(): Kpi {
+    const kpi = new Kpi();
+    kpi.iconClasses = ['fas', 'fa-history'];
+    kpi.title = 'Mittlere Verspätung';
+    kpi.kpi = +this.jobs
         .map(job => job.delay)
         .reduce((a, b) => a + b)
       / this.jobs.length;
+    return kpi;
   }
 
-  private calculateStandardDeviationOfDelay(): number {
-    const mean = this.calculateMeanDelay();
-    return +Math.sqrt(
+  private calculateStandardDeviationOfDelayKpi(): Kpi {
+    const mean = this.calculateMeanDelayKpi().kpi;
+
+    const kpi = new Kpi();
+    kpi.iconClasses = ['fas', 'fa-code-branch'];
+    kpi.title = 'Standardabweichung der Verspätung';
+    kpi.kpi = +Math.sqrt(
       this.jobs
         .map(job => job.delay)
         .map(delay => (delay - mean) * (delay - mean)
         ).reduce((dev1, dev2) => dev1 + dev2
       )
       / (this.jobs.length - 1));
+    return kpi;
   }
 
-  private calculateSumOfDelays(): number {
-    return +this.jobs
+  private calculateSumOfDelaysKpi(): Kpi {
+    const kpi = new Kpi();
+    kpi.iconClasses = ['functions'];
+    kpi.title = 'Summe der Verspätungen';
+    kpi.kpi = +this.jobs
       .map(job => job.delay)
       .reduce((delay1, delay2) => delay1 + delay2);
+    return kpi;
   }
 
-  private calculateMaximumDelay(): number {
-    return this.jobs
+  private calculateMaximumDelayKpi(): Kpi {
+    const kpi = new Kpi();
+    kpi.iconClasses = ['fas', 'fa-tachometer-alt'];
+    kpi.title = 'Maximale Verspätung';
+    kpi.kpi = this.jobs
       .map(job => job.delay)
       .reduce((prevDelay, currentDelay) => prevDelay > currentDelay ? prevDelay : currentDelay);
+    return kpi;
   }
 
   private generateVisualizableSolutionQualityData(): VisualizableSolutionQualityData {
