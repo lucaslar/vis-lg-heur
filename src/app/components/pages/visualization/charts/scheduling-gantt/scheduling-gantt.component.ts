@@ -15,9 +15,6 @@ import {TimelineData} from '../../../../../model/internal/visualization/Visualiz
 })
 export class SchedulingGanttComponent implements OnInit {
 
-  options: TimelineOptions;
-  data: [string, string, Date, Date][];
-
   @Input() set timelineData(timelineData: TimelineData) {
     this.data = timelineData.timelineData;
     this.options = <TimelineOptions>{
@@ -29,17 +26,19 @@ export class SchedulingGanttComponent implements OnInit {
     };
   }
 
-  // TODO Both needed?
+  @ViewChild('container', {static: false}) container: ElementRef;
+  @ViewChild('chartContainer', {static: false}) chartContainer: ElementRef;
+  @ViewChild('chartConsole', {static: false}) operationConsole: ElementRef;
+
   private isChartVisible = false;
-  private isChartActuallyShown = false;
+  private isChartReady = false;
   private selectedOperation: OperationOnConsole;
   private hoveredOperation: OperationOnConsole;
   private colorMap: Map<number, string> = new Map<number, string>();
   private _consoleText = 'Diagramm wird erstellt...'; // default text
 
-  @ViewChild('container', {static: false}) container: ElementRef;
-  @ViewChild('chartContainer', {static: false}) chartContainer: ElementRef;
-  @ViewChild('chartConsole', {static: false}) operationConsole: ElementRef;
+  options: TimelineOptions;
+  data: [string, string, Date, Date][];
 
   constructor(private changeDetector: ChangeDetectorRef,
               public storage: StorageService) {
@@ -58,18 +57,17 @@ export class SchedulingGanttComponent implements OnInit {
     }
   }
 
-  // TODO: Delete this method and observe chart?
   detectChartVisibility(): boolean {
     if (!!this.chartContainer !== this.isChartVisible) {
       this.isChartVisible = true;
       this.changeDetector.detectChanges();
     }
-    return this.isChartActuallyShown;
+    return this.isChartReady;
   }
 
   onChartReady() {
-    if (!this.isChartActuallyShown) {
-      this.isChartActuallyShown = true;
+    if (!this.isChartReady) {
+      this.isChartReady = true;
       this._consoleText = 'Interagieren Sie für weitere Details mit dem Diagramm';
     }
   }
