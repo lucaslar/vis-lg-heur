@@ -324,6 +324,7 @@ export class JobsAndMachinesComponent implements OnInit {
     }
 
     if (job.dueDate && !isDueDateStillPossible) {
+      job.dueDate = Math.floor(job.dueDate * 1.2);
       return 'Auftrag \'' + job.name + '\' (ID: ' + job.id + '): von ' + previousDueDate + ' aktualisiert auf ' + job.dueDate;
     }
   }

@@ -18,7 +18,6 @@
     <!-- TODO: on window nav bar hidden due to resizing: detect changes? -->
 
     <div #chartContainer>
-
       <google-chart (ready)="onChartReady()"
                     (select)="onJobOperationSelected($event)"
                     (mouseenter)="onJobOperationMouseEnter($event)"
@@ -30,8 +29,8 @@
                     [height]="contentHeight"
                     #chart
       ></google-chart>
-
     </div>
+
     <div class="chart-console-container"
          [style.width.px]="container.offsetWidth - 16">
 
