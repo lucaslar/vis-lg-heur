@@ -251,9 +251,7 @@ export class JobsAndMachinesComponent implements OnInit {
   }
 
   private addJob(job: Job, isMessageToBeHidden?: boolean): void {
-
     if (job.id) {
-      console.log(job.id);
       this.jobs.forEach(jobInList => {
         if (jobInList.id >= job.id) {
           jobInList.id++;
