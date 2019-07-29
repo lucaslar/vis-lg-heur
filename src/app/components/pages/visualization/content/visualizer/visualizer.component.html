@@ -2,21 +2,40 @@
 <div class="row title">
   <div class="col-md-12 text-center">
     <h3>
-      Visualisierung der Lösungsgüte bei Verwendung von {{result.generalData.usedHeuristic.name}}
+      Lösen des Reihenfolgeproblems mit Heuristik:
+      {{result.generalData.usedHeuristic.name}}
     </h3>
     <mat-divider></mat-divider>
   </div>
 </div>
 
-<!-- TODO text-->
-<p>
-  Visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization
-  lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum
-  visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization
-  lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum
-  visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization lorem ipsum visualization
-  lorem ipsum.
+<p class="text-justify">
+  Im Folgenden werden sowohl das Reihenfolgeproblem selbst als auch die Güte der mithilfe der gewählten Heuristik
+  ermittelten Lösung visualisiert. Dem Auftragsfolge-Gantt-Diagramm folgend, das die Abarbeitungsreihenfolge der
+  einzlenen Arbeitsgänge grafisch darstellt, ist diese Seite in Abschnitte unterteilt, die sich aus
+  Übersichtlichkeitsgründen nach Belieben ein- und ausblenden lassen.
+  <!-- TODO: If log implemented: Name here, list below and add component to page -->
 </p>
+<p class="text-justify">
+  Sie können alternativ auch direkt hier an- bzw. abwählen, welche Informationen angezeigt werden sollen:
+</p>
+
+<!-- checkboxes with headlines: -->
+<ul class="small">
+  <li>
+    <mat-checkbox [(ngModel)]="isGeneralDataVisible">Grundsätzliche Daten</mat-checkbox>
+  </li>
+  <li>
+    <mat-checkbox [(ngModel)]="isSolutionQualityDataVisible">Kennzahlen der ermittelten Lösung</mat-checkbox>
+  </li>
+  <li>
+    <mat-checkbox [(ngModel)]="isVisualizableGeneralDataVisible">Visualisierung von Daten des Reihenfolgeproblems
+    </mat-checkbox>
+  </li>
+  <li>
+    <mat-checkbox [(ngModel)]="isVisualizableSolutionQualityDataVisible">Visualisierung der Lösungsgüte</mat-checkbox>
+  </li>
+</ul>
 
 <div *ngIf="!result; else solution" class="loading-container">
   <div class="loading-content">
@@ -26,12 +45,78 @@
 
 <ng-template #solution>
 
-  <app-general-data [data]="result.generalData"></app-general-data>
   <app-scheduling-gantt
     [timelineData]="result.visualizableSolutionQualityData.allMachineOperationsTimeline"></app-scheduling-gantt>
-  <!-- TODO: Add card like layout in order to have flexible heights? -->
-  <app-solution-quality-data [data]="result.solutionQualityData"></app-solution-quality-data>
-  <app-general-data-visualizer [data]="result.visualizableGeneralData"></app-general-data-visualizer>
-  <app-solution-quality-visualizer [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
+
+  <!-- Subtitle: General data -->
+  <div class="row title">
+    <div class="col-md-12 text-center">
+      <h4 class="expandable-content-header"
+          (click)="isGeneralDataVisible = !isGeneralDataVisible"
+          matTooltip="{{'Grundsätzliche Daten '+(isGeneralDataVisible ? 'ausblenden':'einblenden')}}">
+        <i class="material-icons pull-left" [style.transform]="'rotate(' + (isGeneralDataVisible ? 0 : 180) + 'deg)'">
+          keyboard_arrow_up
+        </i>
+        Grundsätzliche Daten
+      </h4>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+  <app-general-data *ngIf="isGeneralDataVisible"
+                    [data]="result.generalData"></app-general-data>
+
+  <!-- Subtitle: KPIs -->
+  <div class="row title">
+    <div class="col-md-12 text-center">
+      <h4 class="expandable-content-header"
+          (click)="isSolutionQualityDataVisible = !isSolutionQualityDataVisible"
+          matTooltip="{{'Kennzahlen der ermittelten Lösung '+(isSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
+        <i class="material-icons pull-left"
+           [style.transform]="'rotate(' + (isSolutionQualityDataVisible ? 0 : 180) + 'deg)'">
+          keyboard_arrow_up
+        </i>
+        Kennzahlen der ermittelten Lösung
+      </h4>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+  <app-solution-quality-data *ngIf="isSolutionQualityDataVisible"
+                             [data]="result.solutionQualityData"></app-solution-quality-data>
+
+  <!-- Subtitle: General data visualization -->
+  <div class="row title">
+    <div class="col-md-12 text-center">
+      <h4 class="expandable-content-header"
+          (click)="isVisualizableGeneralDataVisible = !isVisualizableGeneralDataVisible"
+          matTooltip="{{'Visualisierung von Daten des Reihenfolgeproblems '+(isVisualizableGeneralDataVisible ? 'ausblenden':'einblenden')}}">
+        <i class="material-icons pull-left"
+           [style.transform]="'rotate(' + (isVisualizableGeneralDataVisible ? 0 : 180) + 'deg)'">
+          keyboard_arrow_up
+        </i>
+        Visualisierung von Daten des Reihenfolgeproblems
+      </h4>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+  <app-general-data-visualizer *ngIf="isVisualizableGeneralDataVisible"
+                               [data]="result.visualizableGeneralData"></app-general-data-visualizer>
+
+  <!-- Subtitle: Solution quality data visualization -->
+  <div class="row title">
+    <div class="col-md-12 text-center">
+      <h4 class="expandable-content-header"
+          (click)="isVisualizableSolutionQualityDataVisible = !isVisualizableSolutionQualityDataVisible"
+          matTooltip="{{'Visualisierung der Lösungsgüte '+(isVisualizableSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
+        <i class="material-icons pull-left"
+           [style.transform]="'rotate(' + (isVisualizableSolutionQualityDataVisible ? 0 : 180) + 'deg)'">
+          keyboard_arrow_up
+        </i>
+        Visualisierung der Lösungsgüte
+      </h4>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+  <app-solution-quality-visualizer *ngIf="isVisualizableSolutionQualityDataVisible"
+                                   [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
 
 </ng-template>

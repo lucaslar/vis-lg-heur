@@ -1,0 +1,23 @@
+.expandable-content-header {
+  padding-top: 16px;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+app-general-data {
+  transition: max-height 0.2s ease-out;
+}
+
+h4 i {
+  font-size: 28px;
+  -webkit-transition: .2s;
+  -moz-transition: .2s;
+  -ms-transition: .2s;
+  -o-transition: .2s;
+  transition: .2s;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 16px;
+}
