@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, DoCheck, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import {Kpi} from '../../../../../model/internal/visualization/SchedulingResult';
@@ -12,12 +12,14 @@ import {Kpi} from '../../../../../model/internal/visualization/SchedulingResult'
     '../shared-chart-styles.css'
   ]
 })
-export class SchedulingKpiComponent implements OnInit {
+export class SchedulingKpiComponent implements OnInit, DoCheck {
 
   @ViewChild('icon', {static: true}) icon: ElementRef;
   @ViewChild('card', {static: true}) card: ElementRef;
 
   @Input() kpi: Kpi;
+
+  private _isRow: boolean;
 
   constructor(private changeDetector: ChangeDetectorRef) {
   }
@@ -36,7 +38,14 @@ export class SchedulingKpiComponent implements OnInit {
         (<HTMLElement>this.icon.nativeElement).innerHTML = this.kpi.iconClasses[0];
       }
     } // else: &oslash;
+  }
+
+  ngDoCheck(): void {
+    this._isRow = this.card.nativeElement.offsetHeight / this.card.nativeElement.offsetWidth < 0.5;
     this.changeDetector.detectChanges();
   }
 
+  get isRow(): boolean {
+    return this._isRow;
+  }
 }
