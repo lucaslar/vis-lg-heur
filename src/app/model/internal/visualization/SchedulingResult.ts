@@ -160,7 +160,7 @@ export class VisualizableSolutionQualityData {
   private _cumulatedDelaysAtTimestamps: ChartData;
   private _comparisonDelayedAndInTimeJobs: ChartData;
   private _finishedJobsAtTimestamp: ChartData;
-  private _allMachineOperationTimeline: TimelineData;
+  private _allMachineOperationsTimeline: TimelineData;
 
   get cumulatedDelaysAtTimestamps(): ChartData {
     return this._cumulatedDelaysAtTimestamps;
@@ -186,11 +186,11 @@ export class VisualizableSolutionQualityData {
     this._finishedJobsAtTimestamp = value;
   }
 
-  get allMachineOperationTimeline(): TimelineData {
-    return this._allMachineOperationTimeline;
+  get allMachineOperationsTimeline(): TimelineData {
+    return this._allMachineOperationsTimeline;
   }
 
-  set allMachineOperationTimeline(value: TimelineData) {
-    this._allMachineOperationTimeline = value;
+  set allMachineOperationsTimeline(value: TimelineData) {
+    this._allMachineOperationsTimeline = value;
   }
 }

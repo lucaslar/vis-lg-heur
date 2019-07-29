@@ -1,1 +1,15 @@
-<p>general-data-visualizer works!</p>
+<app-chart [title]="data.totalDurationsOnMachines.title"
+           [type]="data.totalDurationsOnMachines.visualizableAs"
+           [labels]="data.totalDurationsOnMachines.labels"
+           [datasets]="data.totalDurationsOnMachines.datasets"
+           [yLabel]="data.totalDurationsOnMachines.yLabel"
+           [xLabel]="data.totalDurationsOnMachines.xLabel"
+></app-chart>
+<app-chart [title]="data.totalJobTimes.title"
+           [type]="data.totalJobTimes.visualizableAs"
+           [labels]="data.totalJobTimes.labels"
+           [datasets]="data.totalJobTimes.datasets"
+           [yLabel]="data.totalJobTimes.yLabel"
+           [xLabel]="data.totalJobTimes.xLabel"
+           [colors]="data.totalJobTimes.colors"
+></app-chart>

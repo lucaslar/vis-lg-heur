@@ -1,1 +1,21 @@
-<p>solution-quality-visualizer works!</p>
+<app-chart [title]="data.cumulatedDelaysAtTimestamps.title"
+           [type]="data.cumulatedDelaysAtTimestamps.visualizableAs"
+           [labels]="data.cumulatedDelaysAtTimestamps.labels"
+           [datasets]="data.cumulatedDelaysAtTimestamps.datasets"
+           [yLabel]="data.cumulatedDelaysAtTimestamps.yLabel"
+           [xLabel]="data.cumulatedDelaysAtTimestamps.xLabel"
+></app-chart>
+<app-chart [title]="data.finishedJobsAtTimestamp.title"
+           [type]="data.finishedJobsAtTimestamp.visualizableAs"
+           [labels]="data.finishedJobsAtTimestamp.labels"
+           [datasets]="data.finishedJobsAtTimestamp.datasets"
+           [yLabel]="data.finishedJobsAtTimestamp.yLabel"
+           [xLabel]="data.finishedJobsAtTimestamp.xLabel"
+></app-chart>
+<app-chart [title]="data.comparisonDelayedAndInTimeJobs.title"
+           [type]="data.comparisonDelayedAndInTimeJobs.visualizableAs"
+           [labels]="data.comparisonDelayedAndInTimeJobs.labels"
+           [datasets]="data.comparisonDelayedAndInTimeJobs.datasets"
+           [yLabel]="data.comparisonDelayedAndInTimeJobs.yLabel"
+           [xLabel]="data.comparisonDelayedAndInTimeJobs.xLabel"
+></app-chart>

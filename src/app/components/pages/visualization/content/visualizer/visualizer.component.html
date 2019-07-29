@@ -26,71 +26,12 @@
 
 <ng-template #solution>
 
-  <app-general-data></app-general-data>
-
-  <app-general-data-visualizer></app-general-data-visualizer>
-
+  <app-general-data [data]="result.generalData"></app-general-data>
   <app-scheduling-gantt
-    [timelineData]="result.visualizableSolutionQualityData.allMachineOperationTimeline">
-  </app-scheduling-gantt>
-
-  <app-solution-quality-data [data]="result.solutionQualityData"></app-solution-quality-data>
-
-  <app-solution-quality-visualizer></app-solution-quality-visualizer>
-
-
+    [timelineData]="result.visualizableSolutionQualityData.allMachineOperationsTimeline"></app-scheduling-gantt>
   <!-- TODO: Add card like layout in order to have flexible heights? -->
-
-  <!-- TODO: Extract? Add colors? row padding -->
-  <div class="row">
-    <div class="col-md-12">
-      <app-chart [title]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.title"
-                 [type]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.visualizableAs"
-                 [labels]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.labels"
-                 [datasets]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.datasets"
-                 [yLabel]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.yLabel"
-                 [xLabel]="result.visualizableSolutionQualityData.cumulatedDelaysAtTimestamps.xLabel"
-      ></app-chart>
-    </div>
-    <div class="col-md-12">
-      <app-chart [title]="result.visualizableGeneralData.totalDurationsOnMachines.title"
-                 [type]="result.visualizableGeneralData.totalDurationsOnMachines.visualizableAs"
-                 [labels]="result.visualizableGeneralData.totalDurationsOnMachines.labels"
-                 [datasets]="result.visualizableGeneralData.totalDurationsOnMachines.datasets"
-                 [yLabel]="result.visualizableGeneralData.totalDurationsOnMachines.yLabel"
-                 [xLabel]="result.visualizableGeneralData.totalDurationsOnMachines.xLabel"
-      ></app-chart>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <app-chart [title]="result.visualizableGeneralData.totalJobTimes.title"
-                 [type]="result.visualizableGeneralData.totalJobTimes.visualizableAs"
-                 [labels]="result.visualizableGeneralData.totalJobTimes.labels"
-                 [datasets]="result.visualizableGeneralData.totalJobTimes.datasets"
-                 [yLabel]="result.visualizableGeneralData.totalJobTimes.yLabel"
-                 [xLabel]="result.visualizableGeneralData.totalJobTimes.xLabel"
-                 [colors]="result.visualizableGeneralData.totalJobTimes.colors"
-      ></app-chart>
-    </div>
-    <div class="col-md-12">
-      <app-chart [title]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.title"
-                 [type]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.visualizableAs"
-                 [labels]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.labels"
-                 [datasets]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.datasets"
-                 [yLabel]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.yLabel"
-                 [xLabel]="result.visualizableSolutionQualityData.finishedJobsAtTimestamp.xLabel"
-      ></app-chart>
-    </div>
-    <div class="col-md-12">
-      <app-chart [title]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.title"
-                 [type]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.visualizableAs"
-                 [labels]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.labels"
-                 [datasets]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.datasets"
-                 [yLabel]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.yLabel"
-                 [xLabel]="result.visualizableSolutionQualityData.comparisonDelayedAndInTimeJobs.xLabel"
-      ></app-chart>
-    </div>
-  </div>
+  <app-solution-quality-data [data]="result.solutionQualityData"></app-solution-quality-data>
+  <app-general-data-visualizer [data]="result.visualizableGeneralData"></app-general-data-visualizer>
+  <app-solution-quality-visualizer [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
 
 </ng-template>

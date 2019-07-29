@@ -359,7 +359,7 @@ export class SchedulingService {
   private generateVisualizableSolutionQualityData(): VisualizableSolutionQualityData {
     const data = new VisualizableSolutionQualityData();
 
-    data.allMachineOperationTimeline = this.generateAllMachineOperationsTimeline();
+    data.allMachineOperationsTimeline = this.generateAllMachineOperationsTimeline();
     data.finishedJobsAtTimestamp = this.generateFinishedJobsAtTimestampVisualization();
 
     if (this.jobs[0].dueDate) {
