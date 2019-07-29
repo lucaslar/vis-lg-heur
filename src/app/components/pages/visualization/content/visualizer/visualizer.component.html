@@ -45,16 +45,19 @@
 
 <ng-template #solution>
 
+  <!-- TODO: Cards? -->
+  <!-- TODO: Panel-animation? -->
+
   <app-scheduling-gantt
     [timelineData]="result.visualizableSolutionQualityData.allMachineOperationsTimeline"></app-scheduling-gantt>
 
   <!-- Subtitle: General data -->
   <div class="row title">
-    <div class="col-md-12 text-center">
+    <div class="col-md-12">
       <h4 class="expandable-content-header"
           (click)="isGeneralDataVisible = !isGeneralDataVisible"
           matTooltip="{{'Grundsätzliche Daten '+(isGeneralDataVisible ? 'ausblenden':'einblenden')}}">
-        <i class="material-icons pull-left" [style.transform]="'rotate(' + (isGeneralDataVisible ? 0 : 180) + 'deg)'">
+        <i class="material-icons pull-right" [style.transform]="'rotate(' + (isGeneralDataVisible ? 0 : 180) + 'deg)'">
           keyboard_arrow_up
         </i>
         Grundsätzliche Daten
@@ -67,11 +70,11 @@
 
   <!-- Subtitle: KPIs -->
   <div class="row title">
-    <div class="col-md-12 text-center">
+    <div class="col-md-12">
       <h4 class="expandable-content-header"
           (click)="isSolutionQualityDataVisible = !isSolutionQualityDataVisible"
           matTooltip="{{'Kennzahlen der ermittelten Lösung '+(isSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
-        <i class="material-icons pull-left"
+        <i class="material-icons pull-right"
            [style.transform]="'rotate(' + (isSolutionQualityDataVisible ? 0 : 180) + 'deg)'">
           keyboard_arrow_up
         </i>
@@ -85,11 +88,11 @@
 
   <!-- Subtitle: General data visualization -->
   <div class="row title">
-    <div class="col-md-12 text-center">
+    <div class="col-md-12">
       <h4 class="expandable-content-header"
           (click)="isVisualizableGeneralDataVisible = !isVisualizableGeneralDataVisible"
           matTooltip="{{'Visualisierung von Daten des Reihenfolgeproblems '+(isVisualizableGeneralDataVisible ? 'ausblenden':'einblenden')}}">
-        <i class="material-icons pull-left"
+        <i class="material-icons pull-right"
            [style.transform]="'rotate(' + (isVisualizableGeneralDataVisible ? 0 : 180) + 'deg)'">
           keyboard_arrow_up
         </i>
@@ -103,11 +106,11 @@
 
   <!-- Subtitle: Solution quality data visualization -->
   <div class="row title">
-    <div class="col-md-12 text-center">
+    <div class="col-md-12">
       <h4 class="expandable-content-header"
           (click)="isVisualizableSolutionQualityDataVisible = !isVisualizableSolutionQualityDataVisible"
           matTooltip="{{'Visualisierung der Lösungsgüte '+(isVisualizableSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
-        <i class="material-icons pull-left"
+        <i class="material-icons pull-right"
            [style.transform]="'rotate(' + (isVisualizableSolutionQualityDataVisible ? 0 : 180) + 'deg)'">
           keyboard_arrow_up
         </i>
