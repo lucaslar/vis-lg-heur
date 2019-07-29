@@ -4,7 +4,7 @@
 }
 
 .chart-console-container {
-  background-color: var(--color-background);
+  background-color: white;
   position: absolute;
   margin-top: -72px;
   max-height: 50px;
@@ -20,6 +20,7 @@
   -ms-text-overflow: ellipsis;
   text-overflow: ellipsis;
   overflow: hidden;
+  background-color: var(--color-background);
 }
 
 .job-info {

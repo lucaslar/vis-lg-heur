@@ -13,8 +13,9 @@ export class VisualizerComponent implements OnInit {
 
   private _result: SchedulingResult;
 
-  private _isGeneralDataVisible = true;
-  private _isSolutionQualityDataVisible = true;
+  private _isGanttChartVisible = false;
+  private _isGeneralDataVisible = false;
+  private _isSolutionQualityDataVisible = false;
   private _isVisualizableGeneralDataVisible = true;
   private _isVisualizableSolutionQualityDataVisible = true;
 
@@ -29,6 +30,14 @@ export class VisualizerComponent implements OnInit {
 
   get result(): SchedulingResult {
     return this._result;
+  }
+
+  get isGanttChartVisible(): boolean {
+    return this._isGanttChartVisible;
+  }
+
+  set isGanttChartVisible(value: boolean) {
+    this._isGanttChartVisible = value;
   }
 
   get isGeneralDataVisible(): boolean {

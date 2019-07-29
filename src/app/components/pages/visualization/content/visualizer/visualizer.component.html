@@ -10,32 +10,37 @@
 </div>
 
 <p class="text-justify">
-  Im Folgenden werden sowohl das Reihenfolgeproblem selbst als auch die Güte der mithilfe der gewählten Heuristik
-  ermittelten Lösung visualisiert. Dem Auftragsfolge-Gantt-Diagramm folgend, das die Abarbeitungsreihenfolge der
-  einzlenen Arbeitsgänge grafisch darstellt, ist diese Seite in Abschnitte unterteilt, die sich aus
-  Übersichtlichkeitsgründen nach Belieben ein- und ausblenden lassen.
+  Im Folgenden werden sowohl Daten des Reihenfolgeproblems selbst, der mithilfe der gewählten Heuristikermittelten
+  Lösung als auch ihrer Güte dargestellt bzw. visualisiert. Diese Seite ist hierbei in Abschnitte unterteilt, die sich
+  aus Übersichtlichkeitsgründen nach Belieben ein- und ausblenden lassen.
   <!-- TODO: If log implemented: Name here, list below and add component to page -->
 </p>
 <p class="text-justify">
-  Sie können alternativ auch direkt hier an- bzw. abwählen, welche Informationen angezeigt werden sollen:
+  Sie können alternativ auch direkt hier an- bzw. abwählen, welche Informationen Sie angezeigt bekommen möchten:
 </p>
-
 <!-- checkboxes with headlines: -->
-<ul class="small">
-  <li>
-    <mat-checkbox [(ngModel)]="isGeneralDataVisible">Grundsätzliche Daten</mat-checkbox>
-  </li>
-  <li>
-    <mat-checkbox [(ngModel)]="isSolutionQualityDataVisible">Kennzahlen der ermittelten Lösung</mat-checkbox>
-  </li>
-  <li>
-    <mat-checkbox [(ngModel)]="isVisualizableGeneralDataVisible">Visualisierung von Daten des Reihenfolgeproblems
-    </mat-checkbox>
-  </li>
-  <li>
-    <mat-checkbox [(ngModel)]="isVisualizableSolutionQualityDataVisible">Visualisierung der Lösungsgüte</mat-checkbox>
-  </li>
-</ul>
+<div class="row small">
+  <ul class="col-md-6 col-12">
+    <li>
+      <mat-checkbox [(ngModel)]="isGanttChartVisible">Auftragsfolge-Gantt-Diagramm</mat-checkbox>
+    </li>
+    <li>
+      <mat-checkbox [(ngModel)]="isGeneralDataVisible">Grundsätzliche Daten</mat-checkbox>
+    </li>
+    <li>
+      <mat-checkbox [(ngModel)]="isSolutionQualityDataVisible">Kennzahlen der ermittelten Lösung</mat-checkbox>
+    </li>
+  </ul>
+  <ul class="col-md-6 col-12">
+    <li>
+      <mat-checkbox [(ngModel)]="isVisualizableGeneralDataVisible">Visualisierung von Daten des Reihenfolgeproblems
+      </mat-checkbox>
+    </li>
+    <li>
+      <mat-checkbox [(ngModel)]="isVisualizableSolutionQualityDataVisible">Visualisierung der Lösungsgüte</mat-checkbox>
+    </li>
+  </ul>
+</div>
 
 <div *ngIf="!result; else solution" class="loading-container">
   <div class="loading-content">
@@ -45,14 +50,29 @@
 
 <ng-template #solution>
 
-  <app-scheduling-gantt
-    [timelineData]="result.visualizableSolutionQualityData.allMachineOperationsTimeline"></app-scheduling-gantt>
-
   <mat-accordion #accordion="matAccordion" [multi]="true">
 
+    <!-- Subtitle: Gantt -->
+    <mat-expansion-panel [expanded]="isGanttChartVisible">
+      <mat-expansion-panel-header (click)="isGanttChartVisible = !isGanttChartVisible">
+        <div class="row title">
+          <div class="col-md-12">
+            <h4 matTooltip="{{'Auftragsfolge-Gantt-Diagramm '+(isGanttChartVisible ? 'ausblenden':'einblenden')}}">
+              Auftragsfolge-Gantt-Diagramm
+            </h4>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+      <mat-divider></mat-divider>
+      <div class="content">
+        <app-scheduling-gantt
+          [timelineData]="result.visualizableSolutionQualityData.allMachineOperationsTimeline"></app-scheduling-gantt>
+      </div>
+    </mat-expansion-panel>
+
     <!-- Subtitle: General data -->
-    <mat-expansion-panel [expanded]="isGeneralDataVisible" (click)="isGeneralDataVisible = !isGeneralDataVisible">
-      <mat-expansion-panel-header>
+    <mat-expansion-panel [expanded]="isGeneralDataVisible">
+      <mat-expansion-panel-header (click)="isGeneralDataVisible = !isGeneralDataVisible">
         <div class="row title">
           <div class="col-md-12">
             <h4 matTooltip="{{'Grundsätzliche Daten '+(isGeneralDataVisible ? 'ausblenden':'einblenden')}}">
@@ -68,11 +88,12 @@
     </mat-expansion-panel>
 
     <!-- Subtitle: KPIs -->
-    <mat-expansion-panel [expanded]="isSolutionQualityDataVisible" (click)="isSolutionQualityDataVisible = !isSolutionQualityDataVisible">
-      <mat-expansion-panel-header>
+    <mat-expansion-panel [expanded]="isSolutionQualityDataVisible">
+      <mat-expansion-panel-header (click)="isSolutionQualityDataVisible = !isSolutionQualityDataVisible">
         <div class="row title">
           <div class="col-md-12">
-            <h4 matTooltip="{{'Kennzahlen der ermittelten Lösung '+(isSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
+            <h4
+              matTooltip="{{'Kennzahlen der ermittelten Lösung '+(isSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
               Kennzahlen der ermittelten Lösung
             </h4>
           </div>
@@ -85,11 +106,12 @@
     </mat-expansion-panel>
 
     <!-- Subtitle: General data visualization -->
-    <mat-expansion-panel [expanded]="isVisualizableGeneralDataVisible" (click)="isVisualizableGeneralDataVisible = !isVisualizableGeneralDataVisible">
-      <mat-expansion-panel-header>
+    <mat-expansion-panel [expanded]="isVisualizableGeneralDataVisible">
+      <mat-expansion-panel-header (click)="isVisualizableGeneralDataVisible = !isVisualizableGeneralDataVisible">
         <div class="row title">
           <div class="col-md-12">
-            <h4 matTooltip="{{'Visualisierung von Daten des Reihenfolgeproblems '+(isVisualizableGeneralDataVisible ? 'ausblenden':'einblenden')}}">
+            <h4
+              matTooltip="{{'Visualisierung von Daten des Reihenfolgeproblems '+(isVisualizableGeneralDataVisible ? 'ausblenden':'einblenden')}}">
               Visualisierung von Daten des Reihenfolgeproblems
             </h4>
           </div>
@@ -102,11 +124,13 @@
     </mat-expansion-panel>
 
     <!-- Subtitle: General data visualization -->
-    <mat-expansion-panel [expanded]="isVisualizableSolutionQualityDataVisible" (click)="isVisualizableSolutionQualityDataVisible = !isVisualizableSolutionQualityDataVisible">
-      <mat-expansion-panel-header>
+    <mat-expansion-panel [expanded]="isVisualizableSolutionQualityDataVisible">
+      <mat-expansion-panel-header
+        (click)="isVisualizableSolutionQualityDataVisible = !isVisualizableSolutionQualityDataVisible">
         <div class="row title">
           <div class="col-md-12">
-            <h4 matTooltip="{{'Visualisierung der Lösungsgüte '+(isVisualizableSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
+            <h4
+              matTooltip="{{'Visualisierung der Lösungsgüte '+(isVisualizableSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
               Visualisierung der Lösungsgüte
             </h4>
           </div>
@@ -114,7 +138,8 @@
       </mat-expansion-panel-header>
       <mat-divider></mat-divider>
       <div class="content">
-        <app-solution-quality-visualizer [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
+        <app-solution-quality-visualizer
+          [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
       </div>
     </mat-expansion-panel>
 

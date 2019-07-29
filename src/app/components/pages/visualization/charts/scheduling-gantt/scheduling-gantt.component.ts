@@ -95,7 +95,6 @@ export class SchedulingGanttComponent implements OnInit {
     return this.colorMap.get(index);
   }
 
-
   get contentHeight(): number {
     return this.storage.nrOfMachines * 41 + 8 + 64; // rows, padding and console
   }

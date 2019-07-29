@@ -1,15 +1,13 @@
-h4 i {
-  font-size: 28px;
-  -webkit-transition: .2s;
-  -moz-transition: .2s;
-  -ms-transition: .2s;
-  -o-transition: .2s;
-  transition: .2s;
-}
-
 ul {
   list-style-type: none;
-  padding-left: 16px;
+}
+
+ul:first-child {
+  margin-bottom: 0;
+}
+
+mat-expansion-panel-header {
+  min-height: 64px;
 }
 
 mat-expansion-panel div.content, mat-expansion-panel-header h4 {
@@ -17,7 +15,7 @@ mat-expansion-panel div.content, mat-expansion-panel-header h4 {
 }
 
 mat-expansion-panel-header h4 {
-  margin-top: 8px;
+  margin-top: 12px;
   /* Margin bottom is automatically added for each h-element */
 }
 

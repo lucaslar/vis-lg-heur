@@ -1,9 +1,4 @@
-<div class="diagram-container" #container>
-  <div class="text-center title">
-    <h4>Auftragsfolge-Gantt-Diagramm</h4>
-  </div>
-
-  <mat-divider></mat-divider>
+<div #container>
 
   <div *ngIf="!detectChartVisibility()"
        [style.height.px]="contentHeight"
@@ -14,8 +9,10 @@
     </div>
   </div>
 
-  <div class="solution-diagram no-legend">
+  <div class="solution-diagram">
     <!-- TODO: on window nav bar hidden due to resizing: detect changes? -->
+
+    <p></p>
 
     <div #chartContainer>
       <google-chart (ready)="onChartReady()"
