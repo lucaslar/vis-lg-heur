@@ -68,7 +68,7 @@ export class SchedulingChartComponent implements OnInit {
   private initDefaultColors(): void {
     this._colors = [
       { // Indigo accent (Angular Material) with less opacity:
-        backgroundColor: this.type === ChartType.CJS_LINE ? 'rgba(255, 64, 119, .2)' : 'rgba(255, 64, 119, .7)',
+        backgroundColor: this.type === ChartType.CJS_LINE ? 'rgba(255, 64, 119, .2)' : 'rgba(255, 64, 119, .8)',
         borderColor: 'rgba(255, 64, 119, .7)',
         borderWidth: this.type === ChartType.CJS_LINE ? 2 : 0
       }
