@@ -11,6 +11,7 @@ html, body {
   --color-warning: #9c0500;
   --color-grey-font: #747474;
   --color-background: #fafafa; /* Color of the content pages */
+  --color-grey-line: rgba(0, 0, 0, .12); /* Anuglar line grey */
 }
 
 .status-warning {
@@ -19,7 +20,7 @@ html, body {
 
 button, button span, button i {
   color: var(--color-main);
-  -webkit-transition: .5s ;
+  -webkit-transition: .5s;
   -moz-transition: .5s;
   -ms-transition: .5s;
   -o-transition: .5s;
