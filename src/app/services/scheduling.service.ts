@@ -42,7 +42,10 @@ export class SchedulingService {
 
     const schedulingPerformance = performance.now() - tStart;
     const schedulingData = this.generateSchedulingResult();
-    schedulingData.generalData.durationInMillis = schedulingPerformance;
+    schedulingData.generalData.durationInMillisKpi = new Kpi();
+    schedulingData.generalData.durationInMillisKpi.kpi = schedulingPerformance;
+    schedulingData.generalData.durationInMillisKpi.title = 'Dauer der Berechnung in ms.';
+    schedulingData.generalData.durationInMillisKpi.iconClasses = ['fas', 'fa-stopwatch'];
     return schedulingData;
   }
 
@@ -61,6 +64,7 @@ export class SchedulingService {
   private proceedScheduling(): void {
     this.handleEachCurrentJobOfMachine();
     this.addJobsToMachineQueues();
+    // TODO FOr each or only new/changed queues? Change and compare with logging text?
     this.sortJobsInQueuesBasedOnHeuristic(); // Implementations of heuristics called in this method and its called methods
     this.setNextJobForEachFreeMachine();
   }

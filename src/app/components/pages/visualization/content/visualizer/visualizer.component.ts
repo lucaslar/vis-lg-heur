@@ -20,8 +20,6 @@ export class VisualizerComponent implements OnInit {
   ngOnInit() {
     const heuristicDefiner = <HeuristicDefiner>this.route.snapshot.paramMap.get('heuristic');
     this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
-
-    console.log(this.result);
   }
 
   get result(): SchedulingResult {

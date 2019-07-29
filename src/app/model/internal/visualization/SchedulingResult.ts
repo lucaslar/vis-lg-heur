@@ -51,7 +51,7 @@ export class GeneralSchedulingData {
   private _machineConfig: MachineConfig;
   private _numberOfMachines: number;
   private _numberOfJobs: number;
-  private _durationInMillis: number;
+  private _durationInMillisKpi: Kpi;
 
   get usedHeuristic(): Heuristic {
     return this._usedHeuristic;
@@ -93,12 +93,12 @@ export class GeneralSchedulingData {
     this._numberOfJobs = value;
   }
 
-  get durationInMillis(): number {
-    return this._durationInMillis;
+  get durationInMillisKpi(): Kpi {
+    return this._durationInMillisKpi;
   }
 
-  set durationInMillis(value: number) {
-    this._durationInMillis = value;
+  set durationInMillisKpi(value: Kpi) {
+    this._durationInMillisKpi = value;
   }
 }
 
