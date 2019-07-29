@@ -22,6 +22,10 @@
   overflow: hidden;
 }
 
+.job-info {
+  white-space: nowrap;
+}
+
 .chart-console i {
   padding-right: 8px;
 }
