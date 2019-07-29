@@ -58,8 +58,7 @@ export class StorageService {
           'Das aktuelle Reihenfolgeproblem (' + (this.machineConfigParam === MachineConfig.FLOWSHOP ?
             'Flowshop' : 'Jobshop') + ' mit zwei Maschinen) ist mithilfe des ' +
           'Johnson-Algorithmus in vertretbarer Zeit exakt lösbar.',
-          // TODO Correct calculating time?
-          'Der Rechenaufwand beträgt hierbei O(n log n). Es besteht also kein Bedarf, ein ' +
+          'Der Rechenaufwand beträgt hierbei n log(n). Es besteht also kein Bedarf, ein ' +
           'heuristisches Verfahren zu verwenden.'
         ],
         DialogType.INFO
