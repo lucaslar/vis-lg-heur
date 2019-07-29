@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivateChild, Router} from '@angular/router';
 import {StorageService} from '../services/storage.service';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {PopUpComponent} from '../components/dialogs/pop-up/pop-up.component';
 import {DialogContent} from '../model/internal/dialog/DialogContent';
 import {DialogType} from '../model/internal/dialog/DialogType';

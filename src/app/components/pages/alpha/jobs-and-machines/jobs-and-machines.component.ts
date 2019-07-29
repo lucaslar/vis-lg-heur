@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {StorageService} from '../../../../services/storage.service';
 import {Job, MachineTimeForJob} from '../../../../model/Job';
-import {MatDialog, MatExpansionPanelHeader, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
+import {MatExpansionPanelHeader} from '@angular/material/expansion';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {MachineNrPopupComponent} from '../../../dialogs/machine-nr-popup/machine-nr-popup.component';
 import {DialogContent} from '../../../../model/internal/dialog/DialogContent';

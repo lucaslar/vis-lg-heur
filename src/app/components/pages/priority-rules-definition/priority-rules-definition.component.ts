@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {PriorityRule} from '../../../model/enums/PriorityRule';
 import {StorageService} from '../../../services/storage.service';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-priority-rules-definition',
@@ -65,8 +65,8 @@ export class PriorityRulesDefinitionComponent implements OnInit {
 
     } else if (previousContainer !== container && container === this.othersList) {
       const newIndex = Object.values(PriorityRule)
-          .filter(priorityRule => priorityRule === this.storedList.data[previousIndex] || this.othersList.data.includes(priorityRule))
-          .indexOf(previousContainer.data[previousIndex]);
+        .filter(priorityRule => priorityRule === this.storedList.data[previousIndex] || this.othersList.data.includes(priorityRule))
+        .indexOf(previousContainer.data[previousIndex]);
       transferArrayItem(previousContainer.data, container.data, previousIndex, newIndex);
       this.storage.priorityRules = this.storedRules;
 

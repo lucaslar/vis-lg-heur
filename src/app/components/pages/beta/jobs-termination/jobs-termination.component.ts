@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {StorageService} from '../../../../services/storage.service';
 import {Job} from '../../../../model/Job';
 import {DialogContent} from '../../../../model/internal/dialog/DialogContent';
@@ -71,7 +71,7 @@ export class JobsTerminationComponent implements OnInit {
 
   isDueDateOfEachJobConfigured(): boolean {
     return this.storage
-      .getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES)
+        .getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES)
       === DefinitionStatus.COMPLETELY_DEFINED;
   }
 

@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {DialogType} from '../../../model/internal/dialog/DialogType';
-import {MAT_DIALOG_DATA} from '@angular/material';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {DialogContent} from '../../../model/internal/dialog/DialogContent';
 
 @Component({

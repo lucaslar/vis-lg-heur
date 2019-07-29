@@ -1,6 +1,7 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
-import {MatDialog, MatSidenav} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSidenav} from '@angular/material/sidenav';
 import {AboutThisAppComponent} from './components/dialogs/about-this-app/about-this-app.component';
 import {HeuristicsSelectionComponent} from './components/dialogs/heuristics-selection/heuristics-selection.component';
 import {PopUpComponent} from './components/dialogs/pop-up/pop-up.component';
