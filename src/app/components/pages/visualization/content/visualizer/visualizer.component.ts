@@ -13,9 +13,9 @@ export class VisualizerComponent implements OnInit {
 
   private _result: SchedulingResult;
 
-  private _isGanttChartVisible = false;
-  private _isGeneralDataVisible = false;
-  private _isSolutionQualityDataVisible = false;
+  private _isGanttChartVisible = true;
+  private _isGeneralDataVisible = true;
+  private _isSolutionQualityDataVisible = true;
   private _isVisualizableGeneralDataVisible = true;
   private _isVisualizableSolutionQualityDataVisible = true;
 
