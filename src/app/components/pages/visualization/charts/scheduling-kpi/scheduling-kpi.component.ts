@@ -35,7 +35,7 @@ export class SchedulingKpiComponent implements OnInit {
         (<HTMLElement>this.icon.nativeElement).classList.add('material-icons');
         (<HTMLElement>this.icon.nativeElement).innerHTML = this.kpi.iconClasses[0];
       }
-    } // else: &Oslash;
+    } // else: &oslash;
     this.changeDetector.detectChanges();
   }
 
