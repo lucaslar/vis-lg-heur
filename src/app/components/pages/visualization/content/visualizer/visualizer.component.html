@@ -45,81 +45,79 @@
 
 <ng-template #solution>
 
-  <!-- TODO: Cards? -->
-  <!-- TODO: Panel-animation? -->
-
   <app-scheduling-gantt
     [timelineData]="result.visualizableSolutionQualityData.allMachineOperationsTimeline"></app-scheduling-gantt>
 
-  <!-- Subtitle: General data -->
-  <div class="row title">
-    <div class="col-md-12">
-      <h4 class="expandable-content-header"
-          (click)="isGeneralDataVisible = !isGeneralDataVisible"
-          matTooltip="{{'Grundsätzliche Daten '+(isGeneralDataVisible ? 'ausblenden':'einblenden')}}">
-        <i class="material-icons pull-right" [style.transform]="'rotate(' + (isGeneralDataVisible ? 0 : 180) + 'deg)'">
-          keyboard_arrow_up
-        </i>
-        Grundsätzliche Daten
-      </h4>
-      <mat-divider></mat-divider>
-    </div>
-  </div>
-  <app-general-data *ngIf="isGeneralDataVisible"
-                    [data]="result.generalData"></app-general-data>
+  <mat-accordion #accordion="matAccordion" [multi]="true">
 
-  <!-- Subtitle: KPIs -->
-  <div class="row title">
-    <div class="col-md-12">
-      <h4 class="expandable-content-header"
-          (click)="isSolutionQualityDataVisible = !isSolutionQualityDataVisible"
-          matTooltip="{{'Kennzahlen der ermittelten Lösung '+(isSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
-        <i class="material-icons pull-right"
-           [style.transform]="'rotate(' + (isSolutionQualityDataVisible ? 0 : 180) + 'deg)'">
-          keyboard_arrow_up
-        </i>
-        Kennzahlen der ermittelten Lösung
-      </h4>
+    <!-- Subtitle: General data -->
+    <mat-expansion-panel [expanded]="isGeneralDataVisible" (click)="isGeneralDataVisible = !isGeneralDataVisible">
+      <mat-expansion-panel-header>
+        <div class="row title">
+          <div class="col-md-12">
+            <h4 matTooltip="{{'Grundsätzliche Daten '+(isGeneralDataVisible ? 'ausblenden':'einblenden')}}">
+              Grundsätzliche Daten
+            </h4>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
       <mat-divider></mat-divider>
-    </div>
-  </div>
-  <app-solution-quality-data *ngIf="isSolutionQualityDataVisible"
-                             [data]="result.solutionQualityData"></app-solution-quality-data>
+      <div class="content">
+        <app-general-data [data]="result.generalData"></app-general-data>
+      </div>
+    </mat-expansion-panel>
 
-  <!-- Subtitle: General data visualization -->
-  <div class="row title">
-    <div class="col-md-12">
-      <h4 class="expandable-content-header"
-          (click)="isVisualizableGeneralDataVisible = !isVisualizableGeneralDataVisible"
-          matTooltip="{{'Visualisierung von Daten des Reihenfolgeproblems '+(isVisualizableGeneralDataVisible ? 'ausblenden':'einblenden')}}">
-        <i class="material-icons pull-right"
-           [style.transform]="'rotate(' + (isVisualizableGeneralDataVisible ? 0 : 180) + 'deg)'">
-          keyboard_arrow_up
-        </i>
-        Visualisierung von Daten des Reihenfolgeproblems
-      </h4>
+    <!-- Subtitle: KPIs -->
+    <mat-expansion-panel [expanded]="isSolutionQualityDataVisible" (click)="isSolutionQualityDataVisible = !isSolutionQualityDataVisible">
+      <mat-expansion-panel-header>
+        <div class="row title">
+          <div class="col-md-12">
+            <h4 matTooltip="{{'Kennzahlen der ermittelten Lösung '+(isSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
+              Kennzahlen der ermittelten Lösung
+            </h4>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
       <mat-divider></mat-divider>
-    </div>
-  </div>
-  <app-general-data-visualizer *ngIf="isVisualizableGeneralDataVisible"
-                               [data]="result.visualizableGeneralData"></app-general-data-visualizer>
+      <div class="content no-padding-bottom">
+        <app-solution-quality-data [data]="result.solutionQualityData"></app-solution-quality-data>
+      </div>
+    </mat-expansion-panel>
 
-  <!-- Subtitle: Solution quality data visualization -->
-  <div class="row title">
-    <div class="col-md-12">
-      <h4 class="expandable-content-header"
-          (click)="isVisualizableSolutionQualityDataVisible = !isVisualizableSolutionQualityDataVisible"
-          matTooltip="{{'Visualisierung der Lösungsgüte '+(isVisualizableSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
-        <i class="material-icons pull-right"
-           [style.transform]="'rotate(' + (isVisualizableSolutionQualityDataVisible ? 0 : 180) + 'deg)'">
-          keyboard_arrow_up
-        </i>
-        Visualisierung der Lösungsgüte
-      </h4>
+    <!-- Subtitle: General data visualization -->
+    <mat-expansion-panel [expanded]="isVisualizableGeneralDataVisible" (click)="isVisualizableGeneralDataVisible = !isVisualizableGeneralDataVisible">
+      <mat-expansion-panel-header>
+        <div class="row title">
+          <div class="col-md-12">
+            <h4 matTooltip="{{'Visualisierung von Daten des Reihenfolgeproblems '+(isVisualizableGeneralDataVisible ? 'ausblenden':'einblenden')}}">
+              Visualisierung von Daten des Reihenfolgeproblems
+            </h4>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
       <mat-divider></mat-divider>
-    </div>
-  </div>
-  <app-solution-quality-visualizer *ngIf="isVisualizableSolutionQualityDataVisible"
-                                   [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
+      <div class="content">
+        <app-general-data-visualizer [data]="result.visualizableGeneralData"></app-general-data-visualizer>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Subtitle: General data visualization -->
+    <mat-expansion-panel [expanded]="isVisualizableSolutionQualityDataVisible" (click)="isVisualizableSolutionQualityDataVisible = !isVisualizableSolutionQualityDataVisible">
+      <mat-expansion-panel-header>
+        <div class="row title">
+          <div class="col-md-12">
+            <h4 matTooltip="{{'Visualisierung der Lösungsgüte '+(isVisualizableSolutionQualityDataVisible ? 'ausblenden':'einblenden')}}">
+              Visualisierung der Lösungsgüte
+            </h4>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+      <mat-divider></mat-divider>
+      <div class="content">
+        <app-solution-quality-visualizer [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
+      </div>
+    </mat-expansion-panel>
+
+  </mat-accordion>
 
 </ng-template>

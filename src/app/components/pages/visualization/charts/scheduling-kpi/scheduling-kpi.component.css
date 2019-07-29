@@ -2,6 +2,7 @@
   background-color: var(--color-main);
   color: white;
   padding: 8px;
+  margin-bottom: 8px;
 }
 
 i, .average {

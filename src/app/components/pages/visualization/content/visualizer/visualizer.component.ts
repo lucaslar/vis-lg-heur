@@ -11,8 +11,6 @@ import {SchedulingResult} from '../../../../../model/internal/visualization/Sche
 })
 export class VisualizerComponent implements OnInit {
 
-  // TODO: (Generally) Readonly -> Upper case
-
   private _result: SchedulingResult;
 
   private _isGeneralDataVisible = true;

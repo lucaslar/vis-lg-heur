@@ -56,6 +56,10 @@ button:disabled span, button:disabled i {
   stroke: var(--color-main);
 }
 
+mat-accordion mat-expansion-panel:last-child {
+  margin-bottom: 16px;
+}
+
 .larger-icon {
   font-size: larger !important;
 }
