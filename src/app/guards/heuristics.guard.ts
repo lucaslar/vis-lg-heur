@@ -34,6 +34,7 @@ export class HeuristicsGuard implements CanActivate {
     // no error or info dialog as feedback means the heuristic exists and is applicable:
     const isApplicableHeuristic = responseDialog === undefined;
 
+    // TODO: Add: Not all due dates -> less diagrams?
     if (!isApplicableHeuristic) {
       this.dialog.open(PopUpComponent, {data: <DialogContent>responseDialog});
       // Unfortunately, this line had to be added because of an Angular bug:
