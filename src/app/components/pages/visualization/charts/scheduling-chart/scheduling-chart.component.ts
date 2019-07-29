@@ -31,15 +31,17 @@ export class SchedulingChartComponent implements OnInit {
     ];
   }
 
-  private readonly lineChartColor: Array<any> = [
-    {
-      backgroundColor: 'rgba(105, 0, 132, .2)',
-      borderColor: 'rgba(200, 99, 132, .7)',
-      borderWidth: 2,
-    }
-  ];
 
   ngOnInit(): void {
+
+    this.initOptions();
+
+    if (!this._colors) {
+      this.initDefaultColors();
+    }
+  }
+
+  private initOptions(): void {
     this._options = {
       responsive: true,
       spanGaps: true,
@@ -63,12 +65,18 @@ export class SchedulingChartComponent implements OnInit {
     };
   }
 
+  private initDefaultColors(): void {
+    this._colors = [
+      { // Indigo accent (Angular Material) with less opacity:
+        backgroundColor: this.type === ChartType.CJS_LINE ? 'rgba(255, 64, 119, .2)' : 'rgba(255, 64, 119, .7)',
+        borderColor: 'rgba(255, 64, 119, .7)',
+        borderWidth: this.type === ChartType.CJS_LINE ? 2 : 0
+      }
+    ];
+  }
+
   get chartColors(): any[] {
-    if (this._colors) {
-      return this._colors;
-    } else if (this.type === ChartType.CJS_LINE) {
-      return this.lineChartColor;
-    }
+    return this._colors;
   }
 
   get options() {
