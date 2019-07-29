@@ -7,7 +7,7 @@ ul:first-child {
 }
 
 mat-expansion-panel-header {
-  min-height: 64px;
+  min-height: 68px;
 }
 
 mat-expansion-panel div.content, mat-expansion-panel-header h4 {
