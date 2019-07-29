@@ -1,0 +1,9 @@
+.diagram-container {
+  padding: 8px;
+  border: 1px solid var(--color-grey-line);
+  border-radius: 4px;
+}
+
+.no-legend {
+  padding-top: 8px;
+}
