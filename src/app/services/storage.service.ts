@@ -93,6 +93,10 @@ export class StorageService {
     }
   }
 
+  isEachDueDateCOnfigured(): boolean {
+    return this.jobs.every(job => !!job.dueDate);
+  }
+
   private checkValuesForHeuristic(heuristic: Heuristic): DefinableValue | undefined {
     for (const value of heuristic.requiredValues) {
       if (this.getValueDefinitionStatus(value) !== DefinitionStatus.COMPLETELY_DEFINED) {

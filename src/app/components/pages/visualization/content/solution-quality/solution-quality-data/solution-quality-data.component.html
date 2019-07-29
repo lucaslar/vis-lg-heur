@@ -1,17 +1,17 @@
 <!-- TODO Calculate due date based kpis only if due dates are configured for each job. -->
 <p>
-  Die Güte einer ermittelten Lösung lässt sich unter anderem an bestimmten Kennzahlen
-  festmachen.
+  Die Güte der ermittelten Lösung lässt sich unter anderem an bestimmten Kennzahlen festmachen, die in diesem
+  Unterkapitel präsentiert werden.
 </p>
 
-<div class="info-box">
+<div class="info-box" *ngIf="!isEachDueDateConfigured">
   <h6>
     <i class="fas fa-info-circle"></i>
     Hinweis
   </h6>
   <div class="information font-italic  text-justify">
-    Bitte beachten Sie, dass Kennzahlen, die sich auf gewünschte Fertigstellungstermine bzw. Verspätungen
-    beziehen, nur dann berechnet werden können, wenn diese für alle Aufträge konfiguriert sind.
+    Kennzahlen, die sich auf gewünschte Fertigstellungstermine bzw. Verspätungen beziehen, konnten nicht berechnet
+    werden, da nicht für alle Aufträge Fertigstellungstermine definiert sind.
   </div>
 </div>
 
