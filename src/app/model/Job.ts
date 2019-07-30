@@ -4,6 +4,7 @@ export class Job {
   name: string;
   machineTimes: MachineTimeForJob[];
   dueDate: number;
+  setupTimesToOtherJobs: SetupTime[];
 
   constructor(_name: string) {
     this.name = _name;
@@ -19,5 +20,15 @@ export class MachineTimeForJob {
     this.machineNr = machineNr;
     this.timeOnMachine = timeOnMachine;
   }
+}
 
+export class SetupTime {
+
+  idTo: number;
+  duration: number;
+
+  constructor(idTo: number, duration: number) {
+    this.idTo = idTo;
+    this.duration = duration;
+  }
 }

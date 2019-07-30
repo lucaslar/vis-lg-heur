@@ -45,9 +45,6 @@ export class StorageService {
     } else if (definableValue === DefinableValue.PRIORITY_RULES) {
       // Since not all rules have to be selected:
       return this.priorityRules.length ? DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
-    } else if (definableValue === DefinableValue.GAMMA_OBJECTIVE_FUNCTION) {
-      // Is one or none defined?
-      return this.objectiveFunction ? DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
     } else {
       console.log('Define: ' + definableValue + '!');
     }
@@ -106,6 +103,7 @@ export class StorageService {
 
   deleteSetupTimesForEachJob(): void {
     this.jobs.forEach(job => job.setupTimesToOtherJobs = undefined);
+    this.jobs = this.jobs;
   }
 
   private checkValuesForHeuristic(heuristic: Heuristic): DefinableValue | undefined {
