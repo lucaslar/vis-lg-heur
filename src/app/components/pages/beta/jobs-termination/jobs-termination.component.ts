@@ -30,7 +30,7 @@ export class JobsTerminationComponent implements OnInit {
           'Fehlende Fertigstellungstermine automatisch generieren',
           [
             'Derzeit sind nicht für alle Aufträge Fertigstellungstermine festgelegt. ' +
-            'Diese können automatisch generiert werden oder einzeln eingegeben werden. ' +
+            'Diese können automatisch generiert oder einzeln eingegeben werden. ' +
             'Änderungen sind nach der automatischen Generierung nichtsdestrotz möglich.',
             'Es wird hierbei versucht, realistische Fertgstellungstermine zu erzeugen, indem für alle Aufträge ' +
             'basierend auf aktuell konfigurierten Zeiten ihrer jeweiligen Arbeitsgänge die Gesamtbearbeitungsdauer ' +

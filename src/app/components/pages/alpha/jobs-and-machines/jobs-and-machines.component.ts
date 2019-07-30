@@ -211,7 +211,7 @@ export class JobsAndMachinesComponent implements OnInit {
           'Zeiten fehlender Arbeitsgänge automatisch generieren',
           [
             'Derzeit sind nicht alle Zeiten für die Arbeitsgänge der einzelnen Aufträge ' +
-            'festgelegt. Diese können automatisch generiert werden oder einzeln eingegeben werden. ' +
+            'festgelegt. Diese können automatisch generiert oder einzeln eingegeben werden. ' +
             'Änderungen sind nach der automatischen Generierung nichtsdestrotz möglich.',
             'Möchten Sie die fehlenden Zeiten automatisch generieren lassen? (Empfohlen)'
           ],
