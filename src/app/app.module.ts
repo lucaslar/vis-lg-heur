@@ -31,6 +31,7 @@ import {GeneralDataVisualizerComponent} from './components/pages/visualization/c
 import { SchedulingLogComponent } from './components/pages/visualization/content/scheduling-log/scheduling-log.component';
 import { SchedulingLogDialogComponent } from './components/dialogs/scheduling-log-dialog/scheduling-log-dialog.component';
 import { MachineTablesComponent } from './components/pages/visualization/content/machine-tables/machine-tables.component';
+import { ObjectiveFunctionDefinitionComponent } from './components/pages/gamma/objective-function-definition/objective-function-definition.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { MachineTablesComponent } from './components/pages/visualization/content
     GeneralDataVisualizerComponent,
     SchedulingLogComponent,
     SchedulingLogDialogComponent,
-    MachineTablesComponent
+    MachineTablesComponent,
+    ObjectiveFunctionDefinitionComponent
   ],
   imports: [
     BrowserModule,
