@@ -115,7 +115,7 @@
           </div>
         </mat-expansion-panel-header>
 
-        <div *ngIf="job.machineTimes.length > 1" class="information text-left">
+        <div *ngIf="job.machineTimes.length > 1" class="information add-padding-left">
           Abarbeitungsreihenfolge per Drag & Drop ändern:
         </div>
         <div cdkDropList class="drag-drop-list" (cdkDropListDropped)="changeMachineOrderOfJob(job, $event)">

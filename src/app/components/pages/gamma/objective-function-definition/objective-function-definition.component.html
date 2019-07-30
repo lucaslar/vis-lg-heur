@@ -37,6 +37,7 @@
         <mat-radio-group [(ngModel)]="selectedFunction">
           <mat-radio-button *ngFor="let objFunction of objectiveFunctionsAsStrings"
                             [value]="objFunction"
+                            class="ord-text"
                             (change)="onSelectionChange($event)">
             {{objFunction}}
           </mat-radio-button>
