@@ -7,6 +7,7 @@ import {DialogType} from '../../../../model/internal/dialog/DialogType';
 import {DefinitionStatus} from '../../../../model/internal/value-definition/DefinitionStatus';
 import {DefinableValue} from '../../../../model/internal/value-definition/DefinableValue';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-jobs-termination',
@@ -17,10 +18,10 @@ export class JobsTerminationComponent implements OnInit {
 
   private _jobs: Job[];
 
-  constructor(public storage: StorageService, private dialog: MatDialog) {
+  constructor(public storage: StorageService, private dialog: MatDialog, private snackBar: MatSnackBar) {
   }
 
-  // TODO: (low priority) Snackbar / undo action after auto generating flowshop/times?
+  // TODO: undo action after auto generating flowshop/times?
 
   ngOnInit(): void {
     this._jobs = this.storage.jobs;
@@ -70,9 +71,28 @@ export class JobsTerminationComponent implements OnInit {
   }
 
   isDueDateOfEachJobConfigured(): boolean {
-    return this.storage
-        .getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES)
-      === DefinitionStatus.COMPLETELY_DEFINED;
+    return this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED;
+  }
+
+  isDueDateOfNoJobConfigured(): boolean {
+    return this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.NOT_DEFINED;
+  }
+
+  deleteAllExistingDueDates(): void {
+    this.dialog.open(PopUpComponent, {
+      data: new DialogContent(
+        'Löschen bestätigen',
+        ['Möchten Sie wirklich alle gewünschten Fertigstellungstermine löschen?', 'Diese Aktion kann nicht rückgängig gemacht werden'],
+        DialogType.QUESTION)
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.jobs.forEach(job => delete job.dueDate);
+        this.storage.jobs = this.jobs;
+        this.snackBar.open('Alle Fertigstellungstermine gelöscht', 'OK',
+          {panelClass: 'color-white', duration: 2000}
+        );
+      }
+    });
   }
 
   addRandomDueDates(): void {
@@ -104,6 +124,9 @@ export class JobsTerminationComponent implements OnInit {
       }
     });
     this.storage.jobs = this.jobs;
+    this.snackBar.open('Fehlende Fertigstellungstermine zufällig erstellt', 'OK',
+      {panelClass: 'color-white', duration: 2000}
+    );
   }
 
   get jobs(): Job[] {

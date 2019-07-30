@@ -1,6 +1,5 @@
-<!-- TODO: add help pop-up? -->
-<!-- TODO: col-md-6 if start date is not implemnted? -->
-<!-- TODO: delete all button? -->
+<!-- TODO: add help pop-up/descriptional text -->
+<!-- TODO: col-md-6 if start date is not implemented? -->
 
 <!-- Title -->
 <div class="row title">
@@ -22,6 +21,18 @@
                 : 'Es sind bereits Fertigstellungstermine für alle Aufträge definiert'}}">
             <i class="fas fa-random"></i>
             Zufällige Fertigstellungstermine
+          </span>
+    </button>
+    <button mat-stroked-button
+            [disabled]="isDueDateOfNoJobConfigured()"
+            (click)="deleteAllExistingDueDates()"
+            class="status-warning">
+          <span class="align-middle"
+                matTooltip="{{!isDueDateOfNoJobConfigured() ? 'Alle bestehenden Fertigstellungstermine löschen'
+                  : 'Aktuell existieren keine Fertigstellungstermine, die gelöscht werden könnten'
+                }}">
+            <i class="fas fa-trash"></i>
+            Alle Fertigstellungstermine löschen
           </span>
     </button>
   </div>
