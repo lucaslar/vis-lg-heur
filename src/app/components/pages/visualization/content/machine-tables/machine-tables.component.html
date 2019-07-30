@@ -17,8 +17,12 @@
       </thead>
       <tbody>
       <tr *ngFor="let entry of machineTable.machineTableEntries">
-        <td>{{entry.timestampStart}} - {{entry.timestampEnd}}</td>
-        <td [style.color]="entry.color">{{entry.producedJobString}}</td>
+        <td matTooltip="{{'Von Zeitpunkt ' + entry.timestampStart + ' bis ' + entry.timestampEnd}}">
+          {{entry.timestampStart}} - {{entry.timestampEnd}}
+        </td>
+        <td matTooltip="{{'Auftrag: ' + entry.producedJobString}}" [style.color]="entry.color">
+          {{entry.producedJobString}}
+        </td>
       </tr>
       </tbody>
     </table>
