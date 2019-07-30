@@ -39,9 +39,8 @@ export class StorageService {
     } else if (definableValue === DefinableValue.BETA_SETUP_TIMES) {
       expectedDefinitions = (this.jobs.length - 1) * this.jobs.length;
       existingDefinitions = this.jobs
-        .map(job => job.setupTimesToOtherJobs
-          .filter(setupTime => setupTime.duration !== undefined).length)
-        .reduce((num1, num2) => num1 + num2);
+        .map(job => job.setupTimesToOtherJobs ? job.setupTimesToOtherJobs
+          .filter(setupTime => setupTime.duration !== undefined).length : 0).reduce((num1, num2) => num1 + num2);
     } else if (definableValue === DefinableValue.PRIORITY_RULES) {
       // Since not all rules have to be selected:
       return this.priorityRules.length ? DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
