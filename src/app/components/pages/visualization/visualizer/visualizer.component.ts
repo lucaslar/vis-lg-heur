@@ -18,6 +18,7 @@ export class VisualizerComponent implements OnInit {
   private _isSolutionQualityDataVisible = true;
   private _isVisualizableGeneralDataVisible = true;
   private _isVisualizableSolutionQualityDataVisible = true;
+  private _isLoggingShown = false;
 
   constructor(public scheduling: SchedulingService,
               private route: ActivatedRoute) {
@@ -70,5 +71,13 @@ export class VisualizerComponent implements OnInit {
 
   set isVisualizableSolutionQualityDataVisible(value: boolean) {
     this._isVisualizableSolutionQualityDataVisible = value;
+  }
+
+  get isLoggingShown(): boolean {
+    return this._isLoggingShown;
+  }
+
+  set isLoggingShown(value: boolean) {
+    this._isLoggingShown = value;
   }
 }

@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>
+  <span class="pull-right">
+    <i class="far fa-file-alt align-middle"></i>
+  </span>
+  Scheduling-Log
+</h1>
+
+<!--TODO Add icons based on log type?-->
+<mat-dialog-content>
+  <table>
+    <thead class="text-center">
+    <tr>
+      <th>t</th>
+      <th>M</th>
+      <th>Log</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let log of data">
+      <td class="text-right" matTooltip="Zeitpunkt {{log[0]}}">{{log[0]}}</td>
+      <td class="text-right" matTooltip="Maschine {{log[1]}}">{{log[1]}}</td>
+      <td>{{log[2]}}</td>
+    </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <div>
+    <button mat-button mat-dialog-close>Schließen</button>
+  </div>
+</mat-dialog-actions>

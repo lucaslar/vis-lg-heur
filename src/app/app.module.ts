@@ -28,6 +28,8 @@ import { SchedulingKpiComponent } from './components/pages/visualization/charts/
 import { GeneralDataComponent } from './components/pages/visualization/content/general/general-data/general-data.component';
 import {SolutionQualityDataComponent} from './components/pages/visualization/content/solution-quality/solution-quality-data/solution-quality-data.component';
 import {GeneralDataVisualizerComponent} from './components/pages/visualization/content/general/general-data-visualizer/general-data-visualizer.component';
+import { SchedulingLogComponent } from './components/pages/visualization/content/scheduling-log/scheduling-log.component';
+import { SchedulingLogDialogComponent } from './components/dialogs/scheduling-log-dialog/scheduling-log-dialog.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import {GeneralDataVisualizerComponent} from './components/pages/visualization/c
     SchedulingGanttComponent,
     SchedulingKpiComponent,
     GeneralDataComponent,
-    GeneralDataVisualizerComponent
+    GeneralDataVisualizerComponent,
+    SchedulingLogComponent,
+    SchedulingLogDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -68,6 +72,7 @@ import {GeneralDataVisualizerComponent} from './components/pages/visualization/c
     AboutThisAppComponent,
     HeuristicsSelectionComponent,
     MachineNrPopupComponent,
+    SchedulingLogDialogComponent,
     PopUpComponent
   ]
 })

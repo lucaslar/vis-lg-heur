@@ -39,6 +39,9 @@
     <li>
       <mat-checkbox [(ngModel)]="isVisualizableSolutionQualityDataVisible">Visualisierung der Lösungsgüte</mat-checkbox>
     </li>
+    <li>
+      <mat-checkbox [(ngModel)]="isLoggingShown">Scheduling-Log</mat-checkbox>
+    </li>
   </ul>
 </div>
 
@@ -140,6 +143,26 @@
       <div class="content">
         <app-solution-quality-visualizer
           [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Subtitle: General data visualization -->
+    <mat-expansion-panel [expanded]="isLoggingShown">
+      <mat-expansion-panel-header
+        (click)="isLoggingShown = !isLoggingShown">
+        <div class="row title">
+          <div class="col-md-12">
+            <h4
+              matTooltip="{{'Scheduling-Log '+(isLoggingShown ? 'ausblenden':'einblenden')}}">
+              Scheduling-Log
+            </h4>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+      <mat-divider></mat-divider>
+      <div class="content">
+        <app-scheduling-log-component
+          [data]="result.schedulingLogging"></app-scheduling-log-component>
       </div>
     </mat-expansion-panel>
 

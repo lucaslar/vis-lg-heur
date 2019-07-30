@@ -26,12 +26,11 @@ export class SchedulingService {
   private priorityRules: PriorityRule[];
   private currentTimestampInScheduling: number;
 
+  // TODO: Implement logging tags for filtering later?
   private logging: [number, number, string][];
 
   constructor(public storage: StorageService) {
   }
-
-  // TODO Log procedure
 
   scheduleUsingHeuristic(heuristicDefiner: HeuristicDefiner): SchedulingResult {
     this.initialize(heuristicDefiner);
@@ -88,6 +87,8 @@ export class SchedulingService {
           machine.jobQueue.sort((jobA: ScheduledJob, jobB: ScheduledJob) =>
             this.comparisonResultForCurrentHeuristic(jobA, jobB, machine.machineNr)
           );
+          this.logSchedulingProcedure(machine.machineNr, 'Fertig bestimmte Warteschlange: ' + machine.jobQueue
+            .map(job => this.jobStringForLogging(job)).join('->'));
           machine.startProductionOfNext(this.currentTimestampInScheduling);
           this.logSchedulingProcedure(machine.machineNr,
             'Beginn der Abarbeitung von Auftrag ' + this.jobStringForLogging(machine.currentJob));

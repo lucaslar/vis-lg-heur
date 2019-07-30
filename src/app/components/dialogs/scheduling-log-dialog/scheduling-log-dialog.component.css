@@ -1,0 +1,33 @@
+tr td:not(:last-child) {
+  border-right: 1px solid var(--color-main);
+}
+
+td, th {
+  padding-left: 4px;
+  padding-right: 4px;
+  cursor: default;
+  min-width: 40px;
+}
+
+th {
+  height: 40px;
+}
+
+tbody {
+  overflow: auto;
+  height: 300px;
+  width: 100%;
+}
+
+tbody, thead tr {
+  display: block;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #F0F0F0;
+}
+
+thead tr {
+  color: var(--color-main);
+  border-bottom: 1px solid var(--color-main);
+}
