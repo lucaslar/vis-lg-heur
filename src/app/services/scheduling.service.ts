@@ -8,6 +8,7 @@ import {ScheduledJob} from '../model/ScheduledJob';
 import {
   GeneralSchedulingData,
   Kpi,
+  SchedulingLogEntry,
   SchedulingResult,
   VisualizableGeneralData,
   VisualizableSolutionQualityData
@@ -27,7 +28,7 @@ export class SchedulingService {
   private priorityRules: PriorityRule[];
   private currentTimestampInScheduling: number;
 
-  private logging: [number, number, string, LogEventType][];
+  private logging: SchedulingLogEntry[];
 
   constructor(public storage: StorageService) {
   }
@@ -557,8 +558,7 @@ export class SchedulingService {
   }
 
   private logSchedulingProcedure(machineNr: number, description: string, type: LogEventType): void {
-    // noinspection TypeScriptValidateTypes
-    this.logging.push([this.currentTimestampInScheduling, machineNr, description, type]);
+    this.logging.push(new SchedulingLogEntry(this.currentTimestampInScheduling, machineNr, description, type));
   }
 
   private jobStringForLogging(job: ScheduledJob): string {

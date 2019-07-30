@@ -3,6 +3,7 @@ import {MatDialog} from '@angular/material';
 import {SchedulingLogDialogComponent} from '../../../../dialogs/scheduling-log-dialog/scheduling-log-dialog.component';
 import {StorageService} from '../../../../../services/storage.service';
 import {LogEventType} from '../../../../../model/enums/LogEventType';
+import {SchedulingLogEntry} from '../../../../../model/internal/visualization/SchedulingResult';
 
 @Component({
   selector: 'app-scheduling-log-component',
@@ -11,7 +12,7 @@ import {LogEventType} from '../../../../../model/enums/LogEventType';
 })
 export class SchedulingLogComponent implements OnInit {
 
-  @Input() data: [number, number, string, LogEventType][];
+  @Input() data: SchedulingLogEntry[];
 
   private _machinesShown: boolean[];
 
@@ -47,7 +48,7 @@ export class SchedulingLogComponent implements OnInit {
     }
 
     const filteredData = this.data
-      .filter(data => shownMachines.includes(data[1]) && shownTypes.includes(data[3]));
+      .filter(data => shownMachines.includes(data.machineNr) && shownTypes.includes(data.eventType));
     this.dialog.open(SchedulingLogDialogComponent, {data: filteredData});
   }
 

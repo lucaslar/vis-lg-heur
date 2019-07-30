@@ -10,7 +10,7 @@ export class SchedulingResult {
   private _solutionQualityData: Kpi[];
   private _visualizableGeneralData: VisualizableGeneralData;
   private _visualizableSolutionQualityData: VisualizableSolutionQualityData;
-  private _schedulingLogging: [number, number, string, LogEventType][];
+  private _schedulingLogging: SchedulingLogEntry[];
 
   get generalData(): GeneralSchedulingData {
     return this._generalData;
@@ -44,11 +44,11 @@ export class SchedulingResult {
     this._visualizableSolutionQualityData = value;
   }
 
-  get schedulingLogging(): [number, number, string, LogEventType][] {
+  get schedulingLogging(): SchedulingLogEntry[] {
     return this._schedulingLogging;
   }
 
-  set schedulingLogging(value: [number, number, string, LogEventType][]) {
+  set schedulingLogging(value: SchedulingLogEntry[]) {
     this._schedulingLogging = value;
   }
 }
@@ -202,5 +202,52 @@ export class VisualizableSolutionQualityData {
 
   set allMachineOperationsTimeline(value: TimelineData) {
     this._allMachineOperationsTimeline = value;
+  }
+}
+
+export class SchedulingLogEntry {
+
+  private _timestamp: number;
+  private _machineNr: number;
+  private _description: string;
+  private _eventType: LogEventType;
+
+  constructor(timestamp: number, machineNr: number, description: string, eventType: LogEventType) {
+    this._timestamp = timestamp;
+    this._machineNr = machineNr;
+    this._description = description;
+    this._eventType = eventType;
+  }
+
+  get timestamp(): number {
+    return this._timestamp;
+  }
+
+  set timestamp(value: number) {
+    this._timestamp = value;
+  }
+
+  get machineNr(): number {
+    return this._machineNr;
+  }
+
+  set machineNr(value: number) {
+    this._machineNr = value;
+  }
+
+  get description(): string {
+    return this._description;
+  }
+
+  set description(value: string) {
+    this._description = value;
+  }
+
+  get eventType(): LogEventType {
+    return this._eventType;
+  }
+
+  set eventType(value: LogEventType) {
+    this._eventType = value;
   }
 }
