@@ -95,7 +95,7 @@ export class PriorityRulesDefinitionComponent implements OnInit {
 
     if (message) {
       this.snackBar.open(message, 'Rückgängig',
-        {panelClass: 'color-white', duration: 3000}
+        {panelClass: 'color-white', duration: 2000}
       ).onAction().subscribe(() => {
         // reverse event
         this.changeArrays(container, previousContainer, currentIndex, previousIndex, true);
