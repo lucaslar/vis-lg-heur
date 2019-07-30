@@ -26,6 +26,8 @@ export class SchedulingService {
   private priorityRules: PriorityRule[];
   private currentTimestampInScheduling: number;
 
+  private logging: [number, number, string][];
+
   constructor(public storage: StorageService) {
   }
 
@@ -44,7 +46,7 @@ export class SchedulingService {
     const schedulingData = this.generateSchedulingResult();
     schedulingData.generalData.durationInMillisKpi = new Kpi();
     schedulingData.generalData.durationInMillisKpi.kpi = schedulingPerformance;
-    schedulingData.generalData.durationInMillisKpi.title = 'Dauer der Berechnung in ms.';
+    schedulingData.generalData.durationInMillisKpi.title = 'Dauer der Berechnung in ms. (inkl. Logging)';
     schedulingData.generalData.durationInMillisKpi.iconClasses = ['fas', 'fa-stopwatch'];
 
     this.deleteTemporarilyStoredData();
@@ -56,6 +58,7 @@ export class SchedulingService {
     const deepCopiedJobs: Job[] = JSON.parse(JSON.stringify(this.storage.jobs));
     this.jobs = deepCopiedJobs.map(job => new ScheduledJob(job));
     this.machines = this.jobs[0].machineTimes.map(m => new Machine(m.machineNr)).sort();
+    this.logging = [];
     this.currentTimestampInScheduling = 0;
     this.heuristicType = heuristicDefiner;
     if (heuristicDefiner === HeuristicDefiner.PRIORITY_RULES) {
@@ -109,31 +112,16 @@ export class SchedulingService {
       const nextMachine = this.machines.find(m => m.machineNr === job.nextMachineNr);
       if (!nextMachine.jobQueue.includes(job)) { // only add jobs, that have not been pushed to queue already
         nextMachine.jobQueue.push(job);
+        this.logSchedulingProcedure(nextMachine.machineNr, 'Hinzufügen zur Warteschlange von '
+          + this.jobStringForLogging(job));
       }
     });
   }
 
-  // Called for any heuristic (after calling the heuristic itself)
-  private setNextJobForEachFreeMachine(): void {
-    this.machines
-      .filter(machine => !machine.currentJob && machine.jobQueue.length)
-      .forEach(machine => machine.startProductionOfNext(this.currentTimestampInScheduling));
-  }
-
-  // Implementation of heuristics starts here
-  private sortJobsInQueuesBasedOnHeuristic(): void {
-    this.machines
-      .map(machine => machine.jobQueue)
-      .forEach(queue => queue
-        .sort((jobA: ScheduledJob, jobB: ScheduledJob) =>
-          this.comparisonResultForCurrentHeuristic(jobA, jobB)
-        )
-      );
-  }
-
-  private comparisonResultForCurrentHeuristic(jobA: ScheduledJob, jobB: ScheduledJob): number {
+  // Implementation of sorting based on heuristics starts here:
+  private comparisonResultForCurrentHeuristic(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number): number {
     if (this.heuristicType === HeuristicDefiner.PRIORITY_RULES) {
-      return this.compareJobsByPriorityRules(jobA, jobB);
+      return this.compareJobsByPriorityRules(jobA, jobB, machineNr);
     } else {
       // TODO: Implement more heuristics by implementing sorting here
       console.log('Implement me (' + this.heuristicType + '!');
@@ -141,23 +129,38 @@ export class SchedulingService {
     }
   }
 
-  private compareJobsByPriorityRules(jobA: ScheduledJob, jobB: ScheduledJob): number {
+  private compareJobsByPriorityRules(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number): number {
     for (const priorityRule of this.priorityRules) {
       if (priorityRule === PriorityRule.FCFS) {
+        this.logSchedulingProcedure(machineNr,
+          PriorityRule.FCFS + ' angewandt auf ' + this.jobStringForLogging(jobA)
+          + ' & ' + this.jobStringForLogging(jobB));
         return 0;
       } else {
         const aPriorityValue = this.getPriorityValueForJob(jobA, priorityRule);
         const bPriorityValue = this.getPriorityValueForJob(jobB, priorityRule);
 
         if (aPriorityValue < bPriorityValue) {
+          this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobA) + ' (Wert: ' + aPriorityValue
+            + ') gegenüber ' + this.jobStringForLogging(jobB) + ' (' + bPriorityValue + ') aufgrund von Prioritätsregel: ' + priorityRule);
           return -1;
         } else if (bPriorityValue < aPriorityValue) {
+          this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobB) + ' (Wert: ' + bPriorityValue
+            + ') gegenüber ' + this.jobStringForLogging(jobA) + ' (' + aPriorityValue + ') aufgrund von Prioritätsregel: ' + priorityRule);
           return 1;
+        } else {
+          this.logSchedulingProcedure(machineNr,
+            'Betrachteter Wert für ' + this.jobStringForLogging(jobA) + ' & ' + this.jobStringForLogging(jobB) + ' identisch (' +
+            aPriorityValue + '), daher keine Sortierung mithilfe von Prioritätsregel ' + priorityRule + ' möglich');
+          // No return value since in case of no clear result, the next priority rule is to be taken.
+          // Returning 0 does only make sense if no more rules are available or for FCFS
+
         }
-        // No else-block since in case of no clear result, the next priority rule is to be taken.
-        // Returning 0 does only make sense if no more rules are available or for FCFS
       }
     }
+    this.logSchedulingProcedure(machineNr,
+      this.jobStringForLogging(jobA) + ' & ' + this.jobStringForLogging(jobB) + ' bezüglich aller betrachteten Prioritätsregeln '
+      + 'identisch und somit nicht vergleichbar (Sortierung entspricht nun ' + PriorityRule.FCFS + ')');
     return 0;
   }
 
@@ -213,6 +216,7 @@ export class SchedulingService {
     result.visualizableGeneralData = this.generateVisualizableGeneralData();
     result.solutionQualityData = this.generateSolutionQualityData();
     result.visualizableSolutionQualityData = this.generateVisualizableSolutionQualityData();
+    result.schedulingLogging = this.logging;
     return result;
   }
 
@@ -549,4 +553,14 @@ export class SchedulingService {
 
     return sortedColors;
   }
+
+  private logSchedulingProcedure(machineNr: number, description: string): void {
+    // noinspection TypeScriptValidateTypes
+    this.logging.push([this.currentTimestampInScheduling, machineNr, description]);
+  }
+
+  private jobStringForLogging(job: ScheduledJob): string {
+    return '\'' + job.name + '\' (ID: ' + job.id + ')';
+  }
+
 }

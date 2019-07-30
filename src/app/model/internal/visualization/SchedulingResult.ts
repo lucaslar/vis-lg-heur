@@ -9,6 +9,7 @@ export class SchedulingResult {
   private _solutionQualityData: Kpi[];
   private _visualizableGeneralData: VisualizableGeneralData;
   private _visualizableSolutionQualityData: VisualizableSolutionQualityData;
+  private _schedulingLogging: [number, number, string][];
 
   get generalData(): GeneralSchedulingData {
     return this._generalData;
@@ -40,6 +41,14 @@ export class SchedulingResult {
 
   set visualizableSolutionQualityData(value: VisualizableSolutionQualityData) {
     this._visualizableSolutionQualityData = value;
+  }
+
+  get schedulingLogging(): [number, number, string][] {
+    return this._schedulingLogging;
+  }
+
+  set schedulingLogging(value: [number, number, string][]) {
+    this._schedulingLogging = value;
   }
 }
 
