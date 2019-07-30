@@ -1,1 +1,26 @@
+<!-- TODO: Add descriptional text -->
 <p>machine-tables works!</p>
+
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let machineTable of data">
+    <mat-expansion-panel-header>
+      <div class="text-center title">
+        <h5>Maschine {{machineTable.machineNr}}</h5>
+      </div>
+    </mat-expansion-panel-header>
+    <table class="table">
+      <thead>
+      <tr>
+        <th class="text-center">t</th>
+        <th>Auftrag</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let entry of machineTable.machineTableEntries">
+        <td>{{entry.timestampStart}} - {{entry.timestampEnd}}</td>
+        <td>{{entry.producedJobString}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </mat-expansion-panel>
+</mat-accordion>
