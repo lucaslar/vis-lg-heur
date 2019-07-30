@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Kpi} from '../../../../../../model/internal/visualization/SchedulingResult';
 import {StorageService} from '../../../../../../services/storage.service';
+import {DefinableValue} from '../../../../../../model/internal/value-definition/DefinableValue';
+import {DefinitionStatus} from '../../../../../../model/internal/value-definition/DefinitionStatus';
 
 @Component({
   selector: 'app-solution-quality-data',
@@ -18,7 +20,7 @@ export class SolutionQualityDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.data = this.data.filter(data => !!data);
-    this._isEachDueDateConfigured = this.storage.isEachDueDateCOnfigured();
+    this._isEachDueDateConfigured = this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED;
   }
 
   get isEachDueDateConfigured(): boolean {

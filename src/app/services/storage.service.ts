@@ -36,6 +36,12 @@ export class StorageService {
     } else if (definableValue === DefinableValue.BETA_DUE_DATES) {
       expectedDefinitions = this.jobs.length;
       existingDefinitions = this.jobs.filter(job => job.dueDate).length;
+    } else if (definableValue === DefinableValue.BETA_SETUP_TIMES) {
+      expectedDefinitions = (this.jobs.length - 1) * this.jobs.length;
+      existingDefinitions = this.jobs
+        .map(job => job.setupTimesToOtherJobs
+          .filter(setupTime => setupTime.duration !== undefined).length)
+        .reduce((num1, num2) => num1 + num2);
     } else if (definableValue === DefinableValue.PRIORITY_RULES) {
       // Since not all rules have to be selected:
       return this.priorityRules.length ? DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
@@ -98,8 +104,8 @@ export class StorageService {
     }
   }
 
-  isEachDueDateCOnfigured(): boolean {
-    return this.jobs.every(job => !!job.dueDate);
+  deleteSetupTimesForEachJob(): void {
+    this.jobs.forEach(job => job.setupTimesToOtherJobs = undefined);
   }
 
   private checkValuesForHeuristic(heuristic: Heuristic): DefinableValue | undefined {
