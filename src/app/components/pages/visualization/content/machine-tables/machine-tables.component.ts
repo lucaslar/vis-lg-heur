@@ -8,8 +8,6 @@ import {MachineTableData} from '../../../../../model/internal/visualization/Sche
 })
 export class MachineTablesComponent {
 
-  // TODO: Add ... if no production?
-  // TODO: get colour from charts?
   @Input() data: MachineTableData[];
 
 }
