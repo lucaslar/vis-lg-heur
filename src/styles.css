@@ -14,7 +14,7 @@ html, body {
   --color-grey-line: rgba(0, 0, 0, .12); /* Anuglar line grey */
 }
 
-.status-warning {
+.status-warning, .status-warning * {
   color: var(--color-warning) !important;
 }
 
@@ -28,7 +28,7 @@ button, button span, button i {
 }
 
 button:disabled span, button:disabled i {
-  color: var(--color-grey-font)
+  color: var(--color-grey-font) !important;
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {

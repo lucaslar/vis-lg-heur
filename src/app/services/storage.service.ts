@@ -8,6 +8,7 @@ import {DialogContent} from '../model/internal/dialog/DialogContent';
 import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
 import {Heuristic} from '../model/Heuristic';
 import {DialogType} from '../model/internal/dialog/DialogType';
+import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,13 @@ export class StorageService {
 
   private _jobs: Job[];
   private _nrOfMachines: number;
+  private _objectiveFunction: ObjectiveFunction;
   private _priorityRules: PriorityRule[];
 
   private readonly PREFIX_KEY = 'VISLGHEUR_';
-  private readonly NR_OF_MACHINES = 'NR_OF_MACHINES';
   private readonly JOBS = 'JOBS';
+  private readonly NR_OF_MACHINES = 'NR_OF_MACHINES';
+  private readonly OBJECTIVE_FUNCTION = 'OBJECTIVE_FUNCTION';
   private readonly PRIORITY_RULES = 'PRIORITY_RULES';
 
   getValueDefinitionStatus(definableValue: DefinableValue): DefinitionStatus {
@@ -225,6 +228,18 @@ export class StorageService {
   set jobs(jobs: Job[]) {
     this._jobs = jobs;
     localStorage.setItem(this.PREFIX_KEY + this.JOBS, JSON.stringify(jobs));
+  }
+
+  get objectiveFunction(): ObjectiveFunction {
+    if (this._objectiveFunction === undefined) { // would be null if parsed from JSON
+      this._objectiveFunction = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.OBJECTIVE_FUNCTION));
+    }
+    return this._objectiveFunction;
+  }
+
+  set objectiveFunction(value: ObjectiveFunction) {
+    this._objectiveFunction = value;
+    localStorage.setItem(this.PREFIX_KEY + this.OBJECTIVE_FUNCTION, JSON.stringify(this.objectiveFunction));
   }
 
   get priorityRules(): PriorityRule[] {

@@ -15,6 +15,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatRadioModule} from '@angular/material';
 
 @NgModule({
   exports: [
@@ -28,6 +29,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
     MatSnackBarModule,

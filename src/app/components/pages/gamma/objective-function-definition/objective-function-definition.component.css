@@ -1,0 +1,16 @@
+mat-radio-button {
+  margin-top: 8px;
+  width: 100%;
+}
+
+mat-radio-button:not(:last-child) {
+  border-bottom: 1px solid var(--color-grey-line);
+}
+
+h5 {
+  margin-top: 8px;
+}
+
+button {
+  margin: 8px;
+}

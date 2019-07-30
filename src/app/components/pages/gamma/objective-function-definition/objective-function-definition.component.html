@@ -1,1 +1,60 @@
-<p>objective-function-definition works!</p>
+<!-- Title -->
+<div class="row title">
+  <div class="col-md-12 text-center">
+    <h3>
+      Zielfunktion festlegen
+    </h3>
+    <mat-divider></mat-divider>
+  </div>
+</div>
+
+<div class="row">
+  <p class="col-md-12 text-justify">
+    Loooooooooorem ipsum dolor sit amet.
+    Lorem ipsum dolor sit amet.
+    Lorem ipsum dolor sit amet.
+    Lorem ipsum dolor sit amet.
+    Lorem ipsum dolor sit amet.
+    Lorem ipsum dolor sit amet.
+    Lorem ipsum dolor sit amet.
+    Lorem ipsum dolor sit amet.
+    <!-- TODO: Add question mark and/or text? -->
+  </p>
+</div>
+
+<div class="card">
+  <div class="container">
+    <div class="row title">
+      <div class="col-md-12 text-center">
+        <h5>
+          Wählbare Zielfunktionswerte
+        </h5>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <mat-radio-group [(ngModel)]="selectedFunction">
+          <mat-radio-button *ngFor="let objFunction of objectiveFunctionsAsStrings"
+                            [value]="objFunction"
+                            (change)="onSelectionChange($event)">
+            {{objFunction}}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-center">
+
+        <button mat-stroked-button
+                (click)="deleteObjectiveFunction()"
+                [disabled]="!selectedFunction"
+                class="status-warning">
+          <i class="fas fa-trash"></i>
+          Gewählte Option löschen
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
