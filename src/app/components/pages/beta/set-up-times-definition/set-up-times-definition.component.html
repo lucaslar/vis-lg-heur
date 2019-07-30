@@ -1,1 +1,75 @@
-<p>set-up-times-definition works!</p>
+<div class="row title">
+  <div class="col-md-12 text-center">
+    <h3>
+      Reihenfolgeabhängige Rüstzeiten
+    </h3>
+    <mat-divider></mat-divider>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12">
+    <!-- TODO: Descriptional text -->
+    <p>Rüstzeiten ... Nur erste Maschine</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <button mat-stroked-button
+            [disabled]="isSetupTimeOfEachJobConfigured()"
+            (click)="addRandomSetupTimes()">
+          <span class="align-middle"
+                matTooltip="{{!isSetupTimeOfEachJobConfigured() ? 'Automatisch zufällige Rüstzeiten für alle Aufträge generieren'
+                : 'Es sind bereits Rüstzeiten für alle Aufträge definiert'}}">
+            <i class="fas fa-random"></i>
+            Zufällige Rüstzeiten
+          </span>
+    </button>
+    <button mat-stroked-button
+            [disabled]="isSetupTimeOfNoJobConfigured()"
+            (click)="deleteAllExistingSetupTimes()"
+            class="status-warning">
+          <span class="align-middle"
+                matTooltip="{{!isSetupTimeOfNoJobConfigured() ? 'Alle bestehenden Rüstzeiten löschen'
+                  : 'Aktuell existieren keine Rüstzeiten, die gelöscht werden könnten'
+                }}">
+            <i class="fas fa-trash"></i>
+            Alle Rüstzeiten löschen
+          </span>
+    </button>
+  </div>
+</div>
+
+
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let job of jobs">
+    <mat-expansion-panel-header>
+      <span class="information job-id">
+        (ID: {{job.id}})
+      </span>
+      <!-- Tooltip, since long job names may be cut off on smaller devices. -->
+      <span matTooltip="{{job.name}}">
+        {{job.name}}
+      </span>
+    </mat-expansion-panel-header>
+
+    <div class="row">
+      <div class="col-md-6 to-job-setup-time" *ngFor="let otherJob of otherJobsForJob(job)">
+        zu Auftrag mit ID: {{otherJob.id}}
+        <!-- Tooltip, since long job names may be cut off on smaller devices. -->
+        <span matTooltip="{{otherJob.name}}">
+        ({{otherJob.name}})
+      </span>
+        <app-icon-number-input [iconClasses]="['fas','fa-cogs']"
+                               [placeholder]="'Rüstzeit'"
+                               [value]="findSetupTimeRelationForJob(job, otherJob).duration"
+                               [min]="1"
+                               (newValue)="onSetupValueChange(job, otherJob, $event)">
+        </app-icon-number-input>
+      </div>
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>
