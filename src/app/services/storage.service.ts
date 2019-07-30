@@ -101,9 +101,11 @@ export class StorageService {
     }
   }
 
-  deleteSetupTimesForEachJob(): void {
-    this.jobs.forEach(job => job.setupTimesToOtherJobs = undefined);
-    this.jobs = this.jobs;
+  deleteUndefinedBetaValuesLockingFunctions(): void {
+    if (this.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) === DefinitionStatus.NOT_DEFINED) {
+      this.jobs.forEach(job => job.setupTimesToOtherJobs = undefined);
+      this.jobs = this.jobs;
+    }
   }
 
   private checkValuesForHeuristic(heuristic: Heuristic): DefinableValue | undefined {
