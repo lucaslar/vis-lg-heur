@@ -27,6 +27,10 @@ button, button span, button i {
   transition: .5s;
 }
 
+button span {
+  font-family: Roboto,"Helvetica Neue",sans-serif !important;
+}
+
 button:disabled span, button:disabled i {
   color: var(--color-grey-font) !important;
 }
@@ -60,7 +64,7 @@ mat-accordion mat-expansion-panel:last-child {
   margin-bottom: 16px;
 }
 
-mat-expansion-panel *:not(button *), mat-expansion-panel-header *:not(button *), mat-card *:not(button *) {
+mat-expansion-panel *:not(i):not(mat-icon), mat-expansion-panel-header *:not(i):not(mat-icon), mat-card *:not(i):not(mat-icon) {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
