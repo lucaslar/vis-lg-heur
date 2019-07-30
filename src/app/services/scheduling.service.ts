@@ -144,14 +144,14 @@ export class SchedulingService {
         const bPriorityValue = this.getPriorityValueForJob(jobB, priorityRule);
 
         if (aPriorityValue < bPriorityValue) {
-          this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobA) + ' (Wert: ' + aPriorityValue
-            + ') gegenüber ' + this.jobStringForLogging(jobB) + ' (' + bPriorityValue + ') aufgrund von Prioritätsregel: ' + priorityRule,
-            LogEventType.HEURISTIC_BASED_SORTING);
+          this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobA) + ' (betrachteter Wert: '
+            + aPriorityValue + ') gegenüber ' + this.jobStringForLogging(jobB) + ' (betrachteter Wert: ' + bPriorityValue
+            + ') aufgrund von Prioritätsregel: ' + priorityRule, LogEventType.HEURISTIC_BASED_SORTING);
           return -1;
         } else if (bPriorityValue < aPriorityValue) {
-          this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobB) + ' (Wert: ' + bPriorityValue
-            + ') gegenüber ' + this.jobStringForLogging(jobA) + ' (' + aPriorityValue + ') aufgrund von Prioritätsregel: ' + priorityRule,
-            LogEventType.HEURISTIC_BASED_SORTING);
+          this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobB) + ' (betrachteter Wert: '
+            + bPriorityValue + ') gegenüber ' + this.jobStringForLogging(jobA) + ' (betrachteter Wert: ' + aPriorityValue
+            + ') aufgrund von Prioritätsregel: ' + priorityRule, LogEventType.HEURISTIC_BASED_SORTING);
           return 1;
         } else {
           this.logSchedulingProcedure(machineNr,
@@ -302,7 +302,6 @@ export class SchedulingService {
     const colors = this.generateUniqueJobColorValues().map(rgb => 'rgb(' + rgb + ')');
     for (let i = 0; i < sortedFirstMachineJobStings.length; i++) {
       colorMap.set(sortedFirstMachineJobStings[i], colors[i]);
-      console.log(sortedFirstMachineJobStings[i]);
     }
     return colorMap;
   }
