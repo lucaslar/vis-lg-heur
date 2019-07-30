@@ -328,7 +328,8 @@ export class SchedulingService {
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
-    visualization.colors = this.getColorsAsSpecifiedInGanttWithLessOpacity();
+    visualization.colors = this.getColorsAsSpecifiedInGanttForMachine(1)
+      .map(color => 'rgba(' + color + ',0.8)');
     visualization.title = 'Gesamtbearbeitungsdauer ' +
       (sortedJobs[0].dueDate ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
     visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
@@ -573,14 +574,13 @@ export class SchedulingService {
     return newRgbColors.map(rgb => rgb[0] + ', ' + rgb[1] + ', ' + rgb[2]);
   }
 
-  private getColorsAsSpecifiedInGanttWithLessOpacity(): string[] {
+  private getColorsAsSpecifiedInGanttForMachine(machineNr: number): string[] {
 
-    let colors = this.generateUniqueJobColorValues()
-      .map(color => 'rgba(' + color + ',0.8)');
+    let colors = this.generateUniqueJobColorValues();
 
     const sortedColors = [];
     for (let i = 0; i < this.currentTimestampInScheduling; i++) {
-      const job = this.jobs.find(j => j.operationsOnMachines.find(o => o.machineNr === 1).startTimestamp === i);
+      const job = this.jobs.find(j => j.operationsOnMachines.find(o => o.machineNr === machineNr).startTimestamp === i);
       if (job) {
         sortedColors[job.id - 1] = colors[0];
         colors = colors.filter(color => color !== colors[0]);
