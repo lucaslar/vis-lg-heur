@@ -249,15 +249,24 @@ export class MachineTableData {
 }
 
 export class MachineTableEntry {
-  private _timestamp: number;
+  private _timestampStart: number;
+  private _timestampEnd: number;
   private _producedJobString: string;
 
-  get timestamp(): number {
-    return this._timestamp;
+  get timestampStart(): number {
+    return this._timestampStart;
   }
 
-  set timestamp(value: number) {
-    this._timestamp = value;
+  set timestampStart(value: number) {
+    this._timestampStart = value;
+  }
+
+  get timestampEnd(): number {
+    return this._timestampEnd;
+  }
+
+  set timestampEnd(value: number) {
+    this._timestampEnd = value;
   }
 
   get producedJobString(): string {

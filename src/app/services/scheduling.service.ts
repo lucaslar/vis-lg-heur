@@ -8,6 +8,8 @@ import {ScheduledJob} from '../model/ScheduledJob';
 import {
   GeneralSchedulingData,
   Kpi,
+  MachineTableData,
+  MachineTableEntry,
   SchedulingLogEntry,
   SchedulingResult,
   SchedulingTimesData,
@@ -240,7 +242,7 @@ export class SchedulingService {
   private generateSchedulingTimesData(): SchedulingTimesData {
     const data = new SchedulingTimesData();
     data.allMachineOperationsTimeline = this.generateAllMachineOperationsTimeline();
-    // TODO Implement here data.machineTables = this.generateAllMachineTables();
+    data.machineTables = this.generateAllMachineTables();
     return data;
   }
 
@@ -264,6 +266,29 @@ export class SchedulingService {
     });
     visualization.colors = this.generateUniqueJobColorValues().map(color => 'rgb(' + color + ')');
     return visualization;
+  }
+
+  private generateAllMachineTables(): MachineTableData[] {
+    const data = [];
+    for (let i = 1; i <= this.machines.length; i++) {
+      const machineData = new MachineTableData();
+      machineData.machineNr = i;
+      machineData.machineTableEntries = [];
+      data.push(machineData);
+    }
+
+    this.jobs.forEach(job => {
+      job.operationsOnMachines
+        .forEach(operation => {
+          const entry = new MachineTableEntry();
+          entry.producedJobString = job.name + ' (ID: ' + job.id + ')';
+          entry.timestampStart = operation.startTimestamp;
+          entry.timestampEnd = operation.finishTimestamp;
+          (<MachineTableData>data[operation.machineNr - 1]).machineTableEntries.push(entry);
+        });
+    });
+    data.forEach(table => table.machineTableEntries.sort((o1, o2) => o1.timestampStart - o2.timestampStart));
+    return data;
   }
 
   private generateVisualizableGeneralData(): VisualizableGeneralData {
