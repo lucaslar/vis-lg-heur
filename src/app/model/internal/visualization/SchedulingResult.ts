@@ -207,10 +207,10 @@ export class VisualizableSolutionQualityData {
 
 export class SchedulingLogEntry {
 
-  private _timestamp: number;
-  private _machineNr: number;
-  private _description: string;
-  private _eventType: LogEventType;
+  private readonly  _timestamp: number;
+  private readonly _machineNr: number;
+  private readonly _description: string;
+  private readonly _eventType: LogEventType;
 
   constructor(timestamp: number, machineNr: number, description: string, eventType: LogEventType) {
     this._timestamp = timestamp;
@@ -223,31 +223,15 @@ export class SchedulingLogEntry {
     return this._timestamp;
   }
 
-  set timestamp(value: number) {
-    this._timestamp = value;
-  }
-
   get machineNr(): number {
     return this._machineNr;
-  }
-
-  set machineNr(value: number) {
-    this._machineNr = value;
   }
 
   get description(): string {
     return this._description;
   }
 
-  set description(value: string) {
-    this._description = value;
-  }
-
   get eventType(): LogEventType {
     return this._eventType;
-  }
-
-  set eventType(value: LogEventType) {
-    this._eventType = value;
   }
 }
