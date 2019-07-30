@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {SchedulingService} from '../../../../../services/scheduling.service';
+import {SchedulingService} from '../../../../services/scheduling.service';
 import {ActivatedRoute} from '@angular/router';
-import {HeuristicDefiner} from '../../../../../model/enums/HeuristicDefiner';
-import {SchedulingResult} from '../../../../../model/internal/visualization/SchedulingResult';
+import {HeuristicDefiner} from '../../../../model/enums/HeuristicDefiner';
+import {SchedulingResult} from '../../../../model/internal/visualization/SchedulingResult';
 
 @Component({
   selector: 'app-visualizer',
   templateUrl: './visualizer.component.html',
-  styleUrls: ['./visualizer.component.css', '../../../pages-styles.css']
+  styleUrls: ['./visualizer.component.css', '../../pages-styles.css']
 })
 export class VisualizerComponent implements OnInit {
 

@@ -16,7 +16,7 @@ import {IconNumberInputComponent} from './components/shared/icon-number-input/ic
 import {JobsTerminationComponent} from './components/pages/beta/jobs-termination/jobs-termination.component';
 import {PopUpComponent} from './components/dialogs/pop-up/pop-up.component';
 import {PriorityRulesDefinitionComponent} from './components/pages/priority-rules-definition/priority-rules-definition.component';
-import {VisualizerComponent} from './components/pages/visualization/content/visualizer/visualizer.component';
+import {VisualizerComponent} from './components/pages/visualization/visualizer/visualizer.component';
 import {HeuristicsSelectionComponent} from './components/dialogs/heuristics-selection/heuristics-selection.component';
 import {
   SolutionQualityVisualizerComponent
