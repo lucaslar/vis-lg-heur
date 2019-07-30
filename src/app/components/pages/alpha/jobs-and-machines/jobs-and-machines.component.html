@@ -1,4 +1,3 @@
-<!-- TODO: Specify more rows? -->
 <!-- TODO: Implement locked functions -->
 <!-- TODO: Delete all? -->
 <!-- TODO: Add buttons random order jobs -->
@@ -20,47 +19,14 @@
 </div>
 
 <div class="row">
+  <div class="col-md-12">
+    <app-add-job (autoGenerateTimesChanged)="onAutoTimeGenerationChanged($event)"
+                 (newCreatedJob)="onNewJobCreated($event)"></app-add-job>
+  </div>
+</div>
+
+<div class="row">
   <div class="col-12 text-center">
-
-    <!-- Add new job and configuration -->
-    <form (submit)="createNewJob()">
-      <mat-form-field>
-        <input matInput
-               placeholder="Neuer Auftrag"
-               name="jobNameInput"
-               [(ngModel)]="jobNameInput">
-
-        <button mat-icon-button
-                matSuffix
-                type="submit"
-                matTooltip="Auftrag hinzufügen"
-                [disabled]="!jobNameInput || jobNameInput.trim().length === 0">
-          <mat-icon class="material-icons larger-icon">
-            add_circle_outline
-          </mat-icon>
-        </button>
-      </mat-form-field>
-      <br>
-      <div class="text-left row">
-        <div class="col-md-6">
-          <mat-checkbox name="checkboxAutoGenerateTimes"
-                        [(ngModel)]="isAutomaticallyGenerateTimes"
-                        class="small">
-            Automatisch zufällige Zeiten für Arbeitsgänge generieren
-          </mat-checkbox>
-        </div>
-        <div class="col-md-6">
-          <mat-checkbox name="checkboxShuffleMachineOrder"
-                        [(ngModel)]="isShuffleMachineOrder"
-                        [disabled]="storage.nrOfMachines < 2"
-                        matTooltip="{{shuffleBox.disabled ? 'Diese Option ist nur bei mehreren Maschinen wählbar' : ''}}"
-                        #shuffleBox
-                        class="small">
-            Zufällige Reihenfolge der Arbeitsgänge
-          </mat-checkbox>
-        </div>
-      </div>
-    </form>
 
     <!-- actions concerning existing jobs -->
     <div class="text-left existing-jobs-actions">

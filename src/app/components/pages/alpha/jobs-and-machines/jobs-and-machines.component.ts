@@ -27,10 +27,7 @@ export class JobsAndMachinesComponent implements OnInit {
   private readonly _machineConfig = MachineConfig;
 
   private _jobs: Job[];
-  private _jobNameInput: string;
-
-  private _isShuffleMachineOrder: boolean;
-  private _isAutomaticallyGenerateTimes: boolean;
+  private isAutomaticallyGenerateTimes: boolean;
 
   constructor(
     private dialog: MatDialog,
@@ -41,8 +38,6 @@ export class JobsAndMachinesComponent implements OnInit {
 
   ngOnInit(): void {
     this._jobs = this.storage.jobs;
-    this.isAutomaticallyGenerateTimes = true;
-    this.isShuffleMachineOrder = false;
   }
 
   onMachineNrChanged(newMachineNr: number): void {
@@ -65,13 +60,14 @@ export class JobsAndMachinesComponent implements OnInit {
     this.openSnackBar(5, 'Maschinenzahl auf ' + newMachineNr + ' aktualisiert', 'OK');
   }
 
-  createNewJob(): void {
-    const job = new Job(this.jobNameInput);
-    this.jobNameInput = undefined;
-    this.generateMachineOrderForJob(job);
-    if (this.storage.nrOfMachines > 1 && this.isShuffleMachineOrder) {
-      job.machineTimes = job.machineTimes.sort(() => Math.random() - 0.5);
+  onAutoTimeGenerationChanged(newValue: boolean): void {
+    this.isAutomaticallyGenerateTimes = newValue;
+    if (this.isAutomaticallyGenerateTimes) {
+      this.openAutoGenDialogIfNeeded();
     }
+  }
+
+  onNewJobCreated(job: Job): void {
     this.addJob(job);
   }
 
@@ -164,15 +160,6 @@ export class JobsAndMachinesComponent implements OnInit {
         .reduce((a, b) => a + b, 0);
     } else {
       return undefined;
-    }
-  }
-
-  private generateMachineOrderForJob(job: Job): void {
-    job.machineTimes = [];
-    for (let i = 1; i <= this.storage.nrOfMachines; i++) {
-      job.machineTimes.push(new MachineTimeForJob(
-        i, this.isAutomaticallyGenerateTimes ? this.randomTime(10) : undefined
-      ));
     }
   }
 
@@ -283,33 +270,6 @@ export class JobsAndMachinesComponent implements OnInit {
 
   set jobs(jobs: Job[]) {
     this._jobs = jobs;
-  }
-
-  get jobNameInput(): string {
-    return this._jobNameInput;
-  }
-
-  set jobNameInput(jobNameInput: string) {
-    this._jobNameInput = jobNameInput;
-  }
-
-  get isAutomaticallyGenerateTimes(): boolean {
-    return this._isAutomaticallyGenerateTimes;
-  }
-
-  set isAutomaticallyGenerateTimes(isAutomaticallyGenerateTimes: boolean) {
-    this._isAutomaticallyGenerateTimes = isAutomaticallyGenerateTimes;
-    if (isAutomaticallyGenerateTimes) {
-      this.openAutoGenDialogIfNeeded();
-    }
-  }
-
-  get isShuffleMachineOrder(): boolean {
-    return this._isShuffleMachineOrder;
-  }
-
-  set isShuffleMachineOrder(isShuffleMachineOrder: boolean) {
-    this._isShuffleMachineOrder = isShuffleMachineOrder;
   }
 
   get machineConfig(): any {

@@ -1,0 +1,40 @@
+<mat-card class="text-center">
+  <form (submit)="createNewJob()">
+    <mat-form-field>
+      <input matInput
+             placeholder="Neuer Auftrag"
+             name="jobNameInput"
+             [(ngModel)]="jobNameInput">
+
+      <button mat-icon-button
+              matSuffix
+              type="submit"
+              matTooltip="Auftrag hinzufügen"
+              [disabled]="!jobNameInput || jobNameInput.trim().length === 0">
+        <mat-icon class="material-icons larger-icon">
+          add_circle_outline
+        </mat-icon>
+      </button>
+    </mat-form-field>
+    <br>
+    <div class="text-left row">
+      <div class="col-md-6">
+        <mat-checkbox name="checkboxAutoGenerateTimes"
+                      [(ngModel)]="isAutomaticallyGenerateTimes"
+                      class="small">
+          Automatisch zufällige Zeiten für Arbeitsgänge generieren
+        </mat-checkbox>
+      </div>
+      <div class="col-md-6">
+        <mat-checkbox name="checkboxShuffleMachineOrder"
+                      [(ngModel)]="isShuffleMachineOrder"
+                      [disabled]="storage.nrOfMachines < 2"
+                      matTooltip="{{storage.nrOfMachines === 1 ? 'Diese Option ist nur bei mehreren Maschinen wählbar' : ''}}"
+                      #shuffleBox
+                      class="small">
+          Zufällige Reihenfolge der Arbeitsgänge
+        </mat-checkbox>
+      </div>
+    </div>
+  </form>
+</mat-card>

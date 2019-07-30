@@ -34,6 +34,7 @@ import { MachineTablesComponent } from './components/pages/visualization/content
 import { ObjectiveFunctionDefinitionComponent } from './components/pages/gamma/objective-function-definition/objective-function-definition.component';
 import { SetUpTimesDefinitionComponent } from './components/pages/beta/set-up-times-definition/set-up-times-definition.component';
 import { MachineConfigComponent } from './components/pages/alpha/machine-config/machine-config.component';
+import { AddJobComponent } from './components/pages/alpha/add-job/add-job.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { MachineConfigComponent } from './components/pages/alpha/machine-config/
     MachineTablesComponent,
     ObjectiveFunctionDefinitionComponent,
     SetUpTimesDefinitionComponent,
-    MachineConfigComponent
+    MachineConfigComponent,
+    AddJobComponent
   ],
   imports: [
     BrowserModule,
