@@ -10,7 +10,7 @@
 </div>
 
 <p class="text-justify">
-  Im Folgenden werden sowohl Daten des Reihenfolgeproblems selbst, der mithilfe der gewählten Heuristikermittelten
+  Im Folgenden werden sowohl Daten des Reihenfolgeproblems selbst, der mithilfe der gewählten Heuristik ermittelten
   Lösung als auch ihrer Güte dargestellt bzw. visualisiert. Diese Seite ist hierbei in Abschnitte unterteilt, die sich
   aus Übersichtlichkeitsgründen nach Belieben ein- und ausblenden lassen.
   <!-- TODO: If log implemented: Name here, list below and add component to page -->
@@ -69,7 +69,7 @@
       <mat-divider></mat-divider>
       <div class="content">
         <app-scheduling-gantt
-          [timelineData]="result.visualizableSolutionQualityData.allMachineOperationsTimeline"></app-scheduling-gantt>
+          [timelineData]="result.schedulingTimesData.allMachineOperationsTimeline"></app-scheduling-gantt>
       </div>
     </mat-expansion-panel>
 

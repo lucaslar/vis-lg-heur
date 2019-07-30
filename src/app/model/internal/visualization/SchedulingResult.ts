@@ -10,6 +10,7 @@ export class SchedulingResult {
   private _solutionQualityData: Kpi[];
   private _visualizableGeneralData: VisualizableGeneralData;
   private _visualizableSolutionQualityData: VisualizableSolutionQualityData;
+  private _schedulingTimesData: SchedulingTimesData;
   private _schedulingLogging: SchedulingLogEntry[];
 
   get generalData(): GeneralSchedulingData {
@@ -42,6 +43,14 @@ export class SchedulingResult {
 
   set visualizableSolutionQualityData(value: VisualizableSolutionQualityData) {
     this._visualizableSolutionQualityData = value;
+  }
+
+  get schedulingTimesData(): SchedulingTimesData {
+    return this._schedulingTimesData;
+  }
+
+  set schedulingTimesData(value: SchedulingTimesData) {
+    this._schedulingTimesData = value;
   }
 
   get schedulingLogging(): SchedulingLogEntry[] {
@@ -170,7 +179,6 @@ export class VisualizableSolutionQualityData {
   private _cumulatedDelaysAtTimestamps: ChartData;
   private _comparisonDelayedAndInTimeJobs: ChartData;
   private _finishedJobsAtTimestamp: ChartData;
-  private _allMachineOperationsTimeline: TimelineData;
 
   get cumulatedDelaysAtTimestamps(): ChartData {
     return this._cumulatedDelaysAtTimestamps;
@@ -196,6 +204,12 @@ export class VisualizableSolutionQualityData {
     this._finishedJobsAtTimestamp = value;
   }
 
+}
+
+export class SchedulingTimesData {
+  private _allMachineOperationsTimeline: TimelineData;
+  private _machineTables: MachineTableData[];
+
   get allMachineOperationsTimeline(): TimelineData {
     return this._allMachineOperationsTimeline;
   }
@@ -203,11 +217,61 @@ export class VisualizableSolutionQualityData {
   set allMachineOperationsTimeline(value: TimelineData) {
     this._allMachineOperationsTimeline = value;
   }
+
+  get machineTables(): MachineTableData[] {
+    return this._machineTables;
+  }
+
+  set machineTables(value: MachineTableData[]) {
+    this._machineTables = value;
+  }
+}
+
+export class MachineTableData {
+  private _machineNr: number;
+  private _machineTableEntries: MachineTableEntry[];
+
+  get machineNr(): number {
+    return this._machineNr;
+  }
+
+  set machineNr(value: number) {
+    this._machineNr = value;
+  }
+
+  get machineTableEntries(): MachineTableEntry[] {
+    return this._machineTableEntries;
+  }
+
+  set machineTableEntries(value: MachineTableEntry[]) {
+    this._machineTableEntries = value;
+  }
+}
+
+export class MachineTableEntry {
+  private _timestamp: number;
+  private _producedJobString: string;
+
+  get timestamp(): number {
+    return this._timestamp;
+  }
+
+  set timestamp(value: number) {
+    this._timestamp = value;
+  }
+
+  get producedJobString(): string {
+    return this._producedJobString;
+  }
+
+  set producedJobString(value: string) {
+    this._producedJobString = value;
+  }
 }
 
 export class SchedulingLogEntry {
 
-  private readonly  _timestamp: number;
+  private readonly _timestamp: number;
   private readonly _machineNr: number;
   private readonly _description: string;
   private readonly _eventType: LogEventType;

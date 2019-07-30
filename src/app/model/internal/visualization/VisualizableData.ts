@@ -80,6 +80,7 @@ export class TimelineData extends VisualizableData {
 }
 
 export class Dataset {
+  // Attributes cannot be private (Chart.js)
   data: number[];
   label: string;
 }

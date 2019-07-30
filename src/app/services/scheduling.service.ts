@@ -10,6 +10,7 @@ import {
   Kpi,
   SchedulingLogEntry,
   SchedulingResult,
+  SchedulingTimesData,
   VisualizableGeneralData,
   VisualizableSolutionQualityData
 } from '../model/internal/visualization/SchedulingResult';
@@ -216,6 +217,7 @@ export class SchedulingService {
   private generateSchedulingResult(): SchedulingResult {
     const result = new SchedulingResult();
     result.generalData = this.generateGeneralSchedulingData();
+    result.schedulingTimesData = this.generateSchedulingTimesData();
     result.visualizableGeneralData = this.generateVisualizableGeneralData();
     result.solutionQualityData = this.generateSolutionQualityData();
     result.visualizableSolutionQualityData = this.generateVisualizableSolutionQualityData();
@@ -233,6 +235,35 @@ export class SchedulingService {
     data.usedHeuristic = Heuristic.getHeuristicByDefiner(this.heuristicType);
     data.priorityRules = this.priorityRules; // may be undefined
     return data;
+  }
+
+  private generateSchedulingTimesData(): SchedulingTimesData {
+    const data = new SchedulingTimesData();
+    data.allMachineOperationsTimeline = this.generateAllMachineOperationsTimeline();
+    // TODO Implement here data.machineTables = this.generateAllMachineTables();
+    return data;
+  }
+
+  private generateAllMachineOperationsTimeline(): TimelineData {
+    const visualization = new TimelineData();
+    visualization.timelineData = [];
+    this.jobs.forEach(job => {
+      for (let mnr = 1; mnr <= this.machines.length; mnr++) {
+        const operation = job.operationsOnMachines.find(o => o.machineNr === mnr);
+        // noinspection TypeScriptValidateTypes
+        visualization.timelineData.push([
+          'M' + operation.machineNr,
+          'Auftrag mit ID ' + job.id + ': \'' + job.name + '\'',
+          // Workaround in order to fix two problems in this context:
+          // 1. Errors on too small devices since not all labels can be shown
+          // 2. No or in case of many operations useful x-axis labels/categorizations/vertical lines
+          new Date(operation.startTimestamp),
+          new Date(operation.finishTimestamp)
+        ]);
+      }
+    });
+    visualization.colors = this.generateUniqueJobColorValues().map(color => 'rgb(' + color + ')');
+    return visualization;
   }
 
   private generateVisualizableGeneralData(): VisualizableGeneralData {
@@ -393,7 +424,6 @@ export class SchedulingService {
   private generateVisualizableSolutionQualityData(): VisualizableSolutionQualityData {
     const data = new VisualizableSolutionQualityData();
 
-    data.allMachineOperationsTimeline = this.generateAllMachineOperationsTimeline();
     data.finishedJobsAtTimestamp = this.generateFinishedJobsAtTimestampVisualization();
 
     if (this.jobs[0].dueDate) {
@@ -402,28 +432,6 @@ export class SchedulingService {
     }
 
     return data;
-  }
-
-  private generateAllMachineOperationsTimeline(): TimelineData {
-    const visualization = new TimelineData();
-    visualization.timelineData = [];
-    this.jobs.forEach(job => {
-      for (let mnr = 1; mnr <= this.machines.length; mnr++) {
-        const operation = job.operationsOnMachines.find(o => o.machineNr === mnr);
-        // noinspection TypeScriptValidateTypes
-        visualization.timelineData.push([
-          'M' + operation.machineNr,
-          'Auftrag mit ID ' + job.id + ': \'' + job.name + '\'',
-          // Workaround in order to fix two problems in this context:
-          // 1. Errors on too small devices since not all labels can be shown
-          // 2. No or in case of many operations useful x-axis labels/categorizations/vertical lines
-          new Date(operation.startTimestamp),
-          new Date(operation.finishTimestamp)
-        ]);
-      }
-    });
-    visualization.colors = this.generateUniqueJobColorValues().map(color => 'rgb(' + color + ')');
-    return visualization;
   }
 
   private generateFinishedJobsAtTimestampVisualization(): ChartData {
