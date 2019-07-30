@@ -2,7 +2,6 @@
 <!-- TODO: Delete all? -->
 <!-- TODO: Add buttons random order jobs -->
 
-<!-- Title -->
 <div class="row title">
   <div class="col-md-12 text-center">
     <h3>
@@ -26,14 +25,13 @@
 </div>
 
 <div class="row">
-  <div class="col-12 text-center">
+  <div class="col-md-12 existing-jobs-actions">
 
-    <!-- actions concerning existing jobs -->
-    <div class="text-left existing-jobs-actions">
-      <mat-divider></mat-divider>
-      <button mat-stroked-button
-              [disabled]="jobs.length < 1 || storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.COMPLETELY_DEFINED"
-              (click)="addRandomTimesForUndefined()">
+    <mat-divider></mat-divider>
+
+    <button mat-stroked-button
+            [disabled]="jobs.length < 1 || storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.COMPLETELY_DEFINED"
+            (click)="addRandomTimesForUndefined()">
           <span class="align-middle"
                 matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst mindestens einen Auftrag hinzu'
                   : storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) !== configurationStatus.COMPLETELY_DEFINED ? 'Alle fehlenden Zeiten der Arbeitsgänge der einzelnen Aufträge automatisch erzeugen'
@@ -42,10 +40,11 @@
             <i class="fas fa-random"></i>
             Zufällige Zeiten für undefinierte Arbeitsgänge
           </span>
-      </button>
-      <button mat-stroked-button
-              [disabled]="storage.machineConfigParam !== machineConfig.JOBSHOP"
-              (click)="sortEachJobMachineOrder()">
+    </button>
+
+    <button mat-stroked-button
+            [disabled]="storage.machineConfigParam !== machineConfig.JOBSHOP"
+            (click)="sortEachJobMachineOrder()">
           <span class="align-middle"
                 matTooltip="{{storage.machineConfigParam === machineConfig.JOBSHOP ? 'Reihenfolge der Arbeitsgänge aller Aufträge vereinheitlichen und somit zu Flowshop wechseln'
                   : storage.machineConfigParam === machineConfig.FLOWSHOP ? 'Bei der aktuellen Konfiguration handelt es sich bereits um einen Flowshop'
@@ -57,18 +56,51 @@
             <mat-icon class="align-middle">arrow_right_alt</mat-icon>
             Flowshop
           </span>
-      </button>
-    </div>
+    </button>
 
-    <!-- List existing jobs -->
+    <button mat-stroked-button
+            [disabled]="jobs.length < 1 || storage.machineConfigParam === machineConfig.ONE_MACHINE"
+            (click)="shuffleMachineOrderOfExistingJobs()">
+          <span class="align-middle"
+                matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst Aufträge hinzu'
+                  : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für diese Funktion werden mehrere Maschinen benötigt'
+                  : 'Arbeitsgänge aller Aufträge zufällig anordnen'
+                }}">
+            <i class="fas fa-random"></i>
+            Reihenfolge der Arbeitsgänge aller Aufträge mischen
+          </span>
+    </button>
+
+    <button mat-stroked-button
+            [disabled]="jobs.length < 1"
+            (click)="deleteAllExistingJobs()"
+            class="status-warning">
+          <span class="align-middle"
+                matTooltip="{{jobs.length > 0 ? 'Alle bestehenden Aufträge löschen'
+                  : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für diese Funktion werden mehrere Maschinen benötigt'
+                  : 'Aktuell existieren keine Aufträge, die gelöscht werden könnten'
+                }}">
+            <i class="fas fa-trash"></i>
+            Alle Aufträge löschen
+          </span>
+    </button>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+
+    <!-- TODO: Extract to new class? -->
+    <!-- Jobs list -->
     <mat-accordion *ngIf="jobs.length > 0; else noJobs">
       <mat-expansion-panel *ngFor="let job of jobs">
         <mat-expansion-panel-header #header>
-          <div class="text-left job-header">
+          <div class="job-header">
             <button mat-icon-button
                     (click)="deleteJob(job)"
                     matTooltip="Auftrag löschen">
-              <i class="fa fa-trash"></i>
+              <i class="fas fa-trash"></i>
             </button>
             <button mat-icon-button
                     (click)="copyJob(job, header)"
@@ -110,7 +142,7 @@
 
     <!-- Information shown in case of no configured jobs -->
     <ng-template #noJobs>
-      <div class="information font-italic small">
+      <div class="information font-italic small text-center">
         Bisher keine Aufträge konfiguriert.
       </div>
     </ng-template>

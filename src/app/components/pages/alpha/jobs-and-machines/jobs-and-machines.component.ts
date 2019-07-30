@@ -152,6 +152,28 @@ export class JobsAndMachinesComponent implements OnInit {
     this.storage.jobs = this.jobs;
   }
 
+  shuffleMachineOrderOfExistingJobs(): void {
+    this.jobs.forEach(job => job.machineTimes = job.machineTimes.sort(() => Math.random() - 0.5));
+    this.openSnackBar(2, 'Abarbeitungsreihenfolgen zufällig angeordnet');
+    this.storage.jobs = this.jobs;
+  }
+
+  deleteAllExistingJobs(): void {
+    this.dialog.open(PopUpComponent, {
+      data: new DialogContent(
+        'Löschen bestätigen',
+        ['Möchten Sie wirklich alle Aufträge löschen?', 'Diese Aktion kann nicht rückgängig gemacht werden'],
+        DialogType.QUESTION)
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.jobs = [];
+        this.storage.jobs = [];
+        console.log(this.jobs, this.storage.jobs);
+        this.openSnackBar(2, 'Alle Aufträge gelöscht');
+      }
+    });
+  }
+
   calculateMaxMachineTimeForJob(job: Job, machine: MachineTimeForJob): number | undefined {
     if (job.dueDate) {
       return job.dueDate - job.machineTimes
