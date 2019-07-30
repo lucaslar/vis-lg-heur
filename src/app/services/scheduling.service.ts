@@ -75,9 +75,21 @@ export class SchedulingService {
   private proceedScheduling(): void {
     this.handleEachCurrentJobOfMachine();
     this.addJobsToMachineQueues();
-    // TODO FOr each or only new/changed queues? Change and compare with logging text?
-    this.sortJobsInQueuesBasedOnHeuristic(); // Implementations of heuristics called in this method and its called methods
-    this.setNextJobForEachFreeMachine();
+
+    // Sort queues of free machines (with jobs in queue) and produce best job:
+    this.machines
+      .filter(machine => !machine.currentJob && machine.jobQueue.length)
+      .forEach(machine => {
+          this.logSchedulingProcedure(machine.machineNr,
+            'Beginn der Sortierung der Warteschlange');
+          machine.jobQueue.sort((jobA: ScheduledJob, jobB: ScheduledJob) =>
+            this.comparisonResultForCurrentHeuristic(jobA, jobB, machine.machineNr)
+          );
+          machine.startProductionOfNext(this.currentTimestampInScheduling);
+          this.logSchedulingProcedure(machine.machineNr,
+            'Beginn der Abarbeitung von Auftrag ' + this.jobStringForLogging(machine.currentJob));
+        }
+      );
   }
 
   // Called for any heuristic (before calling the heuristic itself)
