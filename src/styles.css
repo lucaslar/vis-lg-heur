@@ -72,10 +72,6 @@ mat-expansion-panel-header *, mat-expansion-panel *, mat-card-content, .title, .
   font-size: larger !important;
 }
 
-.job-id {
-  color: var(--color-grey-font);
-}
-
 .color-white .mat-simple-snackbar-action button span {
   color: white !important;
 }

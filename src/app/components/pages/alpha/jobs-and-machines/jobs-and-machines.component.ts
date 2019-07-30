@@ -168,7 +168,6 @@ export class JobsAndMachinesComponent implements OnInit {
       if (result) {
         this.jobs = [];
         this.storage.jobs = [];
-        console.log(this.jobs, this.storage.jobs);
         this.openSnackBar(2, 'Alle Aufträge gelöscht');
       }
     });
