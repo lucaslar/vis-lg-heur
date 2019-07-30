@@ -60,6 +60,10 @@ mat-accordion mat-expansion-panel:last-child {
   margin-bottom: 16px;
 }
 
+mat-expansion-panel *, mat-expansion-panel-header * {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 .larger-icon {
   font-size: larger !important;
 }
