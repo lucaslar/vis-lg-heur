@@ -5,11 +5,11 @@
   Scheduling-Log
 </h1>
 
-<!--TODO Add icons based on log type?-->
 <mat-dialog-content>
   <table>
     <thead class="text-center">
     <tr>
+      <th></th>
       <th>t</th>
       <th>M</th>
       <th>Log</th>
@@ -17,8 +17,13 @@
     </thead>
     <tbody>
     <tr *ngFor="let log of data">
-      <td class="text-right" matTooltip="Zeitpunkt {{log[0]}}">{{log[0]}}</td>
-      <td class="text-right" matTooltip="Maschine {{log[1]}}">{{log[1]}}</td>
+      <td matTooltip="{{log[3]}}" class="text-center">
+        <i class="fas fa-sort-numeric-down" *ngIf="log[3]===logEventType.HEURISTIC_BASED_SORTING"></i>
+        <i class="fas fa-hammer" *ngIf="log[3]===logEventType.PRODUCTION_START"></i>
+        <i class="fas fa-tasks" *ngIf="log[3]===logEventType.JOB_QUEUE"></i>
+      </td>
+      <td class="text-center" matTooltip="Zeitpunkt {{log[0]}}">{{log[0]}}</td>
+      <td class="text-center" matTooltip="Maschine {{log[1]}}">{{log[1]}}</td>
       <td>{{log[2]}}</td>
     </tr>
     </tbody>

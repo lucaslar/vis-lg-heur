@@ -14,6 +14,7 @@ import {
 } from '../model/internal/visualization/SchedulingResult';
 import {Heuristic} from '../model/Heuristic';
 import {ChartData, ChartType, Dataset, TimelineData} from '../model/internal/visualization/VisualizableData';
+import {LogEventType} from '../model/enums/LogEventType';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,7 @@ export class SchedulingService {
   private priorityRules: PriorityRule[];
   private currentTimestampInScheduling: number;
 
-  // TODO: Implement logging tags for filtering later?
-  private logging: [number, number, string][];
+  private logging: [number, number, string, LogEventType][];
 
   constructor(public storage: StorageService) {
   }
@@ -82,16 +82,15 @@ export class SchedulingService {
     this.machines
       .filter(machine => !machine.currentJob && machine.jobQueue.length)
       .forEach(machine => {
-          this.logSchedulingProcedure(machine.machineNr,
-            'Beginn der Sortierung der Warteschlange');
+          this.logSchedulingProcedure(machine.machineNr, 'Beginn der Sortierung der Warteschlange', LogEventType.HEURISTIC_BASED_SORTING);
           machine.jobQueue.sort((jobA: ScheduledJob, jobB: ScheduledJob) =>
             this.comparisonResultForCurrentHeuristic(jobA, jobB, machine.machineNr)
           );
           this.logSchedulingProcedure(machine.machineNr, 'Fertig bestimmte Warteschlange: ' + machine.jobQueue
-            .map(job => this.jobStringForLogging(job)).join('->'));
+            .map(job => this.jobStringForLogging(job)).join(' -> '), LogEventType.JOB_QUEUE);
           machine.startProductionOfNext(this.currentTimestampInScheduling);
           this.logSchedulingProcedure(machine.machineNr,
-            'Beginn der Abarbeitung von Auftrag ' + this.jobStringForLogging(machine.currentJob));
+            'Beginn der Abarbeitung von Auftrag ' + this.jobStringForLogging(machine.currentJob), LogEventType.PRODUCTION_START);
         }
       );
   }
@@ -114,7 +113,7 @@ export class SchedulingService {
       if (!nextMachine.jobQueue.includes(job)) { // only add jobs, that have not been pushed to queue already
         nextMachine.jobQueue.push(job);
         this.logSchedulingProcedure(nextMachine.machineNr, 'Hinzufügen zur Warteschlange von '
-          + this.jobStringForLogging(job));
+          + this.jobStringForLogging(job), LogEventType.JOB_QUEUE);
       }
     });
   }
@@ -133,9 +132,8 @@ export class SchedulingService {
   private compareJobsByPriorityRules(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number): number {
     for (const priorityRule of this.priorityRules) {
       if (priorityRule === PriorityRule.FCFS) {
-        this.logSchedulingProcedure(machineNr,
-          PriorityRule.FCFS + ' angewandt auf ' + this.jobStringForLogging(jobA)
-          + ' & ' + this.jobStringForLogging(jobB));
+        this.logSchedulingProcedure(machineNr, PriorityRule.FCFS + ' angewandt auf ' + this.jobStringForLogging(jobA) + ' & ' +
+          this.jobStringForLogging(jobB), LogEventType.HEURISTIC_BASED_SORTING);
         return 0;
       } else {
         const aPriorityValue = this.getPriorityValueForJob(jobA, priorityRule);
@@ -143,16 +141,19 @@ export class SchedulingService {
 
         if (aPriorityValue < bPriorityValue) {
           this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobA) + ' (Wert: ' + aPriorityValue
-            + ') gegenüber ' + this.jobStringForLogging(jobB) + ' (' + bPriorityValue + ') aufgrund von Prioritätsregel: ' + priorityRule);
+            + ') gegenüber ' + this.jobStringForLogging(jobB) + ' (' + bPriorityValue + ') aufgrund von Prioritätsregel: ' + priorityRule,
+            LogEventType.HEURISTIC_BASED_SORTING);
           return -1;
         } else if (bPriorityValue < aPriorityValue) {
           this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobB) + ' (Wert: ' + bPriorityValue
-            + ') gegenüber ' + this.jobStringForLogging(jobA) + ' (' + aPriorityValue + ') aufgrund von Prioritätsregel: ' + priorityRule);
+            + ') gegenüber ' + this.jobStringForLogging(jobA) + ' (' + aPriorityValue + ') aufgrund von Prioritätsregel: ' + priorityRule,
+            LogEventType.HEURISTIC_BASED_SORTING);
           return 1;
         } else {
           this.logSchedulingProcedure(machineNr,
             'Betrachteter Wert für ' + this.jobStringForLogging(jobA) + ' & ' + this.jobStringForLogging(jobB) + ' identisch (' +
-            aPriorityValue + '), daher keine Sortierung mithilfe von Prioritätsregel ' + priorityRule + ' möglich');
+            aPriorityValue + '), daher keine Sortierung mithilfe von Prioritätsregel ' + priorityRule + ' möglich',
+            LogEventType.HEURISTIC_BASED_SORTING);
           // No return value since in case of no clear result, the next priority rule is to be taken.
           // Returning 0 does only make sense if no more rules are available or for FCFS
 
@@ -160,8 +161,8 @@ export class SchedulingService {
       }
     }
     this.logSchedulingProcedure(machineNr,
-      this.jobStringForLogging(jobA) + ' & ' + this.jobStringForLogging(jobB) + ' bezüglich aller betrachteten Prioritätsregeln '
-      + 'identisch und somit nicht vergleichbar (Sortierung entspricht nun ' + PriorityRule.FCFS + ')');
+      this.jobStringForLogging(jobA) + ' & ' + this.jobStringForLogging(jobB) + ' bezüglich aller betrachteten Prioritätsregeln ' +
+      'identisch und somit nicht vergleichbar (Sortierung entspricht nun ' + PriorityRule.FCFS + ')', LogEventType.HEURISTIC_BASED_SORTING);
     return 0;
   }
 
@@ -555,9 +556,9 @@ export class SchedulingService {
     return sortedColors;
   }
 
-  private logSchedulingProcedure(machineNr: number, description: string): void {
+  private logSchedulingProcedure(machineNr: number, description: string, type: LogEventType): void {
     // noinspection TypeScriptValidateTypes
-    this.logging.push([this.currentTimestampInScheduling, machineNr, description]);
+    this.logging.push([this.currentTimestampInScheduling, machineNr, description, type]);
   }
 
   private jobStringForLogging(job: ScheduledJob): string {

@@ -1,5 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material';
+import {LogEventType} from '../../../model/enums/LogEventType';
 
 @Component({
   selector: 'app-scheduling-log-dialog',
@@ -8,6 +9,12 @@ import {MAT_DIALOG_DATA} from '@angular/material';
 })
 export class SchedulingLogDialogComponent {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: [number, number, string][]) {
+  private _logEventType = LogEventType;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: [number, number, string, LogEventType][]) {
+  }
+
+  get logEventType(): any {
+    return this._logEventType;
   }
 }

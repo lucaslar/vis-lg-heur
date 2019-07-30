@@ -1,13 +1,55 @@
-<!-- TODO Buttons for filtering? -->
-
 <!-- TODO Descriptional text -->
 <p>scheduling-log-component works!</p>
 
-<div>Config ...</div>
+<div class="row">
+  <div class="col-md-12 information">
+    <i class="fas fa-pen"></i>
+    Logbare Ereignisse in Bezug auf
+  </div>
+</div>
 
-<button #b mat-stroked-button (click)="showLog(b)">
+<mat-divider></mat-divider>
+
+<div class="row log-group-description">
+  <div class="col-12 col-md-6">
+    <mat-checkbox [(ngModel)]="isJobQueueSelected" class="small">
+      {{logEventType.JOB_QUEUE}}
+    </mat-checkbox>
+  </div>
+  <div class="col-12 col-md-6">
+    <mat-checkbox [(ngModel)]="isProductionStartSelected" class="small">
+      {{logEventType.PRODUCTION_START}}
+    </mat-checkbox>
+  </div>
+  <div class="col-12 col-md-6">
+    <mat-checkbox [(ngModel)]="isHeuristicBasedSortingSelected" class="small">
+      {{logEventType.HEURISTIC_BASED_SORTING}}
+    </mat-checkbox>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 information">
+    <i class="fas fa-tools"></i>
+    Maschinen
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div class="row log-group-description">
+  <div *ngFor="let mnr of machineNrs" class="col-6 col-md-4 col-lg-3 col-xl-2">
+    <mat-checkbox [(ngModel)]="machinesShown[mnr-1]" class="small">
+      Maschine {{mnr}}
+    </mat-checkbox>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<button mat-stroked-button [disabled]="isLogEmpty()" (click)="showLog()">
   <span class="align-middle">
-    <i class="far fa-file"></i>
+    <i class="far fa-file-alt"></i>
     Log anzeigen
   </span>
 </button>

@@ -2,6 +2,7 @@ import {MachineConfig} from '../../enums/MachineConfig';
 import {Heuristic} from '../../Heuristic';
 import {PriorityRule} from '../../enums/PriorityRule';
 import {ChartData, TimelineData} from './VisualizableData';
+import {LogEventType} from '../../enums/LogEventType';
 
 export class SchedulingResult {
 
@@ -9,7 +10,7 @@ export class SchedulingResult {
   private _solutionQualityData: Kpi[];
   private _visualizableGeneralData: VisualizableGeneralData;
   private _visualizableSolutionQualityData: VisualizableSolutionQualityData;
-  private _schedulingLogging: [number, number, string][];
+  private _schedulingLogging: [number, number, string, LogEventType][];
 
   get generalData(): GeneralSchedulingData {
     return this._generalData;
@@ -43,11 +44,11 @@ export class SchedulingResult {
     this._visualizableSolutionQualityData = value;
   }
 
-  get schedulingLogging(): [number, number, string][] {
+  get schedulingLogging(): [number, number, string, LogEventType][] {
     return this._schedulingLogging;
   }
 
-  set schedulingLogging(value: [number, number, string][]) {
+  set schedulingLogging(value: [number, number, string, LogEventType][]) {
     this._schedulingLogging = value;
   }
 }
