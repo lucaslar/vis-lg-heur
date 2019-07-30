@@ -46,6 +46,8 @@ export class SchedulingService {
     schedulingData.generalData.durationInMillisKpi.kpi = schedulingPerformance;
     schedulingData.generalData.durationInMillisKpi.title = 'Dauer der Berechnung in ms.';
     schedulingData.generalData.durationInMillisKpi.iconClasses = ['fas', 'fa-stopwatch'];
+
+    this.deleteTemporarilyStoredData();
     return schedulingData;
   }
 
@@ -59,6 +61,15 @@ export class SchedulingService {
     if (heuristicDefiner === HeuristicDefiner.PRIORITY_RULES) {
       this.priorityRules = <PriorityRule[]>JSON.parse(JSON.stringify(this.storage.priorityRules));
     }
+  }
+
+  private deleteTemporarilyStoredData(): void {
+    delete this.jobs;
+    delete this.machines;
+    delete this.logging;
+    delete this.currentTimestampInScheduling;
+    delete this.heuristicType;
+    delete this.priorityRules;
   }
 
   private proceedScheduling(): void {
