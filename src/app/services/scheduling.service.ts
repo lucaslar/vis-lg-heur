@@ -270,6 +270,7 @@ export class SchedulingService {
 
   private generateAllMachineTables(): MachineTableData[] {
     const data = [];
+
     for (let i = 1; i <= this.machines.length; i++) {
       const machineData = new MachineTableData();
       machineData.machineNr = i;
@@ -287,8 +288,23 @@ export class SchedulingService {
           (<MachineTableData>data[operation.machineNr - 1]).machineTableEntries.push(entry);
         });
     });
+
     data.forEach(table => table.machineTableEntries.sort((o1, o2) => o1.timestampStart - o2.timestampStart));
+
+    const colorMap = this.generateColorMapForMachineTables(data[0].machineTableEntries.map(entry => entry.producedJobString));
+    data.forEach(table => table.machineTableEntries.forEach(entry => entry.color = colorMap.get(entry.producedJobString)));
+
     return data;
+  }
+
+  private generateColorMapForMachineTables(sortedFirstMachineJobStings: string[]): Map<string, string> {
+    const colorMap: Map<string, string> = new Map();
+    const colors = this.generateUniqueJobColorValues().map(rgb => 'rgb(' + rgb + ')');
+    for (let i = 0; i < sortedFirstMachineJobStings.length; i++) {
+      colorMap.set(sortedFirstMachineJobStings[i], colors[i]);
+      console.log(sortedFirstMachineJobStings[i]);
+    }
+    return colorMap;
   }
 
   private generateVisualizableGeneralData(): VisualizableGeneralData {
@@ -328,7 +344,7 @@ export class SchedulingService {
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
-    visualization.colors = this.getColorsAsSpecifiedInGanttForMachine(1)
+    visualization.colors = this.getColorsAsSpecifiedInGanttFirstMachine()
       .map(color => 'rgba(' + color + ',0.8)');
     visualization.title = 'Gesamtbearbeitungsdauer ' +
       (sortedJobs[0].dueDate ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
@@ -574,13 +590,13 @@ export class SchedulingService {
     return newRgbColors.map(rgb => rgb[0] + ', ' + rgb[1] + ', ' + rgb[2]);
   }
 
-  private getColorsAsSpecifiedInGanttForMachine(machineNr: number): string[] {
+  private getColorsAsSpecifiedInGanttFirstMachine(): string[] {
 
     let colors = this.generateUniqueJobColorValues();
 
     const sortedColors = [];
     for (let i = 0; i < this.currentTimestampInScheduling; i++) {
-      const job = this.jobs.find(j => j.operationsOnMachines.find(o => o.machineNr === machineNr).startTimestamp === i);
+      const job = this.jobs.find(j => j.operationsOnMachines.find(o => o.machineNr === 1).startTimestamp === i);
       if (job) {
         sortedColors[job.id - 1] = colors[0];
         colors = colors.filter(color => color !== colors[0]);

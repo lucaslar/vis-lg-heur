@@ -18,7 +18,7 @@
       <tbody>
       <tr *ngFor="let entry of machineTable.machineTableEntries">
         <td>{{entry.timestampStart}} - {{entry.timestampEnd}}</td>
-        <td>{{entry.producedJobString}}</td>
+        <td [style.color]="entry.color">{{entry.producedJobString}}</td>
       </tr>
       </tbody>
     </table>

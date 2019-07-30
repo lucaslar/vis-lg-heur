@@ -252,6 +252,7 @@ export class MachineTableEntry {
   private _timestampStart: number;
   private _timestampEnd: number;
   private _producedJobString: string;
+  private _color: string;
 
   get timestampStart(): number {
     return this._timestampStart;
@@ -275,6 +276,14 @@ export class MachineTableEntry {
 
   set producedJobString(value: string) {
     this._producedJobString = value;
+  }
+
+  get color(): string {
+    return this._color;
+  }
+
+  set color(value: string) {
+    this._color = value;
   }
 }
 
