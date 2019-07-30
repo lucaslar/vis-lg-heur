@@ -5,7 +5,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatExpansionPanelHeader} from '@angular/material/expansion';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {MachineNrPopupComponent} from '../../../dialogs/machine-nr-popup/machine-nr-popup.component';
 import {DialogContent} from '../../../../model/internal/dialog/DialogContent';
 import {MachineConfig} from '../../../../model/enums/MachineConfig';
 import {DialogType} from '../../../../model/internal/dialog/DialogType';
@@ -46,6 +45,26 @@ export class JobsAndMachinesComponent implements OnInit {
     this.isShuffleMachineOrder = false;
   }
 
+  onMachineNrChanged(newMachineNr: number): void {
+    const messages = [];
+    this.storage.nrOfMachines = newMachineNr;
+    this.jobs.forEach(job => {
+      if (job.machineTimes.length > newMachineNr) {
+        job.machineTimes = job.machineTimes.filter(
+          machineTime => machineTime.machineNr <= newMachineNr
+        );
+      } else {
+        const message = this.addNewMachineTimesToJob(job);
+        if (message) {
+          messages.push(message);
+        }
+      }
+    });
+    this.openChangedDueDatesInfoIfNeeded(messages);
+    this.storage.jobs = this.jobs;
+    this.openSnackBar(5, 'Maschinenzahl auf ' + newMachineNr + ' aktualisiert', 'OK');
+  }
+
   createNewJob(): void {
     const job = new Job(this.jobNameInput);
     this.jobNameInput = undefined;
@@ -84,99 +103,6 @@ export class JobsAndMachinesComponent implements OnInit {
   changeMachineOrderOfJob(job: Job, event: CdkDragDrop<string[]>): void {
     moveItemInArray(job.machineTimes, event.previousIndex, event.currentIndex);
     this.storage.jobs = this.jobs;
-  }
-
-  openMachinePopUp(): void {
-    this.dialog.open(MachineNrPopupComponent).afterClosed().subscribe(result => {
-      if (result) {
-        const messages = [];
-        this.storage.nrOfMachines = result;
-        this.jobs.forEach(job => {
-          if (job.machineTimes.length > result) {
-            job.machineTimes = job.machineTimes.filter(
-              machineTime => machineTime.machineNr <= result
-            );
-          } else {
-            const message = this.addNewMachineTimesToJob(job);
-            if (message) {
-              messages.push(message);
-            }
-          }
-        });
-        this.openChangedDueDatesInfoIfNeeded(messages);
-        this.storage.jobs = this.jobs;
-        this.openSnackBar(5, 'Maschinenzahl auf ' + result + ' aktualisiert', 'OK');
-      }
-    });
-  }
-
-  openMachinesDescription(): void {
-    const currentCOnfiguration = this.storage.machineConfigParam;
-    let configInWords: string;
-    let whatDoesConfigMean: string | string[];
-
-    if (currentCOnfiguration === MachineConfig.ONE_MACHINE) {
-      configInWords = 'Es gibt genau eine Maschine';
-      whatDoesConfigMean = [
-        'Es kann nur einen Arbeitsgang an genau einer Maschine geben. Somit erübigt es sich, ' +
-        'einen Vergleich der Reihenfolge der Arbeitsgänge zu ziehen.',
-        'Flow- bzw. Jobshop setzen mindestens zwei Maschinen voraus. ' +
-        'Erhöhen Sie die Anzahl an Maschinen, ergäbe sich ein Flowshop.'];
-    } else if (currentCOnfiguration === MachineConfig.FLOWSHOP) {
-      configInWords = 'Flowshop mit ' + this.storage.nrOfMachines + ' Maschinen';
-      let machineOrderAsString = 'Erst M. ';
-      this.jobs[0].machineTimes.map(m => m.machineNr).forEach(
-        machineNr => machineOrderAsString += machineNr + (
-          this.jobs[0].machineTimes.findIndex(m => m.machineNr === machineNr) === this.storage.nrOfMachines - 1 ?
-            '.' : ', dann M. '
-        )
-      );
-      whatDoesConfigMean = [
-        (this.jobs.length > 1 ?
-            'Die ' + this.jobs[0].machineTimes.length + ' Arbeitsgänge aller ' + this.jobs.length +
-            ' Aufträge werden in derselben Reihenfolge ausgeführt, nämlich: '
-            :
-            'Da die Reihenfolge der ' + this.jobs[0].machineTimes.length + ' Arbeitsgänge ' +
-            'des aktuell einzigen Auftrags ' + 'nicht mit der Reihenfolge der Arbeitsgänge ' +
-            'anderer Aufträge verglichen werden kann, liegt formal ein Flowshop vor. ' +
-            'Die (derzeit einzige) Reihenfolge der Arbeitsgänge ist: '
-        ) +
-        machineOrderAsString,
-        (this.jobs.length > 1 ?
-            'Verschieben Sie '
-            :
-            'Fügen Sie mindestens einen Auftrag hinzu und verschieben anschließend '
-        ) + 'die Arbeitsgänge eines Auftrags, entsteht ein Jobshop.'
-      ];
-    } else if (currentCOnfiguration === MachineConfig.JOBSHOP) {
-      configInWords = 'Jobshop mit ' + this.storage.nrOfMachines + ' Maschinen';
-      whatDoesConfigMean = [
-        'Die Arbeitsgänge der ' + this.jobs.length + ' Aufträge weisen nicht dieselbe Reihenfolge auf.',
-        'Sorgen Sie dafür, dass die Reihenfolge der Arbeitsgänge aller Aufträge gleich ist, entsteht ein ' +
-        'Flowshop. Hierfür können Sie auch den dafür vorgesehenen Button unterhalb der Auftragseingabe nutzen.'
-      ];
-    } else {
-      configInWords = 'Aussage nicht möglich';
-      whatDoesConfigMean = [
-        'Es sind keine Aufträge definiert, daher kann die Maschinenumgebung nicht ' +
-        'spezifiziert werden.',
-        'Fügen Sie bitte mindestens einen Auftrag hinzu.'
-      ];
-    }
-
-    const texts = [
-      'Aktuelle Maschinenumgebung: ' +
-      configInWords + '.'
-    ];
-    texts.push(...whatDoesConfigMean);
-
-    this.dialog.open(PopUpComponent, {
-      data: new DialogContent(
-        'Maschinenumgebung',
-        texts,
-        DialogType.INFO
-      )
-    });
   }
 
   onTimeOnMachineChange(machine: MachineTimeForJob, newValue: number): void {

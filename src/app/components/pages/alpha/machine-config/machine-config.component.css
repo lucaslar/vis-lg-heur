@@ -1,0 +1,20 @@
+mat-card {
+  /* TODO: Move to wrapper component: row definition */
+  margin-bottom: 8px;
+}
+
+mat-card button.mat-icon-button {
+  -webkit-transform: translate(2px, -10px);
+  -moz-transform: translate(2px, -10px);
+  -ms-transform: translate(2px, -10px);
+  -o-transform: translate(2px, -10px);
+  transform: translate(2px, -10px);
+}
+
+.machine-number {
+  color: var(--color-main);
+}
+
+.machine-number .information {
+  margin: 0;
+}

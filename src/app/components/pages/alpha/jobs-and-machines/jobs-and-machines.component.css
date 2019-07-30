@@ -24,26 +24,6 @@ mat-expansion-panel-header {
   margin-left: calc((40px - 13.2px) / 2);
 }
 
-.machine-config-container {
-  margin-bottom: 8px;
-}
-
-.machine-config-container button.mat-icon-button {
-  -webkit-transform: translate(-2px, -2px);
-  -moz-transform: translate(-2px, -2px);
-  -ms-transform: translate(-2px, -2px);
-  -o-transform: translate(-2px, -2px);
-  transform: translate(-2px, -2px);
-}
-
-.machine-number {
-  color: var(--color-main);
-}
-
-.machine-number .information {
-  margin: 0;
-}
-
 .drag-drop-list {
   margin: 8px;
 }

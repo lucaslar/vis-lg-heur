@@ -1,0 +1,28 @@
+<mat-card class="machine-config-container">
+  <button mat-icon-button
+          matTooltip="Weitere Informationen zur aktuellen Maschinenumgebung"
+          (click)="openMachinesDescription()"
+          class="pull-right">
+    <mat-icon class="material-icons">
+      help_outline
+    </mat-icon>
+  </button>
+  <span class="machine-number-container">
+    <span class="machine-number">
+      Maschinenanzahl: {{storage.nrOfMachines}}
+    </span>
+    <button mat-stroked-button
+            (click)="openMachinePopUp()"
+            matTooltip="{{'Machinenzahl (aktuell '+storage.nrOfMachines+') ändern'}}">
+      <i class="fas fa-tools"></i>
+      Ändern
+    </button>
+  </span>
+  <mat-card-content>
+    <div class="information">
+      Derzeitiger Wert für &alpha;:
+      {{storage.machineConfigParam}}<sub
+      *ngIf="storage.nrOfMachines > 1 && storage.jobs.length">{{storage.nrOfMachines}}</sub>
+    </div>
+  </mat-card-content>
+</mat-card>

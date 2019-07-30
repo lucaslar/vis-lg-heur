@@ -33,6 +33,7 @@ import { SchedulingLogDialogComponent } from './components/dialogs/scheduling-lo
 import { MachineTablesComponent } from './components/pages/visualization/content/machine-tables/machine-tables.component';
 import { ObjectiveFunctionDefinitionComponent } from './components/pages/gamma/objective-function-definition/objective-function-definition.component';
 import { SetUpTimesDefinitionComponent } from './components/pages/beta/set-up-times-definition/set-up-times-definition.component';
+import { MachineConfigComponent } from './components/pages/alpha/machine-config/machine-config.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { SetUpTimesDefinitionComponent } from './components/pages/beta/set-up-ti
     SchedulingLogDialogComponent,
     MachineTablesComponent,
     ObjectiveFunctionDefinitionComponent,
-    SetUpTimesDefinitionComponent
+    SetUpTimesDefinitionComponent,
+    MachineConfigComponent
   ],
   imports: [
     BrowserModule,
