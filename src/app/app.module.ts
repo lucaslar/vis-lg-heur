@@ -30,6 +30,7 @@ import {SolutionQualityDataComponent} from './components/pages/visualization/con
 import {GeneralDataVisualizerComponent} from './components/pages/visualization/content/general/general-data-visualizer/general-data-visualizer.component';
 import { SchedulingLogComponent } from './components/pages/visualization/content/scheduling-log/scheduling-log.component';
 import { SchedulingLogDialogComponent } from './components/dialogs/scheduling-log-dialog/scheduling-log-dialog.component';
+import { MachineTablesComponent } from './components/pages/visualization/content/machine-tables/machine-tables.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { SchedulingLogDialogComponent } from './components/dialogs/scheduling-lo
     GeneralDataComponent,
     GeneralDataVisualizerComponent,
     SchedulingLogComponent,
-    SchedulingLogDialogComponent
+    SchedulingLogDialogComponent,
+    MachineTablesComponent
   ],
   imports: [
     BrowserModule,

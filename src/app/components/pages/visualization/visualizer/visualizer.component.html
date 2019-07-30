@@ -30,17 +30,20 @@
     <li>
       <mat-checkbox [(ngModel)]="isSolutionQualityDataVisible">Kennzahlen der ermittelten Lösung</mat-checkbox>
     </li>
-  </ul>
-  <ul class="col-md-6 col-12">
     <li>
       <mat-checkbox [(ngModel)]="isVisualizableGeneralDataVisible">Visualisierung des Reihenfolgeproblems
       </mat-checkbox>
     </li>
+  </ul>
+  <ul class="col-md-6 col-12">
     <li>
       <mat-checkbox [(ngModel)]="isVisualizableSolutionQualityDataVisible">Visualisierung der Lösungsgüte</mat-checkbox>
     </li>
     <li>
-      <mat-checkbox [(ngModel)]="isLoggingShown">Scheduling-Log</mat-checkbox>
+      <mat-checkbox [(ngModel)]="isMachineTablesVisible">Produktionsdaten pro Maschine</mat-checkbox>
+    </li>
+    <li>
+      <mat-checkbox [(ngModel)]="isLoggingVisible">Scheduling-Log</mat-checkbox>
     </li>
   </ul>
 </div>
@@ -146,14 +149,33 @@
       </div>
     </mat-expansion-panel>
 
-    <!-- Subtitle: General data visualization -->
-    <mat-expansion-panel [expanded]="isLoggingShown">
+    <!-- Subtitle: Machine tables -->
+    <mat-expansion-panel [expanded]="isMachineTablesVisible">
       <mat-expansion-panel-header
-        (click)="isLoggingShown = !isLoggingShown">
+        (click)="isMachineTablesVisible = !isMachineTablesVisible">
         <div class="row title">
           <div class="col-md-12">
             <h4
-              matTooltip="{{'Scheduling-Log '+(isLoggingShown ? 'ausblenden':'einblenden')}}">
+              matTooltip="{{'Produktionsdaten pro Maschine '+(isMachineTablesVisible ? 'ausblenden':'einblenden')}}">
+              Produktionsdaten pro Maschine
+            </h4>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+      <mat-divider></mat-divider>
+      <div class="content">
+        <app-machine-tables [data]="result.schedulingTimesData.machineTables"></app-machine-tables>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Subtitle: General data visualization -->
+    <mat-expansion-panel [expanded]="isLoggingVisible">
+      <mat-expansion-panel-header
+        (click)="isLoggingVisible = !isLoggingVisible">
+        <div class="row title">
+          <div class="col-md-12">
+            <h4
+              matTooltip="{{'Scheduling-Log '+(isLoggingVisible ? 'ausblenden':'einblenden')}}">
               Scheduling-Log
             </h4>
           </div>
