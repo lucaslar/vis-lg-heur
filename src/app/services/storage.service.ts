@@ -38,8 +38,10 @@ export class StorageService {
       existingDefinitions = this.jobs.filter(job => job.dueDate).length;
     } else if (definableValue === DefinableValue.PRIORITY_RULES) {
       // Since not all rules have to be selected:
-      return this.priorityRules.length ?
-        DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
+      return this.priorityRules.length ? DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
+    } else if (definableValue === DefinableValue.GAMMA_OBJECTIVE_FUNCTION) {
+      // Is one or none defined?
+      return this.objectiveFunction ? DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
     } else {
       console.log('Define: ' + definableValue + '!');
     }
@@ -110,6 +112,7 @@ export class StorageService {
   }
 
   private getNotApplicableDueToValueDialog(missingValue: DefinableValue, heuristicName: string): DialogContent {
+    // TODO: Add description for objective function here
     return new DialogContent(
       'Werte für Berechnung unvollständig',
       [

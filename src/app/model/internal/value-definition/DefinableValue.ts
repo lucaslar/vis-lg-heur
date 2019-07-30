@@ -1,6 +1,6 @@
 export enum DefinableValue {
   ALPHA_JOB_TIMES,
   BETA_DUE_DATES,
-  // TODO Add gamma as definable value
+  GAMMA_OBJECTIVE_FUNCTION,
   PRIORITY_RULES
 }
