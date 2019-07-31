@@ -6,7 +6,7 @@ button {
   margin-bottom: 8px;
 }
 
-i {
+mat-expansion-panel-header i {
   padding-right: 20px;
 }
 
