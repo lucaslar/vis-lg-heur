@@ -35,7 +35,6 @@ export class SchedulingService {
   private logging: SchedulingLogEntry[];
 
   // TODO also add gamma to general data result
-  // TODO Diagrams for setup times? (if setup times are selected only)
 
   constructor(public storage: StorageService) {
   }

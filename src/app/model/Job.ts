@@ -1,5 +1,7 @@
 export class Job {
 
+  // TODO Can this be private?
+
   id: number;
   name: string;
   machineTimes: MachineTimeForJob[];
@@ -9,6 +11,7 @@ export class Job {
   constructor(_name: string) {
     this.name = _name;
   }
+
 }
 
 export class MachineTimeForJob {

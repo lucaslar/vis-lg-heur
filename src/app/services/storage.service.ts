@@ -87,7 +87,6 @@ export class StorageService {
       } else {
         const missingValue = this.checkValuesForHeuristic(heuristic);
         const isApplicable = missingValue === undefined;
-        // TODO: implement special case: due dates not defined for priority rules but no priority rules needs due dates
         if (isDialogRequired) {
           return isApplicable ? undefined : this.getNotApplicableDueToValueDialog(missingValue, heuristic.name);
         } else {
