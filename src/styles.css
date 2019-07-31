@@ -75,3 +75,11 @@ mat-expansion-panel-header *, mat-expansion-panel *, mat-card-content, .title, .
 .color-white .mat-simple-snackbar-action button span {
   color: white !important;
 }
+
+.no-wrap-text-ellipsis {
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}

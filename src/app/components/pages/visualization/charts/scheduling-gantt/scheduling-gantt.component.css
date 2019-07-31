@@ -17,14 +17,8 @@
   border-radius: 4px;
   padding: 8px;
   font-size: 16px;
-  -ms-text-overflow: ellipsis;
-  text-overflow: ellipsis;
   overflow: hidden;
   background-color: var(--color-background);
-}
-
-.job-info {
-  white-space: nowrap;
 }
 
 .chart-console i {

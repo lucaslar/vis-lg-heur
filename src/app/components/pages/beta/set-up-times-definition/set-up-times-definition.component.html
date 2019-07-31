@@ -42,21 +42,22 @@
   </div>
 </div>
 
-<!-- TODO: whitespae no wrap and hidden for names in headers and columns -->
 <mat-accordion>
   <mat-expansion-panel *ngFor="let job of jobs">
     <mat-expansion-panel-header>
-      <span class="information job-id">
-        (ID: {{job.id}})
-      </span>
-      <!-- Tooltip, since long job names may be cut off on smaller devices. -->
-      <span matTooltip="{{job.name}}">
+      <div class="no-wrap-text-ellipsis">
+        <span class="information job-id">
+          (ID: {{job.id}})
+        </span>
+        <!-- Tooltip, since long job names may be cut off on smaller devices. -->
+        <span matTooltip="{{job.name}}">
         {{job.name}}
       </span>
+      </div>
     </mat-expansion-panel-header>
 
     <div class="row">
-      <div class="col-md-6 to-job-setup-time" *ngFor="let otherJob of otherJobsForJob(job)">
+      <div class="col-md-6 to-job-setup-time no-wrap-text-ellipsis" *ngFor="let otherJob of otherJobsForJob(job)">
         zu Auftrag mit ID: {{otherJob.id}}
         <!-- Tooltip, since long job names may be cut off on smaller devices. -->
         <span matTooltip="{{otherJob.name}}">

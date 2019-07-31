@@ -7,12 +7,6 @@ mat-expansion-panel-header {
   padding-left: calc(24px - (40px - 13.2px) / 2);
 }
 
-.job-header {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
 .job-id {
   /* additional to global style */
   /* 13.2 = width of trash icon. Calc: space from trash icon to clone icon (40px = button width) */

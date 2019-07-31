@@ -86,12 +86,12 @@
 <div class="row">
   <div class="col-md-12">
 
-    <!-- TODO: Extract to new class? -->
+    <!-- TODO: Extract to new component? -->
     <!-- Jobs list -->
     <mat-accordion *ngIf="jobs.length > 0; else noJobs">
       <mat-expansion-panel *ngFor="let job of jobs">
         <mat-expansion-panel-header #header>
-          <div class="job-header">
+          <div class="job-header no-wrap-text-ellipsis">
             <button mat-icon-button
                     (click)="deleteJob(job)"
                     matTooltip="Auftrag löschen">
