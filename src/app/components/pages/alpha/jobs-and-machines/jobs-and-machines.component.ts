@@ -154,13 +154,13 @@ export class JobsAndMachinesComponent implements OnInit {
         }
       );
     });
-    this.openSnackBar(2, 'Abarbeitungsreihenfolgen sortiert');
+    this.openSnackBar(3, 'Abarbeitungsreihenfolge der Arbeitsgänge aller Aufträge sortiert');
     this.storage.jobs = this.jobs;
   }
 
   shuffleMachineOrderOfExistingJobs(): void {
     this.jobs.forEach(job => job.machineTimes = job.machineTimes.sort(() => Math.random() - 0.5));
-    this.openSnackBar(2, 'Abarbeitungsreihenfolgen zufällig angeordnet');
+    this.openSnackBar( 3, 'Abarbeitungsreihenfolge der Arbeitsgänge aller Aufträge zufällig angeordnet');
     this.storage.jobs = this.jobs;
   }
 
