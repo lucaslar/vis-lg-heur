@@ -1,5 +1,4 @@
 import {MachineConfig} from '../../enums/MachineConfig';
-import {Heuristic} from '../../Heuristic';
 import {PriorityRule} from '../../enums/PriorityRule';
 import {ChartData, TimelineData} from './VisualizableData';
 import {LogEventType} from '../../enums/LogEventType';
@@ -167,9 +166,14 @@ export class VisualizableGeneralData {
 
 export class VisualizableSolutionQualityData {
 
+  private _finishedJobsAtTimestamp: ChartData;
+
+  // Only if delays are configured:
   private _cumulatedDelaysAtTimestamps: ChartData;
   private _comparisonDelayedAndInTimeJobs: ChartData;
-  private _finishedJobsAtTimestamp: ChartData;
+
+  // Only if sum of setup times is to be optimized:
+  private _cumulatedSetupTimesAtTimetamps: ChartData;
 
   get cumulatedDelaysAtTimestamps(): ChartData {
     return this._cumulatedDelaysAtTimestamps;
@@ -195,6 +199,13 @@ export class VisualizableSolutionQualityData {
     this._finishedJobsAtTimestamp = value;
   }
 
+  get cumulatedSetupTimesAtTimetamps(): ChartData {
+    return this._cumulatedSetupTimesAtTimetamps;
+  }
+
+  set cumulatedSetupTimesAtTimetamps(value: ChartData) {
+    this._cumulatedSetupTimesAtTimetamps = value;
+  }
 }
 
 export class SchedulingTimesData {

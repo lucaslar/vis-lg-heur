@@ -25,3 +25,14 @@
            [yLabel]="data.comparisonDelayedAndInTimeJobs.yLabel"
            [xLabel]="data.comparisonDelayedAndInTimeJobs.xLabel"
 ></app-chart>
+
+<!-- Specific diagrams here: -->
+
+<app-chart *ngIf="data.cumulatedSetupTimesAtTimetamps"
+           [title]="data.cumulatedSetupTimesAtTimetamps.title"
+           [type]="data.cumulatedSetupTimesAtTimetamps.visualizableAs"
+           [labels]="data.cumulatedSetupTimesAtTimetamps.labels"
+           [datasets]="data.cumulatedSetupTimesAtTimetamps.datasets"
+           [yLabel]="data.cumulatedSetupTimesAtTimetamps.yLabel"
+           [xLabel]="data.cumulatedSetupTimesAtTimetamps.xLabel"
+></app-chart>

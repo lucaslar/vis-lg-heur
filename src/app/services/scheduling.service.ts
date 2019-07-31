@@ -35,10 +35,8 @@ export class SchedulingService {
   private logging: SchedulingLogEntry[];
 
   // TODO also add gamma to general data result
-  // TODO get mean setup time? (visualization)
-  // TODO get cum. setup time? (visualization)
+  // TODO get mean setup time of solution? (kpi)
   // TODO get mean setup time of solution? (visualization)
-  // TODO (General): check if due dates are configured for result gen.
   // TODO Diagrams for setup times? (if setup times are selected only)
 
   constructor(public storage: StorageService) {
@@ -548,6 +546,11 @@ export class SchedulingService {
       data.comparisonDelayedAndInTimeJobs = this.generateComparisonDelayedAndInTimeVisualization();
     }
 
+    // Specific diagrams:
+    if (this.heuristicType === HeuristicDefiner.NEAREST_NEIGHBOUR) {
+      data.cumulatedSetupTimesAtTimetamps = this.generateCumulatedSetupTimesVisualization();
+    }
+
     return data;
   }
 
@@ -598,6 +601,44 @@ export class SchedulingService {
     visualization.datasets = [dataset];
     visualization.xLabel = 'Zeiteinheiten';
     visualization.yLabel = 'Kumulierte Verspätungszeiten';
+    return visualization;
+  }
+
+  private generateCumulatedSetupTimesVisualization(): ChartData {
+    const dataset = new Dataset();
+    const labels = ['0'];
+    dataset.data = [0];
+    dataset.label = 'Kumulierte Rüstzeiten';
+
+    // '[0]' possible since only one machine exists:
+    const maxStartTime = Math.max(...this.jobs.map(job => job.operationsOnMachines[0].startTimestamp));
+
+    let previoiusJob: ScheduledJob;
+
+    for (let i = 0; i <= maxStartTime; i++) {
+      const jobStartedAtTimestamp = this.jobs.find(job => job.operationsOnMachines[0].startTimestamp === i);
+
+      if (jobStartedAtTimestamp) {
+        if (i > 0) {
+          // previousJob is defined here, since production starts at 0
+          const previousSetupTime = previoiusJob.setupTimesToOtherJobs.find(sT => sT.idTo === jobStartedAtTimestamp.id).duration;
+          dataset.data.push(Math.max(...dataset.data.filter(d => d !== undefined)) + previousSetupTime);
+          labels.push('' + i);
+        } // no else as zero is already added by default
+        previoiusJob = jobStartedAtTimestamp;
+      } else {
+        labels.push('');
+        dataset.data.push(undefined);
+      }
+    }
+
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_LINE;
+    visualization.title = 'Kumulierte Rüstzeiten zu Produktionsstartzeitpunkten';
+    visualization.labels = labels;
+    visualization.datasets = [dataset];
+    visualization.xLabel = 'Zeiteinheiten';
+    visualization.yLabel = 'Kumulierte Rüstzeiten';
     return visualization;
   }
 
