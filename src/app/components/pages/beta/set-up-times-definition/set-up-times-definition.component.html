@@ -46,6 +46,15 @@
   <mat-expansion-panel *ngFor="let job of jobs">
     <mat-expansion-panel-header>
       <div class="no-wrap-text-ellipsis">
+
+        <i class="fas fa-times-circle status-warning"
+           matTooltip="Rüstzeiten zu anderen Aufträgen unvollständig"
+           *ngIf="isJobHavingUndefinedRelations(job); else checkedIcon">
+        </i>
+        <ng-template #checkedIcon>
+          <i class="fas fa-check-circle" matTooltip="Rüstzeiten zu anderen Aufträgen vollständig"></i>
+        </ng-template>
+
         <span class="information job-id">
           (ID: {{job.id}})
         </span>
@@ -66,7 +75,7 @@
         <app-icon-number-input [iconClasses]="['fas','fa-cogs']"
                                [placeholder]="'Rüstzeit'"
                                [value]="findSetupTimeRelationForJob(job, otherJob).duration"
-                               [min]="0"
+                               [min]="1"
                                (newValue)="onSetupValueChange(job, otherJob, $event)">
         </app-icon-number-input>
       </div>
@@ -74,3 +83,4 @@
 
   </mat-expansion-panel>
 </mat-accordion>
+<!-- TODO: Allow 0? -->

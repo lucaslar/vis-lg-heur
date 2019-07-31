@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Job, SetupTime} from '../../../../model/Job';
 import {StorageService} from '../../../../services/storage.service';
 import {DefinableValue} from '../../../../model/internal/value-definition/DefinableValue';
@@ -17,7 +17,10 @@ export class SetUpTimesDefinitionComponent implements OnInit, OnDestroy {
 
   private _jobs: Job[];
 
-  constructor(public storage: StorageService, private dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(public storage: StorageService,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -46,10 +49,23 @@ export class SetUpTimesDefinitionComponent implements OnInit, OnDestroy {
     this.storage.jobs = this.jobs;
   }
 
+  isSetupTimeOfEachJobConfigured(): boolean {
+    return this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) === DefinitionStatus.COMPLETELY_DEFINED;
+  }
+
+  isSetupTimeOfNoJobConfigured(): boolean {
+    return this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) === DefinitionStatus.NOT_DEFINED;
+  }
+
+  isJobHavingUndefinedRelations(job: Job): boolean {
+    return job.setupTimesToOtherJobs.some(sT => sT.duration === undefined);
+  }
+
   addRandomSetupTimes(): void {
     this.jobs.forEach(job => job.setupTimesToOtherJobs
       .forEach(setupTime => setupTime.duration = setupTime.duration !== undefined ? setupTime.duration : ((Math.floor(Math.random() * 10) + 1)))
     );
+    this.changeDetector.detectChanges();
     this.storage.jobs = this.jobs;
     this.snackBar.open('Fehlende Rüstzeiten zufällig erstellt', 'OK',
       {panelClass: 'color-white', duration: 2000}
@@ -67,20 +83,13 @@ export class SetUpTimesDefinitionComponent implements OnInit, OnDestroy {
         this.jobs.forEach(job => job.setupTimesToOtherJobs
           .forEach(setupTime => delete setupTime.duration)
         );
+        this.changeDetector.detectChanges();
         this.storage.jobs = this.jobs;
         this.snackBar.open('Alle Rüstzeiten gelöscht', 'OK',
           {panelClass: 'color-white', duration: 2000}
         );
       }
     });
-  }
-
-  isSetupTimeOfEachJobConfigured(): boolean {
-    return this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) === DefinitionStatus.COMPLETELY_DEFINED;
-  }
-
-  isSetupTimeOfNoJobConfigured(): boolean {
-    return this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) === DefinitionStatus.NOT_DEFINED;
   }
 
   private openAutoGenerationDialogIfNeeded(definitionStatus: DefinitionStatus): void {

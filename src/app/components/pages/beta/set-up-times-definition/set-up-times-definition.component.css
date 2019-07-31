@@ -1,11 +1,15 @@
-.job-id {
-  padding-right: 4px;
-}
-
 .to-job-setup-time {
   padding-bottom: 8px;
 }
 
 button {
   margin-bottom: 8px;
+}
+
+i {
+  padding-right: 20px;
+}
+
+.fa-check-circle {
+  color: var(--color-main);
 }
