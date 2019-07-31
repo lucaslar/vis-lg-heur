@@ -1,5 +1,14 @@
-<!-- TODO: Add descriptional text -->
-<p>machine-tables works!</p>
+<p>
+  Die Produktionszeitspannen der einzelnen Aufträge können nochmal in
+  {{data.length > 1 ? 'den folgenden Tabellen ':'der folgenden Tabelle'}}
+  eingesehen werden. Hierbei sind die Aufträge zur besseren Nachvollziehbarkeit in den selben Farben wie auch in den
+  Diagrammen hinterlegt.
+</p>
+<p>
+  Über {{data.length > 1 ?
+  'die Maschinennamen lassen sich die einzelnen Tabellen': 'den Maschinennamen lässt sich die Tabelle'}}
+  nach Belieben ein- und ausklappen.
+</p>
 
 <mat-accordion>
   <mat-expansion-panel *ngFor="let machineTable of data" class="mat-elevation-z0"
