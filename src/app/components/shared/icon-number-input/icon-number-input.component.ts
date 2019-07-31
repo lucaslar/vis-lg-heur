@@ -43,13 +43,14 @@ export class IconNumberInputComponent implements OnInit {
 
   checkValidityOfNumber(): void {
     const value: number = +this.inputFieldRef.nativeElement.value;
-    this.isLegalValue = !value || !(this.min && value < this.min) && !(this.max && value > this.max);
+    this.isLegalValue = value !== undefined || !(this.min && value < this.min) && !(this.max && value > this.max);
   }
 
   onNumberChange(): void {
+    console.log(this.isLegalValue);
     const inputField: HTMLInputElement = this.inputFieldRef.nativeElement;
     const value = +inputField.value;
-    if (!value) {
+    if (!value && !(this.min === 0)) {
       inputField.value = '';
       this.newValue.emit(undefined);
     } else if (this.isLegalValue) {
@@ -74,13 +75,13 @@ export class IconNumberInputComponent implements OnInit {
         message += this.minErrorText + ' - ';
       }
 
-      if (!value || !this.isLegalValue) {
+      if (value === undefined || !this.isLegalValue) {
         if (this.max && this.min) {
           message += 'Bitte geben Sie einen Wert zwischen ' + this.min + ' und ' + this.max + ' ein';
         } else if (this.max) {
           message += 'Bitte geben Sie einen positiven Wert bis ' + this.max + ' ein';
         } else if (this.min) {
-          message += 'Bitte geben Sie einen positiven Wert ab ' + this.min + ' ein';
+          message += 'Bitte geben Sie einen Wert ab ' + this.min + ' ein';
         } else {
           message = 'Bitte geben Sie einen positiven Wert ein';
         }
