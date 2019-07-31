@@ -30,7 +30,7 @@ export class SetUpTimesDefinitionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.storage.deleteUndefinedBetaValuesLockingFunctions();
+    this.storage.deleteUndefinedBetaValuesBlockingFunctions();
   }
 
   otherJobsForJob(job): Job[] {
@@ -107,7 +107,7 @@ export class SetUpTimesDefinitionComponent implements OnInit, OnDestroy {
   private initializeSetupTimesForJobs(): void {
     this.jobs.forEach(job => job.setupTimesToOtherJobs =
       this.jobs.filter(_job => job !== _job)
-        .map(otherJob => new SetupTime(otherJob.id, undefined))
+        .map(otherJob => new SetupTime(otherJob.id))
     );
   }
 

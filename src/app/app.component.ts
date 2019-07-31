@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.changeDetector.detectChanges();
-    this.storage.deleteUndefinedBetaValuesLockingFunctions();
+    this.storage.deleteUndefinedBetaValuesBlockingFunctions();
   }
 
   openHeuristicsList(): void {

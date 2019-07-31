@@ -36,11 +36,12 @@ export class StorageService {
     } else if (definableValue === DefinableValue.BETA_DUE_DATES) {
       expectedDefinitions = this.jobs.length;
       existingDefinitions = this.jobs.filter(job => job.dueDate).length;
-    } else if (definableValue === DefinableValue.BETA_SETUP_TIMES) {
+    } else if (definableValue === DefinableValue.BETA_SETUP_TIMES && this.jobs.length) {
       expectedDefinitions = (this.jobs.length - 1) * this.jobs.length;
-      existingDefinitions = this.jobs
-        .map(job => job.setupTimesToOtherJobs ? job.setupTimesToOtherJobs
-          .filter(setupTime => setupTime.duration !== undefined).length : 0).reduce((num1, num2) => num1 + num2);
+      existingDefinitions = this.jobs.map(job => job.setupTimesToOtherJobs ? job.setupTimesToOtherJobs
+        .filter(setupTime => setupTime.duration !== undefined).length : 0).reduce((num1, num2) => num1 + num2);
+    } else if (definableValue === DefinableValue.BETA_SETUP_TIMES && !this.jobs.length) {
+      return DefinitionStatus.NOT_DEFINED;
     } else if (definableValue === DefinableValue.PRIORITY_RULES) {
       // Since not all rules have to be selected:
       return this.priorityRules.length ? DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
@@ -100,8 +101,8 @@ export class StorageService {
     }
   }
 
-  deleteUndefinedBetaValuesLockingFunctions(): void {
-    if (this.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) === DefinitionStatus.NOT_DEFINED) {
+  deleteUndefinedBetaValuesBlockingFunctions(isForced?: boolean): void {
+    if (isForced || this.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) === DefinitionStatus.NOT_DEFINED) {
       this.jobs.forEach(job => job.setupTimesToOtherJobs = undefined);
       this.jobs = this.jobs;
     }
