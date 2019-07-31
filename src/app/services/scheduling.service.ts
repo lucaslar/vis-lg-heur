@@ -651,7 +651,7 @@ export class SchedulingService {
     // '[0]' possible since only one machine exists:
     const maxStartTime = Math.max(...this.jobs.map(job => job.operationsOnMachines[0].startTimestamp));
 
-    let previoiusJob: ScheduledJob;
+    let previousJob: ScheduledJob;
 
     for (let i = 0; i <= maxStartTime; i++) {
       const jobStartedAtTimestamp = this.jobs.find(job => job.operationsOnMachines[0].startTimestamp === i);
@@ -659,11 +659,11 @@ export class SchedulingService {
       if (jobStartedAtTimestamp) {
         if (i > 0) {
           // previousJob is defined here, since production starts at 0
-          const previousSetupTime = previoiusJob.setupTimesToOtherJobs.find(sT => sT.idTo === jobStartedAtTimestamp.id).duration;
+          const previousSetupTime = previousJob.setupTimesToOtherJobs.find(sT => sT.idTo === jobStartedAtTimestamp.id).duration;
           dataset.data.push(Math.max(...dataset.data.filter(d => d !== undefined)) + previousSetupTime);
           labels.push('' + i);
         } // no else as zero is already added by default
-        previoiusJob = jobStartedAtTimestamp;
+        previousJob = jobStartedAtTimestamp;
       } else {
         labels.push('');
         dataset.data.push(undefined);
