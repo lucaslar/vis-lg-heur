@@ -1,6 +1,8 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {StorageService} from '../../../../services/storage.service';
-import {Job, MachineTimeForJob} from '../../../../model/Job';
+import {Job, MachineTimeForJob, SetupTime} from '../../../../model/Job';
+import {DefinableValue} from '../../../../model/internal/value-definition/DefinableValue';
+import {DefinitionStatus} from '../../../../model/internal/value-definition/DefinitionStatus';
 
 @Component({
   selector: 'app-add-job',
@@ -30,6 +32,9 @@ export class AddJobComponent implements OnInit {
     this.generateMachineOrderForJob(job);
     if (this.storage.nrOfMachines > 1 && this.isShuffleMachineOrder) {
       job.machineTimes = job.machineTimes.sort(() => Math.random() - 0.5);
+    }
+    if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) !== DefinitionStatus.NOT_DEFINED) {
+      job.setupTimesToOtherJobs = this.storage.jobs.map(_job => new SetupTime(_job.id));
     }
     this.newCreatedJob.emit(job);
   }

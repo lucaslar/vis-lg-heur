@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {StorageService} from '../../../../services/storage.service';
-import {Job, MachineTimeForJob} from '../../../../model/Job';
+import {Job, MachineTimeForJob, SetupTime} from '../../../../model/Job';
 import {MatDialog} from '@angular/material/dialog';
 import {MatExpansionPanelHeader} from '@angular/material/expansion';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -73,12 +73,13 @@ export class JobsAndMachinesComponent implements OnInit {
 
   deleteJob(job: Job, isMessageToBeHidden?: boolean): void {
     this._jobs = this.jobs.filter(j => j !== job);
-
     let i = 0;
-    this.jobs.forEach(o => {
-      if (o.id !== ++i) {
-        o.id = i;
+    this.jobs.forEach(j => {
+      if (j.id !== ++i) {
+        j.id = i;
       }
+      j.setupTimesToOtherJobs = j.setupTimesToOtherJobs.filter(sT => sT.idTo !== job.id);
+      j.setupTimesToOtherJobs.forEach(sT => sT.idTo = sT.idTo > job.id ? sT.idTo - 1 : sT.idTo);
     });
     this.storage.jobs = this.jobs;
     if (!isMessageToBeHidden) {
@@ -91,6 +92,9 @@ export class JobsAndMachinesComponent implements OnInit {
     header._toggle();
     const copy: Job = <Job>JSON.parse(JSON.stringify(job));
     copy.id = undefined;
+    if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) !== DefinitionStatus.NOT_DEFINED) {
+      copy.setupTimesToOtherJobs.push(new SetupTime(job.id));
+    }
     this.addJob(copy, true);
     this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') kopiert', 'Rückgängig')
       .onAction().subscribe(() => this.deleteJob(copy, true));
@@ -190,6 +194,9 @@ export class JobsAndMachinesComponent implements OnInit {
         if (jobInList.id >= job.id) {
           jobInList.id++;
         }
+        if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) !== DefinitionStatus.NOT_DEFINED) {
+          jobInList.setupTimesToOtherJobs.forEach(sT => sT.idTo = sT.idTo >= job.id ? sT.idTo + 1 : sT.idTo);
+        }
       });
       this.jobs.push(job);
       this.jobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
@@ -197,6 +204,13 @@ export class JobsAndMachinesComponent implements OnInit {
       job.id = this.jobs.length + 1;
       this.jobs.push(job);
     }
+
+    if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) !== DefinitionStatus.NOT_DEFINED) {
+      this.jobs
+        .filter(_job => _job !== job)
+        .forEach(_job => _job.setupTimesToOtherJobs.push(new SetupTime(job.id)));
+    }
+
     this.storage.jobs = this.jobs;
     if (!isMessageToBeHidden) {
       this.openSnackBar(2, 'Auftrag \'' + job.name + '\' (ID: ' + job.id + ') hinzugefügt', 'Rückgängig')
@@ -304,4 +318,5 @@ export class JobsAndMachinesComponent implements OnInit {
   get configurationStatus(): any {
     return this._configurationStatus;
   }
+
 }

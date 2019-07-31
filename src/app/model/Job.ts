@@ -27,8 +27,7 @@ export class SetupTime {
   idTo: number;
   duration: number;
 
-  constructor(idTo: number, duration: number) {
+  constructor(idTo: number) {
     this.idTo = idTo;
-    this.duration = duration;
   }
 }
