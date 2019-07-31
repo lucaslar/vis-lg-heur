@@ -169,7 +169,7 @@ export class StorageService {
         // TODO More than one in other cases? If not: No array
         'Benötigt wird: ' + heuristic.requiredObjectiveFunctions[0] + ', aktuell gewählt ist allerdings' +
         (this.objectiveFunction ? ': ' + this.objectiveFunction + '.' : ' keine Zielfunktion.') +
-        'Bitte wählen Sie die geannnte Funktion, um fortfahren zu können.',
+        ' Bitte wählen Sie die geannnte Funktion, um fortfahren zu können.',
         'Das Lösen von Reihenfolgeproblemen mithilfe von Prioritätsregeln stellt hierbei eine Besonderheit dar, da ' +
         'durch die Wahl unterschiedlicher Regeln unterschiedliche Zielwerte betrachtet werden.'
       ],
