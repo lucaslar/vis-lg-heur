@@ -78,8 +78,10 @@ export class JobsAndMachinesComponent implements OnInit {
       if (j.id !== ++i) {
         j.id = i;
       }
-      j.setupTimesToOtherJobs = j.setupTimesToOtherJobs.filter(sT => sT.idTo !== job.id);
-      j.setupTimesToOtherJobs.forEach(sT => sT.idTo = sT.idTo > job.id ? sT.idTo - 1 : sT.idTo);
+      if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) !== DefinitionStatus.NOT_DEFINED) {
+        j.setupTimesToOtherJobs = j.setupTimesToOtherJobs.filter(sT => sT.idTo !== job.id);
+        j.setupTimesToOtherJobs.forEach(sT => sT.idTo = sT.idTo > job.id ? sT.idTo - 1 : sT.idTo);
+      }
     });
     this.storage.jobs = this.jobs;
     if (!isMessageToBeHidden) {
