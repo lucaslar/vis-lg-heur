@@ -36,3 +36,12 @@
            [yLabel]="data.cumulatedSetupTimesAtTimetamps.yLabel"
            [xLabel]="data.cumulatedSetupTimesAtTimetamps.xLabel"
 ></app-chart>
+
+<app-chart *ngIf="data.comparisonMeanSetupTimesVisualization"
+           [title]="data.comparisonMeanSetupTimesVisualization.title"
+           [type]="data.comparisonMeanSetupTimesVisualization.visualizableAs"
+           [labels]="data.comparisonMeanSetupTimesVisualization.labels"
+           [datasets]="data.comparisonMeanSetupTimesVisualization.datasets"
+           [yLabel]="data.comparisonMeanSetupTimesVisualization.yLabel"
+           [xLabel]="data.comparisonMeanSetupTimesVisualization.xLabel"
+></app-chart>

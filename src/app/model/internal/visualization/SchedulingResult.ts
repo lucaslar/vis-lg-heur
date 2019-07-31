@@ -174,6 +174,7 @@ export class VisualizableSolutionQualityData {
 
   // Only if sum of setup times is to be optimized:
   private _cumulatedSetupTimesAtTimetamps: ChartData;
+  private _comparisonMeanSetupTimesVisualization: ChartData;
 
   get cumulatedDelaysAtTimestamps(): ChartData {
     return this._cumulatedDelaysAtTimestamps;
@@ -205,6 +206,14 @@ export class VisualizableSolutionQualityData {
 
   set cumulatedSetupTimesAtTimetamps(value: ChartData) {
     this._cumulatedSetupTimesAtTimetamps = value;
+  }
+
+  get comparisonMeanSetupTimesVisualization(): ChartData {
+    return this._comparisonMeanSetupTimesVisualization;
+  }
+
+  set comparisonMeanSetupTimesVisualization(value: ChartData) {
+    this._comparisonMeanSetupTimesVisualization = value;
   }
 }
 

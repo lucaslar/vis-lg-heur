@@ -35,7 +35,6 @@ export class SchedulingService {
   private logging: SchedulingLogEntry[];
 
   // TODO also add gamma to general data result
-  // TODO get mean setup time of solution? (visualization)
   // TODO Diagrams for setup times? (if setup times are selected only)
 
   constructor(public storage: StorageService) {
@@ -566,6 +565,7 @@ export class SchedulingService {
     // Specific diagrams:
     if (this.heuristicType === HeuristicDefiner.NEAREST_NEIGHBOUR) {
       data.cumulatedSetupTimesAtTimetamps = this.generateCumulatedSetupTimesVisualization();
+      data.comparisonMeanSetupTimesVisualization = this.generateComparisonMeanSetupTimesVisualization();
     }
 
     return data;
@@ -621,6 +621,26 @@ export class SchedulingService {
     return visualization;
   }
 
+  private generateComparisonDelayedAndInTimeVisualization(): ChartData {
+    const dataset = new Dataset();
+    const labels = ['Rechtzeitig', 'Verspätet'];
+    dataset.data = [];
+    dataset.label = 'Aufträge';
+
+    const nrDelayedJobs = this.jobs.filter(job => job.finishedAtTimestamp > job.dueDate).length;
+    dataset.data.push(this.jobs.length - nrDelayedJobs);
+    dataset.data.push(nrDelayedJobs);
+
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_BAR;
+    visualization.title = 'Rechtzeitig und verspätet fertiggestellte Aufträge';
+    visualization.labels = labels;
+    visualization.datasets = [dataset];
+    visualization.xLabel = 'Fertigstellungsstatus der Aufträge';
+    visualization.yLabel = 'Anzahl';
+    return visualization;
+  }
+
   private generateCumulatedSetupTimesVisualization(): ChartData {
     const dataset = new Dataset();
     const labels = ['0'];
@@ -659,23 +679,29 @@ export class SchedulingService {
     return visualization;
   }
 
-  private generateComparisonDelayedAndInTimeVisualization(): ChartData {
+  private generateComparisonMeanSetupTimesVisualization(): ChartData {
     const dataset = new Dataset();
-    const labels = ['Rechtzeitig', 'Verspätet'];
+    const labels = ['Lösung', 'Problem (gesamt)'];
     dataset.data = [];
-    dataset.label = 'Aufträge';
+    dataset.label = 'Durchschnittliche Rüstdauer';
 
-    const nrDelayedJobs = this.jobs.filter(job => job.finishedAtTimestamp > job.dueDate).length;
-    dataset.data.push(this.jobs.length - nrDelayedJobs);
-    dataset.data.push(nrDelayedJobs);
+
+    const summedSetupDurations = this.jobs
+      .map(job => job.setupTimesToOtherJobs
+        .map(sT => sT.duration)
+        .reduce((d1, d2) => d1 + d2))
+      .reduce((td1, td2) => td1 + td2);
+
+    dataset.data.push(this.calculateMeanSetupTimeKpi().kpi);
+    dataset.data.push(summedSetupDurations / ((this.jobs.length - 1) * (this.jobs.length - 1)));
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
-    visualization.title = 'Rechtzeitig und verspätet fertiggestellte Aufträge';
+    visualization.title = 'Durchschnittliche Rüstdauer der Lösung und des Problems';
     visualization.labels = labels;
     visualization.datasets = [dataset];
-    visualization.xLabel = 'Fertigstellungsstatus der Aufträge';
-    visualization.yLabel = 'Anzahl';
+    visualization.xLabel = 'Durschnittswerte';
+    visualization.yLabel = 'Zeiteinheiten';
     return visualization;
   }
 
