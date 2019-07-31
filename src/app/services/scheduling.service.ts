@@ -35,7 +35,6 @@ export class SchedulingService {
   private logging: SchedulingLogEntry[];
 
   // TODO also add gamma to general data result
-  // TODO get mean setup time of solution? (kpi)
   // TODO get mean setup time of solution? (visualization)
   // TODO Diagrams for setup times? (if setup times are selected only)
 
@@ -439,7 +438,6 @@ export class SchedulingService {
     const data = [];
 
     // TODO Mind start time here if implemented
-    // TODO Setup time KPIs?
 
     data.push(this.calculateTotalDurationKpi());
     data.push(this.calculateMeanCycleTimeKpi());
@@ -452,6 +450,11 @@ export class SchedulingService {
       data.push(this.calculateSumOfDelaysKpi());
       data.push(this.calculateMaximumDelayKpi());
     }
+
+    if (this.heuristicType === HeuristicDefiner.NEAREST_NEIGHBOUR) {
+      data.push(this.calculateMeanSetupTimeKpi());
+    }
+
     return data;
   }
 
@@ -533,6 +536,20 @@ export class SchedulingService {
     kpi.kpi = this.jobs
       .map(job => job.delay)
       .reduce((prevDelay, currentDelay) => prevDelay > currentDelay ? prevDelay : currentDelay);
+    return kpi;
+  }
+
+  private calculateMeanSetupTimeKpi(): Kpi {
+    const kpi = new Kpi();
+    kpi.iconClasses = ['fas', 'fa-cogs'];
+    kpi.title = 'Mittlere Rüstzeit';
+
+    const totalSetupTime = this.currentTimestampInScheduling - 1 -
+      this.jobs
+      // since only one machine is configured
+        .map(job => job.machineTimes[0].timeOnMachine)
+        .reduce((mt1, mt2) => mt1 + mt2);
+    kpi.kpi = totalSetupTime / (this.jobs.length - 1); // since all jobs except for first can have setup times
     return kpi;
   }
 
