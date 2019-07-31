@@ -7,15 +7,11 @@ import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, O
 })
 export class IconNumberInputComponent implements OnInit {
 
-  isLegalValue = true;
-  _value: number;
-
   @ViewChild('inputField', {static: false}) inputFieldRef: ElementRef;
   @ViewChild('icon', {static: true}) icon: ElementRef;
 
-  @Output() newValue: EventEmitter<number> = new EventEmitter();
-
   @Input() readonly iconClasses: string[];
+  @Input() readonly value: number;
   @Input() readonly min: number;
   @Input() readonly max: number;
   @Input() readonly isShowValueTooltip: string;
@@ -23,11 +19,9 @@ export class IconNumberInputComponent implements OnInit {
   @Input() readonly maxErrorText: string;
   @Input() readonly placeholder: string;
 
-  // Input setter in order to avoid 'expression has changed after it was checked' (tooltips).
-  @Input() set value(value) {
-    this._value = value;
-    this.changeDetector.detectChanges();
-  }
+  @Output() newValue: EventEmitter<number> = new EventEmitter();
+
+  isLegalValue = true;
 
   constructor(private changeDetector: ChangeDetectorRef) {
   }
@@ -43,14 +37,13 @@ export class IconNumberInputComponent implements OnInit {
 
   checkValidityOfNumber(): void {
     const value: number = +this.inputFieldRef.nativeElement.value;
-    this.isLegalValue = value !== undefined || !(this.min && value < this.min) && !(this.max && value > this.max);
+    this.isLegalValue = !value || !(this.min && value < this.min) && !(this.max && value > this.max);
   }
 
   onNumberChange(): void {
-    console.log(this.isLegalValue);
     const inputField: HTMLInputElement = this.inputFieldRef.nativeElement;
     const value = +inputField.value;
-    if (!value && !(this.min === 0)) {
+    if (!value) {
       inputField.value = '';
       this.newValue.emit(undefined);
     } else if (this.isLegalValue) {
@@ -75,19 +68,20 @@ export class IconNumberInputComponent implements OnInit {
         message += this.minErrorText + ' - ';
       }
 
-      if (value === undefined || !this.isLegalValue) {
+      if (!value || !this.isLegalValue) {
         if (this.max && this.min) {
           message += 'Bitte geben Sie einen Wert zwischen ' + this.min + ' und ' + this.max + ' ein';
         } else if (this.max) {
           message += 'Bitte geben Sie einen positiven Wert bis ' + this.max + ' ein';
         } else if (this.min) {
-          message += 'Bitte geben Sie einen Wert ab ' + this.min + ' ein';
+          message += 'Bitte geben Sie einen positiven Wert ab ' + this.min + ' ein';
         } else {
           message = 'Bitte geben Sie einen positiven Wert ein';
         }
       } else if (this.isShowValueTooltip) {
         message += this.placeholder ? (this.placeholder + ': ' + value) : value;
       }
+
       return message;
     } else {
       return undefined;
