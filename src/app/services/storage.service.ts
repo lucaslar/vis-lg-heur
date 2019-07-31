@@ -80,6 +80,10 @@ export class StorageService {
 
       if (!heuristic.requiredMachineConfigs.includes(this.machineConfigParam)) {
         return isDialogRequired ? this.getNotApplicableDueToMachineConfigDialog(heuristic) : false;
+      } else if (
+        heuristic.heuristicDefiner !== HeuristicDefiner.PRIORITY_RULES
+        && (!this.objectiveFunction || !heuristic.requiredObjectiveFunctions.includes(this.objectiveFunction))) {
+        return isDialogRequired ? this.getNotApplicableDueToWrongOrMissingFunction(heuristic) : false;
       } else {
         const missingValue = this.checkValuesForHeuristic(heuristic);
         const isApplicable = missingValue === undefined;
@@ -153,6 +157,23 @@ export class StorageService {
       ],
       DialogType.ERROR,
       possibleMachineConfigs.length > 1 ? possibleMachineConfigs : undefined
+    );
+  }
+
+  private getNotApplicableDueToWrongOrMissingFunction(heuristic: Heuristic): DialogContent {
+    return new DialogContent(
+      'Zielfunktion nicht passend',
+      [
+        'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
+        heuristic.name + ') nicht die richtige zu minimierende Zielfunktion vorliegt.',
+        // TODO More than one in other cases? If not: No array
+        'Benötigt wird: ' + heuristic.requiredObjectiveFunctions[0] + ', aktuell gewählt ist allerdings' +
+        (this.objectiveFunction ? ': ' + this.objectiveFunction + '.' : ' keine Zielfunktion.') +
+        'Bitte wählen Sie die geannnte Funktion, um fortfahren zu können.',
+        'Das Lösen von Reihenfolgeproblemen mithilfe von Prioritätsregeln stellt hierbei eine Besonderheit dar, da ' +
+        'durch die Wahl unterschiedlicher Regeln unterschiedliche Zielwerte betrachtet werden.'
+      ],
+      DialogType.ERROR
     );
   }
 
