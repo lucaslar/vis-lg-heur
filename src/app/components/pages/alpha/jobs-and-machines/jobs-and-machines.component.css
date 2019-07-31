@@ -27,13 +27,8 @@ mat-expansion-panel-header {
   font-size: larger;
 }
 
-.existing-jobs-actions, .existing-jobs-actions mat-divider, .information {
+.jobs-actions, .jobs-actions mat-divider, .information {
   padding-top: 8px;
-}
-
-.existing-jobs-actions button {
-  margin-right: 8px;
-  margin-bottom: 8px;
 }
 
 .add-padding-left {

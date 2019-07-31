@@ -1,5 +1,3 @@
-<!-- TODO: Implement locked functions -->
-
 <div class="row title">
   <div class="col-md-12 text-center">
     <h3>
@@ -23,7 +21,7 @@
 </div>
 
 <div class="row">
-  <div class="col-md-12 existing-jobs-actions">
+  <div class="col-md-12 jobs-actions">
 
     <mat-divider></mat-divider>
 
@@ -75,7 +73,6 @@
             class="status-warning">
           <span class="align-middle"
                 matTooltip="{{jobs.length > 0 ? 'Alle bestehenden Aufträge löschen'
-                  : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für diese Funktion werden mehrere Maschinen benötigt'
                   : 'Aktuell existieren keine Aufträge, die gelöscht werden könnten'
                 }}">
             <i class="fas fa-trash"></i>
