@@ -3,6 +3,17 @@
   kann hier, auf Wunsch auch nach Maschinen bzw. Ereignistypen gefiltert, angezeigt werden.
 </p>
 
+<div class="info-box" *ngIf="!isEachDueDateConfigured">
+  <h6>
+    <i class="fas fa-info-circle"></i>
+    Hinweis
+  </h6>
+  <div class="information font-italic  text-justify">
+    Das Auflisten der Ereignisse kann abhängig von der Größe und Komplexität des Reihenfolgeproblems und den gewählten
+    Filteroptionen mitunter wenige Sekunden in Anspruch nehmen.
+  </div>
+</div>
+
 <div class="information">
   <i class="fas fa-pen"></i>
   Geloggte Ereignisse in Bezug auf
