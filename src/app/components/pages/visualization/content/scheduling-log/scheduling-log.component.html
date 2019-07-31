@@ -39,19 +39,31 @@
 
 <div class="row log-group-description">
   <div *ngFor="let mnr of machineNrs" class="col-6 col-md-4 col-lg-3 col-xl-2">
-    <mat-checkbox [(ngModel)]="machinesShown[mnr-1]" class="small">
+    <mat-checkbox [disabled]="machineNrs.length === 1"
+                  [(ngModel)]="machinesShown[mnr-1]" class="small"
+                  matTooltip="{{machineNrs.length === 1 ? 'Nicht abwählbar, da nur eine Maschine konfiguriert ist' : ''}}">
       Maschine {{mnr}}
     </mat-checkbox>
   </div>
 </div>
-<!-- TODO Disable if only one machine -->
 
-<mat-divider></mat-divider>
 
-<button mat-stroked-button [disabled]="isLogEmpty()" (click)="showLog()">
-  <span class="align-middle">
+<div class="row">
+  <div class="col-md-12">
+    <mat-divider></mat-divider>
+    <button mat-stroked-button
+            [disabled]="!isAnyMachineSelected() || !isAnyLogTypeSelected()"
+            (click)="showLog()">
+  <span class="align-middle"
+        matTooltip="{{!isAnyMachineSelected() && !isAnyLogTypeSelected()
+          ? 'Bitte wählen Sie mindestens eine Maschine und mindestens einen logbaren Ereigbnistypen'
+          : !isAnyMachineSelected() ? 'Bitte wählen Sie mindestens eine Maschine'
+          : !isAnyLogTypeSelected() ? 'Bitte wählen Sie mindestens einen logbaren Ereigbnistypen'
+          : 'Geloggte Ereignisse mit gewählten Optionen anzeigen'
+        }}">
     <i class="far fa-file-alt"></i>
     Log anzeigen
-    <!-- TODO: Tooltips -->
   </span>
-</button>
+    </button>
+  </div>
+</div>

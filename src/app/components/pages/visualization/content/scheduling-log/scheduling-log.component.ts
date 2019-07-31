@@ -52,9 +52,12 @@ export class SchedulingLogComponent implements OnInit {
     this.dialog.open(SchedulingLogDialogComponent, {data: filteredData});
   }
 
-  isLogEmpty(): boolean {
-    return this._machinesShown.every(m => m === false) ||
-      (!this.isHeuristicBasedSortingSelected && !this.isJobQueueSelected && !this.isProductionStartSelected);
+  isAnyMachineSelected(): boolean {
+    return this._machinesShown.some(m => m === true);
+  }
+
+  isAnyLogTypeSelected(): boolean {
+    return this.isHeuristicBasedSortingSelected || this.isJobQueueSelected || this.isProductionStartSelected;
   }
 
   get machineNrs(): number[] {
