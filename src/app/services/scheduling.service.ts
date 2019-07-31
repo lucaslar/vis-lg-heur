@@ -86,15 +86,30 @@ export class SchedulingService {
     this.machines
       .filter(machine => !machine.currentJob && machine.jobQueue.length)
       .forEach(machine => {
-          this.logSchedulingProcedure(machine.machineNr, 'Beginn der Sortierung der Warteschlange', LogEventType.HEURISTIC_BASED_SORTING);
-          machine.jobQueue.sort((jobA: ScheduledJob, jobB: ScheduledJob) =>
-            this.comparisonResultForCurrentHeuristic(jobA, jobB, machine.machineNr)
-          );
-          this.logSchedulingProcedure(machine.machineNr, 'Fertig bestimmte Warteschlange: ' + machine.jobQueue
-            .map(job => this.jobStringForLogging(job)).join(' -> '), LogEventType.JOB_QUEUE);
-          machine.startProductionOfNext(this.currentTimestampInScheduling);
-          this.logSchedulingProcedure(machine.machineNr,
-            'Beginn der Abarbeitung von Auftrag ' + this.jobStringForLogging(machine.currentJob), LogEventType.PRODUCTION_START);
+
+          // No sorting for each timestamp in NN-Heuristic (only once before setting up)
+          if (this.heuristicType !== HeuristicDefiner.NEAREST_NEIGHBOUR ||
+            !machine.lastJob || machine.lastJob.finishedAtTimestamp === this.currentTimestampInScheduling) {
+
+            this.logSchedulingProcedure(machine.machineNr, 'Beginn der Sortierung der Warteschlange', LogEventType.HEURISTIC_BASED_SORTING);
+            machine.jobQueue.sort((jobA: ScheduledJob, jobB: ScheduledJob) =>
+              this.comparisonResultForCurrentHeuristic(jobA, jobB, machine.machineNr)
+            );
+            this.logSchedulingProcedure(machine.machineNr, 'Fertig bestimmte Warteschlange: ' + machine.jobQueue
+              .map(job => this.jobStringForLogging(job)).join(' -> '), LogEventType.JOB_QUEUE);
+          }
+
+          // No current job could be possible here because of setup times
+          if (this.heuristicType !== HeuristicDefiner.NEAREST_NEIGHBOUR || machine.isMachineSetup(this.currentTimestampInScheduling)) {
+
+            machine.startProductionOfNext(this.currentTimestampInScheduling);
+
+            this.logSchedulingProcedure(machine.machineNr,
+              'Beginn der Abarbeitung von Auftrag ' + this.jobStringForLogging(machine.currentJob), LogEventType.PRODUCTION_START);
+          } else {
+            this.logSchedulingProcedure(machine.machineNr,
+              'Rüsten für Auftrag ' + this.jobStringForLogging(machine.jobQueue[0]), LogEventType.PRODUCTION_START);
+          }
         }
       );
   }
@@ -126,6 +141,8 @@ export class SchedulingService {
   private comparisonResultForCurrentHeuristic(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number): number {
     if (this.heuristicType === HeuristicDefiner.PRIORITY_RULES) {
       return this.compareJobsByPriorityRules(jobA, jobB, machineNr);
+    } else if (this.heuristicType === HeuristicDefiner.NEAREST_NEIGHBOUR) {
+      return this.compareJobsBySetupTimes(jobA, jobB, machineNr);
     } else {
       // TODO: Implement more heuristics by implementing sorting here
       console.log('Implement me (' + this.heuristicType + '!');
@@ -213,6 +230,55 @@ export class SchedulingService {
       return job.slipTime;
     }
 
+  }
+
+  private compareJobsBySetupTimes(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number) {
+
+    const previousJob = this.machines.find(machine => machine.machineNr === machineNr).lastJob;
+
+    // if previous job: time from previous job to a/b, if not: find minimum setup time from a/b to any job
+    const lowestValueOfA = previousJob ? previousJob.setupTimesToOtherJobs.find(sT => sT.idTo === jobA.id).duration
+      : Math.min.apply(Math, jobA.setupTimesToOtherJobs.map(sT => sT.duration));
+    const lowestValueOfB = previousJob ? previousJob.setupTimesToOtherJobs.find(sT => sT.idTo === jobB.id).duration
+      : Math.min.apply(Math, jobB.setupTimesToOtherJobs.map(sT => sT.duration));
+
+    // Logging only:
+    if (lowestValueOfA < lowestValueOfB) {
+      this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobA) + ' gegenüber '
+        + this.jobStringForLogging(jobB) + ' als ' + (previousJob ?
+          // if previous job:
+          'folgender Auftrag, da die Rüstzeit vom vorherigen Auftrag (' + this.jobStringForLogging(previousJob)
+          + ') zum genannten Auftrag geringer ist (' + lowestValueOfA + ' gegenüber ' + lowestValueOfB + ')' :
+          // if no previous job:
+          'Startwert, da seine kürzeste Rüstzeit zu einem folgenden Auftrag (' + lowestValueOfA +
+          ') kleiner ist als die vom letzteren Auftrag zu einem folgenden (' + lowestValueOfB + ')'
+        ), LogEventType.HEURISTIC_BASED_SORTING);
+    } else if (lowestValueOfB < lowestValueOfA) {
+      this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobB) + ' gegenüber '
+        + this.jobStringForLogging(jobA) + ' als ' + (previousJob ?
+          // if previous job:
+          'folgender Auftrag, da die Rüstzeit vom vorherigen Auftrag (' + this.jobStringForLogging(previousJob)
+          + ') zum genannten Auftrag geringer ist (' + lowestValueOfB + ' gegenüber ' + lowestValueOfA + ')' :
+          // if no previous job:
+          'Startwert, da seine kürzeste Rüstzeit zu einem folgenden Auftrag (' + lowestValueOfB +
+          ') kleiner ist als die vom letzteren Auftrag zu einem folgenden (' + lowestValueOfA + ')'
+        ), LogEventType.HEURISTIC_BASED_SORTING);
+    } else {
+      this.logSchedulingProcedure(machineNr, (previousJob ?
+        // if previous job:
+        'Rüstzeit zu Auftrag ' + this.jobStringForLogging(jobA) + ' & zu Auftrag ' + this.jobStringForLogging(jobB) +
+        ' ausgehend von vorherigem Auftrag (' + this.jobStringForLogging(previousJob) + ') identisch (' + lowestValueOfA +
+        '), daher keine Aussage darüber möglich, welcher der geeignetere Nachfolger ist' :
+        // if no previous job:
+        'Kleinste Rüstzeit zu einem folgenden Auftrag für ' + this.jobStringForLogging(jobA) + ' & ' +
+        this.jobStringForLogging(jobB) + ' identisch (' + lowestValueOfA + '), daher keine Aussage darüber möglich, welcher ' +
+        'dieser beiden Auftäge besser als Startwert geeignet wäre'
+        ), LogEventType.HEURISTIC_BASED_SORTING
+      );
+    }
+    // End of logging
+
+    return lowestValueOfA - lowestValueOfB;
   }
 
   // called after successful scheduling

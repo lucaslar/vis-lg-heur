@@ -10,6 +10,7 @@ export class ScheduledJob extends Job {
     this.id = job.id;
     this.machineTimes = job.machineTimes;
     this.dueDate = job.dueDate;
+    this.setupTimesToOtherJobs = job.setupTimesToOtherJobs;
   }
 
   onNextOperationStarted(timestamp: number): void {
