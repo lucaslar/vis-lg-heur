@@ -33,7 +33,6 @@ export class SchedulingService {
   private logging: SchedulingLogEntry[];
 
   // TODO also add gamma to general data result
-  // TODO stay on visualization page with other heuristic
   // TODO get mean setup time? (visualization)
   // TODO get mean setup time of solution? (visualization)
   // TODO (General): check if due dates are configured for result gen.

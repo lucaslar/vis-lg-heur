@@ -3,6 +3,7 @@ import {SchedulingService} from '../../../../services/scheduling.service';
 import {ActivatedRoute} from '@angular/router';
 import {HeuristicDefiner} from '../../../../model/enums/HeuristicDefiner';
 import {SchedulingResult} from '../../../../model/internal/visualization/SchedulingResult';
+import {Heuristic} from '../../../../model/Heuristic';
 
 @Component({
   selector: 'app-visualizer',
@@ -11,6 +12,7 @@ import {SchedulingResult} from '../../../../model/internal/visualization/Schedul
 })
 export class VisualizerComponent implements OnInit {
 
+  private _usedHeuristic: Heuristic;
   private _result: SchedulingResult;
 
   private _isGanttChartVisible = true;
@@ -26,8 +28,14 @@ export class VisualizerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const heuristicDefiner = <HeuristicDefiner>this.route.snapshot.paramMap.get('heuristic');
-    this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
+    this.route.params.subscribe(() => {
+      const heuristicDefiner = <HeuristicDefiner>this.route.snapshot.paramMap.get('heuristic');
+      if (!this.usedHeuristic || this.usedHeuristic.heuristicDefiner !== heuristicDefiner) {
+        this._usedHeuristic = Heuristic.getHeuristicByDefiner(heuristicDefiner);
+        this._result = undefined;
+        this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
+      }
+    });
     // TODO scroll pos 0?
   }
 
@@ -89,5 +97,9 @@ export class VisualizerComponent implements OnInit {
 
   set isLoggingVisible(value: boolean) {
     this._isLoggingVisible = value;
+  }
+
+  get usedHeuristic(): Heuristic {
+    return this._usedHeuristic;
   }
 }
