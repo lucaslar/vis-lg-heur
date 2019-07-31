@@ -1,4 +1,5 @@
 <!-- TODO Add text, rows and note if diagram not visible -->
+<!-- TODO ngif for containers? -->
 
 <!-- General diagrams here: -->
 
@@ -44,4 +45,13 @@
            [datasets]="data.comparisonMeanSetupTimesVisualization.datasets"
            [yLabel]="data.comparisonMeanSetupTimesVisualization.yLabel"
            [xLabel]="data.comparisonMeanSetupTimesVisualization.xLabel"
+></app-chart>
+
+<app-chart *ngIf="data.comparisonSelectedAndMeanSetupTimeVisualization"
+           [title]="data.comparisonSelectedAndMeanSetupTimeVisualization.title"
+           [type]="data.comparisonSelectedAndMeanSetupTimeVisualization.visualizableAs"
+           [labels]="data.comparisonSelectedAndMeanSetupTimeVisualization.labels"
+           [datasets]="data.comparisonSelectedAndMeanSetupTimeVisualization.datasets"
+           [yLabel]="data.comparisonSelectedAndMeanSetupTimeVisualization.yLabel"
+           [xLabel]="data.comparisonSelectedAndMeanSetupTimeVisualization.xLabel"
 ></app-chart>

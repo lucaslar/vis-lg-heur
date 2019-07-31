@@ -566,6 +566,7 @@ export class SchedulingService {
     if (this.heuristicType === HeuristicDefiner.NEAREST_NEIGHBOUR) {
       data.cumulatedSetupTimesAtTimetamps = this.generateCumulatedSetupTimesVisualization();
       data.comparisonMeanSetupTimesVisualization = this.generateComparisonMeanSetupTimesVisualization();
+      data.comparisonSelectedAndMeanSetupTimeVisualization = this.generateComparisonSelectedAndMeanSetupTimeVisualization();
     }
 
     return data;
@@ -701,6 +702,41 @@ export class SchedulingService {
     visualization.labels = labels;
     visualization.datasets = [dataset];
     visualization.xLabel = 'Durschnittswerte';
+    visualization.yLabel = 'Zeiteinheiten';
+    return visualization;
+  }
+
+  private generateComparisonSelectedAndMeanSetupTimeVisualization(): ChartData {
+    const labels = [];
+    const average = new Dataset();
+    average.data = [];
+    average.label = 'Reihenfolgeunabhängige Durchschnittsrüstzeit';
+    const solution = new Dataset();
+    solution.data = [];
+    solution.label = 'Reihenfolgebedingte Rüstzeit';
+
+    let previousJob: ScheduledJob;
+    for (const job of this.getJobsSortedByFinishingDate()) {
+
+      const avg = this.jobs
+        .filter(_job => _job.id !== job.id) // Filter current out current job
+        .map(_job => _job.setupTimesToOtherJobs
+          .find(sT => sT.idTo === job.id).duration
+        ).reduce((d1, d2) => d1 + d2) / (this.jobs.length - 1);
+
+      average.data.push(avg);
+      solution.data.push(previousJob ? previousJob.setupTimesToOtherJobs.find(sT => sT.idTo === job.id).duration : 0);
+      labels.push(job.name + ' (ID: ' + job.id + ')');
+      previousJob = job;
+    }
+
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_LINE;
+    visualization.title =
+      'Vergleich der reihenfolgebedingten Rüstzeiten mit den reihenfolgeunabhängigen Durchschnittsrüstzeiten zu den einzelnen Aufträgen';
+    visualization.labels = labels;
+    visualization.datasets = [solution, average];
+    visualization.xLabel = 'Aufträge in Abarbeitungsreihenfolge';
     visualization.yLabel = 'Zeiteinheiten';
     return visualization;
   }
