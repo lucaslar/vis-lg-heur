@@ -16,7 +16,7 @@ const routes: Routes = [
   {
     path: 'beta', canActivateChild: [BetaEnoughJobsGuard], children: [
       {path: 'jobs-termination', component: JobsTerminationComponent, data: {minJobs: 1}},
-      {path: 'jobs-setup-times', component: SetUpTimesDefinitionComponent, data: {minJobs: 5}}
+      {path: 'jobs-setup-times', component: SetUpTimesDefinitionComponent, data: {minJobs: 2}}
     ]
   },
   {path: 'gamma', component: ObjectiveFunctionDefinitionComponent},
