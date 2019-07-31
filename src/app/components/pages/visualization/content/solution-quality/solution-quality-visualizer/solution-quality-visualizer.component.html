@@ -1,4 +1,9 @@
-<app-chart [title]="data.cumulatedDelaysAtTimestamps.title"
+<!-- TODO Add text, rows and note if diagram not visible -->
+
+<!-- General diagrams here: -->
+
+<app-chart *ngIf="data.cumulatedDelaysAtTimestamps"
+           [title]="data.cumulatedDelaysAtTimestamps.title"
            [type]="data.cumulatedDelaysAtTimestamps.visualizableAs"
            [labels]="data.cumulatedDelaysAtTimestamps.labels"
            [datasets]="data.cumulatedDelaysAtTimestamps.datasets"
@@ -12,7 +17,8 @@
            [yLabel]="data.finishedJobsAtTimestamp.yLabel"
            [xLabel]="data.finishedJobsAtTimestamp.xLabel"
 ></app-chart>
-<app-chart [title]="data.comparisonDelayedAndInTimeJobs.title"
+<app-chart *ngIf="data.comparisonDelayedAndInTimeJobs"
+           [title]="data.comparisonDelayedAndInTimeJobs.title"
            [type]="data.comparisonDelayedAndInTimeJobs.visualizableAs"
            [labels]="data.comparisonDelayedAndInTimeJobs.labels"
            [datasets]="data.comparisonDelayedAndInTimeJobs.datasets"
