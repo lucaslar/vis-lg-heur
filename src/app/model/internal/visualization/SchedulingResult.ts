@@ -65,20 +65,11 @@ export class SchedulingResult {
 export class GeneralSchedulingData {
 
   // TODO Add complexity here? (and set in scheduling service)
-  private _usedHeuristic: Heuristic;
   private _priorityRules: PriorityRule[];
   private _machineConfig: MachineConfig;
   private _numberOfMachines: number;
   private _numberOfJobs: number;
   private _durationInMillisKpi: Kpi;
-
-  get usedHeuristic(): Heuristic {
-    return this._usedHeuristic;
-  }
-
-  set usedHeuristic(value: Heuristic) {
-    this._usedHeuristic = value;
-  }
 
   get priorityRules(): PriorityRule[] {
     return this._priorityRules;

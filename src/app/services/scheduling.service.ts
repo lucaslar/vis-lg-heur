@@ -16,7 +16,6 @@ import {
   VisualizableGeneralData,
   VisualizableSolutionQualityData
 } from '../model/internal/visualization/SchedulingResult';
-import {Heuristic} from '../model/Heuristic';
 import {ChartData, ChartType, Dataset, TimelineData} from '../model/internal/visualization/VisualizableData';
 import {LogEventType} from '../model/enums/LogEventType';
 
@@ -253,33 +252,33 @@ export class SchedulingService {
     if (lowestValueOfA < lowestValueOfB) {
       this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobA) + ' gegenüber '
         + this.jobStringForLogging(jobB) + ' als ' + (previousJob ?
-          // if previous job:
-          'folgender Auftrag, da die Rüstzeit vom vorherigen Auftrag (' + this.jobStringForLogging(previousJob)
-          + ') zum genannten Auftrag geringer ist (' + lowestValueOfA + ' gegenüber ' + lowestValueOfB + ')' :
-          // if no previous job:
-          'Startwert, da seine kürzeste Rüstzeit zu einem folgenden Auftrag (' + lowestValueOfA +
-          ') kleiner ist als die vom letzteren Auftrag zu einem folgenden (' + lowestValueOfB + ')'
+            // if previous job:
+            'folgender Auftrag, da die Rüstzeit vom vorherigen Auftrag (' + this.jobStringForLogging(previousJob)
+            + ') zum genannten Auftrag geringer ist (' + lowestValueOfA + ' gegenüber ' + lowestValueOfB + ')' :
+            // if no previous job:
+            'Startwert, da seine kürzeste Rüstzeit zu einem folgenden Auftrag (' + lowestValueOfA +
+            ') kleiner ist als die vom letzteren Auftrag zu einem folgenden (' + lowestValueOfB + ')'
         ), LogEventType.HEURISTIC_BASED_SORTING);
     } else if (lowestValueOfB < lowestValueOfA) {
       this.logSchedulingProcedure(machineNr, 'Bevorzugen von ' + this.jobStringForLogging(jobB) + ' gegenüber '
         + this.jobStringForLogging(jobA) + ' als ' + (previousJob ?
-          // if previous job:
-          'folgender Auftrag, da die Rüstzeit vom vorherigen Auftrag (' + this.jobStringForLogging(previousJob)
-          + ') zum genannten Auftrag geringer ist (' + lowestValueOfB + ' gegenüber ' + lowestValueOfA + ')' :
-          // if no previous job:
-          'Startwert, da seine kürzeste Rüstzeit zu einem folgenden Auftrag (' + lowestValueOfB +
-          ') kleiner ist als die vom letzteren Auftrag zu einem folgenden (' + lowestValueOfA + ')'
+            // if previous job:
+            'folgender Auftrag, da die Rüstzeit vom vorherigen Auftrag (' + this.jobStringForLogging(previousJob)
+            + ') zum genannten Auftrag geringer ist (' + lowestValueOfB + ' gegenüber ' + lowestValueOfA + ')' :
+            // if no previous job:
+            'Startwert, da seine kürzeste Rüstzeit zu einem folgenden Auftrag (' + lowestValueOfB +
+            ') kleiner ist als die vom letzteren Auftrag zu einem folgenden (' + lowestValueOfA + ')'
         ), LogEventType.HEURISTIC_BASED_SORTING);
     } else {
       this.logSchedulingProcedure(machineNr, (previousJob ?
-        // if previous job:
-        'Rüstzeit zu Auftrag ' + this.jobStringForLogging(jobA) + ' & zu Auftrag ' + this.jobStringForLogging(jobB) +
-        ' ausgehend von vorherigem Auftrag (' + this.jobStringForLogging(previousJob) + ') identisch (' + lowestValueOfA +
-        '), daher keine Aussage darüber möglich, welcher der geeignetere Nachfolger ist' :
-        // if no previous job:
-        'Kleinste Rüstzeit zu einem folgenden Auftrag für ' + this.jobStringForLogging(jobA) + ' & ' +
-        this.jobStringForLogging(jobB) + ' identisch (' + lowestValueOfA + '), daher keine Aussage darüber möglich, welcher ' +
-        'dieser beiden Auftäge besser als Startwert geeignet wäre'
+          // if previous job:
+          'Rüstzeit zu Auftrag ' + this.jobStringForLogging(jobA) + ' & zu Auftrag ' + this.jobStringForLogging(jobB) +
+          ' ausgehend von vorherigem Auftrag (' + this.jobStringForLogging(previousJob) + ') identisch (' + lowestValueOfA +
+          '), daher keine Aussage darüber möglich, welcher der geeignetere Nachfolger ist' :
+          // if no previous job:
+          'Kleinste Rüstzeit zu einem folgenden Auftrag für ' + this.jobStringForLogging(jobA) + ' & ' +
+          this.jobStringForLogging(jobB) + ' identisch (' + lowestValueOfA + '), daher keine Aussage darüber möglich, welcher ' +
+          'dieser beiden Auftäge besser als Startwert geeignet wäre'
         ), LogEventType.HEURISTIC_BASED_SORTING
       );
     }
@@ -307,7 +306,6 @@ export class SchedulingService {
     data.machineConfig = this.storage.machineConfigParam;
     data.numberOfJobs = this.jobs.length;
     data.numberOfMachines = this.machines.length;
-    data.usedHeuristic = Heuristic.getHeuristicByDefiner(this.heuristicType);
     data.priorityRules = this.priorityRules; // may be undefined
     return data;
   }
