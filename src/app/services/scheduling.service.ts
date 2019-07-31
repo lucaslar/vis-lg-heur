@@ -693,7 +693,7 @@ export class SchedulingService {
       .reduce((td1, td2) => td1 + td2);
 
     dataset.data.push(this.calculateMeanSetupTimeKpi().kpi);
-    dataset.data.push(summedSetupDurations / ((this.jobs.length - 1) * (this.jobs.length - 1)));
+    dataset.data.push(summedSetupDurations / ((this.jobs.length - 1) * this.jobs.length));
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
