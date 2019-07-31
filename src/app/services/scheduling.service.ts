@@ -18,6 +18,8 @@ import {
 } from '../model/internal/visualization/SchedulingResult';
 import {ChartData, ChartType, Dataset, TimelineData} from '../model/internal/visualization/VisualizableData';
 import {LogEventType} from '../model/enums/LogEventType';
+import {DefinableValue} from '../model/internal/value-definition/DefinableValue';
+import {DefinitionStatus} from '../model/internal/value-definition/DefinitionStatus';
 
 @Injectable({
   providedIn: 'root'
@@ -404,6 +406,8 @@ export class SchedulingService {
   }
 
   private generateTotalJobTimesVisualization(): ChartData {
+    const isMindDueDates = this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED;
+
     const sortedJobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
     const dataset = new Dataset();
     dataset.data = sortedJobs
@@ -417,13 +421,13 @@ export class SchedulingService {
     visualization.colors = this.getColorsAsSpecifiedInGanttFirstMachine()
       .map(color => 'rgba(' + color + ',0.8)');
     visualization.title = 'Gesamtbearbeitungsdauer ' +
-      (sortedJobs[0].dueDate ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
+      (isMindDueDates ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
     visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
     visualization.datasets = [dataset];
     visualization.xLabel = 'Aufträge';
     visualization.yLabel = 'Zeiteinheiten';
 
-    if (sortedJobs[0].dueDate) {
+    if (isMindDueDates) {
       const dueDatesDataset = new Dataset();
       dueDatesDataset.data = sortedJobs.map(job => job.dueDate);
       dueDatesDataset.label = 'Gewünschter Fertigstellungstermin';
@@ -437,13 +441,14 @@ export class SchedulingService {
     const data = [];
 
     // TODO Mind start time here if implemented
+    // TODO Setup time KPIs?
 
     data.push(this.calculateTotalDurationKpi());
     data.push(this.calculateMeanCycleTimeKpi());
     data.push(this.calculateMeanJobBacklogKpi());
 
-    // Either none or all jobs do have a due date here
-    if (this.jobs[0].dueDate) {
+    // Either none or all jobs must have a due date
+    if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED) {
       data.push(this.calculateMeanDelayKpi());
       data.push(this.calculateStandardDeviationOfDelayKpi());
       data.push(this.calculateSumOfDelaysKpi());
@@ -538,7 +543,7 @@ export class SchedulingService {
 
     data.finishedJobsAtTimestamp = this.generateFinishedJobsAtTimestampVisualization();
 
-    if (this.jobs[0].dueDate) {
+    if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED) {
       data.cumulatedDelaysAtTimestamps = this.generateCumulatedDelaysVisualization();
       data.comparisonDelayedAndInTimeJobs = this.generateComparisonDelayedAndInTimeVisualization();
     }
