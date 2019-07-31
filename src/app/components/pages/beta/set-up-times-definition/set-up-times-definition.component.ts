@@ -48,7 +48,7 @@ export class SetUpTimesDefinitionComponent implements OnInit, OnDestroy {
 
   addRandomSetupTimes(): void {
     this.jobs.forEach(job => job.setupTimesToOtherJobs
-      .forEach(setupTime => setupTime.duration = setupTime.duration ? setupTime.duration : (Math.floor(Math.random() * 5) + 1))
+      .forEach(setupTime => setupTime.duration = setupTime.duration !== undefined ? setupTime.duration : (Math.floor(Math.random() * 5) + 1))
     );
     this.storage.jobs = this.jobs;
     this.snackBar.open('Fehlende Rüstzeiten zufällig erstellt', 'OK',

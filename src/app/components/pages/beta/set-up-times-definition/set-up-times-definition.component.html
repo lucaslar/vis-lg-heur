@@ -42,7 +42,7 @@
   </div>
 </div>
 
-
+<!-- TODO: whitespae no wrap and hidden for names in headers and columns -->
 <mat-accordion>
   <mat-expansion-panel *ngFor="let job of jobs">
     <mat-expansion-panel-header>
@@ -65,7 +65,7 @@
         <app-icon-number-input [iconClasses]="['fas','fa-cogs']"
                                [placeholder]="'Rüstzeit'"
                                [value]="findSetupTimeRelationForJob(job, otherJob).duration"
-                               [min]="1"
+                               [min]="0"
                                (newValue)="onSetupValueChange(job, otherJob, $event)">
         </app-icon-number-input>
       </div>
