@@ -118,24 +118,20 @@ export class StorageService {
   }
 
   private getNotApplicableDueToValueDialog(missingValue: DefinableValue, heuristicName: string): DialogContent {
-    // TODO: Add description for objective function here
     return new DialogContent(
       'Werte für Berechnung unvollständig',
       [
         'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
         heuristicName + ') nicht alle benötigten Werte vorliegen.',
         'Konkret handelt es sich dabei um ' + (this.getValueDefinitionStatus(missingValue) === DefinitionStatus.NOT_DEFINED
-          ? '' : 'zum Teil ') + 'undefinierte ' + (
-          missingValue === DefinableValue.ALPHA_JOB_TIMES ? 'Zeiten für die Arbeitsgänge von Aufträgen'
-            : missingValue === DefinableValue.BETA_DUE_DATES ? 'gewünschte Fertigstellungstermine'
-            : 'Prioritätsregeln') + '.',
+          ? '' : 'zum Teil ') + 'undefinierte ' + missingValue + '.',
         'Bitte sorgen Sie dafür, dass die genannten Werte vollständig sind, um fortfahren zu können.'
       ],
       DialogType.ERROR
     );
   }
 
-  private getNotApplicableDueToMachineConfigDialog(heuristic: Heuristic) {
+  private getNotApplicableDueToMachineConfigDialog(heuristic: Heuristic): DialogContent {
     const possibleMachineConfigs = [];
     heuristic.requiredMachineConfigs.forEach(config => {
       if (config === MachineConfig.FLOWSHOP) {
