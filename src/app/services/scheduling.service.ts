@@ -33,6 +33,13 @@ export class SchedulingService {
 
   private logging: SchedulingLogEntry[];
 
+  // TODO also add gamma to general data result
+  // TODO stay on visualization page with other heuristic
+  // TODO get mean setup time? (visualization)
+  // TODO get mean setup time of solution? (visualization)
+  // TODO (General): check if due dates are configured for result gen.
+  // TODO Diagrams for setup times? (if setup times are selected only)
+
   constructor(public storage: StorageService) {
   }
 
@@ -145,7 +152,7 @@ export class SchedulingService {
       return this.compareJobsBySetupTimes(jobA, jobB, machineNr);
     } else {
       // TODO: Implement more heuristics by implementing sorting here
-      console.log('Implement me (' + this.heuristicType + '!');
+      console.log('Implement me (' + this.heuristicType + '!)');
       return 0;
     }
   }

@@ -28,6 +28,7 @@ export class VisualizerComponent implements OnInit {
   ngOnInit(): void {
     const heuristicDefiner = <HeuristicDefiner>this.route.snapshot.paramMap.get('heuristic');
     this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
+    // TODO scroll pos 0?
   }
 
   get result(): SchedulingResult {
