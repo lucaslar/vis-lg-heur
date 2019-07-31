@@ -15,7 +15,7 @@ th {
 
 tbody {
   overflow: auto;
-  height: 300px;
+  max-height: 300px;
   width: 100%;
 }
 
