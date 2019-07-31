@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {StorageService} from '../../../../services/storage.service';
 import {Job} from '../../../../model/Job';
@@ -18,10 +18,11 @@ export class JobsTerminationComponent implements OnInit {
 
   private _jobs: Job[];
 
-  constructor(public storage: StorageService, private dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(public storage: StorageService,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private changeDetector: ChangeDetectorRef) {
   }
-
-  // TODO: undo action after auto generating flowshop/times?
 
   ngOnInit(): void {
     this._jobs = this.storage.jobs;
@@ -87,6 +88,7 @@ export class JobsTerminationComponent implements OnInit {
     }).afterClosed().subscribe(result => {
       if (result) {
         this.jobs.forEach(job => delete job.dueDate);
+        this.changeDetector.detectChanges();
         this.storage.jobs = this.jobs;
         this.snackBar.open('Alle Fertigstellungstermine gelöscht', 'OK',
           {panelClass: 'color-white', duration: 2000}
@@ -123,6 +125,7 @@ export class JobsTerminationComponent implements OnInit {
         sumOfFirstSteps += job.machineTimes[0].timeOnMachine ? job.machineTimes[0].timeOnMachine : 6;
       }
     });
+    this.changeDetector.detectChanges();
     this.storage.jobs = this.jobs;
     this.snackBar.open('Fehlende Fertigstellungstermine zufällig erstellt', 'OK',
       {panelClass: 'color-white', duration: 2000}
