@@ -36,7 +36,6 @@ export class VisualizerComponent implements OnInit {
         this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
       }
     });
-    // TODO scroll pos 0?
   }
 
   get result(): SchedulingResult {
