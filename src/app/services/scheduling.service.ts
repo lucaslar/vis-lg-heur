@@ -184,13 +184,13 @@ export class SchedulingService {
         if (valueA < valueB) {
           this.logSchedulingProcedure(1,
             'Maschinenübergreifendes Bevorzugen von Permutation ' + this.jobListStringForLogging(p1) +
-            ' (zu minimierender Zielwert bei Abarbeitung' + valueA + ') gegenüber ' + this.jobListStringForLogging(p2) +
-            ' (zu minimierender Zielwert bei Abarbeitung' + valueB + ')', LogEventType.HEURISTIC_BASED_SORTING);
+            ' (zu minimierender Zielwert bei Abarbeitung ' + valueA + ') gegenüber ' + this.jobListStringForLogging(p2) +
+            ' (zu minimierender Zielwert bei Abarbeitung ' + valueB + ')', LogEventType.HEURISTIC_BASED_SORTING);
         } else if (valueB < valueA) {
           this.logSchedulingProcedure(1,
             'Maschinenübergreifendes Bevorzugen von Permutation ' + this.jobListStringForLogging(p2) +
-            ' (zu minimierender Zielwert bei Abarbeitung' + valueB + ') gegenüber ' + this.jobListStringForLogging(p1) +
-            ' (zu minimierender Zielwert bei Abarbeitung' + valueA + ')', LogEventType.HEURISTIC_BASED_SORTING);
+            ' (zu minimierender Zielwert bei Abarbeitung ' + valueB + ') gegenüber ' + this.jobListStringForLogging(p1) +
+            ' (zu minimierender Zielwert bei Abarbeitung ' + valueA + ')', LogEventType.HEURISTIC_BASED_SORTING);
         } else {
           this.logSchedulingProcedure(1,
             'Zu minimierender Zielwert bei Abarbeitungen von Permutationen ' + this.jobListStringForLogging(p1) + ' & ' +
@@ -214,8 +214,6 @@ export class SchedulingService {
 
     if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME) {
       const duration = this.mockProductionOfPermutation(permutation) - 1;
-      // TODO: Test logging for success in first permutation comparison:
-      // console.log(permutation.map(j => j.finishedAtTimestamp));
       return duration;
     } else if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY) {
       this.mockProductionOfPermutation(permutation);
