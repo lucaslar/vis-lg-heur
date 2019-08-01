@@ -9,19 +9,20 @@ export class Heuristic {
   private readonly _heuristicDefiner: HeuristicDefiner;
   private readonly _requiredValues: DefinableValue[];
   private readonly _requiredMachineConfigs: MachineConfig[];
-  private readonly _requiredObjectiveFunctions: ObjectiveFunction[];
+  private readonly _requiredValuesForObjectiveFunctions: Map<ObjectiveFunction, DefinableValue[]>;
+
   // TODO: Required machine nr.?
 
   constructor(name: string,
               heuristicDefiner: HeuristicDefiner,
               requiredValues: DefinableValue[],
               requiredMachineConfigs: MachineConfig[],
-              requiredObjectiveFunctions?: ObjectiveFunction[]) {
+              requiredValuesForObjectiveFunctions?: Map<ObjectiveFunction, DefinableValue[]>) {
     this._name = name;
     this._heuristicDefiner = heuristicDefiner;
     this._requiredValues = requiredValues;
     this._requiredMachineConfigs = requiredMachineConfigs;
-    this._requiredObjectiveFunctions = requiredObjectiveFunctions;
+    this._requiredValuesForObjectiveFunctions = requiredValuesForObjectiveFunctions;
   }
 
   static getHeuristicByDefiner(definer: HeuristicDefiner): Heuristic {
@@ -45,12 +46,15 @@ export class Heuristic {
   }
 
   private static nearestNeighbourHeuristic(definer: HeuristicDefiner) {
+    const functions = new Map<ObjectiveFunction, DefinableValue[]>();
+    functions.set(ObjectiveFunction.SUM_SETUP_TIME, []);
+
     return new Heuristic(
       'Nächster Nachbar',
       definer,
       [DefinableValue.ALPHA_JOB_TIMES, DefinableValue.BETA_SETUP_TIMES],
       [MachineConfig.ONE_MACHINE],
-      [ObjectiveFunction.SUM_SETUP_TIME]
+      functions
     );
   }
 
@@ -70,7 +74,7 @@ export class Heuristic {
     return this._requiredValues;
   }
 
-  get requiredObjectiveFunctions(): ObjectiveFunction[] {
-    return this._requiredObjectiveFunctions;
+  get requiredValuesForObjectiveFunctions(): Map<ObjectiveFunction, DefinableValue[]> {
+    return this._requiredValuesForObjectiveFunctions;
   }
 }

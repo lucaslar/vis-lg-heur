@@ -82,13 +82,13 @@ export class StorageService {
         return isDialogRequired ? this.getNotApplicableDueToMachineConfigDialog(heuristic) : false;
       } else if (
         heuristic.heuristicDefiner !== HeuristicDefiner.PRIORITY_RULES
-        && (!this.objectiveFunction || !heuristic.requiredObjectiveFunctions.includes(this.objectiveFunction))) {
+        && (!this.objectiveFunction || ![...heuristic.requiredValuesForObjectiveFunctions.keys()].includes(this.objectiveFunction))) {
         return isDialogRequired ? this.getNotApplicableDueToWrongOrMissingFunction(heuristic) : false;
       } else {
         const missingValue = this.checkValuesForHeuristic(heuristic);
         const isApplicable = missingValue === undefined;
         if (isDialogRequired) {
-          return isApplicable ? undefined : this.getNotApplicableDueToValueDialog(missingValue, heuristic.name);
+          return isApplicable ? undefined : this.getNotApplicableDueToValueDialog(missingValue, heuristic);
         } else {
           return isApplicable;
         }
@@ -117,17 +117,30 @@ export class StorageService {
         return <DefinableValue>value;
       }
     }
+    if (heuristic.requiredValuesForObjectiveFunctions) {
+      for (const value of heuristic.requiredValuesForObjectiveFunctions.get(this.objectiveFunction)) {
+        if (this.getValueDefinitionStatus(value) !== DefinitionStatus.COMPLETELY_DEFINED) {
+          return <DefinableValue>value;
+        }
+      }
+    }
     return undefined;
   }
 
-  private getNotApplicableDueToValueDialog(missingValue: DefinableValue, heuristicName: string): DialogContent {
+  private getNotApplicableDueToValueDialog(missingValue: DefinableValue, heuristic: Heuristic): DialogContent {
     return new DialogContent(
       'Werte für Berechnung unvollständig',
       [
         'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
-        heuristicName + ') nicht alle benötigten Werte vorliegen.',
+        heuristic.name + ') nicht alle benötigten Werte vorliegen.',
         'Konkret handelt es sich dabei um ' + (this.getValueDefinitionStatus(missingValue) === DefinitionStatus.NOT_DEFINED
           ? '' : 'zum Teil ') + 'undefinierte ' + missingValue + '.',
+        heuristic.requiredValuesForObjectiveFunctions &&
+        heuristic.requiredValuesForObjectiveFunctions.get(this.objectiveFunction).includes(missingValue) ?
+          'Dieser Wert wird nur aufgrund der gewählten Zielfunktion benötigt. Für die Verwendung dieser Heuristik bei einer anderen zu ' +
+          'minimierenden Zielfunktion (' +
+          [...heuristic.requiredValuesForObjectiveFunctions.keys()].filter(k => k !== this.objectiveFunction).join(', ') +
+          ') ist dieser Wert ggf. nicht zu definieren.' : '',
         'Bitte sorgen Sie dafür, dass die genannten Werte vollständig sind, um fortfahren zu können.'
       ],
       DialogType.ERROR
@@ -145,8 +158,6 @@ export class StorageService {
         possibleMachineConfigs.push('Eine Maschine');
       }
     });
-
-    // TODO Check machine nr, too.
     return new DialogContent(
       'Falsche Maschinenkonfiguration für ' + heuristic.name,
       [
@@ -165,10 +176,11 @@ export class StorageService {
       [
         'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
         heuristic.name + ') nicht die richtige zu minimierende Zielfunktion vorliegt.',
-        // TODO More than one in other cases? If not: No array
-        'Benötigt wird: ' + heuristic.requiredObjectiveFunctions[0] + ', aktuell gewählt ist allerdings' +
+        'Benötigt wird: ' + [...heuristic.requiredValuesForObjectiveFunctions.keys()].join(' oder ') +
+        ', aktuell gewählt ist allerdings' +
         (this.objectiveFunction ? ': ' + this.objectiveFunction + '.' : ' keine Zielfunktion.') +
-        ' Bitte wählen Sie die geannnte Funktion, um fortfahren zu können.',
+        ' Bitte wählen Sie ' + ([...heuristic.requiredValuesForObjectiveFunctions.keys()].length > 1 ?
+          'eine' : 'die') + ' gennnte Funktion, um fortfahren zu können.',
         'Das Lösen von Reihenfolgeproblemen mithilfe von Prioritätsregeln stellt hierbei eine Besonderheit dar, da ' +
         'durch die Wahl unterschiedlicher Regeln unterschiedliche Zielwerte betrachtet werden.'
       ],
