@@ -3,7 +3,7 @@ import {Job} from './Job';
 export class ScheduledJob extends Job {
 
   private readonly _operationsOnMachines: OperationOnMachine[] = [];
-  private finishedOperationsCounter = 0;
+  private finishedOperationsCounter;
 
   constructor(job: Job) {
     super(job.name);
@@ -11,6 +11,7 @@ export class ScheduledJob extends Job {
     this.machineTimes = job.machineTimes;
     this.dueDate = job.dueDate;
     this.setupTimesToOtherJobs = job.setupTimesToOtherJobs;
+    this.finishedOperationsCounter = 0;
   }
 
   onNextOperationStarted(timestamp: number): void {
@@ -115,7 +116,7 @@ export class ScheduledJob extends Job {
     return this.machineTimes[this.finishedOperationsCounter].timeOnMachine;
   }
 
-  // End of values needed for priority rule
+  // End of values needed for priority rules
 
   get nextMachineNr(): number | undefined {
     // undefined means the order is finished and has no next machine
@@ -139,9 +140,13 @@ export class ScheduledJob extends Job {
       undefined :
       // no delay if finished before due date
       this.finishedAtTimestamp <= this.dueDate ? 0 :
-        this.finishedAtTimestamp - this.dueDate
-      ;
+        this.finishedAtTimestamp - this.dueDate;
   }
+
+  get totalMachiningTime(): number {
+    return this.machineTimes.map(m => m.timeOnMachine).reduce((m1, m2) => m1 + m2);
+  }
+
 }
 
 export class OperationOnMachine {

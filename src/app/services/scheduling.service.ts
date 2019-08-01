@@ -92,7 +92,7 @@ export class SchedulingService {
   }
 
   private isDynamicallySolvable(): boolean {
-    // TODO: More static procedure? add here:
+    // TODO: More static procedures? add here:
     return this.heuristicType !== HeuristicDefiner.NEH_HEURISTIC;
   }
 
@@ -100,7 +100,153 @@ export class SchedulingService {
 
   // TODO: Only NEH? -> Rename
   private scheduleStatically(): void {
-    console.log('Static');
+    this.logSchedulingProcedure(1, 'Bestimmen der maschinenübergreifenden Warteschlange bzw. Abarbeitungsreihenfolge',
+      LogEventType.JOB_QUEUE);
+
+    const presortedJobs = this.preSortJobs();
+
+    let yetBestPermutation: ScheduledJob[] = [presortedJobs[0]];
+    let currentPermutations: ScheduledJob[][];
+
+    // start index 1 as first permutation already contains 0:
+    for (let i = 1; i < presortedJobs.length; i++) {
+      currentPermutations = this.createPermutations(yetBestPermutation, presortedJobs[i]);
+      yetBestPermutation = this.getBestPermutation(currentPermutations);
+    }
+
+    // Run final solution once again in order to be able to generate diagrams later on:
+    this.jobs = yetBestPermutation.map(job => new ScheduledJob(job));
+    this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
+  }
+
+  private preSortJobs(): ScheduledJob[] {
+    const preSortBasedOn = this.objectiveFunction === ObjectiveFunction.MEAN_DELAY ?
+      'gewünschten Fertigstellungsterminen' : 'der Summe der Gesamtbearbeitungszeiten';
+    this.logSchedulingProcedure(1, 'Maschinenübergreifendes Vorsortieren der Aufträge nach ' + preSortBasedOn,
+      LogEventType.HEURISTIC_BASED_SORTING);
+
+    const sortedJobs = this.jobs.sort((j1, j2) => {
+      const valueA = this.getCompareValueForPresortingBasedOnObjectiveFunction(j1);
+      const valueB = this.getCompareValueForPresortingBasedOnObjectiveFunction(j2);
+
+      // Logging:
+      if (valueA < valueB) {
+        this.logSchedulingProcedure(1, 'Maschinenübergreifende Vorsortierung: Bevorzugen von '
+          + this.jobStringForLogging(j1) + '(Wert: ' + valueA + ') gegenüber ' + this.jobStringForLogging(j2) +
+          ' (Wert: ' + valueB + ')', LogEventType.HEURISTIC_BASED_SORTING);
+      } else if (valueB > valueA) {
+        this.logSchedulingProcedure(1, 'Maschinenübergreifende Vorsortierung: Bevorzugen von ' +
+          this.jobStringForLogging(j2) + '(Wert: ' + valueB + ') gegenüber ' + this.jobStringForLogging(j1) +
+          ' (Wert: ' + valueA + ')', LogEventType.HEURISTIC_BASED_SORTING);
+      } else {
+        this.logSchedulingProcedure(1, 'Maschinenübergreifende Vorsortierung: Betrachteter Wert für ' +
+          this.jobStringForLogging(j1) + ' & ' + this.jobStringForLogging(j2) + ' identisch (' + valueA +
+          '), daher keine Sortierung möglich', LogEventType.HEURISTIC_BASED_SORTING);
+      }
+      // End of logging
+
+      return valueA - valueB;
+    });
+
+    this.logSchedulingProcedure(1, 'Vorsortieren der Aufträge abgeschlossen: ' +
+      this.jobListStringForLogging(sortedJobs), LogEventType.HEURISTIC_BASED_SORTING);
+
+    return sortedJobs;
+  }
+
+  private getCompareValueForPresortingBasedOnObjectiveFunction(job: ScheduledJob): number {
+    if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY) {
+      return this.getPriorityValueForJob(job, PriorityRule.EDD);
+    } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME) {
+      return job.totalMachiningTime;
+    } else {
+      console.log('Implement presorting based on: ' + this.objectiveFunction);
+    }
+  }
+
+  private createPermutations(existingPermutation: ScheduledJob[], newJob: ScheduledJob): ScheduledJob[][] {
+    const permutations = [];
+    for (let i = 0; i <= existingPermutation.length; i++) {
+      const copiedPermutation = existingPermutation.map(job => new ScheduledJob(job));
+      copiedPermutation.splice(i, 0, newJob);
+      permutations.push(copiedPermutation);
+    }
+    return permutations;
+  }
+
+  private getBestPermutation(permutations: ScheduledJob[][]): ScheduledJob[] {
+    permutations.sort((p1, p2) => {
+
+        const valueA = this.getCompareValueForPermutation(p1);
+        const valueB = this.getCompareValueForPermutation(p2);
+
+        // Logging:
+        if (valueA < valueB) {
+          this.logSchedulingProcedure(1,
+            'Maschinenübergreifendes Bevorzugen von Permutation ' + this.jobListStringForLogging(p1) +
+            ' (zu minimierender Zielwert bei Abarbeitung' + valueA + ') gegenüber ' + this.jobListStringForLogging(p2) +
+            ' (zu minimierender Zielwert bei Abarbeitung' + valueB + ')', LogEventType.HEURISTIC_BASED_SORTING);
+        } else if (valueB < valueA) {
+          this.logSchedulingProcedure(1,
+            'Maschinenübergreifendes Bevorzugen von Permutation ' + this.jobListStringForLogging(p2) +
+            ' (zu minimierender Zielwert bei Abarbeitung' + valueB + ') gegenüber ' + this.jobListStringForLogging(p1) +
+            ' (zu minimierender Zielwert bei Abarbeitung' + valueA + ')', LogEventType.HEURISTIC_BASED_SORTING);
+        } else {
+          this.logSchedulingProcedure(1,
+            'Zu minimierender Zielwert bei Abarbeitungen von Permutationen ' + this.jobListStringForLogging(p1) + ' & ' +
+            this.jobListStringForLogging(p2) + ' identisch (' + valueA + '), daher keine Sortierung möglich',
+            LogEventType.HEURISTIC_BASED_SORTING);
+        }
+        // End of logging
+
+        return valueA - valueB;
+      }
+    );
+
+    this.logSchedulingProcedure(1, 'Maschinenübergreifend weiter betrachtete Permutation' + this.jobListStringForLogging(permutations[0]),
+      LogEventType.HEURISTIC_BASED_SORTING);
+
+    return permutations[0];
+  }
+
+  private getCompareValueForPermutation(permutation: ScheduledJob[]): number {
+    permutation = permutation.map(job => new ScheduledJob(job));
+
+    if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME) {
+      const duration = this.mockProductionOfPermutation(permutation) - 1;
+      // TODO: Test logging for success in first permutation comparison:
+      // console.log(permutation.map(j => j.finishedAtTimestamp));
+      return duration;
+    } else if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY) {
+      this.mockProductionOfPermutation(permutation);
+      const sumOfDelays = permutation.map(j => j.delay).reduce((d1, d2) => d1 + d2);
+      return sumOfDelays / permutation.length;
+    } else {
+      console.log('Implement permutation comparison for obj. fun.: ' + this.objectiveFunction);
+    }
+  }
+
+  private mockProductionOfPermutation(permutation: ScheduledJob[], isLog?: boolean): number {
+    let mockTimestamp = 0;
+
+    do {
+      this.handleEachCurrentJobOfMachine(mockTimestamp);
+      this.addJobsToMachineQueues(permutation);
+
+      this.machines
+        .filter(machine => !machine.currentJob && machine.jobQueue.length)
+        .forEach(machine => {
+          machine.startProductionOfNext(mockTimestamp);
+          if (isLog) {
+            this.logSchedulingProcedure(machine.machineNr,
+              'Beginn der Abarbeitung von Auftrag ' + this.jobStringForLogging(machine.currentJob), LogEventType.PRODUCTION_START);
+          }
+        });
+
+      mockTimestamp++;
+    } while (permutation.some(job => job.nextMachineNr !== undefined));
+
+    return mockTimestamp;
   }
 
   // Dynamic scheduling:
@@ -141,20 +287,24 @@ export class SchedulingService {
       );
   }
 
-  // Called for any dynamically executed heuristic (before calling the heuristic based sorting)
-  private handleEachCurrentJobOfMachine(): void {
+  // Called for any dynamically executed heuristic (before calling the heuristic based sorting) and static procedure mocking
+  private handleEachCurrentJobOfMachine(mockTimestamp?: number): void {
+    // mock timestamp used for static procedures only
+    const usedTimestamp = mockTimestamp === undefined ? this.currentTimestampInScheduling : mockTimestamp;
     this.machines
       .filter(machine => machine.currentJob)
-      .forEach(machine => machine.freeIfCurrentJobOperationFinished(this.currentTimestampInScheduling));
+      .forEach(machine => machine.freeIfCurrentJobOperationFinished(usedTimestamp));
   }
 
-  // Called for any dynamically executed heuristic (before calling the heuristic based sorting)
-  private addJobsToMachineQueues(): void {
-    this.jobs
-      .filter(job =>
-        job.nextMachineNr !== undefined // Exclude jobs that are already finished
-        && !this.machines.some(m => m.currentJob === job) // exclude jobs that are currently in production
-      ).forEach(job => {
+  // Called for any dynamically executed heuristic (before calling the heuristic based sorting) and static procedure mocking
+  private addJobsToMachineQueues(givenJobs?: ScheduledJob[]): void {
+    // Given jobs used for static procedures only
+    const jobs = givenJobs ? givenJobs : this.jobs;
+
+    jobs.filter(job =>
+      job.nextMachineNr !== undefined // Exclude jobs that are already finished
+      && !this.machines.some(m => m.currentJob === job) // exclude jobs that are currently in production
+    ).forEach(job => {
       const nextMachine = this.machines.find(m => m.machineNr === job.nextMachineNr);
       if (!nextMachine.jobQueue.includes(job)) { // only add jobs, that have not been pushed to queue already
         nextMachine.jobQueue.push(job);
