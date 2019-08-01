@@ -2,3 +2,8 @@ a i {
   padding-right: 8px;
   color: var(--color-main);
 }
+
+mat-nav-list, mat-divider {
+  padding-top: 0;
+  margin-bottom: 12px;
+}

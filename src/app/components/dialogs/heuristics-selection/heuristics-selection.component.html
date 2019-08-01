@@ -5,14 +5,16 @@
   Heuristiken
 </h1>
 
-<mat-dialog-content class="mat-typography">
+<mat-dialog-content class="mat-typography text-justify">
 
   <p>
-    <!-- TODO: Add descriptional text -->
-    Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
-    Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
-    Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
-    Lorem ipsum dolor sit amet.
+    Bitte wählen Sie eines der untenstehenden heuristischen Verfahren, um das aktuelle Reihenfolgeproblem zu lösen:
+  </p>
+  <p>
+    Sollte eine Heuristik aktuell nicht anwendbar sein, so befindet sich ein rotes Icon neben ihrem Namen und Sie
+    erfahren beim Überfahren dieses Icons bzw. beim Auswählen der Heuristik, aus welchem Grund sie aktuell nicht
+    verwendet werden kann. Ein blaues Häkchen neben einer Heuristik bedeutet, dass sie aktuell anwendbar
+    ist.
   </p>
 
   <mat-nav-list>
@@ -35,6 +37,25 @@
 
     </span>
   </mat-nav-list>
+
+  <mat-divider></mat-divider>
+
+  <p class="font-weight-bold">
+    Weitere Hinweise:
+  </p>
+  <p>
+    Beim Verwenden von Prioritätsregeln wird kein spezifischer Zielfunktionswert vorausgesetzt, da abhängig von der bzw.
+    den gewählte(n) Regel(n) unterschiedliche Werte betrachtet werden und die Regeln ferner frei kombinierbar sind. Ein
+    womöglich gewählter, zu minimierender Zielfunktionswert würde also ignoriert werden.
+  </p>
+  <p>
+    Definierte Ablaufeigenschaften, die nicht für die Lösung des Reihenfolgeproblems mit der gewählten Heuristik
+    vorausgesetzt sind, werden beim Ermitteln der Reihenfolge ignoriert. Eine Ausnahme bilden spezifizierte gewünschte
+    Fertigstellungszeitpunkte, die zwar, sofern nicht benötigt, nicht in die eigentliche Berechnung einbezogen werden,
+    jedoch stets zum Visualisieren der Lösungsgüte der Heuristik den tatsächlichen Fertigstellungszeitpunkten
+    gegenübergestellt werden können.
+  </p>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
