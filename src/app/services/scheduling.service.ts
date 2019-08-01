@@ -122,8 +122,8 @@ export class SchedulingService {
             machine.jobQueue.sort((jobA: ScheduledJob, jobB: ScheduledJob) =>
               this.dynamicComparisonResultForCurrentHeuristic(jobA, jobB, machine.machineNr)
             );
-            this.logSchedulingProcedure(machine.machineNr, 'Fertig bestimmte Warteschlange: ' + machine.jobQueue
-              .map(job => this.jobStringForLogging(job)).join(' -> '), LogEventType.JOB_QUEUE);
+            this.logSchedulingProcedure(machine.machineNr, 'Fertig bestimmte Warteschlange: ' +
+              this.jobListStringForLogging(machine.jobQueue), LogEventType.JOB_QUEUE);
           }
 
           // No current job could be possible here because of setup times
@@ -830,6 +830,10 @@ export class SchedulingService {
 
   private jobStringForLogging(job: ScheduledJob): string {
     return '\'' + job.name + '\' (ID: ' + job.id + ')';
+  }
+
+  private jobListStringForLogging(jobs: ScheduledJob[]): string {
+    return jobs.map(job => this.jobStringForLogging(job)).join(' -> ');
   }
 
 }
