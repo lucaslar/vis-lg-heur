@@ -26,3 +26,7 @@ mat-expansion-panel div.content {
 mat-expansion-panel div.content.no-padding-bottom {
   padding-bottom: 0;
 }
+
+.loading-content {
+  padding-top: 24px;
+}

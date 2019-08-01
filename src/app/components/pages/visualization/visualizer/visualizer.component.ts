@@ -14,6 +14,7 @@ export class VisualizerComponent implements OnInit {
 
   private _usedHeuristic: Heuristic;
   private _result: SchedulingResult;
+  private _loadingMessage: string;
 
   private _isGanttChartVisible = true;
   private _isGeneralDataVisible = true;
@@ -33,7 +34,9 @@ export class VisualizerComponent implements OnInit {
       if (!this.usedHeuristic || this.usedHeuristic.heuristicDefiner !== heuristicDefiner) {
         this._usedHeuristic = Heuristic.getHeuristicByDefiner(heuristicDefiner);
         this._result = undefined;
-        this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
+        setTimeout(() => {
+          this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner);
+        }, 500);
       }
     });
   }
@@ -100,5 +103,9 @@ export class VisualizerComponent implements OnInit {
 
   get usedHeuristic(): Heuristic {
     return this._usedHeuristic;
+  }
+
+  get loadingMessage(): string {
+    return this._loadingMessage;
   }
 }
