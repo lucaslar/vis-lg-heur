@@ -36,11 +36,11 @@ export class StorageService {
     } else if (definableValue === DefinableValue.BETA_DUE_DATES) {
       expectedDefinitions = this.jobs.length;
       existingDefinitions = this.jobs.filter(job => job.dueDate).length;
-    } else if (definableValue === DefinableValue.BETA_SETUP_TIMES && this.jobs.length) {
+    } else if (definableValue === DefinableValue.BETA_SETUP_TIMES && this.jobs.length > 1) {
       expectedDefinitions = (this.jobs.length - 1) * this.jobs.length;
       existingDefinitions = this.jobs.map(job => job.setupTimesToOtherJobs ? job.setupTimesToOtherJobs
         .filter(setupTime => setupTime.duration !== undefined).length : 0).reduce((num1, num2) => num1 + num2);
-    } else if (definableValue === DefinableValue.BETA_SETUP_TIMES && !this.jobs.length) {
+    } else if (definableValue === DefinableValue.BETA_SETUP_TIMES) {
       return DefinitionStatus.NOT_DEFINED;
     } else if (definableValue === DefinableValue.PRIORITY_RULES) {
       // Since not all rules have to be selected:
