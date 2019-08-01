@@ -20,16 +20,19 @@ import {ChartData, ChartType, Dataset, TimelineData} from '../model/internal/vis
 import {LogEventType} from '../model/enums/LogEventType';
 import {DefinableValue} from '../model/internal/value-definition/DefinableValue';
 import {DefinitionStatus} from '../model/internal/value-definition/DefinitionStatus';
+import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SchedulingService {
 
-  private jobs: ScheduledJob[];
-  private machines: Machine[];
+  private objectiveFunction: ObjectiveFunction;
   private heuristicType: HeuristicDefiner;
   private priorityRules: PriorityRule[];
+
+  private jobs: ScheduledJob[];
+  private machines: Machine[];
   private currentTimestampInScheduling: number;
 
   private logging: SchedulingLogEntry[];
@@ -43,10 +46,14 @@ export class SchedulingService {
     this.initialize(heuristicDefiner);
 
     const tStart = performance.now();
-    do {
-      this.proceedScheduling();
-      this.currentTimestampInScheduling++;
-    } while (this.jobs.some(job => job.nextMachineNr !== undefined));
+    if (this.isDynamicallySolvable()) {
+      do {
+        this.proceedDynamicScheduling();
+        this.currentTimestampInScheduling++;
+      } while (this.jobs.some(job => job.nextMachineNr !== undefined));
+    } else {
+      this.scheduleStatically();
+    }
 
     const schedulingPerformance = performance.now() - tStart;
     const schedulingData = this.generateSchedulingResult();
@@ -70,6 +77,7 @@ export class SchedulingService {
     if (heuristicDefiner === HeuristicDefiner.PRIORITY_RULES) {
       this.priorityRules = <PriorityRule[]>JSON.parse(JSON.stringify(this.storage.priorityRules));
     }
+    this.objectiveFunction = this.storage.objectiveFunction;
   }
 
   private deleteTemporarilyStoredData(): void {
@@ -81,7 +89,21 @@ export class SchedulingService {
     delete this.priorityRules;
   }
 
-  private proceedScheduling(): void {
+  private isDynamicallySolvable(): boolean {
+    // TODO: More static procedure? add here:
+    return this.heuristicType !== HeuristicDefiner.NEH_HEURISTIC;
+  }
+
+  // Static scheduling:
+
+  // TODO: Only NEH? -> Rename
+  private scheduleStatically(): void {
+    console.log('Static');
+  }
+
+  // Dynamic scheduling:
+
+  private proceedDynamicScheduling(): void {
     this.handleEachCurrentJobOfMachine();
     this.addJobsToMachineQueues();
 
@@ -96,7 +118,7 @@ export class SchedulingService {
 
             this.logSchedulingProcedure(machine.machineNr, 'Beginn der Sortierung der Warteschlange', LogEventType.HEURISTIC_BASED_SORTING);
             machine.jobQueue.sort((jobA: ScheduledJob, jobB: ScheduledJob) =>
-              this.comparisonResultForCurrentHeuristic(jobA, jobB, machine.machineNr)
+              this.dynamicComparisonResultForCurrentHeuristic(jobA, jobB, machine.machineNr)
             );
             this.logSchedulingProcedure(machine.machineNr, 'Fertig bestimmte Warteschlange: ' + machine.jobQueue
               .map(job => this.jobStringForLogging(job)).join(' -> '), LogEventType.JOB_QUEUE);
@@ -117,14 +139,14 @@ export class SchedulingService {
       );
   }
 
-  // Called for any heuristic (before calling the heuristic itself)
+  // Called for any dynamically executed heuristic (before calling the heuristic based sorting)
   private handleEachCurrentJobOfMachine(): void {
     this.machines
       .filter(machine => machine.currentJob)
       .forEach(machine => machine.freeIfCurrentJobOperationFinished(this.currentTimestampInScheduling));
   }
 
-  // Called for any heuristic (before calling the heuristic itself)
+  // Called for any dynamically executed heuristic (before calling the heuristic based sorting)
   private addJobsToMachineQueues(): void {
     this.jobs
       .filter(job =>
@@ -140,8 +162,8 @@ export class SchedulingService {
     });
   }
 
-  // Implementation of sorting based on heuristics starts here:
-  private comparisonResultForCurrentHeuristic(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number): number {
+  // Implementation of sorting based on heuristics starts here (for dynamically executed heuristics):
+  private dynamicComparisonResultForCurrentHeuristic(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number): number {
     if (this.heuristicType === HeuristicDefiner.PRIORITY_RULES) {
       return this.compareJobsByPriorityRules(jobA, jobB, machineNr);
     } else if (this.heuristicType === HeuristicDefiner.NEAREST_NEIGHBOUR) {
