@@ -109,13 +109,6 @@ export class StorageService {
     }
   }
 
-  deleteUndefinedBetaValuesBlockingFunctions(isForced?: boolean): void {
-    if (isForced || this.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) === DefinitionStatus.NOT_DEFINED) {
-      this.jobs.forEach(job => job.setupTimesToOtherJobs = undefined);
-      this.jobs = this.jobs;
-    }
-  }
-
   private checkValuesForHeuristic(heuristic: Heuristic): DefinableValue | undefined {
     for (const value of heuristic.requiredValues) {
       if (this.getValueDefinitionStatus(value) !== DefinitionStatus.COMPLETELY_DEFINED) {
