@@ -104,8 +104,7 @@ export class SchedulingService {
 
   // TODO: Only NEH? -> Rename
   private scheduleStatically(): void {
-    this.logSchedulingProcedure(1, 'Bestimmen der maschinenübergreifenden Warteschlange bzw. Abarbeitungsreihenfolge',
-      LogEventType.JOB_QUEUE);
+    this.logSchedulingProcedure(1, 'Bestimmen der maschinenübergreifenden Abarbeitungsreihenfolge', LogEventType.JOB_QUEUE);
 
     const presortedJobs = this.preSortJobs();
 
@@ -117,6 +116,9 @@ export class SchedulingService {
       currentPermutations = this.createPermutations(bestPermutationYet, presortedJobs[i]);
       bestPermutationYet = this.getBestPermutation(currentPermutations);
     }
+
+    this.logSchedulingProcedure(1, 'Maschinenübergreifende Abarbeitungsreihenfolge: ' +
+      this.jobListStringForLogging(bestPermutationYet), LogEventType.JOB_QUEUE);
 
     // Run final solution once again in order to be able to generate diagrams later on:
     this.jobs = bestPermutationYet.map(job => new ScheduledJob(job));
