@@ -1,5 +1,3 @@
-<!-- TODO: add tooltip in console -->
-
 <div #container>
 
   <div *ngIf="!detectChartVisibility()"
@@ -11,7 +9,7 @@
     </div>
   </div>
 
-  <!-- TODO Gantt information here -->
+  <!-- TODO Content: Gantt information -->
 
   <div class="solution-diagram">
     <!-- TODO: on window nav bar hidden due to resizing: detect changes? -->
@@ -35,17 +33,27 @@
     <div class="chart-console-container"
          [style.width.px]="container.offsetWidth - 16">
 
+      <!-- Tooltips since longer strings may be cut off on smaller devices -->
       <div #chartConsole class="chart-console font-weight-light">
         <div *ngIf="!displayedOperation; else operation" class="text-center">
           <span class="information font-italic">{{consoleText}}</span>
         </div>
         <ng-template #operation>
-          <div class="no-wrap-text-ellipsis" [style.color]="displayedOperation.color">
+
+          <div class="no-wrap-text-ellipsis"
+               [style.color]="displayedOperation.color"
+               matTooltip="{{displayedOperation.start}} - {{displayedOperation.end}}
+                  (Dauer: {{displayedOperation.duration}})
+                  an {{displayedOperation.machine}}">
+
             <i class="fas fa-stopwatch"></i>{{displayedOperation.start}} - {{displayedOperation.end}}
             (Dauer: {{displayedOperation.duration}})
             an {{displayedOperation.machine}}
           </div>
-          <div class="no-wrap-text-ellipsis" [style.color]="displayedOperation.color">
+          <div class="no-wrap-text-ellipsis"
+               [style.color]="displayedOperation.color"
+               matTooltip="{{displayedOperation.job}}">
+
             <i class="fas fa-tools align-middle"></i>{{displayedOperation.job}}
           </div>
         </ng-template>
