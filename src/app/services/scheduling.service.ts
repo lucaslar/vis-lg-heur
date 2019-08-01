@@ -38,6 +38,8 @@ export class SchedulingService {
   private logging: SchedulingLogEntry[];
 
   // TODO also add gamma to general data result
+  // TODO Round results in avg. setup times diagrams
+  // TODO Add diagram: comparison: delay and due date for each job
 
   constructor(public storage: StorageService) {
   }

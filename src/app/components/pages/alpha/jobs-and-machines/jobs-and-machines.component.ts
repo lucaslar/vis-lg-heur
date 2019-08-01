@@ -19,6 +19,8 @@ import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 })
 export class JobsAndMachinesComponent implements OnInit {
 
+  // TODO: Delete all machine times button?
+
   private _definableValue = DefinableValue;
   private _configurationStatus = DefinitionStatus;
 
@@ -158,7 +160,7 @@ export class JobsAndMachinesComponent implements OnInit {
 
   shuffleMachineOrderOfExistingJobs(): void {
     this.jobs.forEach(job => job.machineTimes = job.machineTimes.sort(() => Math.random() - 0.5));
-    this.openSnackBar( 3, 'Abarbeitungsreihenfolge der Arbeitsgänge aller Aufträge zufällig angeordnet');
+    this.openSnackBar(3, 'Abarbeitungsreihenfolge der Arbeitsgänge aller Aufträge zufällig angeordnet');
     this.storage.jobs = this.jobs;
   }
 
