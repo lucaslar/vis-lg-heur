@@ -181,38 +181,21 @@ export class SchedulingService {
   }
 
   private getBestPermutation(permutations: ScheduledJob[][]): ScheduledJob[] {
-    permutations.sort((p1, p2) => {
 
-        const valueA = this.getCompareValueForPermutation(p1);
-        const valueB = this.getCompareValueForPermutation(p2);
+    const permutationsAndValuesTuple = permutations.map(permutation => {
+      const value = this.getCompareValueForPermutation(permutation);
+      this.logSchedulingProcedure(1, 'Ermitteln des zu minimierenden Zielwerts bei Abarbeitung von Permutation ' +
+        this.jobListStringForLogging(permutation) + ' mit dem Ergebnis: ' + value, LogEventType.HEURISTIC_BASED_SORTING);
+      return [permutation, value];
+    });
 
-        // Logging:
-        if (valueA < valueB) {
-          this.logSchedulingProcedure(1,
-            'Maschinenübergreifendes Bevorzugen von Permutation ' + this.jobListStringForLogging(p1) +
-            ' (zu minimierender Zielwert bei Abarbeitung ' + valueA + ') gegenüber ' + this.jobListStringForLogging(p2) +
-            ' (zu minimierender Zielwert bei Abarbeitung ' + valueB + ')', LogEventType.HEURISTIC_BASED_SORTING);
-        } else if (valueB < valueA) {
-          this.logSchedulingProcedure(1,
-            'Maschinenübergreifendes Bevorzugen von Permutation ' + this.jobListStringForLogging(p2) +
-            ' (zu minimierender Zielwert bei Abarbeitung ' + valueB + ') gegenüber ' + this.jobListStringForLogging(p1) +
-            ' (zu minimierender Zielwert bei Abarbeitung ' + valueA + ')', LogEventType.HEURISTIC_BASED_SORTING);
-        } else {
-          this.logSchedulingProcedure(1,
-            'Zu minimierender Zielwert bei Abarbeitungen von Permutationen ' + this.jobListStringForLogging(p1) + ' & ' +
-            this.jobListStringForLogging(p2) + ' identisch (' + valueA + '), daher keine Sortierung möglich',
-            LogEventType.HEURISTIC_BASED_SORTING);
-        }
-        // End of logging
+    const minValue = Math.min.apply(Math, permutationsAndValuesTuple.map(paw => paw[1]));
+    const bestPermutation = <ScheduledJob[]>permutationsAndValuesTuple.find(permutation => permutation[1] === minValue)[0];
 
-        return valueA - valueB;
-      }
-    );
+    this.logSchedulingProcedure(1, 'Kleinster zu minimierender Zielwert ist ' + minValue + ' und somit maschinenübergreifend weiter ' +
+      'betrachtete Permutation: ' + this.jobListStringForLogging(bestPermutation), LogEventType.HEURISTIC_BASED_SORTING);
 
-    this.logSchedulingProcedure(1, 'Maschinenübergreifend weiter betrachtete Permutation' + this.jobListStringForLogging(permutations[0]),
-      LogEventType.HEURISTIC_BASED_SORTING);
-
-    return permutations[0];
+    return bestPermutation;
   }
 
   private getCompareValueForPermutation(permutation: ScheduledJob[]): number {
