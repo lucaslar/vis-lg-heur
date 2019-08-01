@@ -157,17 +157,17 @@ export class StorageService {
 
   private getNotApplicableDueToWrongOrMissingFunction(heuristic: Heuristic): DialogContent {
     return new DialogContent(
-      'Zielfunktion nicht passend',
+      'Zielfunktionswert nicht passend',
       [
         'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
-        heuristic.name + ') nicht die richtige zu minimierende Zielfunktion vorliegt.',
+        heuristic.name + ') nicht der richtige zu minimierende Zielfunktionswert vorliegt.',
         'Benötigt wird: ' + [...heuristic.requiredValuesForObjectiveFunctions.keys()].join(' oder ') +
         ', aktuell gewählt ist allerdings' +
-        (this.objectiveFunction ? ': ' + this.objectiveFunction + '.' : ' keine Zielfunktion.') +
+        (this.objectiveFunction ? ': ' + this.objectiveFunction + '.' : ' kein Zielfunktionswert.') +
         ' Bitte wählen Sie ' + ([...heuristic.requiredValuesForObjectiveFunctions.keys()].length > 1 ?
           'eine' : 'die') + ' gennnte Funktion, um fortfahren zu können.',
         'Das Lösen von Reihenfolgeproblemen mithilfe von Prioritätsregeln stellt hierbei eine Besonderheit dar, da ' +
-        'durch die Wahl unterschiedlicher Regeln unterschiedliche Zielwerte betrachtet werden.'
+        'durch die Wahl unterschiedlicher Regeln unterschiedliche Zielwerte betrachtet werden und diese frei kombinierbar sind.'
       ],
       DialogType.ERROR
     );
