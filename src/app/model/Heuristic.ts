@@ -10,6 +10,7 @@ export class Heuristic {
   private readonly _requiredValues: DefinableValue[];
   private readonly _requiredMachineConfigs: MachineConfig[];
   private readonly _requiredValuesForObjectiveFunctions: Map<ObjectiveFunction, DefinableValue[]>;
+  private readonly _machineConfigRequiresFunction: Map<MachineConfig, ObjectiveFunction[]>;
 
   // TODO: Required machine nr.?
 
@@ -17,12 +18,14 @@ export class Heuristic {
               heuristicDefiner: HeuristicDefiner,
               requiredValues: DefinableValue[],
               requiredMachineConfigs: MachineConfig[],
-              requiredValuesForObjectiveFunctions?: Map<ObjectiveFunction, DefinableValue[]>) {
+              requiredValuesForObjectiveFunctions?: Map<ObjectiveFunction, DefinableValue[]>,
+              machineConfigRequiresFunction?: Map<MachineConfig, ObjectiveFunction[]>) {
     this._name = name;
     this._heuristicDefiner = heuristicDefiner;
     this._requiredValues = requiredValues;
     this._requiredMachineConfigs = requiredMachineConfigs;
     this._requiredValuesForObjectiveFunctions = requiredValuesForObjectiveFunctions;
+    this._machineConfigRequiresFunction = machineConfigRequiresFunction;
   }
 
   static getHeuristicByDefiner(definer: HeuristicDefiner): Heuristic {
@@ -66,12 +69,16 @@ export class Heuristic {
     functions.set(ObjectiveFunction.CYCLE_TIME, []);
     functions.set(ObjectiveFunction.MEAN_DELAY, [DefinableValue.BETA_DUE_DATES]);
 
+    const machineConfigRequiresFunction = new Map<MachineConfig, ObjectiveFunction[]>();
+    machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [ObjectiveFunction.MEAN_DELAY]);
+
     return new Heuristic(
       'NEH-Heuristik',
       definer,
       [DefinableValue.ALPHA_JOB_TIMES],
       [MachineConfig.ONE_MACHINE, MachineConfig.FLOWSHOP],
-      functions
+      functions,
+      machineConfigRequiresFunction
     );
   }
 
@@ -93,5 +100,9 @@ export class Heuristic {
 
   get requiredValuesForObjectiveFunctions(): Map<ObjectiveFunction, DefinableValue[]> {
     return this._requiredValuesForObjectiveFunctions;
+  }
+
+  get machineConfigRequiresFunction(): Map<MachineConfig, ObjectiveFunction[]> {
+    return this._machineConfigRequiresFunction;
   }
 }

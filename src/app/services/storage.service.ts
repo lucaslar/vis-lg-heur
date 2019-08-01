@@ -84,6 +84,11 @@ export class StorageService {
         heuristic.heuristicDefiner !== HeuristicDefiner.PRIORITY_RULES
         && (!this.objectiveFunction || ![...heuristic.requiredValuesForObjectiveFunctions.keys()].includes(this.objectiveFunction))) {
         return isDialogRequired ? this.getNotApplicableDueToWrongOrMissingFunction(heuristic) : false;
+      } else if (
+        heuristic.machineConfigRequiresFunction &&
+        heuristic.machineConfigRequiresFunction.get(this.machineConfigParam) &&
+        !heuristic.machineConfigRequiresFunction.get(this.machineConfigParam).includes(this.objectiveFunction)) {
+        return isDialogRequired ? this.getNotApplicableDueToMachineConfigRequiringFunctionDialog(heuristic) : false;
       } else {
         const missingValue = this.checkValuesForHeuristic(heuristic);
         const isApplicable = missingValue === undefined;
@@ -127,26 +132,6 @@ export class StorageService {
     return undefined;
   }
 
-  private getNotApplicableDueToValueDialog(missingValue: DefinableValue, heuristic: Heuristic): DialogContent {
-    return new DialogContent(
-      'Werte für Berechnung unvollständig',
-      [
-        'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
-        heuristic.name + ') nicht alle benötigten Werte vorliegen.',
-        'Konkret handelt es sich dabei um ' + (this.getValueDefinitionStatus(missingValue) === DefinitionStatus.NOT_DEFINED
-          ? '' : 'zum Teil ') + 'undefinierte ' + missingValue + '.',
-        heuristic.requiredValuesForObjectiveFunctions &&
-        heuristic.requiredValuesForObjectiveFunctions.get(this.objectiveFunction).includes(missingValue) ?
-          'Dieser Wert wird nur aufgrund der gewählten Zielfunktion benötigt. Für die Verwendung dieser Heuristik bei einer anderen zu ' +
-          'minimierenden Zielfunktion (' +
-          [...heuristic.requiredValuesForObjectiveFunctions.keys()].filter(k => k !== this.objectiveFunction).join(', ') +
-          ') ist dieser Wert ggf. nicht zu definieren.' : '',
-        'Bitte sorgen Sie dafür, dass die genannten Werte vollständig sind, um fortfahren zu können.'
-      ],
-      DialogType.ERROR
-    );
-  }
-
   private getNotApplicableDueToMachineConfigDialog(heuristic: Heuristic): DialogContent {
     const possibleMachineConfigs = [];
     heuristic.requiredMachineConfigs.forEach(config => {
@@ -183,6 +168,40 @@ export class StorageService {
           'eine' : 'die') + ' gennnte Funktion, um fortfahren zu können.',
         'Das Lösen von Reihenfolgeproblemen mithilfe von Prioritätsregeln stellt hierbei eine Besonderheit dar, da ' +
         'durch die Wahl unterschiedlicher Regeln unterschiedliche Zielwerte betrachtet werden.'
+      ],
+      DialogType.ERROR
+    );
+  }
+
+  private getNotApplicableDueToMachineConfigRequiringFunctionDialog(heuristic: Heuristic): DialogContent {
+    return new DialogContent(
+      'Zielfunktionswert nicht zu aktueller Maschinenkonfiguration passend',
+      [
+        'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da das gewählte heuristische Verfahren (' + heuristic.name +
+        ') für die aktuelle Maschinenkonfiguration einen anderen zu minimierenden Zielfunktionswert ' +
+        'voraussetzt (' + heuristic.machineConfigRequiresFunction.get(this.machineConfigParam).join(', ') +
+        '), aktuell gewählt ist allerdings ' + this.objectiveFunction + '.',
+        'Bitte ändern Sie daher den Zielfunktionswert oder die Maschinenkonfiguration.'
+      ],
+      DialogType.ERROR
+    );
+  }
+
+  private getNotApplicableDueToValueDialog(missingValue: DefinableValue, heuristic: Heuristic): DialogContent {
+    return new DialogContent(
+      'Werte für Berechnung unvollständig',
+      [
+        'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
+        heuristic.name + ') nicht alle benötigten Werte vorliegen.',
+        'Konkret handelt es sich dabei um ' + (this.getValueDefinitionStatus(missingValue) === DefinitionStatus.NOT_DEFINED
+          ? '' : 'zum Teil ') + 'undefinierte ' + missingValue + '.',
+        heuristic.requiredValuesForObjectiveFunctions &&
+        heuristic.requiredValuesForObjectiveFunctions.get(this.objectiveFunction).includes(missingValue) ?
+          'Dieser Wert wird nur aufgrund des gewählten Zielfunktionswerts benötigt. Für die Verwendung dieser Heuristik ' +
+          'bei einem anderen zu minimierenden Zielfunktionswert (' +
+          [...heuristic.requiredValuesForObjectiveFunctions.keys()].filter(k => k !== this.objectiveFunction).join(', ') +
+          ') ist dieser Wert ggf. nicht zu definieren.' : '',
+        'Bitte sorgen Sie dafür, dass die genannten Werte vollständig sind, um fortfahren zu können.'
       ],
       DialogType.ERROR
     );
