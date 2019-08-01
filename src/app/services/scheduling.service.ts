@@ -27,6 +27,10 @@ import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
 })
 export class SchedulingService {
 
+  // TODO Allow scheduling without logging -> faster (Checkbox in dialog)
+  // TODO Then -> Check if logging in KPI
+  // TODO Add how many files logged logging component (before opening the file)
+
   private objectiveFunction: ObjectiveFunction;
   private heuristicType: HeuristicDefiner;
   private priorityRules: PriorityRule[];
@@ -236,8 +240,8 @@ export class SchedulingService {
         .forEach(machine => {
           machine.startProductionOfNext(mockTimestamp);
           if (isLog) {
-            this.logSchedulingProcedure(machine.machineNr,
-              'Beginn der Abarbeitung von Auftrag ' + this.jobStringForLogging(machine.currentJob), LogEventType.PRODUCTION_START);
+            this.logSchedulingProcedure(machine.machineNr, 'Beginn der Abarbeitung von Auftrag ' +
+              this.jobStringForLogging(machine.currentJob), LogEventType.PRODUCTION_START, mockTimestamp);
           }
         });
 
@@ -306,8 +310,12 @@ export class SchedulingService {
       const nextMachine = this.machines.find(m => m.machineNr === job.nextMachineNr);
       if (!nextMachine.jobQueue.includes(job)) { // only add jobs, that have not been pushed to queue already
         nextMachine.jobQueue.push(job);
-        this.logSchedulingProcedure(nextMachine.machineNr, 'Hinzufügen zur Warteschlange von '
-          + this.jobStringForLogging(job), LogEventType.JOB_QUEUE);
+
+        // In case of static scheduling:
+        if (!givenJobs) {
+          this.logSchedulingProcedure(nextMachine.machineNr, 'Hinzufügen zur Warteschlange von '
+            + this.jobStringForLogging(job), LogEventType.JOB_QUEUE);
+        }
       }
     });
   }
@@ -972,8 +980,9 @@ export class SchedulingService {
     return sortedColors;
   }
 
-  private logSchedulingProcedure(machineNr: number, description: string, type: LogEventType): void {
-    this.logging.push(new SchedulingLogEntry(this.currentTimestampInScheduling, machineNr, description, type));
+  private logSchedulingProcedure(machineNr: number, description: string, type: LogEventType, time?: number): void {
+    time = time === undefined ? this.currentTimestampInScheduling : time;
+    this.logging.push(new SchedulingLogEntry(time, machineNr, description, type));
   }
 
   private jobStringForLogging(job: ScheduledJob): string {
