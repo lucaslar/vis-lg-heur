@@ -109,17 +109,17 @@ export class SchedulingService {
 
     const presortedJobs = this.preSortJobs();
 
-    let yetBestPermutation: ScheduledJob[] = [presortedJobs[0]];
+    let bestPermutationYet: ScheduledJob[] = [presortedJobs[0]];
     let currentPermutations: ScheduledJob[][];
 
     // start index 1 as first permutation already contains 0:
     for (let i = 1; i < presortedJobs.length; i++) {
-      currentPermutations = this.createPermutations(yetBestPermutation, presortedJobs[i]);
-      yetBestPermutation = this.getBestPermutation(currentPermutations);
+      currentPermutations = this.createPermutations(bestPermutationYet, presortedJobs[i]);
+      bestPermutationYet = this.getBestPermutation(currentPermutations);
     }
 
     // Run final solution once again in order to be able to generate diagrams later on:
-    this.jobs = yetBestPermutation.map(job => new ScheduledJob(job));
+    this.jobs = bestPermutationYet.map(job => new ScheduledJob(job));
     this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
   }
 

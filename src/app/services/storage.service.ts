@@ -57,7 +57,6 @@ export class StorageService {
   getMessageIfExactlySolvableProblem(): DialogContent | undefined {
 
     // TODO: Implement case: Exactly solvable but more than 2 machines!
-    // TODO Check Gamma after gamma being stored in StorageService.
 
     return this.nrOfMachines === 2 ?
       new DialogContent(
