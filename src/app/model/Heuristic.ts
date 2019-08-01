@@ -31,7 +31,10 @@ export class Heuristic {
       return this.priorityRulesHeuristic(definer);
     } else if (definer === HeuristicDefiner.NEAREST_NEIGHBOUR) {
       return this.nearestNeighbourHeuristic(definer);
+    } else if (definer === HeuristicDefiner.NEH_HEURISTIC) {
+      return this.nehHeuristic(definer);
     } else {
+      console.log('define ' + definer);
       return undefined;
     }
   }
@@ -54,6 +57,20 @@ export class Heuristic {
       definer,
       [DefinableValue.ALPHA_JOB_TIMES, DefinableValue.BETA_SETUP_TIMES],
       [MachineConfig.ONE_MACHINE],
+      functions
+    );
+  }
+
+  private static nehHeuristic(definer: HeuristicDefiner) {
+    const functions = new Map<ObjectiveFunction, DefinableValue[]>();
+    functions.set(ObjectiveFunction.CYCLE_TIME, []);
+    functions.set(ObjectiveFunction.MEAN_DELAY, [DefinableValue.BETA_DUE_DATES]);
+
+    return new Heuristic(
+      'NEH-Heuristik',
+      definer,
+      [DefinableValue.ALPHA_JOB_TIMES],
+      [MachineConfig.ONE_MACHINE, MachineConfig.FLOWSHOP],
       functions
     );
   }
