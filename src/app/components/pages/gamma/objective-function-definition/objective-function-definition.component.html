@@ -32,9 +32,11 @@
                             class="ord-text"
                             (change)="onSelectionChange($event)">
             <div class="wrap-mat-radio-label">
-              {{objFunction}}
-              <span class="information"
-                    [innerHtml]="'(' + (objFunction | objectiveFunctionFormal) + ')'">
+              <span class="font-italic"
+                    [innerHtml]="(objFunction | objectiveFunctionFormal)">
+              </span>
+              <span class="information">
+                ({{objFunction}})
               </span>
             </div>
           </mat-radio-button>
@@ -56,5 +58,3 @@
     </div>
   </div>
 </mat-card>
-
-<!-- TODO Add formula here? Create pipe? -->

@@ -21,7 +21,7 @@ export class GammaFormalPipe implements PipeTransform {
       return '&sum;w<sub>j</sub>U<sub>j</sub>';
     } else if (value === ObjectiveFunction.SUM_SETUP_TIME) {
       // TODO Correct?
-      return '&sum; R<sub>j</sub>';
+      return '&sum; s<sub>j</sub>';
     } else {
       // TODO: delete after having defined each
       console.error('define: ' + value);
