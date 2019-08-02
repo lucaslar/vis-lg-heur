@@ -40,7 +40,6 @@ export class SchedulingService {
 
   // TODO also add gamma to general data result
   // TODO Round results in avg. setup times diagrams
-  // TODO Add diagram: comparison: delay and due date for each job
 
   constructor(public storage: StorageService) {
   }
@@ -578,10 +577,8 @@ export class SchedulingService {
 
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
-    visualization.colors = this.getColorsAsSpecifiedInGanttFirstMachine()
-      .map(color => 'rgba(' + color + ',0.8)');
-    visualization.title = 'Gesamtbearbeitungsdauer ' +
-      (isMindDueDates ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
+    visualization.colors = this.getColorsAsSpecifiedInGanttFirstMachine().map(color => 'rgba(' + color + ',0.8)');
+    visualization.title = 'Gesamtbearbeitungsdauer ' + (isMindDueDates ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
     visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
     visualization.datasets = [dataset];
     visualization.xLabel = 'Aufträge';
@@ -722,6 +719,7 @@ export class SchedulingService {
     data.finishedJobsAtTimestamp = this.generateFinishedJobsAtTimestampVisualization();
 
     if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED) {
+      data.comparisonFinishTimestampAndDueDate = this.generateComparisonFinishTimestampAndDueDate();
       data.cumulatedDelaysAtTimestamps = this.generateCumulatedDelaysVisualization();
       data.comparisonDelayedAndInTimeJobs = this.generateComparisonDelayedAndInTimeVisualization();
     }
@@ -757,6 +755,28 @@ export class SchedulingService {
     visualization.datasets = [dataset];
     visualization.xLabel = 'Zeiteinheiten';
     visualization.yLabel = 'Anzahl';
+
+    return visualization;
+  }
+
+  private generateComparisonFinishTimestampAndDueDate(): ChartData {
+    const sortedJobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
+    const dataset1 = new Dataset();
+    dataset1.data = sortedJobs.map(job => job.finishedAtTimestamp);
+    dataset1.label = 'Ist-Fertigstellungstermin';
+
+    const dataset2 = new Dataset();
+    dataset2.data = sortedJobs.map(job => job.dueDate);
+    dataset2.label = 'Soll-Fertigstellungstermin';
+
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_BAR;
+    visualization.colors = this.getColorsAsSpecifiedInGanttFirstMachine().map(color => 'rgba(' + color + ',0.8)');
+    visualization.title = 'Ist- und Soll-Fertigstellungstermine aller Aufträge ';
+    visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
+    visualization.datasets = [dataset1, dataset2];
+    visualization.xLabel = 'Aufträge';
+    visualization.yLabel = 'Zeiteinheiten';
 
     return visualization;
   }

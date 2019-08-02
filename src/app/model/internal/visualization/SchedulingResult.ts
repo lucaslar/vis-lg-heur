@@ -171,6 +171,7 @@ export class VisualizableSolutionQualityData {
   // Only if delays are configured:
   private _cumulatedDelaysAtTimestamps: ChartData;
   private _comparisonDelayedAndInTimeJobs: ChartData;
+  private _comparisonFinishTimestampAndDueDate: ChartData;
 
   // Only if sum of setup times is to be optimized:
   private _cumulatedSetupTimesAtTimetamps: ChartData;
@@ -199,6 +200,14 @@ export class VisualizableSolutionQualityData {
 
   set finishedJobsAtTimestamp(value: ChartData) {
     this._finishedJobsAtTimestamp = value;
+  }
+
+  get comparisonFinishTimestampAndDueDate(): ChartData {
+    return this._comparisonFinishTimestampAndDueDate;
+  }
+
+  set comparisonFinishTimestampAndDueDate(value: ChartData) {
+    this._comparisonFinishTimestampAndDueDate = value;
   }
 
   get cumulatedSetupTimesAtTimetamps(): ChartData {
