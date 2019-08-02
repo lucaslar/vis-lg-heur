@@ -126,10 +126,7 @@ export class SchedulingService {
   }
 
   private preSortJobs(): ScheduledJob[] {
-    const preSortBasedOn = this.objectiveFunction === ObjectiveFunction.MEAN_DELAY ?
-      'gewünschten Fertigstellungsterminen' : 'der Summe der Gesamtbearbeitungszeiten';
-    this.logSchedulingProcedure(1, 'Maschinenübergreifendes Vorsortieren der Aufträge nach ' + preSortBasedOn,
-      LogEventType.HEURISTIC_BASED_SORTING);
+    this.logPreSortingBasedOnObjectiveFunction();
 
     const sortedJobs = this.jobs.sort((j1, j2) => {
       const valueA = this.getCompareValueForPresortingBasedOnObjectiveFunction(j1);
@@ -158,6 +155,26 @@ export class SchedulingService {
       this.jobListStringForLogging(sortedJobs), LogEventType.HEURISTIC_BASED_SORTING);
 
     return sortedJobs;
+  }
+
+  private logPreSortingBasedOnObjectiveFunction(): void {
+    let preSortBasedOn: string;
+
+    if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY) {
+      preSortBasedOn = 'gewünschten Fertigstellungsterminen';
+    } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME) {
+      preSortBasedOn = 'der Summe der Gesamtbearbeitungszeiten';
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
+      preSortBasedOn = 'der Summe der (tatsächlichen) Fertigstellungstermine';
+    } else if (this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DELAYS) {
+      preSortBasedOn = 'der Menge an Verspätungen';
+    } else {
+      // TODO: Delete after final number of objective functions.
+      console.log('Implement: ' + this.objectiveFunction);
+    }
+
+    this.logSchedulingProcedure(1, 'Maschinenübergreifendes Vorsortieren der Aufträge nach ' + preSortBasedOn,
+      LogEventType.HEURISTIC_BASED_SORTING);
   }
 
   private getCompareValueForPresortingBasedOnObjectiveFunction(job: ScheduledJob): number {
