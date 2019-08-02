@@ -129,7 +129,7 @@ export class SchedulingService {
 
     // start index 1 as first permutation already contains 0:
     for (let i = 1; i < presortedJobs.length; i++) {
-      currentPermutations = this.createPermutationsAddingJob(bestPermutationYet, presortedJobs[i]);
+      currentPermutations = this.createPermutationsByAddingJob(bestPermutationYet, presortedJobs[i]);
       bestPermutationYet = this.getBestPermutation(currentPermutations);
     }
 
@@ -147,7 +147,7 @@ export class SchedulingService {
       iteration++;
       startValue = currentBestValue;
 
-      const possiblePermutations: ScheduledJob[][] = this.createPermutationsSwappingJobs(bestPermutationYet);
+      const possiblePermutations: ScheduledJob[][] = this.createPermutationsBySwappingJobs(bestPermutationYet);
       possiblePermutations.forEach(permutation => {
         const comparisonValue = this.getCompareValueForPermutation(permutation);
         if (comparisonValue < currentBestValue) {
@@ -205,6 +205,10 @@ export class SchedulingService {
       preSortBasedOn = 'der Summe der (tatsächlichen) Fertigstellungstermine';
     } else if (this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DELAYS) {
       preSortBasedOn = 'der Menge an Verspätungen';
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
+      preSortBasedOn = 'der gewichteten Summe der (tatsächlichen) Fertigstellungstermine';
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYS) {
+      preSortBasedOn = 'der gewichteten Summe der Verspätungen';
     } else {
       // TODO: Delete after final number of objective functions.
       console.log('Implement: ' + this.objectiveFunction);
@@ -217,14 +221,20 @@ export class SchedulingService {
   private getCompareValueForPresortingBasedOnObjectiveFunction(job: ScheduledJob): number {
     if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY || this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DELAYS) {
       return job.dueDate;
-    } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME || ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
+    } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME
+      || this.objectiveFunction === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
       return job.totalMachiningTime;
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYS) {
+      return job.weight * job.dueDate;
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
+      return job.weight * job.totalMachiningTime;
     } else {
+      // TODO: Delete after final number of objective functions
       console.log('Implement presorting based on: ' + this.objectiveFunction);
     }
   }
 
-  private createPermutationsAddingJob(existingPermutation: ScheduledJob[], newJob: ScheduledJob): ScheduledJob[][] {
+  private createPermutationsByAddingJob(existingPermutation: ScheduledJob[], newJob: ScheduledJob): ScheduledJob[][] {
     const permutations: ScheduledJob[][] = [];
     for (let i = 0; i <= existingPermutation.length; i++) {
       const copiedPermutation = existingPermutation.map(job => new ScheduledJob(job));
@@ -234,7 +244,7 @@ export class SchedulingService {
     return permutations;
   }
 
-  private createPermutationsSwappingJobs(existingPermutation: ScheduledJob[]): ScheduledJob[][] {
+  private createPermutationsBySwappingJobs(existingPermutation: ScheduledJob[]): ScheduledJob[][] {
     const permutations: ScheduledJob[][] = [];
     for (let i = 0; i < existingPermutation.length; i++) {
       for (let j = i + 1; j < existingPermutation.length; j++) {
@@ -277,7 +287,12 @@ export class SchedulingService {
       return permutation.map(job => job.finishedAtTimestamp).reduce((f1, f2) => f1 + f2);
     } else if (this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DELAYS) {
       return permutation.filter(job => job.delay).length;
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYS) {
+      return permutation.filter(job => job.delay).map(job => job.weight).reduce((wd1, wd2) => wd1 + wd2, 0);
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
+      return permutation.map(job => job.finishedAtTimestamp * job.weight).reduce((wf1, wf2) => wf1 + wf2);
     } else {
+      // TODO: Delete after final number of objective functions
       console.log('Implement permutation comparison for obj. fun.: ' + this.objectiveFunction);
     }
   }

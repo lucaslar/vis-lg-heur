@@ -11,6 +11,7 @@ export class ScheduledJob extends Job {
     this.machineTimes = job.machineTimes;
     this.dueDate = job.dueDate;
     this.setupTimesToOtherJobs = job.setupTimesToOtherJobs;
+    this.weight = job.weight;
     this.finishedOperationsCounter = 0;
   }
 

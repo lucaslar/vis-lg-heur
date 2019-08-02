@@ -70,13 +70,16 @@ export class Heuristic {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.CYCLE_TIME, []);
     functions.set(ObjectiveFunction.SUM_FINISHING_TIMESTAMPS, []);
+    functions.set(ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS, [DefinableValue.BETA_WEIGHTS]);
     functions.set(ObjectiveFunction.MEAN_DELAY, [DefinableValue.BETA_DUE_DATES]);
     functions.set(ObjectiveFunction.NUMBER_OF_DELAYS, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_WEIGHTED_DELAYS, [DefinableValue.BETA_WEIGHTS, DefinableValue.BETA_DUE_DATES]);
 
     const machineConfigRequiresFunction = new Map<MachineConfig, ObjectiveFunction[]>();
     machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [
       ObjectiveFunction.MEAN_DELAY,
       ObjectiveFunction.NUMBER_OF_DELAYS,
+      ObjectiveFunction.SUM_WEIGHTED_DELAYS
     ]);
 
     return new Heuristic(
@@ -93,13 +96,16 @@ export class Heuristic {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.CYCLE_TIME, []);
     functions.set(ObjectiveFunction.SUM_FINISHING_TIMESTAMPS, []);
+    functions.set(ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS, [DefinableValue.BETA_WEIGHTS]);
     functions.set(ObjectiveFunction.MEAN_DELAY, [DefinableValue.BETA_DUE_DATES]);
     functions.set(ObjectiveFunction.NUMBER_OF_DELAYS, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_WEIGHTED_DELAYS, [DefinableValue.BETA_WEIGHTS, DefinableValue.BETA_DUE_DATES]);
 
     const machineConfigRequiresFunction = new Map<MachineConfig, ObjectiveFunction[]>();
     machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [
       ObjectiveFunction.MEAN_DELAY,
       ObjectiveFunction.NUMBER_OF_DELAYS,
+      ObjectiveFunction.SUM_WEIGHTED_DELAYS
     ]);
 
     return new Heuristic(
