@@ -52,7 +52,7 @@ export class StorageService {
       return this.priorityRules.length ? DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
     } else {
       // TODO Delete after having defined each definable value
-      console.log('Define: ' + definableValue + '!');
+      console.error('Define: ' + definableValue + '!');
     }
 
     return expectedDefinitions === existingDefinitions ? DefinitionStatus.COMPLETELY_DEFINED

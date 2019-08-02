@@ -39,7 +39,7 @@ export class Heuristic {
       return this.localSearchHeuristic(definer);
     } else {
       // TODO: Delete when not needed any longer
-      console.log('define ' + definer);
+      console.error('define ' + definer);
       return undefined;
     }
   }

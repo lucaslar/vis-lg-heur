@@ -39,6 +39,7 @@ export class SchedulingService {
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
 
+  // TODO: Check job queue for each machine in static scheduling?
   // TODO also add gamma to general data result
   // TODO Add weight comparison
   // TODO Round results in avg. setup times diagrams
@@ -212,7 +213,7 @@ export class SchedulingService {
       preSortBasedOn = 'der gewichteten Summe der Verspätungen';
     } else {
       // TODO: Delete after final number of objective functions.
-      console.log('Implement: ' + this.objectiveFunction);
+      console.error('Implement: ' + this.objectiveFunction);
     }
 
     this.logSchedulingProcedure(1, 'Maschinenübergreifendes Vorsortieren der Aufträge nach ' + preSortBasedOn,
@@ -231,7 +232,7 @@ export class SchedulingService {
       return job.weight * job.totalMachiningTime;
     } else {
       // TODO: Delete after final number of objective functions
-      console.log('Implement presorting based on: ' + this.objectiveFunction);
+      console.error('Implement presorting based on: ' + this.objectiveFunction);
     }
   }
 
@@ -294,7 +295,7 @@ export class SchedulingService {
       return permutation.map(job => job.finishedAtTimestamp * job.weight).reduce((wf1, wf2) => wf1 + wf2);
     } else {
       // TODO: Delete after final number of objective functions
-      console.log('Implement permutation comparison for obj. fun.: ' + this.objectiveFunction);
+      console.error('Implement permutation comparison for obj. fun.: ' + this.objectiveFunction);
     }
   }
 
@@ -398,7 +399,7 @@ export class SchedulingService {
       return this.compareJobsBySetupTimes(jobA, jobB, machineNr);
     } else {
       // TODO: Implement more heuristics by implementing sorting here
-      console.log('Implement me (' + this.heuristicType + '!)');
+      console.error('Implement me (' + this.heuristicType + '!)');
       return 0;
     }
   }
