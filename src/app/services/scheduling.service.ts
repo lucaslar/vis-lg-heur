@@ -61,7 +61,8 @@ export class SchedulingService {
     const schedulingData = this.generateSchedulingResult();
     schedulingData.generalData.durationInMillisKpi = new Kpi();
     schedulingData.generalData.durationInMillisKpi.kpi = schedulingPerformance;
-    schedulingData.generalData.durationInMillisKpi.title = 'Dauer der Berechnung in ms.' + (this.isLoggingConfigured ? ' (inkl. Logging)' : '');
+    schedulingData.generalData.durationInMillisKpi.title = 'Dauer der Berechnung in ms.' +
+      (this.isLoggingConfigured ? ' (inkl. Logging)' : '');
     schedulingData.generalData.durationInMillisKpi.iconClasses = ['fas', 'fa-stopwatch'];
 
     this.deleteTemporarilyStoredData();
@@ -160,9 +161,9 @@ export class SchedulingService {
   }
 
   private getCompareValueForPresortingBasedOnObjectiveFunction(job: ScheduledJob): number {
-    if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY) {
+    if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY || this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DELAYS) {
       return this.getPriorityValueForJob(job, PriorityRule.EDD);
-    } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME) {
+    } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME || ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
       return job.totalMachiningTime;
     } else {
       console.log('Implement presorting based on: ' + this.objectiveFunction);
@@ -199,14 +200,17 @@ export class SchedulingService {
 
   private getCompareValueForPermutation(permutation: ScheduledJob[]): number {
     permutation = permutation.map(job => new ScheduledJob(job));
+    const duration = this.mockProductionOfPermutation(permutation) - 1;
 
     if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME) {
-      const duration = this.mockProductionOfPermutation(permutation) - 1;
       return duration;
     } else if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY) {
-      this.mockProductionOfPermutation(permutation);
-      const sumOfDelays = permutation.map(j => j.delay).reduce((d1, d2) => d1 + d2);
+      const sumOfDelays = permutation.map(job => job.delay).reduce((d1, d2) => d1 + d2);
       return sumOfDelays / permutation.length;
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
+      return permutation.map(job => job.finishedAtTimestamp).reduce((f1, f2) => f1 + f2);
+    } else if (this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DELAYS) {
+      return permutation.map(job => job.delay ? 1 : 0).reduce((d1, d2) => d1 + d2);
     } else {
       console.log('Implement permutation comparison for obj. fun.: ' + this.objectiveFunction);
     }
