@@ -75,15 +75,3 @@
   left: 50%;
   transform: translate(-50%, 0)
 }
-
-.info-box {
-  margin-bottom: 16px;
-  padding: 8px;
-  border: 1px solid var(--color-grey-line);
-  border-radius: 8px;
-}
-
-.info-box h6 {
-  color: var(--color-main);
-  font-weight: normal;
-}

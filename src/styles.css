@@ -28,7 +28,7 @@ button, button span, button i {
 }
 
 button span {
-  font-family: Roboto,"Helvetica Neue",sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 
 button:disabled span, button:disabled i {
@@ -82,4 +82,16 @@ mat-expansion-panel-header *, mat-expansion-panel *, mat-card-content, .title, .
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.info-box {
+  margin-bottom: 16px;
+  padding: 8px;
+  border: 1px solid var(--color-grey-line);
+  border-radius: 8px;
+}
+
+.info-box h6, .info-box h4 {
+  color: var(--color-main);
+  font-weight: normal;
 }

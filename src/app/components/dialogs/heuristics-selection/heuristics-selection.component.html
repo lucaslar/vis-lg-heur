@@ -7,6 +7,15 @@
 
 <mat-dialog-content class="mat-typography text-justify">
 
+  <div class="log-config-container">
+    <mat-checkbox
+      matTooltip="Wählen Sie diese Option, um alle Schritte bei der Lösungsfindung zu dokumentieren (insbesondere für kleinere Probleme empfohlen)"
+      [(ngModel)]="storage.isLoggingConfigured">Ereignisse loggen
+    </mat-checkbox>
+  </div>
+
+  <mat-divider></mat-divider>
+
   <p>
     Bitte wählen Sie eines der untenstehenden heuristischen Verfahren, um das aktuelle Reihenfolgeproblem zu lösen:
   </p>
@@ -38,32 +47,25 @@
     </span>
   </mat-nav-list>
 
-  <mat-divider></mat-divider>
-
-  <div class="log-config-container">
-    <mat-checkbox
-      matTooltip="Wählen Sie diese Option, um alle Schritte bei der Lösungsfindung zu dokumentieren (insbesondere für kleinere Probleme empfohlen)"
-      [(ngModel)]="storage.isLoggingConfigured">Ereignisse loggen
-    </mat-checkbox>
+  <div class="info-box">
+    <h4>
+      <i class="fas fa-info-circle"></i>
+      Weitere Hinweise:
+    </h4>
+    <p class="information text-justify">
+      Beim Verwenden von Prioritätsregeln wird kein spezifischer zu minimierender Zielfunktionswert vorausgesetzt, da
+      abhängig von der bzw. den gewählte(n) Regel(n) unterschiedliche Werte betrachtet werden und die Regeln ferner frei
+      kombinierbar sind. Ein womöglich gewählter, zu minimierender Zielfunktionswert würde also ignoriert werden.
+    </p>
+    <div class="information text-justify">
+      Definierte Ablaufeigenschaften, die nicht für die Lösung des Reihenfolgeproblems mit der gewählten Heuristik
+      vorausgesetzt sind, werden beim Ermitteln der Reihenfolge ignoriert. Eine Ausnahme bilden spezifizierte gewünschte
+      Fertigstellungszeitpunkte, die zwar, sofern nicht benötigt, nicht in die eigentliche Berechnung einbezogen werden,
+      jedoch stets zum Visualisieren der Lösungsgüte der Heuristik den tatsächlichen Fertigstellungszeitpunkten
+      gegenübergestellt werden können.
+    </div>
   </div>
 
-  <mat-divider></mat-divider>
-
-  <p class="font-weight-bold">
-    Weitere Hinweise:
-  </p>
-  <p>
-    Beim Verwenden von Prioritätsregeln wird kein spezifischer zu minimierender Zielfunktionswert vorausgesetzt, da
-    abhängig von der bzw. den gewählte(n) Regel(n) unterschiedliche Werte betrachtet werden und die Regeln ferner frei
-    kombinierbar sind. Ein womöglich gewählter, zu minimierender Zielfunktionswert würde also ignoriert werden.
-  </p>
-  <p>
-    Definierte Ablaufeigenschaften, die nicht für die Lösung des Reihenfolgeproblems mit der gewählten Heuristik
-    vorausgesetzt sind, werden beim Ermitteln der Reihenfolge ignoriert. Eine Ausnahme bilden spezifizierte gewünschte
-    Fertigstellungszeitpunkte, die zwar, sofern nicht benötigt, nicht in die eigentliche Berechnung einbezogen werden,
-    jedoch stets zum Visualisieren der Lösungsgüte der Heuristik den tatsächlichen Fertigstellungszeitpunkten
-    gegenübergestellt werden können.
-  </p>
 
 </mat-dialog-content>
 
