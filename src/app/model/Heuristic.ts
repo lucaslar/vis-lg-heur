@@ -12,7 +12,7 @@ export class Heuristic {
   private readonly _requiredValuesForObjectiveFunctions: Map<ObjectiveFunction, DefinableValue[]>;
   private readonly _machineConfigRequiresFunction: Map<MachineConfig, ObjectiveFunction[]>;
 
-  // TODO: Required machine nr.?
+  // TODO: Add complexity?
 
   constructor(name: string,
               heuristicDefiner: HeuristicDefiner,
@@ -29,14 +29,16 @@ export class Heuristic {
   }
 
   static getHeuristicByDefiner(definer: HeuristicDefiner): Heuristic {
-    // TODO: Add heuristics
     if (definer === HeuristicDefiner.PRIORITY_RULES) {
       return this.priorityRulesHeuristic(definer);
     } else if (definer === HeuristicDefiner.NEAREST_NEIGHBOUR) {
       return this.nearestNeighbourHeuristic(definer);
     } else if (definer === HeuristicDefiner.NEH_HEURISTIC) {
       return this.nehHeuristic(definer);
+    } else if (definer === HeuristicDefiner.LOCAL_SEARCH) {
+      return this.localSearchHeuristic(definer);
     } else {
+      // TODO: Delete when not needed any longer
       console.log('define ' + definer);
       return undefined;
     }
@@ -79,6 +81,29 @@ export class Heuristic {
 
     return new Heuristic(
       'NEH-Heuristik',
+      definer,
+      [DefinableValue.ALPHA_JOB_TIMES],
+      [MachineConfig.ONE_MACHINE, MachineConfig.FLOWSHOP],
+      functions,
+      machineConfigRequiresFunction
+    );
+  }
+
+  private static localSearchHeuristic(definer: HeuristicDefiner): Heuristic {
+    const functions = new Map<ObjectiveFunction, DefinableValue[]>();
+    functions.set(ObjectiveFunction.CYCLE_TIME, []);
+    functions.set(ObjectiveFunction.SUM_FINISHING_TIMESTAMPS, []);
+    functions.set(ObjectiveFunction.MEAN_DELAY, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.NUMBER_OF_DELAYS, [DefinableValue.BETA_DUE_DATES]);
+
+    const machineConfigRequiresFunction = new Map<MachineConfig, ObjectiveFunction[]>();
+    machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [
+      ObjectiveFunction.MEAN_DELAY,
+      ObjectiveFunction.NUMBER_OF_DELAYS,
+    ]);
+
+    return new Heuristic(
+      'Lokale Suche',
       definer,
       [DefinableValue.ALPHA_JOB_TIMES],
       [MachineConfig.ONE_MACHINE, MachineConfig.FLOWSHOP],
