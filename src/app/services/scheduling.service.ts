@@ -97,7 +97,7 @@ export class SchedulingService {
 
   private isDynamicallySolvable(): boolean {
     // TODO: More static procedures? add here:
-    return this.heuristicType !== HeuristicDefiner.NEH_HEURISTIC;
+    return this.heuristicType !== HeuristicDefiner.NEH_HEURISTIC && this.heuristicType !== HeuristicDefiner.LOCAL_SEARCH;
   }
 
   // Static scheduling:
@@ -106,6 +106,22 @@ export class SchedulingService {
   private scheduleStatically(): void {
     this.logSchedulingProcedure(1, 'Bestimmen der maschinenübergreifenden Abarbeitungsreihenfolge', LogEventType.JOB_QUEUE);
 
+    let bestPermutation: ScheduledJob[];
+    if (this.heuristicType === HeuristicDefiner.NEH_HEURISTIC) {
+      bestPermutation = this.bestPermutationNeh();
+    } else if (this.heuristicType === HeuristicDefiner.LOCAL_SEARCH) {
+      bestPermutation = this.bestPermutationLocalSearch();
+    }
+
+    this.logSchedulingProcedure(1, 'Maschinenübergreifende Abarbeitungsreihenfolge: ' +
+      this.jobListStringForLogging(bestPermutation), LogEventType.JOB_QUEUE);
+
+    // Run final solution once again in order to be able to generate diagrams later on:
+    this.jobs = bestPermutation.map(job => new ScheduledJob(job));
+    this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
+  }
+
+  private bestPermutationNeh(): ScheduledJob[] {
     const presortedJobs = this.preSortJobs();
 
     let bestPermutationYet: ScheduledJob[] = [presortedJobs[0]];
@@ -113,16 +129,41 @@ export class SchedulingService {
 
     // start index 1 as first permutation already contains 0:
     for (let i = 1; i < presortedJobs.length; i++) {
-      currentPermutations = this.createPermutations(bestPermutationYet, presortedJobs[i]);
+      currentPermutations = this.createPermutationsAddingJob(bestPermutationYet, presortedJobs[i]);
       bestPermutationYet = this.getBestPermutation(currentPermutations);
     }
 
-    this.logSchedulingProcedure(1, 'Maschinenübergreifende Abarbeitungsreihenfolge: ' +
-      this.jobListStringForLogging(bestPermutationYet), LogEventType.JOB_QUEUE);
+    return bestPermutationYet;
+  }
 
-    // Run final solution once again in order to be able to generate diagrams later on:
-    this.jobs = bestPermutationYet.map(job => new ScheduledJob(job));
-    this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
+  private bestPermutationLocalSearch(): ScheduledJob[] {
+
+    let startValue: number;
+    let bestPermutationYet = this.jobs;
+    let currentBestValue = this.getCompareValueForPermutation(this.jobs);
+    let iteration = 1;
+
+    do {
+      startValue = currentBestValue;
+
+      const possiblePermutations: ScheduledJob[][] = this.createPermutationsSwappingJobs(bestPermutationYet);
+      possiblePermutations.forEach(permutation => {
+        const comparisonValue = this.getCompareValueForPermutation(permutation);
+        if (comparisonValue < currentBestValue) {
+          currentBestValue = comparisonValue;
+          bestPermutationYet = permutation;
+        }
+      });
+
+      // TODO: Log local search
+      // TODO: Iterations as KPI?
+
+      iteration++;
+    } while (currentBestValue < startValue);
+
+    console.log(iteration);
+
+    return bestPermutationYet;
   }
 
   private preSortJobs(): ScheduledJob[] {
@@ -179,7 +220,7 @@ export class SchedulingService {
 
   private getCompareValueForPresortingBasedOnObjectiveFunction(job: ScheduledJob): number {
     if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY || this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DELAYS) {
-      return this.getPriorityValueForJob(job, PriorityRule.EDD);
+      return job.dueDate;
     } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME || ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
       return job.totalMachiningTime;
     } else {
@@ -187,12 +228,24 @@ export class SchedulingService {
     }
   }
 
-  private createPermutations(existingPermutation: ScheduledJob[], newJob: ScheduledJob): ScheduledJob[][] {
-    const permutations = [];
+  private createPermutationsAddingJob(existingPermutation: ScheduledJob[], newJob: ScheduledJob): ScheduledJob[][] {
+    const permutations: ScheduledJob[][] = [];
     for (let i = 0; i <= existingPermutation.length; i++) {
       const copiedPermutation = existingPermutation.map(job => new ScheduledJob(job));
       copiedPermutation.splice(i, 0, newJob);
       permutations.push(copiedPermutation);
+    }
+    return permutations;
+  }
+
+  private createPermutationsSwappingJobs(existingPermutation: ScheduledJob[]): ScheduledJob[][] {
+    const permutations: ScheduledJob[][] = [];
+    for (let i = 0; i < existingPermutation.length; i++) {
+      for (let j = i + 1; j < existingPermutation.length; j++) {
+        const copiedPermutation = existingPermutation.map(job => new ScheduledJob(job));
+        [copiedPermutation [i], copiedPermutation[j]] = [copiedPermutation[j], copiedPermutation[i]];
+        permutations.push(copiedPermutation);
+      }
     }
     return permutations;
   }
