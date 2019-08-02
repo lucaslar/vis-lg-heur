@@ -4,7 +4,7 @@ import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
 @Pipe({
   name: 'objectiveFunctionFormal'
 })
-export class ObjectiveFunctionFormalPipe implements PipeTransform {
+export class GammaFormalPipe implements PipeTransform {
 
   transform(value: ObjectiveFunction): string {
     if (value === ObjectiveFunction.CYCLE_TIME) {

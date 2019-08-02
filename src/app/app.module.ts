@@ -36,7 +36,7 @@ import { SetUpTimesDefinitionComponent } from './components/pages/beta/set-up-ti
 import { MachineConfigComponent } from './components/pages/alpha/machine-config/machine-config.component';
 import { AddJobComponent } from './components/pages/alpha/add-job/add-job.component';
 import { JobsWeightingComponent } from './components/pages/beta/jobs-weighting/jobs-weighting.component';
-import { ObjectiveFunctionFormalPipe } from './pipes/objective-function-formal.pipe';
+import { GammaFormalPipe } from './pipes/gamma-formal.pipe';
 
 @NgModule({
   declarations: [
@@ -67,7 +67,7 @@ import { ObjectiveFunctionFormalPipe } from './pipes/objective-function-formal.p
     MachineConfigComponent,
     AddJobComponent,
     JobsWeightingComponent,
-    ObjectiveFunctionFormalPipe
+    GammaFormalPipe
   ],
   imports: [
     BrowserModule,
