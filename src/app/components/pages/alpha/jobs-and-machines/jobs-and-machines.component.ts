@@ -140,6 +140,7 @@ export class JobsAndMachinesComponent implements OnInit {
     });
     this.openSnackBar(2, 'Zufällige Zeiten genereriert');
     this.storage.jobs = this.jobs;
+    this.changeDetector.detectChanges();
   }
 
   sortEachJobMachineOrder(): void {
@@ -168,8 +169,8 @@ export class JobsAndMachinesComponent implements OnInit {
     }).afterClosed().subscribe(result => {
       if (result) {
         this.jobs.forEach(job => job.machineTimes.forEach(mT => delete mT.timeOnMachine));
+        this.storage.jobs = this.jobs;
         this.changeDetector.detectChanges();
-        this.storage.jobs = [];
         this.openSnackBar(2, 'Alle Zeiten der Arbeitsgänge gelöscht');
       }
     });
