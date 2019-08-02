@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, DoCheck, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {registerLocaleData} from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
+import localeDe from '@angular/common/locales/de';
 import {Kpi} from '../../../../../model/internal/visualization/SchedulingResult';
 
 @Component({
@@ -25,7 +25,7 @@ export class SchedulingKpiComponent implements OnInit, DoCheck {
   }
 
   ngOnInit(): void {
-    registerLocaleData(localeFr, 'fr');
+    registerLocaleData(localeDe, 'de');
     // Font Awesome icons
     if (this.kpi.iconClasses) {
       if (this.kpi.iconClasses.includes('fas' || 'far' || 'fa')) {

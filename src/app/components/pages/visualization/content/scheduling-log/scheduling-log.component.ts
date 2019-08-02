@@ -5,7 +5,7 @@ import {StorageService} from '../../../../../services/storage.service';
 import {LogEventType} from '../../../../../model/enums/LogEventType';
 import {SchedulingLogEntry} from '../../../../../model/internal/visualization/SchedulingResult';
 import {registerLocaleData} from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
+import localeDe from '@angular/common/locales/de';
 
 @Component({
   selector: 'app-scheduling-log-component',
@@ -32,7 +32,7 @@ export class SchedulingLogComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data) {
-      registerLocaleData(localeFr, 'fr');
+      registerLocaleData(localeDe, 'de');
       this._machinesShown = [];
       for (let i = 1; i <= this.storage.nrOfMachines; i++) {
         this._machinesShown.push(true);
