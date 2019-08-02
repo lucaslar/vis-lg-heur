@@ -132,34 +132,8 @@ export class SchedulingService {
     // start index 1 as first permutation already contains 0:
     for (let i = 1; i < presortedJobs.length; i++) {
       currentPermutations = this.createPermutationsByAddingJob(bestPermutationYet, presortedJobs[i]);
-      bestPermutationYet = this.getBestPermutation(currentPermutations);
+      bestPermutationYet = this.getCurrentBestPermutation(currentPermutations);
     }
-
-    return bestPermutationYet;
-  }
-
-  private bestPermutationLocalSearch(): ScheduledJob[] {
-    let iteration = 0;
-    let startValue: number;
-    let bestPermutationYet = this.jobs;
-    let currentBestValue = this.getCompareValueForPermutation(this.jobs);
-    this.localSearchBestValuesForIterations = [currentBestValue];
-
-    do {
-      iteration++;
-      startValue = currentBestValue;
-
-      const possiblePermutations: ScheduledJob[][] = this.createPermutationsBySwappingJobs(bestPermutationYet);
-      possiblePermutations.forEach(permutation => {
-        const comparisonValue = this.getCompareValueForPermutation(permutation);
-        if (comparisonValue < currentBestValue) {
-          currentBestValue = comparisonValue;
-          bestPermutationYet = permutation;
-        }
-      });
-      this.localSearchBestValuesForIterations.push(currentBestValue);
-      // TODO: Log local search
-    } while (currentBestValue < startValue);
 
     return bestPermutationYet;
   }
@@ -174,11 +148,11 @@ export class SchedulingService {
       // Logging:
       if (valueA < valueB) {
         this.logSchedulingProcedure(1, 'Maschinenübergreifende Vorsortierung: Bevorzugen von '
-          + this.jobStringForLogging(j1) + '(Wert: ' + valueA + ') gegenüber ' + this.jobStringForLogging(j2) +
+          + this.jobStringForLogging(j1) + ' (Wert: ' + valueA + ') gegenüber ' + this.jobStringForLogging(j2) +
           ' (Wert: ' + valueB + ')', LogEventType.HEURISTIC_BASED_SORTING);
       } else if (valueB > valueA) {
         this.logSchedulingProcedure(1, 'Maschinenübergreifende Vorsortierung: Bevorzugen von ' +
-          this.jobStringForLogging(j2) + '(Wert: ' + valueB + ') gegenüber ' + this.jobStringForLogging(j1) +
+          this.jobStringForLogging(j2) + ' (Wert: ' + valueB + ') gegenüber ' + this.jobStringForLogging(j1) +
           ' (Wert: ' + valueA + ')', LogEventType.HEURISTIC_BASED_SORTING);
       } else {
         this.logSchedulingProcedure(1, 'Maschinenübergreifende Vorsortierung: Betrachteter Wert für ' +
@@ -218,6 +192,31 @@ export class SchedulingService {
       LogEventType.HEURISTIC_BASED_SORTING);
   }
 
+  private bestPermutationLocalSearch(): ScheduledJob[] {
+    let iteration = 0;
+    let startValue: number;
+    let bestPermutationYet = this.jobs;
+    let currentBestValue = this.getCompareValueForPermutation(this.jobs);
+    this.localSearchBestValuesForIterations = [currentBestValue];
+
+    do {
+      iteration++;
+      startValue = currentBestValue;
+      const possiblePermutations: ScheduledJob[][] = this.createPermutationsBySwappingJobs(bestPermutationYet);
+      possiblePermutations.forEach(permutation => {
+        const comparisonValue = this.getCompareValueForPermutation(permutation);
+        if (comparisonValue < currentBestValue) {
+          currentBestValue = comparisonValue;
+          bestPermutationYet = permutation;
+        }
+      });
+      this.localSearchBestValuesForIterations.push(currentBestValue);
+      // TODO: Log local search
+    } while (currentBestValue < startValue);
+
+    return bestPermutationYet;
+  }
+
   private getCompareValueForPresortingBasedOnObjectiveFunction(job: ScheduledJob): number {
     if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY
       || this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES) {
@@ -225,10 +224,10 @@ export class SchedulingService {
     } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME
       || this.objectiveFunction === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
       return job.totalMachiningTime;
-    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
-      return job.weight * job.dueDate;
+    } else if (this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES) {
+      return job.dueDate / job.weight;
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
-      return job.weight * job.totalMachiningTime;
+      return job.totalMachiningTime / job.weight;
     } else {
       // TODO: Delete after final number of objective functions
       console.error('Implement presorting based on: ' + this.objectiveFunction);
