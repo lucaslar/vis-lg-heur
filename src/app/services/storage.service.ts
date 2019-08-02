@@ -38,6 +38,9 @@ export class StorageService {
     } else if (definableValue === DefinableValue.BETA_DUE_DATES) {
       expectedDefinitions = this.jobs.length;
       existingDefinitions = this.jobs.filter(job => job.dueDate).length;
+    } else if (definableValue === DefinableValue.BETA_WEIGHTS) {
+      expectedDefinitions = this.jobs.length;
+      existingDefinitions = this.jobs.filter(job => job.weight).length;
     } else if (definableValue === DefinableValue.BETA_SETUP_TIMES && this.jobs.length > 1) {
       expectedDefinitions = (this.jobs.length - 1) * this.jobs.length;
       existingDefinitions = this.jobs.map(job => job.setupTimesToOtherJobs ? job.setupTimesToOtherJobs
@@ -48,6 +51,7 @@ export class StorageService {
       // Since not all rules have to be selected:
       return this.priorityRules.length ? DefinitionStatus.COMPLETELY_DEFINED : DefinitionStatus.NOT_DEFINED;
     } else {
+      // TODO Delete after having defined each definable value
       console.log('Define: ' + definableValue + '!');
     }
 

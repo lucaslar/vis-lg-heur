@@ -55,7 +55,7 @@
           <i class="fas fa-check-circle" matTooltip="Rüstzeiten zu anderen Aufträgen vollständig"></i>
         </ng-template>
 
-        <span class="information job-id">
+        <span class="information">
           (ID: {{job.id}})
         </span>
         <!-- Tooltip, since long job names may be cut off on smaller devices. -->
@@ -75,6 +75,7 @@
         <app-icon-number-input [iconClasses]="['fas','fa-cogs']"
                                [placeholder]="'Rüstzeit'"
                                [value]="findSetupTimeRelationForJob(job, otherJob).duration"
+                               [isShowValueTooltip]="true"
                                [min]="1"
                                (newValue)="onSetupValueChange(job, otherJob, $event)">
         </app-icon-number-input>

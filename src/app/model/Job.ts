@@ -7,6 +7,7 @@ export class Job {
   machineTimes: MachineTimeForJob[];
   dueDate: number;
   setupTimesToOtherJobs: SetupTime[];
+  weight: number;
 
   constructor(_name: string) {
     this.name = _name;
