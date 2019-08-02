@@ -117,11 +117,10 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row jobs-list">
   <div class="col-md-12">
 
     <!-- TODO: Extract to new component? -->
-    <!-- Jobs list -->
     <mat-accordion *ngIf="jobs.length > 0; else noJobs">
       <mat-expansion-panel *ngFor="let job of jobs">
         <mat-expansion-panel-header #header>
@@ -136,7 +135,7 @@
                     matTooltip="Auftrag kopieren">
               <i class="fa fa-clone"></i>
             </button>
-            <span class="job-id information">(ID: {{job.id}})</span>
+            <span class="information">(ID: {{job.id}})</span>
             <!-- Tooltip, since long job names may be cut off on smaller devices. -->
             <span matTooltip="{{job.name}}">
               {{job.name}}

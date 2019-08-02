@@ -21,8 +21,13 @@ mat-expansion-panel-header {
   font-size: larger;
 }
 
-.jobs-actions, .jobs-actions mat-divider, .information, .add-job {
+.jobs-actions:first-child, .jobs-actions mat-divider, .information, .add-job {
   padding-top: 8px;
+  /* TODO: Fix padding issue */
+}
+
+.jobs-list {
+  padding-top: 12px;
 }
 
 .add-padding-left {

@@ -159,8 +159,8 @@ export class StorageService {
       [
         'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da für das gewählte heuristische Verfahren (' +
         heuristic.name + ') nicht der richtige zu minimierende Zielfunktionswert vorliegt.',
-        'Benötigt wird: ' + [...heuristic.requiredValuesForObjectiveFunctions.keys()].join(' oder ') +
-        ', aktuell gewählt ist allerdings' +
+        'Benötigt wird: \'' + [...heuristic.requiredValuesForObjectiveFunctions.keys()].join('\' oder \'') +
+        '\', aktuell gewählt ist allerdings' +
         (this.objectiveFunction ? ': ' + this.objectiveFunction + '.' : ' kein Zielfunktionswert.') +
         ' Bitte wählen Sie ' + ([...heuristic.requiredValuesForObjectiveFunctions.keys()].length > 1 ?
           'eine' : 'die') + ' gennnte Funktion, um fortfahren zu können.',
@@ -196,7 +196,7 @@ export class StorageService {
         heuristic.requiredValuesForObjectiveFunctions &&
         heuristic.requiredValuesForObjectiveFunctions.get(this.objectiveFunction).includes(missingValue) ?
           'Dieser Wert wird nur aufgrund des gewählten Zielfunktionswerts benötigt. Für die Verwendung dieser Heuristik ' +
-          'bei einem anderen zu minimierenden Zielfunktionswert (' +
+          'bei einem anderen zu minimierenden Zielfunktionswert (möglich sind: ' +
           [...heuristic.requiredValuesForObjectiveFunctions.keys()].filter(k => k !== this.objectiveFunction).join(', ') +
           ') ist dieser Wert ggf. nicht zu definieren.' : '',
         'Bitte sorgen Sie dafür, dass die genannten Werte vollständig sind, um fortfahren zu können.'

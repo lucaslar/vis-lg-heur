@@ -40,6 +40,7 @@ export class SchedulingService {
   private logging: SchedulingLogEntry[];
 
   // TODO also add gamma to general data result
+  // TODO Add weight comparison
   // TODO Round results in avg. setup times diagrams
 
   constructor(public storage: StorageService) {
