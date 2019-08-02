@@ -67,10 +67,15 @@ export class Heuristic {
   private static nehHeuristic(definer: HeuristicDefiner) {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.CYCLE_TIME, []);
+    functions.set(ObjectiveFunction.SUM_FINISHING_TIMESTAMPS, []);
     functions.set(ObjectiveFunction.MEAN_DELAY, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.NUMBER_OF_DELAYS, [DefinableValue.BETA_DUE_DATES]);
 
     const machineConfigRequiresFunction = new Map<MachineConfig, ObjectiveFunction[]>();
-    machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [ObjectiveFunction.MEAN_DELAY]);
+    machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [
+      ObjectiveFunction.MEAN_DELAY,
+      ObjectiveFunction.NUMBER_OF_DELAYS,
+    ]);
 
     return new Heuristic(
       'NEH-Heuristik',
