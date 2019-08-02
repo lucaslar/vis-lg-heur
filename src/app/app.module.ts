@@ -35,6 +35,7 @@ import { ObjectiveFunctionDefinitionComponent } from './components/pages/gamma/o
 import { SetUpTimesDefinitionComponent } from './components/pages/beta/set-up-times-definition/set-up-times-definition.component';
 import { MachineConfigComponent } from './components/pages/alpha/machine-config/machine-config.component';
 import { AddJobComponent } from './components/pages/alpha/add-job/add-job.component';
+import { JobsWeightingComponent } from './components/pages/beta/jobs-weighting/jobs-weighting.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { AddJobComponent } from './components/pages/alpha/add-job/add-job.compon
     ObjectiveFunctionDefinitionComponent,
     SetUpTimesDefinitionComponent,
     MachineConfigComponent,
-    AddJobComponent
+    AddJobComponent,
+    JobsWeightingComponent
   ],
   imports: [
     BrowserModule,

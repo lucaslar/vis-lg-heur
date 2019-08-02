@@ -9,6 +9,7 @@ import {HeuristicsGuard} from '../guards/heuristics.guard';
 import {VisualizerComponent} from '../components/pages/visualization/visualizer/visualizer.component';
 import {ObjectiveFunctionDefinitionComponent} from '../components/pages/gamma/objective-function-definition/objective-function-definition.component';
 import {SetUpTimesDefinitionComponent} from '../components/pages/beta/set-up-times-definition/set-up-times-definition.component';
+import {JobsWeightingComponent} from '../components/pages/beta/jobs-weighting/jobs-weighting.component';
 
 const routes: Routes = [
   {path: 'alpha', component: JobsAndMachinesComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   {
     path: 'beta', canActivateChild: [BetaEnoughJobsGuard], children: [
       {path: 'jobs-termination', component: JobsTerminationComponent, data: {minJobs: 1}},
+      {path: 'jobs-weighting', component: JobsWeightingComponent, data: {minJobs: 1}},
       {path: 'jobs-setup-times', component: SetUpTimesDefinitionComponent, data: {minJobs: 2}}
     ]
   },
