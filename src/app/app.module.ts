@@ -23,20 +23,26 @@ import {
 } from './components/pages/visualization/content/solution-quality/solution-quality-visualizer/solution-quality-visualizer.component';
 import {SchedulingChartComponent} from './components/pages/visualization/charts/scheduling-chart/scheduling-chart.component';
 import {GoogleChartsModule} from 'angular-google-charts';
-import { SchedulingGanttComponent } from './components/pages/visualization/charts/scheduling-gantt/scheduling-gantt.component';
-import { SchedulingKpiComponent } from './components/pages/visualization/charts/scheduling-kpi/scheduling-kpi.component';
-import { GeneralDataComponent } from './components/pages/visualization/content/general/general-data/general-data.component';
-import {SolutionQualityDataComponent} from './components/pages/visualization/content/solution-quality/solution-quality-data/solution-quality-data.component';
-import {GeneralDataVisualizerComponent} from './components/pages/visualization/content/general/general-data-visualizer/general-data-visualizer.component';
-import { SchedulingLogComponent } from './components/pages/visualization/content/scheduling-log/scheduling-log.component';
-import { SchedulingLogDialogComponent } from './components/dialogs/scheduling-log-dialog/scheduling-log-dialog.component';
-import { MachineTablesComponent } from './components/pages/visualization/content/machine-tables/machine-tables.component';
-import { ObjectiveFunctionDefinitionComponent } from './components/pages/gamma/objective-function-definition/objective-function-definition.component';
-import { SetUpTimesDefinitionComponent } from './components/pages/beta/set-up-times-definition/set-up-times-definition.component';
-import { MachineConfigComponent } from './components/pages/alpha/machine-config/machine-config.component';
-import { AddJobComponent } from './components/pages/alpha/add-job/add-job.component';
-import { JobsWeightingComponent } from './components/pages/beta/jobs-weighting/jobs-weighting.component';
-import { GammaFormalPipe } from './pipes/gamma-formal.pipe';
+import {SchedulingGanttComponent} from './components/pages/visualization/charts/scheduling-gantt/scheduling-gantt.component';
+import {SchedulingKpiComponent} from './components/pages/visualization/charts/scheduling-kpi/scheduling-kpi.component';
+import {GeneralDataComponent} from './components/pages/visualization/content/general/general-data/general-data.component';
+import {
+  SolutionQualityDataComponent
+} from './components/pages/visualization/content/solution-quality/solution-quality-data/solution-quality-data.component';
+import {
+  GeneralDataVisualizerComponent
+} from './components/pages/visualization/content/general/general-data-visualizer/general-data-visualizer.component';
+import {SchedulingLogComponent} from './components/pages/visualization/content/scheduling-log/scheduling-log.component';
+import {SchedulingLogDialogComponent} from './components/dialogs/scheduling-log-dialog/scheduling-log-dialog.component';
+import {MachineTablesComponent} from './components/pages/visualization/content/machine-tables/machine-tables.component';
+import {
+  ObjectiveFunctionDefinitionComponent
+} from './components/pages/gamma/objective-function-definition/objective-function-definition.component';
+import {SetUpTimesDefinitionComponent} from './components/pages/beta/set-up-times-definition/set-up-times-definition.component';
+import {MachineConfigComponent} from './components/pages/alpha/machine-config/machine-config.component';
+import {AddJobComponent} from './components/pages/alpha/add-job/add-job.component';
+import {JobsWeightingComponent} from './components/pages/beta/jobs-weighting/jobs-weighting.component';
+import {GammaFormalPipe} from './pipes/gamma-formal.pipe';
 
 @NgModule({
   declarations: [
