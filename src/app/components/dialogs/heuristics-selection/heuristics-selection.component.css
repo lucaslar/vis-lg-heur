@@ -7,3 +7,7 @@ mat-nav-list, mat-divider {
   padding-top: 0;
   margin-bottom: 12px;
 }
+
+.log-config-container {
+  margin-bottom: 4px;
+}

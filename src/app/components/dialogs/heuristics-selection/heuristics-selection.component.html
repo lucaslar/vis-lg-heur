@@ -40,6 +40,15 @@
 
   <mat-divider></mat-divider>
 
+  <div class="log-config-container">
+    <mat-checkbox
+      matTooltip="Wählen Sie diese Option, um alle Schritte bei der Lösungsfindung zu dokumentieren (insbesondere für kleinere Probleme empfohlen)"
+      [(ngModel)]="storage.isLoggingConfigured">Ereignisse loggen
+    </mat-checkbox>
+  </div>
+
+  <mat-divider></mat-divider>
+
   <p class="font-weight-bold">
     Weitere Hinweise:
   </p>

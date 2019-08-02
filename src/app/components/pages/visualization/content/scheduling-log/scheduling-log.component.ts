@@ -4,6 +4,8 @@ import {SchedulingLogDialogComponent} from '../../../../dialogs/scheduling-log-d
 import {StorageService} from '../../../../../services/storage.service';
 import {LogEventType} from '../../../../../model/enums/LogEventType';
 import {SchedulingLogEntry} from '../../../../../model/internal/visualization/SchedulingResult';
+import {registerLocaleData} from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 
 @Component({
   selector: 'app-scheduling-log-component',
@@ -27,9 +29,12 @@ export class SchedulingLogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._machinesShown = [];
-    for (let i = 1; i <= this.storage.nrOfMachines; i++) {
-      this._machinesShown.push(true);
+    if (this.data) {
+      registerLocaleData(localeFr, 'fr');
+      this._machinesShown = [];
+      for (let i = 1; i <= this.storage.nrOfMachines; i++) {
+        this._machinesShown.push(true);
+      }
     }
   }
 

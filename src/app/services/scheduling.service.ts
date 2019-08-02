@@ -27,10 +27,6 @@ import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
 })
 export class SchedulingService {
 
-  // TODO Allow scheduling without logging -> faster (Checkbox in dialog)
-  // TODO Then -> Check if logging in KPI
-  // TODO Add how many files logged logging component (before opening the file)
-
   private objectiveFunction: ObjectiveFunction;
   private heuristicType: HeuristicDefiner;
   private priorityRules: PriorityRule[];
@@ -39,6 +35,7 @@ export class SchedulingService {
   private machines: Machine[];
   private currentTimestampInScheduling: number;
 
+  private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
 
   // TODO also add gamma to general data result
@@ -65,7 +62,7 @@ export class SchedulingService {
     const schedulingData = this.generateSchedulingResult();
     schedulingData.generalData.durationInMillisKpi = new Kpi();
     schedulingData.generalData.durationInMillisKpi.kpi = schedulingPerformance;
-    schedulingData.generalData.durationInMillisKpi.title = 'Dauer der Berechnung in ms. (inkl. Logging)';
+    schedulingData.generalData.durationInMillisKpi.title = 'Dauer der Berechnung in ms.' + (this.isLoggingConfigured ? ' (inkl. Logging)' : '');
     schedulingData.generalData.durationInMillisKpi.iconClasses = ['fas', 'fa-stopwatch'];
 
     this.deleteTemporarilyStoredData();
@@ -77,13 +74,16 @@ export class SchedulingService {
     const deepCopiedJobs: Job[] = JSON.parse(JSON.stringify(this.storage.jobs));
     this.jobs = deepCopiedJobs.map(job => new ScheduledJob(job));
     this.machines = this.jobs[0].machineTimes.map(m => new Machine(m.machineNr)).sort();
-    this.logging = [];
     this.currentTimestampInScheduling = 0;
     this.heuristicType = heuristicDefiner;
     if (heuristicDefiner === HeuristicDefiner.PRIORITY_RULES) {
       this.priorityRules = <PriorityRule[]>JSON.parse(JSON.stringify(this.storage.priorityRules));
     }
     this.objectiveFunction = this.storage.objectiveFunction;
+    this.isLoggingConfigured = this.storage.isLoggingConfigured;
+    if (this.isLoggingConfigured) {
+      this.logging = [];
+    }
   }
 
   private deleteTemporarilyStoredData(): void {
@@ -966,8 +966,10 @@ export class SchedulingService {
   }
 
   private logSchedulingProcedure(machineNr: number, description: string, type: LogEventType, time?: number): void {
-    time = time === undefined ? this.currentTimestampInScheduling : time;
-    this.logging.push(new SchedulingLogEntry(time, machineNr, description, type));
+    if (this.isLoggingConfigured) {
+      time = time === undefined ? this.currentTimestampInScheduling : time;
+      this.logging.push(new SchedulingLogEntry(time, machineNr, description, type));
+    }
   }
 
   private jobStringForLogging(job: ScheduledJob): string {

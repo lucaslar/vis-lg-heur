@@ -19,12 +19,14 @@ export class StorageService {
   private _nrOfMachines: number;
   private _objectiveFunction: ObjectiveFunction;
   private _priorityRules: PriorityRule[];
+  private _isLoggingConfigured: boolean;
 
   private readonly PREFIX_KEY = 'VISLGHEUR_';
   private readonly JOBS = 'JOBS';
   private readonly NR_OF_MACHINES = 'NR_OF_MACHINES';
   private readonly OBJECTIVE_FUNCTION = 'OBJECTIVE_FUNCTION';
   private readonly PRIORITY_RULES = 'PRIORITY_RULES';
+  private readonly IS_LOGGING = 'IS_LOGGING';
 
   getValueDefinitionStatus(definableValue: DefinableValue): DefinitionStatus {
     let expectedDefinitions: number;
@@ -301,5 +303,18 @@ export class StorageService {
   set priorityRules(priorityRules: PriorityRule[]) {
     this._priorityRules = priorityRules;
     localStorage.setItem(this.PREFIX_KEY + this.PRIORITY_RULES, JSON.stringify(priorityRules));
+  }
+
+  get isLoggingConfigured(): boolean {
+    if (this._isLoggingConfigured === undefined) {
+      const isLoggingConfigured = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.IS_LOGGING));
+      this._isLoggingConfigured = isLoggingConfigured !== null ? isLoggingConfigured : true;
+    }
+    return this._isLoggingConfigured;
+  }
+
+  set isLoggingConfigured(value: boolean) {
+    this._isLoggingConfigured = value;
+    localStorage.setItem(this.PREFIX_KEY + this.IS_LOGGING, JSON.stringify(value));
   }
 }
