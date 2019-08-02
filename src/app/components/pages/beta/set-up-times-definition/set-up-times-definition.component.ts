@@ -33,7 +33,11 @@ export class SetUpTimesDefinitionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.storage.deleteUndefinedBetaValuesBlockingFunctions();
+    if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_SETUP_TIMES) === DefinitionStatus.NOT_DEFINED) {
+      console.log('delete');
+      this.jobs.forEach(job => delete job.setupTimesToOtherJobs);
+      this.storage.jobs = this.jobs;
+    }
   }
 
   otherJobsForJob(job): Job[] {
