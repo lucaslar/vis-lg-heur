@@ -13,11 +13,11 @@ export class GammaFormalPipe implements PipeTransform {
       return 'undefined';
     } else if (value === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
       return '&sum;C<sub>j</sub>';
-    } else if (value === ObjectiveFunction.NUMBER_OF_DELAYS) {
+    } else if (value === ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES) {
       return '&sum;U<sub>j</sub>';
     } else if (value === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
       return '&sum;w<sub>j</sub>C<sub>j</sub>';
-    } else if (value === ObjectiveFunction.SUM_WEIGHTED_DELAYS) {
+    } else if (value === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
       return '&sum;w<sub>j</sub>U<sub>j</sub>';
     } else if (value === ObjectiveFunction.SUM_SETUP_TIME) {
       // TODO Correct?

@@ -31,13 +31,13 @@ export class BetaFormalPipe implements PipeTransform {
 
     // Add due dates:
     if (objectiveFunction === ObjectiveFunction.MEAN_DELAY
-      || objectiveFunction === ObjectiveFunction.NUMBER_OF_DELAYS
-      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYS) {
+      || objectiveFunction === ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES
+      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
       betaFormal += BetaFormalPipe.formalDueDates(value);
     }
 
     // Add weights:
-    if (objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYS
+    if (objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
       || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
       if (betaFormal) {
         betaFormal += ', ';
