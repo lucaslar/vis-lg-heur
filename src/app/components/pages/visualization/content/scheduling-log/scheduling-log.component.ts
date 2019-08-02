@@ -22,6 +22,8 @@ export class SchedulingLogComponent implements OnInit {
   private _isProductionStartSelected = true;
   private _isHeuristicBasedSortingSelected = true;
 
+  private _isScheduledInFirstMachineOnly: boolean;
+
   private _logEventType = LogEventType;
 
   constructor(private dialog: MatDialog,
@@ -35,6 +37,10 @@ export class SchedulingLogComponent implements OnInit {
       for (let i = 1; i <= this.storage.nrOfMachines; i++) {
         this._machinesShown.push(true);
       }
+
+      this._isScheduledInFirstMachineOnly =
+        this.data.filter(data => data.machineNr === 1 && data.eventType === LogEventType.HEURISTIC_BASED_SORTING).length
+        === this.data.filter(data => data.eventType === LogEventType.HEURISTIC_BASED_SORTING).length;
     }
   }
 
@@ -58,11 +64,21 @@ export class SchedulingLogComponent implements OnInit {
   }
 
   isAnyMachineSelected(): boolean {
-    return this._machinesShown.some(m => m === true);
+    return this.machinesShown.some(m => m === true);
   }
 
   isAnyLogTypeSelected(): boolean {
     return this.isHeuristicBasedSortingSelected || this.isJobQueueSelected || this.isProductionStartSelected;
+  }
+
+  isNoEntryForMachine(): boolean {
+    if (this.isScheduledInFirstMachineOnly) {
+      const onlySortingSelected = this.isHeuristicBasedSortingSelected && !this.isJobQueueSelected && !this.isProductionStartSelected;
+      const machineOneNotSelected = !this.machinesShown[0];
+      return onlySortingSelected && machineOneNotSelected;
+    } else {
+      return false;
+    }
   }
 
   get machineNrs(): number[] {
@@ -103,5 +119,9 @@ export class SchedulingLogComponent implements OnInit {
 
   set isHeuristicBasedSortingSelected(value: boolean) {
     this._isHeuristicBasedSortingSelected = value;
+  }
+
+  get isScheduledInFirstMachineOnly(): boolean {
+    return this._isScheduledInFirstMachineOnly;
   }
 }

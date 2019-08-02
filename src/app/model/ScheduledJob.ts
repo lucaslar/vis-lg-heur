@@ -119,7 +119,7 @@ export class ScheduledJob extends Job {
   // End of values needed for priority rules
 
   get nextMachineNr(): number | undefined {
-    // undefined means the order is finished and has no next machine
+    // undefined means the job is finished and has no next machine
     return this.finishedOperationsCounter === this.machineTimes.length ?
       undefined : this.machineTimes[this.finishedOperationsCounter].machineNr;
   }

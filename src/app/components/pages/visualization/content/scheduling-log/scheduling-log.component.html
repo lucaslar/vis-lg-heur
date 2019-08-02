@@ -10,8 +10,12 @@
   <div class="info-box" *ngIf="!isEachDueDateConfigured">
     <h6>
       <i class="fas fa-info-circle"></i>
-      Hinweis
+      {{'Hinweis' + (isScheduledInFirstMachineOnly ? 'e' : '')}}
     </h6>
+    <div class="static-info information text-justify">
+      Beim gewählten heuristischen Verfahren wurde die Abarbeitungsreihenfolge maschinenübergreifend ermittelt, d.h. im
+      Logfile nur für Maschine 1 eingetragen.
+    </div>
     <div class="information text-justify">
       Das Auflisten der Ereignisse kann abhängig von der Größe und Komplexität des Reihenfolgeproblems und den gewählten
       Filteroptionen mitunter wenige Sekunden in Anspruch nehmen.
@@ -66,13 +70,14 @@
   <div class="row">
     <div class="col-md-12 text-center">
       <button mat-stroked-button
-              [disabled]="!isAnyMachineSelected() || !isAnyLogTypeSelected()"
+              [disabled]="!isAnyMachineSelected() || !isAnyLogTypeSelected() || isNoEntryForMachine()"
               (click)="showLog()">
   <span class="align-middle"
         matTooltip="{{!isAnyMachineSelected() && !isAnyLogTypeSelected()
           ? 'Bitte wählen Sie mindestens eine Maschine und mindestens einen logbaren Ereigbnistypen'
           : !isAnyMachineSelected() ? 'Bitte wählen Sie mindestens eine Maschine'
           : !isAnyLogTypeSelected() ? 'Bitte wählen Sie mindestens einen logbaren Ereigbnistypen'
+          : isNoEntryForMachine() ? 'Das heuristische Vorgehen wurde vollständig für Maschine 1 (maschinenübergreifend) dokumentiert'
           : 'Geloggte Ereignisse mit gewählten Optionen anzeigen'
         }}">
     <i class="far fa-file-alt"></i>
