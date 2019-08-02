@@ -16,18 +16,21 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row add-job">
   <div class="col-md-12">
     <app-add-job (autoGenerateTimesChanged)="onAutoTimeGenerationChanged($event)"
                  (newCreatedJob)="onNewJobCreated($event)"></app-add-job>
   </div>
 </div>
+<!-- TODO: Rows for each action? -->
 
 <div class="row">
   <div class="col-md-12 jobs-actions">
-
+    <div class="information">
+      <i class="fas fa-stopwatch"></i>
+      Zeiten der Arbeitsgänge
+    </div>
     <mat-divider></mat-divider>
-
     <button mat-stroked-button
             [disabled]="jobs.length < 1 || storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.COMPLETELY_DEFINED"
             (click)="addRandomTimesForUndefined()">
@@ -40,7 +43,29 @@
             Zufällige Zeiten für undefinierte Arbeitsgänge
           </span>
     </button>
+    <button mat-stroked-button
+            [disabled]="jobs.length < 1 || storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.NOT_DEFINED"
+            (click)="deleteAllExistingJobTimes()"
+            class="status-warning">
+          <span class="align-middle"
+                matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst mindestens einen Auftrag hinzu'
+                  : storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) !== configurationStatus.NOT_DEFINED ? 'Alle Zeiten für die Arbeitsgänge der einzelnen Aufträge löschen'
+                  : 'Aktuell sind keine Zeiten für Arbeitsgänge definiert, die gelöscht werden könnten'
+                }}">
+            <i class="fas fa-trash"></i>
+            Zeiten aller Arbeitsgänge löschen
+          </span>
+    </button>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col-md-12 jobs-actions">
+    <div class="information">
+      <i class="fas fa-tools"></i>
+      Reihenfolge der Arbeitsgänge
+    </div>
+    <mat-divider></mat-divider>
     <button mat-stroked-button
             [disabled]="storage.machineConfigParam !== machineConfig.JOBSHOP"
             (click)="sortEachJobMachineOrder()">
@@ -50,13 +75,11 @@
                   : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für Flowshop wird mindestens eine weitere Maschine benötigt'
                   : 'Bitte fügen Sie zunächst Aufträge hinzu'
                 }}">
-            <i class="fas fa-tools"></i>
             Jobshop
             <mat-icon class="align-middle">arrow_right_alt</mat-icon>
             Flowshop
           </span>
     </button>
-
     <button mat-stroked-button
             [disabled]="jobs.length < 1 || storage.machineConfigParam === machineConfig.ONE_MACHINE"
             (click)="shuffleMachineOrderOfExistingJobs()">
@@ -69,7 +92,16 @@
             Reihenfolge der Arbeitsgänge aller Aufträge mischen
           </span>
     </button>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col-md-12 jobs-actions">
+    <div class="information">
+      <i class="fas fa-exclamation-triangle"></i>
+      Auftragsübergreifend
+    </div>
+    <mat-divider></mat-divider>
     <button mat-stroked-button
             [disabled]="jobs.length < 1"
             (click)="deleteAllExistingJobs()"
@@ -82,7 +114,14 @@
             Alle Aufträge löschen
           </span>
     </button>
+  </div>
+</div>
 
+<div class="row title">
+  <div class="col-md-12 text-center">
+    <h5>
+      Auftragsliste
+    </h5>
   </div>
 </div>
 

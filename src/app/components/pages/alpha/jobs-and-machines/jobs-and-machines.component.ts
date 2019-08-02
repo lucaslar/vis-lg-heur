@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {StorageService} from '../../../../services/storage.service';
 import {Job, MachineTimeForJob, SetupTime} from '../../../../model/Job';
 import {MatDialog} from '@angular/material/dialog';
@@ -32,6 +32,7 @@ export class JobsAndMachinesComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private changeDetector: ChangeDetectorRef,
     public storage: StorageService
   ) {
   }
@@ -156,6 +157,22 @@ export class JobsAndMachinesComponent implements OnInit {
     });
     this.openSnackBar(3, 'Abarbeitungsreihenfolge der Arbeitsgänge aller Aufträge sortiert');
     this.storage.jobs = this.jobs;
+  }
+
+  deleteAllExistingJobTimes(): void {
+    this.dialog.open(PopUpComponent, {
+      data: new DialogContent(
+        'Löschen bestätigen',
+        ['Möchten Sie wirklich die Zeiten der Arbeitsgänge aller Aufträge löschen?', 'Diese Aktion kann nicht rückgängig gemacht werden'],
+        DialogType.QUESTION)
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.jobs.forEach(job => job.machineTimes.forEach(mT => delete mT.timeOnMachine));
+        this.changeDetector.detectChanges();
+        this.storage.jobs = [];
+        this.openSnackBar(2, 'Alle Zeiten der Arbeitsgänge gelöscht');
+      }
+    });
   }
 
   shuffleMachineOrderOfExistingJobs(): void {
