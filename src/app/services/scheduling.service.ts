@@ -667,8 +667,6 @@ export class SchedulingService {
   private generateSolutionQualityData(): Kpi[] {
     const data = [];
 
-    // TODO Mind start time here if implemented
-
     data.push(this.calculateTotalDurationKpi());
     data.push(this.calculateMeanCycleTimeKpi());
     data.push(this.calculateMeanJobBacklogKpi());

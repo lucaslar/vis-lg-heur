@@ -1,5 +1,4 @@
 <!-- TODO: add help pop-up/descriptional text -->
-<!-- TODO: col-md-6 if start date is not implemented? -->
 
 <!-- Title -->
 <div class="row title">
@@ -38,8 +37,8 @@
   </div>
 </div>
 
-<div *ngFor="let job of jobs" class="row card-container">
-  <div class="col-md-12 ord-text">
+<div class="row">
+  <div *ngFor="let job of jobs" class="col-md-6 ord-text card-container">
     <mat-card>
       <div class="no-wrap-text-ellipsis">
         <span class="job-id">Auftrag mit ID: {{job.id}}</span>
@@ -50,7 +49,7 @@
       </div>
       <mat-card-content>
         <div class="row">
-          <div class="col-md-6 job-config-input-container">
+          <div class="col-md-12 job-config-input-container">
             <app-icon-number-input
               [iconClasses]="['fas', 'fa-calendar-times']"
               [placeholder]="'Fertigstellungstermin'"
