@@ -34,6 +34,7 @@ export class SchedulingService {
   private jobs: ScheduledJob[];
   private machines: Machine[];
   private currentTimestampInScheduling: number;
+  private localSearchBestValuesForIterations: number[];
 
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
@@ -102,7 +103,6 @@ export class SchedulingService {
 
   // Static scheduling:
 
-  // TODO: Only NEH? -> Rename
   private scheduleStatically(): void {
     this.logSchedulingProcedure(1, 'Bestimmen der maschinenübergreifenden Abarbeitungsreihenfolge', LogEventType.JOB_QUEUE);
 
@@ -137,13 +137,14 @@ export class SchedulingService {
   }
 
   private bestPermutationLocalSearch(): ScheduledJob[] {
-
+    let iteration = 0;
     let startValue: number;
     let bestPermutationYet = this.jobs;
     let currentBestValue = this.getCompareValueForPermutation(this.jobs);
-    let iteration = 1;
+    this.localSearchBestValuesForIterations = [currentBestValue];
 
     do {
+      iteration++;
       startValue = currentBestValue;
 
       const possiblePermutations: ScheduledJob[][] = this.createPermutationsSwappingJobs(bestPermutationYet);
@@ -154,14 +155,9 @@ export class SchedulingService {
           bestPermutationYet = permutation;
         }
       });
-
+      this.localSearchBestValuesForIterations.push(currentBestValue);
       // TODO: Log local search
-      // TODO: Iterations as KPI?
-
-      iteration++;
     } while (currentBestValue < startValue);
-
-    console.log(iteration);
 
     return bestPermutationYet;
   }
@@ -801,8 +797,10 @@ export class SchedulingService {
     // Specific diagrams:
     if (this.heuristicType === HeuristicDefiner.NEAREST_NEIGHBOUR) {
       data.cumulatedSetupTimesAtTimetamps = this.generateCumulatedSetupTimesVisualization();
-      data.comparisonMeanSetupTimesVisualization = this.generateComparisonMeanSetupTimesVisualization();
-      data.comparisonSelectedAndMeanSetupTimeVisualization = this.generateComparisonSelectedAndMeanSetupTimeVisualization();
+      data.comparisonMeanSetupTimes = this.generateComparisonMeanSetupTimesVisualization();
+      data.comparisonSelectedAndMeanSetupTime = this.generateComparisonSelectedAndMeanSetupTimeVisualization();
+    } else if (this.heuristicType === HeuristicDefiner.LOCAL_SEARCH) {
+      data.valueToMinimizeAtIterations = this.generateValueToMinimizeAtIterations();
     }
 
     return data;
@@ -996,6 +994,27 @@ export class SchedulingService {
     visualization.datasets = [solution, average];
     visualization.xLabel = 'Aufträge in Abarbeitungsreihenfolge';
     visualization.yLabel = 'Zeiteinheiten';
+    return visualization;
+  }
+
+  private generateValueToMinimizeAtIterations(): ChartData {
+    const dataset = new Dataset();
+    const labels = [];
+    dataset.data = [];
+    dataset.label = this.objectiveFunction;
+
+    for (let i = 0; i < this.localSearchBestValuesForIterations.length; i++) {
+      labels.push('' + i);
+      dataset.data.push(this.localSearchBestValuesForIterations[i]);
+    }
+
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_LINE;
+    visualization.title = 'Betrachteter zu minimierender Zielfunktionswert (' + this.objectiveFunction + ') nach jeder Iteration';
+    visualization.labels = labels;
+    visualization.datasets = [dataset];
+    visualization.xLabel = 'Iteration';
+    visualization.yLabel = this.objectiveFunction;
     return visualization;
   }
 

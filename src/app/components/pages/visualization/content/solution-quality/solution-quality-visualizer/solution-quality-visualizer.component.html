@@ -37,6 +37,7 @@
 </ng-container>
 
 <!-- Specific diagrams here: -->
+
 <!-- Setup times based: -->
 <ng-container *ngIf="data.cumulatedSetupTimesAtTimetamps">
   <app-chart [title]="data.cumulatedSetupTimesAtTimetamps.title"
@@ -46,18 +47,28 @@
              [yLabel]="data.cumulatedSetupTimesAtTimetamps.yLabel"
              [xLabel]="data.cumulatedSetupTimesAtTimetamps.xLabel"
   ></app-chart>
-  <app-chart [title]="data.comparisonMeanSetupTimesVisualization.title"
-             [type]="data.comparisonMeanSetupTimesVisualization.visualizableAs"
-             [labels]="data.comparisonMeanSetupTimesVisualization.labels"
-             [datasets]="data.comparisonMeanSetupTimesVisualization.datasets"
-             [yLabel]="data.comparisonMeanSetupTimesVisualization.yLabel"
-             [xLabel]="data.comparisonMeanSetupTimesVisualization.xLabel"
+  <app-chart [title]="data.comparisonMeanSetupTimes.title"
+             [type]="data.comparisonMeanSetupTimes.visualizableAs"
+             [labels]="data.comparisonMeanSetupTimes.labels"
+             [datasets]="data.comparisonMeanSetupTimes.datasets"
+             [yLabel]="data.comparisonMeanSetupTimes.yLabel"
+             [xLabel]="data.comparisonMeanSetupTimes.xLabel"
   ></app-chart>
-  <app-chart [title]="data.comparisonSelectedAndMeanSetupTimeVisualization.title"
-             [type]="data.comparisonSelectedAndMeanSetupTimeVisualization.visualizableAs"
-             [labels]="data.comparisonSelectedAndMeanSetupTimeVisualization.labels"
-             [datasets]="data.comparisonSelectedAndMeanSetupTimeVisualization.datasets"
-             [yLabel]="data.comparisonSelectedAndMeanSetupTimeVisualization.yLabel"
-             [xLabel]="data.comparisonSelectedAndMeanSetupTimeVisualization.xLabel"
+  <app-chart [title]="data.comparisonSelectedAndMeanSetupTime.title"
+             [type]="data.comparisonSelectedAndMeanSetupTime.visualizableAs"
+             [labels]="data.comparisonSelectedAndMeanSetupTime.labels"
+             [datasets]="data.comparisonSelectedAndMeanSetupTime.datasets"
+             [yLabel]="data.comparisonSelectedAndMeanSetupTime.yLabel"
+             [xLabel]="data.comparisonSelectedAndMeanSetupTime.xLabel"
   ></app-chart>
 </ng-container>
+
+<!-- Local search based: -->
+<app-chart *ngIf="data.valueToMinimizeAtIterations"
+           [title]="data.valueToMinimizeAtIterations.title"
+           [type]="data.valueToMinimizeAtIterations.visualizableAs"
+           [labels]="data.valueToMinimizeAtIterations.labels"
+           [datasets]="data.valueToMinimizeAtIterations.datasets"
+           [yLabel]="data.valueToMinimizeAtIterations.yLabel"
+           [xLabel]="data.valueToMinimizeAtIterations.xLabel"
+></app-chart>

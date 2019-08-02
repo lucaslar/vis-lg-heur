@@ -175,8 +175,11 @@ export class VisualizableSolutionQualityData {
 
   // Only if sum of setup times is to be optimized:
   private _cumulatedSetupTimesAtTimetamps: ChartData;
-  private _comparisonMeanSetupTimesVisualization: ChartData;
-  private _comparisonSelectedAndMeanSetupTimeVisualization: ChartData;
+  private _comparisonMeanSetupTimes: ChartData;
+  private _comparisonSelectedAndMeanSetupTime: ChartData;
+
+  // Only for local searches:
+  private _valueToMinimizeAtIterations: ChartData;
 
   get cumulatedDelaysAtTimestamps(): ChartData {
     return this._cumulatedDelaysAtTimestamps;
@@ -218,20 +221,28 @@ export class VisualizableSolutionQualityData {
     this._cumulatedSetupTimesAtTimetamps = value;
   }
 
-  get comparisonMeanSetupTimesVisualization(): ChartData {
-    return this._comparisonMeanSetupTimesVisualization;
+  get comparisonMeanSetupTimes(): ChartData {
+    return this._comparisonMeanSetupTimes;
   }
 
-  set comparisonMeanSetupTimesVisualization(value: ChartData) {
-    this._comparisonMeanSetupTimesVisualization = value;
+  set comparisonMeanSetupTimes(value: ChartData) {
+    this._comparisonMeanSetupTimes = value;
   }
 
-  get comparisonSelectedAndMeanSetupTimeVisualization(): ChartData {
-    return this._comparisonSelectedAndMeanSetupTimeVisualization;
+  get comparisonSelectedAndMeanSetupTime(): ChartData {
+    return this._comparisonSelectedAndMeanSetupTime;
   }
 
-  set comparisonSelectedAndMeanSetupTimeVisualization(value: ChartData) {
-    this._comparisonSelectedAndMeanSetupTimeVisualization = value;
+  set comparisonSelectedAndMeanSetupTime(value: ChartData) {
+    this._comparisonSelectedAndMeanSetupTime = value;
+  }
+
+  get valueToMinimizeAtIterations(): ChartData {
+    return this._valueToMinimizeAtIterations;
+  }
+
+  set valueToMinimizeAtIterations(value: ChartData) {
+    this._valueToMinimizeAtIterations = value;
   }
 }
 
