@@ -55,3 +55,5 @@ export class AppComponent implements OnInit {
     }
   }
 }
+
+// TODO Hide github button on small devices?

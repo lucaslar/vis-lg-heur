@@ -13,3 +13,4 @@ export enum ObjectiveFunction {
 
 // TODO: Add and implement more
 // TODO: Verspätung (Herrmann), nicht negativ <-> Verspätung (Buch Ablaufplanung) kann negativ sein, Terminüberschreitung nicht
+// TODO: Completely implement as in 'Ablaufplanung'?

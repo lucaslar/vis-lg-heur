@@ -31,7 +31,12 @@
                             [value]="objFunction"
                             class="ord-text"
                             (change)="onSelectionChange($event)">
-            {{objFunction}}
+            <div class="wrap-mat-radio-label">
+              {{objFunction}}
+              <span class="information"
+                    [innerHtml]="'(' + (objFunction | objectiveFunctionFormal) + ')'">
+              </span>
+            </div>
           </mat-radio-button>
         </mat-radio-group>
       </div>

@@ -14,3 +14,7 @@ h5 {
 button {
   margin: 8px;
 }
+
+.wrap-mat-radio-label {
+  white-space: normal;
+}
