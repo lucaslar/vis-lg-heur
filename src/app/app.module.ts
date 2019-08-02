@@ -42,6 +42,7 @@ import {SetUpTimesDefinitionComponent} from './components/pages/beta/set-up-time
 import {MachineConfigComponent} from './components/pages/alpha/machine-config/machine-config.component';
 import {AddJobComponent} from './components/pages/alpha/add-job/add-job.component';
 import {JobsWeightingComponent} from './components/pages/beta/jobs-weighting/jobs-weighting.component';
+import {BetaFormalPipe} from './pipes/beta-formal.pipe';
 import {GammaFormalPipe} from './pipes/gamma-formal.pipe';
 
 @NgModule({
@@ -73,6 +74,7 @@ import {GammaFormalPipe} from './pipes/gamma-formal.pipe';
     MachineConfigComponent,
     AddJobComponent,
     JobsWeightingComponent,
+    BetaFormalPipe,
     GammaFormalPipe
   ],
   imports: [
