@@ -76,7 +76,7 @@ export class StorageService {
 
   isHeuristicApplicable(definer: HeuristicDefiner, isDialogRequired?: boolean): boolean | DialogContent | undefined {
     // only schedule for at least five jobs:
-    if (this.jobs.length >= 5) {
+    if (this.jobs.length >= 4) {
       const heuristic = Heuristic.getHeuristicByDefiner(definer);
 
       if (!heuristic.requiredMachineConfigs.includes(this.machineConfigParam)) {
@@ -102,7 +102,7 @@ export class StorageService {
     } else {
       return isDialogRequired ? new DialogContent(
         (this.jobs.length === 0 ? 'Keine' : 'Zu wenige') + ' Aufträge',
-        ['Für das Visualisieren der Lösungsgüte von Heuristiken müssen mindestens fünf Aufträge angelegt sein.',
+        ['Für das Visualisieren der Lösungsgüte von Heuristiken müssen mindestens vier Aufträge angelegt sein.',
           'Fügen Sie daher bitte ' + (this.jobs.length === 0 ? '' : 'weitere ') + 'Aufträge hinzu.'
         ],
         DialogType.ERROR)
