@@ -276,7 +276,7 @@ export class SchedulingService {
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
       return permutation.map(job => job.finishedAtTimestamp).reduce((f1, f2) => f1 + f2);
     } else if (this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DELAYS) {
-      return permutation.map(job => job.delay ? 1 : 0).reduce((d1, d2) => d1 + d2);
+      return permutation.filter(job => job.delay).length;
     } else {
       console.log('Implement permutation comparison for obj. fun.: ' + this.objectiveFunction);
     }
