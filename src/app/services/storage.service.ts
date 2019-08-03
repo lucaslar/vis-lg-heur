@@ -161,7 +161,7 @@ export class StorageService {
         heuristic.name + ') nicht der richtige zu minimierende Zielfunktionswert vorliegt.',
         'Benötigt wird: \'' + [...heuristic.requiredValuesForObjectiveFunctions.keys()].join('\' oder \'') +
         '\', aktuell gewählt ist allerdings' +
-        (this.objectiveFunction ? ': ' + this.objectiveFunction + '.' : ' kein Zielfunktionswert.') +
+        (this.objectiveFunction ? ': \'' + this.objectiveFunction + '\'.' : ' kein Zielfunktionswert.') +
         ' Bitte wählen Sie ' + ([...heuristic.requiredValuesForObjectiveFunctions.keys()].length > 1 ?
           'eine' : 'die') + ' gennnte Funktion, um fortfahren zu können.',
         'Das Lösen von Reihenfolgeproblemen mithilfe von Prioritätsregeln stellt hierbei eine Besonderheit dar, da ' +
@@ -178,7 +178,7 @@ export class StorageService {
         'Das Reihenfolgeproblem kann derzeit nicht gelöst werden, da das gewählte heuristische Verfahren (' + heuristic.name +
         ') für die aktuelle Maschinenkonfiguration einen anderen zu minimierenden Zielfunktionswert ' +
         'voraussetzt (' + heuristic.machineConfigRequiresFunction.get(this.machineConfigParam).join(', ') +
-        '), aktuell gewählt ist allerdings ' + this.objectiveFunction + '.',
+        '), aktuell gewählt ist allerdings \'' + this.objectiveFunction + '\'.',
         'Bitte ändern Sie daher den Zielfunktionswert oder die Maschinenkonfiguration.'
       ],
       DialogType.ERROR
