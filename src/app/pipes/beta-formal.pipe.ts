@@ -7,6 +7,8 @@ import {Job} from '../model/Job';
 })
 export class BetaFormalPipe implements PipeTransform {
 
+  // TODO: List all or only j/i etc.?
+
   private static formalDueDates(jobs: Job[]): string {
     return jobs.map(job => 'd<sub>' + job.id + '</sub>=' + job.dueDate).join(', ');
   }
