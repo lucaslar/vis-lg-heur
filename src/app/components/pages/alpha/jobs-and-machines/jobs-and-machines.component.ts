@@ -19,7 +19,7 @@ import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 })
 export class JobsAndMachinesComponent implements OnInit {
 
-  // TODO: Delete all machine times button?
+  // TODO: store machine times on reducing machine nr.?
 
   private _definableValue = DefinableValue;
   private _configurationStatus = DefinitionStatus;

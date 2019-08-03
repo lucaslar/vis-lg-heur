@@ -39,7 +39,6 @@ export class SchedulingService {
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
 
-  // TODO: Check job queue for each machine in static scheduling?
   // TODO also add gamma to general data result
   // TODO Add weight comparison
   // TODO Round results in avg. setup times diagrams
@@ -115,7 +114,6 @@ export class SchedulingService {
       bestPermutation = this.bestPermutationLocalSearch();
     }
 
-    // TODO: Really across all machines? Find better word
     this.logSchedulingProcedure(1, 'Maschinenübergreifende Abarbeitungsreihenfolge: ' +
       this.jobListStringForLogging(bestPermutation), LogEventType.JOB_QUEUE);
 

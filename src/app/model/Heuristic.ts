@@ -129,7 +129,6 @@ export class Heuristic {
       definer,
       [DefinableValue.ALPHA_JOB_TIMES],
       [MachineConfig.ONE_MACHINE, MachineConfig.FLOWSHOP],
-      // TODO: Jobshop?
       functions,
       machineConfigRequiresFunction
     );
