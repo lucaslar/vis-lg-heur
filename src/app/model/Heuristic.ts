@@ -70,16 +70,24 @@ export class Heuristic {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.CYCLE_TIME, []);
     functions.set(ObjectiveFunction.SUM_FINISHING_TIMESTAMPS, []);
+    functions.set(ObjectiveFunction.MAX_DELAY, [DefinableValue.BETA_DUE_DATES]);
     functions.set(ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS, [DefinableValue.BETA_WEIGHTS]);
-    functions.set(ObjectiveFunction.MEAN_DELAY, [DefinableValue.BETA_DUE_DATES]);
-    functions.set(ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_DUE_DATES]);
-    functions.set(ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_WEIGHTS, DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_DELAYED_WORK, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_DUE_DATES, DefinableValue.BETA_WEIGHTS]);
+    functions.set(ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_WEIGHTS, DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK, [DefinableValue.BETA_DUE_DATES, DefinableValue.BETA_WEIGHTS]);
 
     const machineConfigRequiresFunction = new Map<MachineConfig, ObjectiveFunction[]>();
     machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [
-      ObjectiveFunction.MEAN_DELAY,
-      ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES,
-      ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
+      ObjectiveFunction.MAX_DELAY,
+      ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES,
+      ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES,
+      ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES,
+      ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES,
+      ObjectiveFunction.SUM_DELAYED_WORK,
+      ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
     ]);
 
     return new Heuristic(
@@ -96,16 +104,24 @@ export class Heuristic {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.CYCLE_TIME, []);
     functions.set(ObjectiveFunction.SUM_FINISHING_TIMESTAMPS, []);
+    functions.set(ObjectiveFunction.MAX_DELAY, [DefinableValue.BETA_DUE_DATES]);
     functions.set(ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS, [DefinableValue.BETA_WEIGHTS]);
-    functions.set(ObjectiveFunction.MEAN_DELAY, [DefinableValue.BETA_DUE_DATES]);
-    functions.set(ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_DUE_DATES]);
-    functions.set(ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_WEIGHTS, DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_DELAYED_WORK, [DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_DUE_DATES, DefinableValue.BETA_WEIGHTS]);
+    functions.set(ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES, [DefinableValue.BETA_WEIGHTS, DefinableValue.BETA_DUE_DATES]);
+    functions.set(ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK, [DefinableValue.BETA_DUE_DATES, DefinableValue.BETA_WEIGHTS]);
 
     const machineConfigRequiresFunction = new Map<MachineConfig, ObjectiveFunction[]>();
     machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [
-      ObjectiveFunction.MEAN_DELAY,
-      ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES,
-      ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
+      ObjectiveFunction.MAX_DELAY,
+      ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES,
+      ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES,
+      ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES,
+      ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES,
+      ObjectiveFunction.SUM_DELAYED_WORK,
+      ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
     ]);
 
     return new Heuristic(

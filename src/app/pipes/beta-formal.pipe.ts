@@ -30,15 +30,20 @@ export class BetaFormalPipe implements PipeTransform {
     value = value.sort((j1, j2) => j1.id - j2.id);
 
     // Add due dates:
-    if (objectiveFunction === ObjectiveFunction.MEAN_DELAY
-      || objectiveFunction === ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES
-      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
+    if (objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES
+      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
+      || objectiveFunction === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES
+      || objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
+      || objectiveFunction === ObjectiveFunction.SUM_DELAYED_WORK
+      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK) {
       betaFormal += BetaFormalPipe.formalDueDates(value);
     }
 
     // Add weights:
-    if (objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
-      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
+    if (objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
+      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS
+      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
+      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
       if (betaFormal) {
         betaFormal += ', ';
       }

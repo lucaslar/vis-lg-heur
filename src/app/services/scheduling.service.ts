@@ -42,6 +42,7 @@ export class SchedulingService {
   // TODO: Check job queue for each machine in static scheduling?
   // TODO also add gamma to general data result
   // TODO Add weight comparison
+  // TODO Iterations as KPI?
   // TODO Round results in avg. setup times diagrams
 
   constructor(public storage: StorageService) {
@@ -115,6 +116,7 @@ export class SchedulingService {
       bestPermutation = this.bestPermutationLocalSearch();
     }
 
+    // TODO: Really across all machines? Find better word
     this.logSchedulingProcedure(1, 'Maschinenübergreifende Abarbeitungsreihenfolge: ' +
       this.jobListStringForLogging(bestPermutation), LogEventType.JOB_QUEUE);
 
@@ -173,19 +175,19 @@ export class SchedulingService {
   private logPreSortingBasedOnObjectiveFunction(): void {
     let preSortBasedOn: string;
 
-    if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY
-      || this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES) {
+    if (this.objectiveFunction === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_DELAYED_WORK
+      || this.objectiveFunction === ObjectiveFunction.MAX_DELAY) {
       preSortBasedOn = 'ihren gewünschten Fertigstellungsterminen';
     } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME
       || this.objectiveFunction === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
-      preSortBasedOn = 'der Summe der ihrer Bearbeitungszeiten';
+      preSortBasedOn = 'der Summe ihrer Bearbeitungszeiten';
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
       preSortBasedOn = 'der gewichteten Summe ihrer Bearbeitungszeiten';
-    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
-      preSortBasedOn = 'ihren gewichteten Fertigstellungsterminen';
-    } else {
-      // TODO: Delete after final number of objective functions.
-      console.error('Implement: ' + this.objectiveFunction);
+    } else if (this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
+      preSortBasedOn = 'ihren gewichteten gewünschten Fertigstellungsterminen';
     }
 
     this.logSchedulingProcedure(1, 'Maschinenübergreifendes Vorsortieren der Aufträge nach ' + preSortBasedOn,
@@ -218,19 +220,19 @@ export class SchedulingService {
   }
 
   private getCompareValueForPresortingBasedOnObjectiveFunction(job: ScheduledJob): number {
-    if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY
-      || this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES) {
+    if (this.objectiveFunction === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_DELAYED_WORK
+      || this.objectiveFunction === ObjectiveFunction.MAX_DELAY) {
       return job.dueDate;
     } else if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME
       || this.objectiveFunction === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
       return job.totalMachiningTime;
-    } else if (this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES) {
-      return job.dueDate / job.weight;
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
       return job.totalMachiningTime / job.weight;
-    } else {
-      // TODO: Delete after final number of objective functions
-      console.error('Implement presorting based on: ' + this.objectiveFunction);
+    } else if (this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
+      return job.dueDate / job.weight;
     }
   }
 
@@ -256,7 +258,7 @@ export class SchedulingService {
     return permutations;
   }
 
-  private getBestPermutation(permutations: ScheduledJob[][]): ScheduledJob[] {
+  private getCurrentBestPermutation(permutations: ScheduledJob[][]): ScheduledJob[] {
 
     const permutationsAndValuesTuple = permutations.map(permutation => {
       const value = this.getCompareValueForPermutation(permutation);
@@ -280,17 +282,34 @@ export class SchedulingService {
 
     if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME) {
       return duration;
-    } else if (this.objectiveFunction === ObjectiveFunction.MEAN_DELAY) {
-      const sumOfDelays = permutation.map(job => job.delay).reduce((d1, d2) => d1 + d2);
-      return sumOfDelays / permutation.length;
+    } else if (this.objectiveFunction === ObjectiveFunction.MAX_DELAY) {
+      return Math.max.apply(Math, permutation.map(job => job.finishedAtTimestamp - job.dueDate));
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES) {
+      return permutation.map(job => job.delay).reduce((d1, d2) => d1 + d2);
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
       return permutation.map(job => job.finishedAtTimestamp).reduce((f1, f2) => f1 + f2);
-    } else if (this.objectiveFunction === ObjectiveFunction.NUMBER_OF_DEADLINE_EXCEEDANCES) {
+    } else if (this.objectiveFunction === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES) {
       return permutation.filter(job => job.delay).length;
-    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
+    } else if (this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES) {
       return permutation.filter(job => job.delay).map(job => job.weight).reduce((wd1, wd2) => wd1 + wd2, 0);
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
       return permutation.map(job => job.finishedAtTimestamp * job.weight).reduce((wf1, wf2) => wf1 + wf2);
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
+      return permutation.map(job => job.delay * job.weight).reduce((wd1, wd2) => wd1 + wd2);
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_DELAYED_WORK) {
+      return permutation.filter(job => job.delay)
+        .map(job => job.operationsOnMachines
+          .filter(operation => operation.finishTimestamp > job.dueDate)
+          .map(o => o.finishTimestamp - (o.startTimestamp > job.dueDate ? o.startTimestamp : job.dueDate))
+          .reduce((t1, t2) => t1 + t2))
+        .reduce((st1, st2) => st1 + st2);
+    } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK) {
+      return permutation.filter(job => job.delay)
+        .map(job => job.weight * job.operationsOnMachines
+          .filter(operation => operation.finishTimestamp > job.dueDate)
+          .map(o => o.finishTimestamp - (o.startTimestamp > job.dueDate ? o.startTimestamp : job.dueDate))
+          .reduce((wt1, wt2) => wt1 + wt2))
+        .reduce((wst1, wst2) => wst1 + wst2);
     } else {
       // TODO: Delete after final number of objective functions
       console.error('Implement permutation comparison for obj. fun.: ' + this.objectiveFunction);
