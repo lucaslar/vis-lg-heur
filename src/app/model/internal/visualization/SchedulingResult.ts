@@ -69,6 +69,7 @@ export class GeneralSchedulingData {
   private _numberOfMachines: number;
   private _numberOfJobs: number;
   private _durationInMillisKpi: Kpi;
+  private _iterations: Kpi; // only for local searches
 
   get priorityRules(): PriorityRule[] {
     return this._priorityRules;
@@ -108,6 +109,14 @@ export class GeneralSchedulingData {
 
   set durationInMillisKpi(value: Kpi) {
     this._durationInMillisKpi = value;
+  }
+
+  get iterations(): Kpi {
+    return this._iterations;
+  }
+
+  set iterations(value: Kpi) {
+    this._iterations = value;
   }
 }
 

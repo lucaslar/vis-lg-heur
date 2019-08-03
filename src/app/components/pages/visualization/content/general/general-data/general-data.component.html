@@ -1,8 +1,9 @@
 <div class="row">
   <div class="col-12 text-justify">
 
-    <div class="float-right col-12 col-sm-7 col-md-6 col-lg-5">
+    <div class="float-right col-12 col-sm-8 col-md-5 col-lg-4">
       <app-scheduling-kpi [kpi]="data.durationInMillisKpi"></app-scheduling-kpi>
+      <app-scheduling-kpi *ngIf="data.iterations" [kpi]="data.iterations"></app-scheduling-kpi>
     </div>
 
     <div> <!-- TODO: add information here -->

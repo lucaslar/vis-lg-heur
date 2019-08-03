@@ -42,7 +42,6 @@ export class SchedulingService {
   // TODO: Check job queue for each machine in static scheduling?
   // TODO also add gamma to general data result
   // TODO Add weight comparison
-  // TODO Iterations as KPI?
   // TODO Round results in avg. setup times diagrams
 
   constructor(public storage: StorageService) {
@@ -310,9 +309,6 @@ export class SchedulingService {
           .map(o => o.finishTimestamp - (o.startTimestamp > job.dueDate ? o.startTimestamp : job.dueDate))
           .reduce((wt1, wt2) => wt1 + wt2))
         .reduce((wst1, wst2) => wst1 + wst2);
-    } else {
-      // TODO: Delete after final number of objective functions
-      console.error('Implement permutation comparison for obj. fun.: ' + this.objectiveFunction);
     }
   }
 
@@ -572,6 +568,15 @@ export class SchedulingService {
     data.numberOfJobs = this.jobs.length;
     data.numberOfMachines = this.machines.length;
     data.priorityRules = this.priorityRules; // may be undefined
+
+    if (this.heuristicType === HeuristicDefiner.LOCAL_SEARCH) {
+      const iterationsKpi = new Kpi();
+      iterationsKpi.kpi = this.localSearchBestValuesForIterations.length;
+      iterationsKpi.iconClasses = ['fas', 'fa-redo'];
+      iterationsKpi.title = 'Iterationen bis zur Lösungsfindung';
+      data.iterations = iterationsKpi;
+    }
+
     return data;
   }
 
