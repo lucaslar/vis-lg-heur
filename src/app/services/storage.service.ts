@@ -79,7 +79,7 @@ export class StorageService {
   }
 
   isHeuristicApplicable(definer: HeuristicDefiner, isDialogRequired?: boolean): boolean | DialogContent | undefined {
-    // only schedule for at least five jobs:
+    // only schedule for at least four jobs:
     if (this.jobs.length >= 4) {
       const heuristic = Heuristic.getHeuristicByDefiner(definer);
 
