@@ -38,6 +38,12 @@ export class Heuristic {
     } else if (definer === HeuristicDefiner.LOCAL_SEARCH) {
       return this.localSearchHeuristic(definer);
     } else {
+
+      if (definer === HeuristicDefiner.SHIFTING_BOTTLENECK) {
+        return this.shiftingBottleneck(definer);
+      }
+
+
       // TODO: Delete when not needed any longer
       console.error('define ' + definer);
       return undefined;
@@ -131,6 +137,20 @@ export class Heuristic {
       [MachineConfig.ONE_MACHINE, MachineConfig.FLOWSHOP],
       functions,
       machineConfigRequiresFunction
+    );
+  }
+
+  private static shiftingBottleneck(definer: HeuristicDefiner): Heuristic {
+    const functions = new Map<ObjectiveFunction, DefinableValue[]>();
+    functions.set(ObjectiveFunction.CYCLE_TIME, []);
+
+    // TODO Shifting bottleneck possible for more than cycle time?
+    return new Heuristic(
+      'Shifting-Bottleneck',
+      definer,
+      [DefinableValue.ALPHA_JOB_TIMES],
+      [MachineConfig.JOBSHOP],
+      functions
     );
   }
 

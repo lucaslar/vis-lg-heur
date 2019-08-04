@@ -4,7 +4,7 @@ import {Job} from '../model/Job';
 import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
 import {PriorityRule} from '../model/enums/PriorityRule';
 import {Machine} from '../model/Machine';
-import {ScheduledJob} from '../model/ScheduledJob';
+import {RelaxableOneMachineScheduledJob, ScheduledJob} from '../model/ScheduledJob';
 import {
   GeneralSchedulingData,
   Kpi,
@@ -39,6 +39,7 @@ export class SchedulingService {
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
 
+  // TODO: Lmax for one machine: offer branch and bound, too?
   // TODO also add gamma to general data result
   // TODO Add weight comparison
   // TODO Round results in avg. setup times diagrams
@@ -50,7 +51,9 @@ export class SchedulingService {
     this.initialize(heuristicDefiner);
 
     const tStart = performance.now();
-    if (this.isDynamicallySolvable()) {
+    if (heuristicDefiner === HeuristicDefiner.SHIFTING_BOTTLENECK) {
+      this.scheduleByShiftingBottleneckHeuristic();
+    } else if (this.isDynamicallySolvable()) {
       do {
         this.proceedDynamicScheduling();
         this.currentTimestampInScheduling++;
@@ -195,7 +198,7 @@ export class SchedulingService {
     let iteration = 0;
     let startValue: number;
     let bestPermutationYet = this.jobs;
-    let currentBestValue = this.getCompareValueForPermutation(this.jobs);
+    let currentBestValue = this.getCompareValueForPermutation(bestPermutationYet);
     this.localSearchBestValuesForIterations = [currentBestValue];
 
     do {
@@ -209,6 +212,7 @@ export class SchedulingService {
           bestPermutationYet = permutation;
         }
       });
+
       this.localSearchBestValuesForIterations.push(currentBestValue);
       // TODO: Log local search
     } while (currentBestValue < startValue);
@@ -393,7 +397,7 @@ export class SchedulingService {
       if (!nextMachine.jobQueue.includes(job)) { // only add jobs, that have not been pushed to queue already
         nextMachine.jobQueue.push(job);
 
-        // In case of static scheduling:
+        // In case of dynamic scheduling:
         if (!givenJobs) {
           this.logSchedulingProcedure(nextMachine.machineNr, 'Hinzufügen zur Warteschlange von '
             + this.jobStringForLogging(job), LogEventType.JOB_QUEUE);
@@ -544,6 +548,231 @@ export class SchedulingService {
     // End of logging
 
     return lowestValueOfA - lowestValueOfB;
+  }
+
+  private scheduleByShiftingBottleneckHeuristic(): void {
+
+    // TODO: Log process
+    let maxTime = Math.max.apply(Math, this.jobs.map(job => job.totalMachiningTime));
+    const schedulingIgnoringMachineCapacity = this.getSchedulingIgnoringMachineCapacity(maxTime);
+    const isOptimalSolution = !schedulingIgnoringMachineCapacity
+      .filter(machine => machine.some(jobsAtTimestamp => jobsAtTimestamp.length > 1));
+
+    if (!isOptimalSolution) {
+      const currentMachineSchedules: [number, RelaxableOneMachineScheduledJob[]][] = [];
+      // TODO: Log that best solution has not been found
+
+      while (currentMachineSchedules.length !== 2) { // !== this.machines.length) {
+        const optimalOneMachineProblems = this.getOptimallySolvedOneMachineProblems(maxTime, currentMachineSchedules);
+
+        optimalOneMachineProblems.forEach(
+          p => console.log(
+            p[0] + ' | ' + p[1].map(j => j.id).join('>') + ' | Lmax=' + this.getMaxLatenessForSortedOneMachineJobs(p[1])
+          )
+        );
+
+        optimalOneMachineProblems.sort((p1, p2) =>
+          -(this.getMaxLatenessForSortedOneMachineJobs(p1[1]) - this.getMaxLatenessForSortedOneMachineJobs(p2[1])));
+
+        // TODO: Testing only, delete this:
+        if (optimalOneMachineProblems.find(o => o[0] === 1)) {
+          // noinspection TypeScriptValidateTypes
+          currentMachineSchedules.push(optimalOneMachineProblems.find(o => o[0] === 1));
+        } else {
+          // noinspection TypeScriptValidateTypes
+          currentMachineSchedules.push(optimalOneMachineProblems[0]);
+          maxTime += this.getMaxLatenessForSortedOneMachineJobs(optimalOneMachineProblems[0][1]);
+        }
+      }
+
+    } else {
+      // TODO: Log that best solution is found!
+      this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
+    }
+
+  }
+
+  private getSchedulingIgnoringMachineCapacity(maxTime: number): ScheduledJob[][][] {
+    const schedulingIgnoringMachineCapacity = this.machines.map(() => new Array(maxTime));
+    this.jobs.forEach(job => {
+      let countedTime = 0;
+      job.machineTimes.forEach(mt => {
+        for (let i = countedTime; i < mt.timeOnMachine + countedTime; i++) {
+          if (!schedulingIgnoringMachineCapacity[mt.machineNr - 1][i]) {
+            schedulingIgnoringMachineCapacity[mt.machineNr - 1][i] = [];
+          }
+          schedulingIgnoringMachineCapacity[mt.machineNr - 1][i].push(job);
+        }
+        countedTime += mt.timeOnMachine;
+      });
+    });
+    return schedulingIgnoringMachineCapacity;
+  }
+
+  private getOptimallySolvedOneMachineProblems(
+    currentTotalTime: number, currentMachineSchedules: [number, RelaxableOneMachineScheduledJob[]][]):
+    [number, RelaxableOneMachineScheduledJob[]][] {
+
+    return this.machines.filter(machine => !currentMachineSchedules
+      .map(s => s[0]).includes(machine.machineNr))
+      .map(machine => {
+          const jobs = this.jobs.map(job => new RelaxableOneMachineScheduledJob(job, machine.machineNr, currentTotalTime));
+          const optimallySortedJobs = this.getBestPermutationByBranchAndBound(jobs);
+
+          if (machine.machineNr === 1) {
+            // TODO: Testing only, delete this!
+            [optimallySortedJobs[2], optimallySortedJobs[3]] = [optimallySortedJobs[3], optimallySortedJobs[2]];
+          }
+
+          return [machine.machineNr, optimallySortedJobs];
+        }
+      );
+  }
+
+  private getBestPermutationByBranchAndBound(jobs: RelaxableOneMachineScheduledJob[]): RelaxableOneMachineScheduledJob[] {
+    // Sort jobs:
+    let currentBestSolution: RelaxableOneMachineScheduledJob[] = jobs.sort((j1, j2) => j1.onMachineAvailability - j2.onMachineAvailability);
+    let upperBound: number = this.getMaxLatenessForSortedOneMachineJobs(jobs);
+    const totalLowerBound: number = this.getMaxLatenessForRelaxedOneMachineJobs(jobs);
+
+    // TODO: Case upper bound = lower bound: return current list?
+
+    const proceedOnBranch = (branch: number[], _lowerBound: number) => {
+      if (branch.length < jobs.length) {
+        const lowerBoundAndProductionList = this.getMaxLatenessForPartlyFixedRelaxedJobs(jobs, branch);
+        const currentBranchLowerBound = lowerBoundAndProductionList[0];
+
+        if (currentBranchLowerBound < upperBound) {
+
+          // TODO: Log all proceeding jobs? if so: this line
+          // console.log('proceed: ' + branch.join('->'));
+
+          // if both the lower bound is smaller than the current upper bound and all jobs are produced without pausing:
+          if (currentBranchLowerBound < upperBound && lowerBoundAndProductionList[1]) {
+            currentBestSolution = lowerBoundAndProductionList[1];
+            upperBound = currentBranchLowerBound;
+          }
+
+          // If the current branch's lower bound did not match the given lower bound yet
+          if (currentBranchLowerBound > _lowerBound || !lowerBoundAndProductionList[1]) {
+            let isCurrentBestSolutionFound = false;
+            currentBestSolution
+              .filter(job => !branch.includes(job.id))
+              .forEach(job => {
+                if (!isCurrentBestSolutionFound) {
+                  const newBranch = branch.slice(0);
+                  newBranch.push(job.id);
+                  isCurrentBestSolutionFound = proceedOnBranch(newBranch, currentBranchLowerBound);
+                }
+              });
+          } else {
+            // if the given lower bound is matched (-> no better solution). Because of this value, the branch will be stopped
+            return true;
+          }
+        }
+      }
+    };
+
+    currentBestSolution.map(job => job.id).forEach(id => proceedOnBranch([id], totalLowerBound));
+
+    return currentBestSolution;
+  }
+
+  private getMaxLatenessForSortedOneMachineJobs(jobs: RelaxableOneMachineScheduledJob[]): number {
+
+    let currentTimestamp = 0;
+    let finishedJobs = 0;
+    let currentMaxDelay: number;
+
+    do {
+      const currentJob = jobs[finishedJobs];
+
+      if (currentTimestamp < currentJob.onMachineAvailability) {
+        currentTimestamp = currentJob.onMachineAvailability + currentJob.onMachineOperationTime;
+      } else {
+        currentTimestamp += currentJob.onMachineOperationTime;
+      }
+
+      const delay = currentTimestamp - currentJob.onMachineDueDate;
+      if (currentMaxDelay === undefined || currentMaxDelay < delay) {
+        currentMaxDelay = delay;
+      }
+
+      finishedJobs++;
+    } while (finishedJobs < jobs.length);
+
+    return currentMaxDelay;
+  }
+
+  private getMaxLatenessForRelaxedOneMachineJobs(jobs: RelaxableOneMachineScheduledJob[]): number {
+    jobs.forEach(job => job.initializeRelaxedProduction());
+    let currentTimestamp = 0;
+
+    do {
+      const currentJob = jobs
+        .filter(job => !job.isRelaxedProductionFinished
+          && job.onMachineAvailability <= currentTimestamp)
+        .sort((j1, j2) => j1.onMachineDueDate - j2.onMachineDueDate)[0];
+      // Might be undefined if no job is available yet
+      if (currentJob) {
+        currentJob.proceedProducing(currentTimestamp);
+      }
+      currentTimestamp++;
+    } while (jobs.some(job => !job.isRelaxedProductionFinished));
+
+    return Math.max.apply(Math, jobs.map(job => job.onMachineDelay));
+  }
+
+  private getMaxLatenessForPartlyFixedRelaxedJobs(jobs: RelaxableOneMachineScheduledJob[], fixtures: number[])
+    : [number, RelaxableOneMachineScheduledJob[]] {
+
+    const productionLine: RelaxableOneMachineScheduledJob[] = [];
+    let currentTimestamp = 0;
+    let maxDelayOfFixedJobs: number;
+
+    jobs.forEach(job => job.initializeRelaxedProduction());
+    fixtures.forEach(fixedId => {
+      const currentJob = jobs.find(job => job.id === fixedId);
+      if (currentTimestamp < currentJob.onMachineAvailability) {
+        currentTimestamp = currentJob.onMachineAvailability + currentJob.onMachineOperationTime;
+      } else {
+        currentTimestamp += currentJob.onMachineOperationTime;
+      }
+      const delay = currentTimestamp - currentJob.onMachineDueDate;
+      if (maxDelayOfFixedJobs === undefined || maxDelayOfFixedJobs < delay) {
+        maxDelayOfFixedJobs = delay;
+      }
+      productionLine.push(currentJob);
+    });
+
+    do {
+      let currentJob = jobs
+        .filter(job => !job.isRelaxedProductionFinished
+          && job.onMachineAvailability <= currentTimestamp
+          && !fixtures.includes(job.id))
+        .sort((j1, j2) => j1.onMachineDueDate - j2.onMachineDueDate)[0];
+
+      // Might be undefined if no job is available yet
+      if (currentJob) {
+        // Check if previously produced job can be taken again
+        const previousJob = productionLine[productionLine.length - 1];
+        if (productionLine.length > fixtures.length
+          && !previousJob.isRelaxedProductionFinished
+          && previousJob.onMachineDueDate === currentJob.onMachineDueDate) {
+          currentJob = previousJob;
+        } else {
+          productionLine.push(currentJob);
+        }
+        currentJob.proceedProducing(currentTimestamp);
+      }
+
+      currentTimestamp++;
+    } while (jobs.some(job => !fixtures.includes(job.id) && !job.isRelaxedProductionFinished));
+
+    const nonFixedMaxDelay = Math.max.apply(Math, jobs.filter(job => !fixtures.includes(job.id)).map(job => job.onMachineDelay));
+    const totalMax = Math.max.apply(Math, [nonFixedMaxDelay, maxDelayOfFixedJobs]);
+
+    return [totalMax, productionLine.length === jobs.length ? productionLine : undefined];
   }
 
   // called after successful scheduling

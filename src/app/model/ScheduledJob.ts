@@ -27,6 +27,15 @@ export class ScheduledJob extends Job {
     this.finishedOperationsCounter++;
   }
 
+  getMachiningTimeBeforeStepOnMachine(machineNr: number): number {
+    let time = 0;
+    const indexOfMachine = this.machineTimes.indexOf(this.machineTimes.find(mt => mt.machineNr === machineNr));
+    for (let i = 0; i < indexOfMachine; i++) {
+      time += this.machineTimes[i].timeOnMachine;
+    }
+    return time;
+  }
+
   getSlackTimeForTimestamp(timestamp: number): number {
     return this.getRemainingTimeForTimestamp(timestamp) - this.getRemainingMachiningTime();
   }
@@ -117,8 +126,6 @@ export class ScheduledJob extends Job {
     return this.machineTimes[this.finishedOperationsCounter].timeOnMachine;
   }
 
-  // End of values needed for priority rules
-
   get nextMachineNr(): number | undefined {
     // undefined means the job is finished and has no next machine
     return this.finishedOperationsCounter === this.machineTimes.length ?
@@ -148,6 +155,65 @@ export class ScheduledJob extends Job {
     return this.machineTimes.map(m => m.timeOnMachine).reduce((m1, m2) => m1 + m2);
   }
 
+}
+
+export class RelaxableOneMachineScheduledJob extends ScheduledJob {
+
+  private readonly _onMachineOperationTime: number;
+  private readonly _onMachineAvailability: number;
+  private readonly _onMachineDueDate: number;
+
+  private remainingProductionTime: number;
+  private _onMachineDelay: number;
+
+  constructor(job: Job, observedMachineNr: number, currentlyAssumedTotalMachineTime: number) {
+    super(job);
+    this._onMachineOperationTime = this.machineTimes.find(mt => mt.machineNr === observedMachineNr).timeOnMachine;
+    this._onMachineAvailability = this.getMachiningTimeBeforeStepOnMachine(observedMachineNr);
+    this._onMachineDueDate = currentlyAssumedTotalMachineTime -
+      (this.totalMachiningTime - this.onMachineOperationTime - this.onMachineAvailability);
+  }
+
+  // TODO: delete this
+  log(): void {
+    console.log(
+      'j: ' + this.id,
+      '\npj: ' + this.onMachineOperationTime,
+      '\nrj: ' + this.onMachineAvailability,
+      '\ndj: ' + this.onMachineDueDate
+    );
+  }
+
+  initializeRelaxedProduction(): void {
+    this.remainingProductionTime = this.onMachineOperationTime;
+  }
+
+  proceedProducing(timestamp: number): void {
+    this.remainingProductionTime--;
+    if (this.isRelaxedProductionFinished) {
+      this._onMachineDelay = (timestamp + 1) - this.onMachineDueDate;
+    }
+  }
+
+  get isRelaxedProductionFinished(): boolean {
+    return this.remainingProductionTime === 0;
+  }
+
+  get onMachineOperationTime(): number {
+    return this._onMachineOperationTime;
+  }
+
+  get onMachineAvailability(): number {
+    return this._onMachineAvailability;
+  }
+
+  get onMachineDueDate(): number {
+    return this._onMachineDueDate;
+  }
+
+  get onMachineDelay(): number {
+    return this._onMachineDelay;
+  }
 }
 
 export class OperationOnMachine {
