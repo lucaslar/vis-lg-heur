@@ -61,21 +61,24 @@ export class StorageService {
   }
 
   getMessageIfExactlySolvableProblem(): DialogContent | undefined {
-
-    // TODO: Implement case: Exactly solvable but more than 2 machines!
-
-    return this.nrOfMachines === 2 ?
-      new DialogContent(
+    // based on Blazewicz, Ecker et al. 2019 – Handbook on Scheduling, p. 274/353
+    if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME && (this.nrOfMachines === 2 || this.isExacltySolvableThreeMachineFs())) {
+      return new DialogContent(
         'Reihenfolgeproblem exakt lösbar',
         [
-          'Das aktuelle Reihenfolgeproblem (' + (this.machineConfigParam === MachineConfig.FLOWSHOP ?
-            'Flowshop' : 'Jobshop') + ' mit zwei Maschinen) ist mithilfe des ' +
-          'Johnson-Algorithmus in vertretbarer Zeit exakt lösbar.',
-          'Der Rechenaufwand beträgt hierbei n log(n). Es besteht also kein Bedarf, ein ' +
-          'heuristisches Verfahren zu verwenden.'
+          // Can only be three or two when returned
+          'Das aktuelle Reihenfolgeproblem (zu minimierende Gesamtbearbeitungszeit in Maschinenumgebung: ' +
+          (this.machineConfigParam === MachineConfig.FLOWSHOP ? 'Flowshop' : 'Jobshop') + ' mit ' +
+          (this.nrOfMachines === 2 ? 'zwei' : 'drei') + ' Maschinen) ist mithilfe des Johnson-Algorithmus in Polynomialzeit exakt ' +
+          'lösbar. Es besteht also kein Bedarf, ein heuristisches Verfahren zu verwenden.',
+          this.nrOfMachines === 3 ? 'Normalerweise kann dieser Algorithmus nur für Zweimachinenprobleme verwendet werden. Im konkreten ' +
+            'Falle stellt die mittlere Maschine allerdings keinen Flaschenhals dar (p1 < p2 < p3 oder p3 < p2 < p1), ' +
+            'weswegen das exakte Verfahren dennoch anwendbar ist.' : ''
         ],
         DialogType.INFO
-      ) : undefined;
+      );
+    }
+    return undefined;
   }
 
   isHeuristicApplicable(definer: HeuristicDefiner, isDialogRequired?: boolean): boolean | DialogContent | undefined {
@@ -244,6 +247,17 @@ export class StorageService {
       lastCheckedIndex++;
     }
     return true;
+  }
+
+  private isExacltySolvableThreeMachineFs(): boolean {
+    if (this.nrOfMachines === 3 && this.machineConfigParam === MachineConfig.FLOWSHOP) {
+      const firstMachineMin = Math.min.apply(Math, this.jobs.map(job => job.machineTimes[0].timeOnMachine));
+      const thirdMachineMin = Math.min.apply(Math, this.jobs.map(job => job.machineTimes[2].timeOnMachine));
+      const secondMachineMax = Math.max.apply(Math, this.jobs.map(job => job.machineTimes[1].timeOnMachine));
+      return firstMachineMin > secondMachineMax || thirdMachineMin > secondMachineMax;
+    } else {
+      return false;
+    }
   }
 
   get machineConfigParam(): MachineConfig {
