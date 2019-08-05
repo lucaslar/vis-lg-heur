@@ -287,31 +287,31 @@ export class SchedulingService {
     } else if (this.objectiveFunction === ObjectiveFunction.MAX_DELAY) {
       return Math.max.apply(Math, permutation.map(job => job.finishedAtTimestamp - job.dueDate));
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES) {
-      return permutation.map(job => job.delay).reduce((d1, d2) => d1 + d2);
+      return permutation.map(job => job.delay).reduce((d1, d2) => d1 + d2, 0);
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_FINISHING_TIMESTAMPS) {
-      return permutation.map(job => job.finishedAtTimestamp).reduce((f1, f2) => f1 + f2);
+      return permutation.map(job => job.finishedAtTimestamp).reduce((f1, f2) => f1 + f2, 0);
     } else if (this.objectiveFunction === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES) {
       return permutation.filter(job => job.delay).length;
     } else if (this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES) {
       return permutation.filter(job => job.delay).map(job => job.weight).reduce((wd1, wd2) => wd1 + wd2, 0);
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
-      return permutation.map(job => job.finishedAtTimestamp * job.weight).reduce((wf1, wf2) => wf1 + wf2);
+      return permutation.map(job => job.finishedAtTimestamp * job.weight).reduce((wf1, wf2) => wf1 + wf2, 0);
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
-      return permutation.map(job => job.delay * job.weight).reduce((wd1, wd2) => wd1 + wd2);
+      return permutation.map(job => job.delay * job.weight).reduce((wd1, wd2) => wd1 + wd2, 0);
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_DELAYED_WORK) {
       return permutation.filter(job => job.delay)
         .map(job => job.operationsOnMachines
           .filter(operation => operation.finishTimestamp > job.dueDate)
           .map(o => o.finishTimestamp - (o.startTimestamp > job.dueDate ? o.startTimestamp : job.dueDate))
-          .reduce((t1, t2) => t1 + t2))
-        .reduce((st1, st2) => st1 + st2);
+          .reduce((t1, t2) => t1 + t2, 0))
+        .reduce((st1, st2) => st1 + st2, 0);
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK) {
       return permutation.filter(job => job.delay)
         .map(job => job.weight * job.operationsOnMachines
           .filter(operation => operation.finishTimestamp > job.dueDate)
           .map(o => o.finishTimestamp - (o.startTimestamp > job.dueDate ? o.startTimestamp : job.dueDate))
           .reduce((wt1, wt2) => wt1 + wt2))
-        .reduce((wst1, wst2) => wst1 + wst2);
+        .reduce((wst1, wst2) => wst1 + wst2, 0);
     }
   }
 
@@ -376,7 +376,7 @@ export class SchedulingService {
       );
   }
 
-  // Called for any dynamically executed heuristic (before calling the heuristic based sorting) and static procedure mocking
+  // Called for any executed heuristic (for dynamic heuristics: before calling the heuristic based sorting)
   private handleEachCurrentJobOfMachine(mockTimestamp?: number): void {
     // mock timestamp used for static procedures only
     const usedTimestamp = mockTimestamp === undefined ? this.currentTimestampInScheduling : mockTimestamp;
