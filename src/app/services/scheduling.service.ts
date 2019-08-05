@@ -4,7 +4,7 @@ import {Job} from '../model/Job';
 import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
 import {PriorityRule} from '../model/enums/PriorityRule';
 import {Machine} from '../model/Machine';
-import {RelaxableOneMachineScheduledJob, ScheduledJob} from '../model/ScheduledJob';
+import {BottleneckRelation, JobToJobCondition, RelaxableOneMachineScheduledJob, ScheduledJob} from '../model/ScheduledJob';
 import {
   GeneralSchedulingData,
   Kpi,
@@ -21,6 +21,7 @@ import {LogEventType} from '../model/enums/LogEventType';
 import {DefinableValue} from '../model/internal/value-definition/DefinableValue';
 import {DefinitionStatus} from '../model/internal/value-definition/DefinitionStatus';
 import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
+import {SchedulingPlanForMachine} from '../model/SchedulingPlanForMachine';
 
 @Injectable({
   providedIn: 'root'
@@ -553,43 +554,185 @@ export class SchedulingService {
   private scheduleByShiftingBottleneckHeuristic(): void {
 
     // TODO: Log process
-    let maxTime = Math.max.apply(Math, this.jobs.map(job => job.totalMachiningTime));
-    const schedulingIgnoringMachineCapacity = this.getSchedulingIgnoringMachineCapacity(maxTime);
+    let lowerBoundMakespan = Math.max.apply(Math,
+      // Longest job processing time:
+      // [Math.max.apply(Math,
+      this.jobs.map(job => job.totalMachiningTime)
+      /*
+      ),
+       TODO or longest total machine time:
+      Math.max.apply(Math,
+        this.machines.map(machine => this.jobs.map(job => job.machineTimes.find(mt => mt.machineNr === machine.machineNr))
+          .map(mt => mt.timeOnMachine).reduce((mt1, mt2) => mt1 + mt2)))
+          ]
+          */
+    );
+
+    const schedulingIgnoringMachineCapacity = this.getSchedulingIgnoringMachineCapacity(lowerBoundMakespan);
     const isOptimalSolution = !schedulingIgnoringMachineCapacity
       .filter(machine => machine.some(jobsAtTimestamp => jobsAtTimestamp.length > 1));
 
     if (!isOptimalSolution) {
-      const currentMachineSchedules: [number, RelaxableOneMachineScheduledJob[]][] = [];
+
+      const finalOneMachineSchedules: SchedulingPlanForMachine[] = [];
+      let remainingOneMachineSchedules = this.initializeOneMachineSchedules(lowerBoundMakespan);
+      const bottleneckRelations = this.initializeBottleneckRelations();
+
+      while (finalOneMachineSchedules.length < this.machines.length) {
+        remainingOneMachineSchedules.forEach(schedule => {
+          console.log('\n--- Maschine ' + schedule.machineNr + ' ---');
+          schedule.scheduledJobs.forEach(job => job.log());
+        });
+
+        const highestLmaxAfterBbSchedule = this.getScheduleWithHighestOptimalLmax(remainingOneMachineSchedules);
+        const deltaLmax = this.getMaxLatenessForSortedOneMachineJobs(highestLmaxAfterBbSchedule.scheduledJobs);
+        lowerBoundMakespan += deltaLmax;
+        finalOneMachineSchedules.push(highestLmaxAfterBbSchedule);
+        remainingOneMachineSchedules = remainingOneMachineSchedules.filter(schedule => schedule !== highestLmaxAfterBbSchedule);
+        this.updateUnscheduledRelations(remainingOneMachineSchedules, highestLmaxAfterBbSchedule, bottleneckRelations, deltaLmax);
+      }
+
+      /*
+      const currentMachineSchedules: SchedulingPlanForMachine[] = [];
       // TODO: Log that best solution has not been found
 
-      while (currentMachineSchedules.length !== 2) { // !== this.machines.length) {
-        const optimalOneMachineProblems = this.getOptimallySolvedOneMachineProblems(maxTime, currentMachineSchedules);
+      // TODO: keep precs here?
+      const jobToJobPrecs: JobToJobPrec[] = [];
 
-        optimalOneMachineProblems.forEach(
-          p => console.log(
-            p[0] + ' | ' + p[1].map(j => j.id).join('>') + ' | Lmax=' + this.getMaxLatenessForSortedOneMachineJobs(p[1])
-          )
-        );
+      while (currentMachineSchedules.length !== 1) { // !== this.machines.length) {
+        const optimalOneMachineProblems = this.getOptimallySolvedOneMachineProblems(
+          lowerBoundMakespan, currentMachineSchedules.map(s => s.machineNr), jobToJobPrecs);
 
-        optimalOneMachineProblems.sort((p1, p2) =>
-          -(this.getMaxLatenessForSortedOneMachineJobs(p1[1]) - this.getMaxLatenessForSortedOneMachineJobs(p2[1])));
+        optimalOneMachineProblems.forEach(p => console.log(p.machineNr + ' | ' + p.schedulingOrder.map(j => j.id).join('>')
+          + ' | Lmax=' + this.getMaxLatenessForSortedOneMachineJobs(p.schedulingOrder)));
+        console.log('------');
 
+        optimalOneMachineProblems.sort((p1, p2) => -(this.getMaxLatenessForSortedOneMachineJobs(p1.schedulingOrder)
+          - this.getMaxLatenessForSortedOneMachineJobs(p2.schedulingOrder)));
+        const machineOptimum = optimalOneMachineProblems[0];
+
+        currentMachineSchedules.push(machineOptimum);
+
+        * TODO: Update lower bound?
+        lowerBoundMakespan += this.getMaxLatenessForSortedOneMachineJobs(machineOptimum.schedulingOrder);
+         console.log('updated lower bound: ' + lowerBoundMakespan);
+         *
+
+        // New j to j precs:
+        for (let i = 0; i < machineOptimum.schedulingOrder.length - 1; i++) {
+          const prec = new JobToJobPrec();
+          prec.from = machineOptimum.schedulingOrder[i].id;
+          prec.to = machineOptimum.schedulingOrder[i + 1].id;
+          prec.machineNr = machineOptimum.machineNr;
+          console.log(prec);
+          jobToJobPrecs.push(prec);
+        }
+        /*
         // TODO: Testing only, delete this:
-        if (optimalOneMachineProblems.find(o => o[0] === 1)) {
-          // noinspection TypeScriptValidateTypes
-          currentMachineSchedules.push(optimalOneMachineProblems.find(o => o[0] === 1));
+        if (optimalOneMachineProblems.find(o => o.machineNr === 1)) {
+          currentMachineSchedules.push(optimalOneMachineProblems.find(problem => problem.machineNr === 1));
         } else {
-          // noinspection TypeScriptValidateTypes
           currentMachineSchedules.push(optimalOneMachineProblems[0]);
-          maxTime += this.getMaxLatenessForSortedOneMachineJobs(optimalOneMachineProblems[0][1]);
+          console.log('Dec for: ' + optimalOneMachineProblems[0].machineNr
+            + ' | ' + optimalOneMachineProblems[0].schedulingOrder.map(j => j.id).join('->'));
+          lowerBoundMakespan += this.getMaxLatenessForSortedOneMachineJobs(optimalOneMachineProblems[0].schedulingOrder);
         }
       }
+        */
 
     } else {
       // TODO: Log that best solution is found!
       this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
     }
+  }
 
+  private initializeOneMachineSchedules(lowerBoundMakespan: number): SchedulingPlanForMachine[] {
+    return this.machines
+      .map(machine => new SchedulingPlanForMachine(machine.machineNr,
+        this.jobs
+          .map(job => new RelaxableOneMachineScheduledJob(job, machine.machineNr, lowerBoundMakespan)
+          )
+        )
+      );
+  }
+
+  private initializeBottleneckRelations(): BottleneckRelation[] {
+    const relations: BottleneckRelation[] = [];
+    this.jobs.forEach(job => {
+      // More than one has to be given, since this method is only called Jobshop
+      const ownRelations: BottleneckRelation[] = [];
+      for (let i = job.machineTimes.length - 1; i >= 0; i--) {
+        const relation = new BottleneckRelation();
+        relation.jobId = job.id;
+        relation.machineNr = job.machineTimes[i].machineNr;
+        if (i < job.machineTimes.length - 1) {
+          relation.nextElements = [ownRelations[ownRelations.length - 1]];
+        }
+        ownRelations.push(relation);
+      }
+      relations.push(...ownRelations);
+    });
+    return relations;
+  }
+
+  private updateUnscheduledRelations(schedulesToUpdate: SchedulingPlanForMachine[],
+                                     finalSchedule: SchedulingPlanForMachine,
+                                     bottleneckRelations: BottleneckRelation[],
+                                     deltaLmax: number): void {
+
+    const conditions: JobToJobCondition[] = [];
+    for (let i = 0; i < finalSchedule.scheduledJobs.length - 1; i++) {
+      const currentJobId = finalSchedule.scheduledJobs[i].id;
+      const nextJobId = finalSchedule.scheduledJobs[i + 1].id;
+      conditions.push(new JobToJobCondition(currentJobId, nextJobId));
+      const currentNode = bottleneckRelations
+        .find(relation => relation.machineNr === finalSchedule.machineNr && relation.jobId === currentJobId);
+      const nextNode = bottleneckRelations
+        .find(relation => relation.machineNr === finalSchedule.machineNr && relation.jobId === nextJobId);
+      if (!currentNode.nextElements) {
+        currentNode.nextElements = [nextNode];
+      } else {
+        currentNode.nextElements.push(nextNode);
+      }
+    }
+
+    // TODO: Log new relations/values for p, r, d?
+    schedulesToUpdate.forEach(schedule => {
+      conditions.forEach(condition => {
+        const jobFrom = finalSchedule.scheduledJobs.find(job => job.id === condition.idFrom);
+        const jobTo = schedule.scheduledJobs.find(job => job.id === condition.idTo);
+        const isBefore = jobTo.machineTimes.indexOf(jobTo.machineTimes.find(mt => mt.machineNr === finalSchedule.machineNr)) <
+          jobTo.machineTimes.indexOf(jobTo.machineTimes.find(mt => mt.machineNr === schedule.machineNr));
+        if (isBefore) {
+          jobTo.onMachineAvailability += jobFrom.onMachineAvailability + jobFrom.onMachineOperationTime;
+        } else {
+          const longestFutureBranch = this.getLongestTimeForFuturePath(jobTo.id, finalSchedule.machineNr, bottleneckRelations);
+          jobTo.reduceDueDate(longestFutureBranch);
+        }
+      });
+      schedule.scheduledJobs.forEach(job => job.reduceDueDate(-deltaLmax));
+    });
+  }
+
+  private getLongestTimeForFuturePath(jobId: number, machineNr: number,
+                                      bottleneckRelations: BottleneckRelation[]): number {
+    let longestTimeYet = 0;
+    const findAllPaths = (startRelation: BottleneckRelation, previousTime?: number) => {
+
+      const currentTime = previousTime !== undefined ? previousTime + this.jobs
+        .find(job => job.id === startRelation.jobId).machineTimes
+        .find(mt => mt.machineNr === startRelation.machineNr).timeOnMachine : 0;
+      if (currentTime > longestTimeYet) {
+        longestTimeYet = currentTime;
+      }
+      if (startRelation.nextElements) {
+        startRelation.nextElements.forEach(next => findAllPaths(next, currentTime));
+      }
+    };
+
+    const start = bottleneckRelations.find(relation => relation.machineNr === machineNr && relation.jobId === jobId);
+    findAllPaths(start);
+    return longestTimeYet;
   }
 
   private getSchedulingIgnoringMachineCapacity(maxTime: number): ScheduledJob[][][] {
@@ -609,24 +752,70 @@ export class SchedulingService {
     return schedulingIgnoringMachineCapacity;
   }
 
-  private getOptimallySolvedOneMachineProblems(
-    currentTotalTime: number, currentMachineSchedules: [number, RelaxableOneMachineScheduledJob[]][]):
-    [number, RelaxableOneMachineScheduledJob[]][] {
+  private getScheduleWithHighestOptimalLmax(schedulingPlans: SchedulingPlanForMachine[]): SchedulingPlanForMachine {
+    // No .reduce() in order to return first optimum and not last (as in literature).
+    schedulingPlans.forEach(schedule => {
+      schedule.scheduledJobs = this.getBestPermutationByBranchAndBound(schedule.scheduledJobs);
 
-    return this.machines.filter(machine => !currentMachineSchedules
-      .map(s => s[0]).includes(machine.machineNr))
+      // TODO: For testing only, remove both code and curly brackets after final implementation:
+      // TODO: Testing only, delete this!
+      if (schedule.machineNr === 1) {
+        [schedule.scheduledJobs[2], schedule.scheduledJobs[3]] = [schedule.scheduledJobs[3], schedule.scheduledJobs[2]];
+      }
+
+      console.log(schedule.machineNr + '. Maschine, Lmax: ' + this.getMaxLatenessForSortedOneMachineJobs(schedule.scheduledJobs) + ' f.: '
+        + schedule.scheduledJobs.map(j => j.id).join('->'));
+
+    });
+    return schedulingPlans.find(schedule => this.getMaxLatenessForSortedOneMachineJobs(schedule.scheduledJobs) ===
+      Math.max.apply(Math, schedulingPlans.map(_schedule => this.getMaxLatenessForSortedOneMachineJobs(_schedule.scheduledJobs))));
+  }
+
+  private getOptimallySolvedOneMachineProblems(currentTotalTime: number,
+                                               currentScheduledMachineNumbers: number[]): SchedulingPlanForMachine[] {
+    return this.machines
+    // TODO everything in one statement?
+      .filter(machine => !currentScheduledMachineNumbers.includes(machine.machineNr))
       .map(machine => {
-          const jobs = this.jobs.map(job => new RelaxableOneMachineScheduledJob(job, machine.machineNr, currentTotalTime));
+          const jobs = this.jobs.map(job => {
+            /*
+            let additionalPrec = 0;
+            let reducedDueDateTime = 0;
+
+            currentMachineSchedules.forEach(schedule => {
+
+              const indexOfCurrent = schedule.schedulingOrder.indexOf(schedule.schedulingOrder.find(_job => _job.id === job.id));
+              // TODO Correct approach?
+              if (indexOfCurrent > 0) {
+                const previousJob = schedule.schedulingOrder[indexOfCurrent - 1];
+                additionalPrec +=
+                  previousJob.machineTimes.find(mt => mt.machineNr === schedule.machineNr).timeOnMachine
+                  + previousJob.getMachiningTimeBeforeStepOnMachine(schedule.machineNr);
+
+                console.log('Relation: ' + previousJob.id + ' -> ' + job.id);
+              }
+
+              else if (indexOfCurrent === schedule.schedulingOrder.length - 2) {
+                const nextJob = schedule.schedulingOrder[indexOfCurrent + 1];
+                reducedDueDateTime += nextJob.machineTimes.find(mt => mt.machineNr === schedule.machineNr).timeOnMachine;
+              }
+
+            });
+                     */
+            // TODO Previous comment needed? if not no curly brackets
+            return new RelaxableOneMachineScheduledJob(job, machine.machineNr, currentTotalTime);
+          });
           const optimallySortedJobs = this.getBestPermutationByBranchAndBound(jobs);
 
+          // TODO: Testing only, delete this!
           if (machine.machineNr === 1) {
-            // TODO: Testing only, delete this!
             [optimallySortedJobs[2], optimallySortedJobs[3]] = [optimallySortedJobs[3], optimallySortedJobs[2]];
           }
 
-          return [machine.machineNr, optimallySortedJobs];
+          return new SchedulingPlanForMachine(machine.machineNr, optimallySortedJobs);
         }
       );
+
   }
 
   private getBestPermutationByBranchAndBound(jobs: RelaxableOneMachineScheduledJob[]): RelaxableOneMachineScheduledJob[] {
@@ -1356,5 +1545,4 @@ export class SchedulingService {
   private jobListStringForLogging(jobs: ScheduledJob[]): string {
     return jobs.map(job => this.jobStringForLogging(job)).join(' -> ');
   }
-
 }

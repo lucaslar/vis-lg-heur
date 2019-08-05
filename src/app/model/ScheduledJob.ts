@@ -1,4 +1,5 @@
 import {Job} from './Job';
+import {SchedulingPlanForMachine} from './SchedulingPlanForMachine';
 
 export class ScheduledJob extends Job {
 
@@ -160,17 +161,17 @@ export class ScheduledJob extends Job {
 export class RelaxableOneMachineScheduledJob extends ScheduledJob {
 
   private readonly _onMachineOperationTime: number;
-  private readonly _onMachineAvailability: number;
-  private readonly _onMachineDueDate: number;
+  private _onMachineAvailability: number;
+  private _onMachineDueDate: number;
 
   private remainingProductionTime: number;
   private _onMachineDelay: number;
 
-  constructor(job: Job, observedMachineNr: number, currentlyAssumedTotalMachineTime: number) {
+  constructor(job: Job, observedMachineNr: number, currentLowerBound: number) {
     super(job);
     this._onMachineOperationTime = this.machineTimes.find(mt => mt.machineNr === observedMachineNr).timeOnMachine;
     this._onMachineAvailability = this.getMachiningTimeBeforeStepOnMachine(observedMachineNr);
-    this._onMachineDueDate = currentlyAssumedTotalMachineTime -
+    this._onMachineDueDate = currentLowerBound -
       (this.totalMachiningTime - this.onMachineOperationTime - this.onMachineAvailability);
   }
 
@@ -195,6 +196,10 @@ export class RelaxableOneMachineScheduledJob extends ScheduledJob {
     }
   }
 
+  reduceDueDate(longestFutureBranch: number): void {
+    this._onMachineDueDate -= longestFutureBranch;
+  }
+
   get isRelaxedProductionFinished(): boolean {
     return this.remainingProductionTime === 0;
   }
@@ -205,6 +210,10 @@ export class RelaxableOneMachineScheduledJob extends ScheduledJob {
 
   get onMachineAvailability(): number {
     return this._onMachineAvailability;
+  }
+
+  set onMachineAvailability(value: number) {
+    this._onMachineAvailability = value;
   }
 
   get onMachineDueDate(): number {
@@ -238,5 +247,57 @@ export class OperationOnMachine {
 
   get finishTimestamp(): number {
     return this._finishTimestamp;
+  }
+}
+
+// TODO Remove from here or delete if not needed
+export class JobToJobCondition {
+
+  private readonly _idFrom: number;
+  private readonly _idTo: number;
+
+  constructor(idFrom: number, idTo: number) {
+    this._idFrom = idFrom;
+    this._idTo = idTo;
+  }
+
+  get idTo(): number {
+    return this._idTo;
+  }
+
+  get idFrom(): number {
+    return this._idFrom;
+  }
+}
+
+// TODO Remove from here or delete if not needed
+export class BottleneckRelation {
+
+  private _machineNr: number;
+  private _jobId: number;
+  private _nextElements: BottleneckRelation[];
+
+  get machineNr(): number {
+    return this._machineNr;
+  }
+
+  set machineNr(value: number) {
+    this._machineNr = value;
+  }
+
+  get jobId(): number {
+    return this._jobId;
+  }
+
+  set jobId(value: number) {
+    this._jobId = value;
+  }
+
+  get nextElements(): BottleneckRelation[] {
+    return this._nextElements;
+  }
+
+  set nextElements(value: BottleneckRelation[]) {
+    this._nextElements = value;
   }
 }
