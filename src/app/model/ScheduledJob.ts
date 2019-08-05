@@ -1,5 +1,4 @@
 import {Job} from './Job';
-import {SchedulingPlanForMachine} from './SchedulingPlanForMachine';
 
 export class ScheduledJob extends Job {
 
@@ -173,16 +172,6 @@ export class RelaxableOneMachineScheduledJob extends ScheduledJob {
     this._onMachineAvailability = this.getMachiningTimeBeforeStepOnMachine(observedMachineNr);
     this._onMachineDueDate = currentLowerBound -
       (this.totalMachiningTime - this.onMachineOperationTime - this.onMachineAvailability);
-  }
-
-  // TODO: delete this
-  log(): void {
-    console.log(
-      'j: ' + this.id,
-      '\npj: ' + this.onMachineOperationTime,
-      '\nrj: ' + this.onMachineAvailability,
-      '\ndj: ' + this.onMachineDueDate
-    );
   }
 
   initializeRelaxedProduction(): void {

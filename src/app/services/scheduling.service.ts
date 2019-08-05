@@ -41,7 +41,7 @@ export class SchedulingService {
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
 
-  // TODO also add gamma to general data result
+  // TODO also add gamma to general data result % 0.005?
   // TODO Add weight comparison chart
   // TODO Round results in avg. setup times diagrams
 
@@ -576,6 +576,7 @@ export class SchedulingService {
         this.updateUnscheduledRelations(
           remainingOneMachineSchedules, highestLmaxAfterBbSchedule, invertedBottleneckRelations, bottleneckRelations, lowerBoundMakespan);
       }
+      this.startProductionWithGivenOneMachineSchedules(finalOneMachineSchedules);
     } else {
       // TODO: Log that best solution is found!
       this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
@@ -724,18 +725,44 @@ export class SchedulingService {
     schedulingPlans.forEach(schedule => {
       schedule.scheduledJobs = this.getBestPermutationByBranchAndBound(schedule.scheduledJobs);
 
-      // TODO: For testing only, remove both code and curly brackets after final implementation:
-      // TODO: Testing only, delete this!
-      if (schedule.machineNr === 1) {
-        [schedule.scheduledJobs[2], schedule.scheduledJobs[3]] = [schedule.scheduledJobs[3], schedule.scheduledJobs[2]];
-      }
-
+      // TODO: For testing only, remove both code and curly brackets after final implementation: Or log?
       console.log(schedule.machineNr + '. Maschine, Lmax: ' + this.getMaxLatenessForSortedOneMachineJobs(schedule.scheduledJobs) + ' f.: '
         + schedule.scheduledJobs.map(j => j.id).join('->'));
 
     });
     return schedulingPlans.find(schedule => this.getMaxLatenessForSortedOneMachineJobs(schedule.scheduledJobs) ===
       Math.max.apply(Math, schedulingPlans.map(_schedule => this.getMaxLatenessForSortedOneMachineJobs(_schedule.scheduledJobs))));
+  }
+
+  private startProductionWithGivenOneMachineSchedules(finalOneMachineSchedules: SchedulingPlanForMachine[]): void {
+    let schedulingTimestamp = 0;
+
+    do {
+      this.handleEachCurrentJobOfMachine(schedulingTimestamp);
+      this.machines.forEach(machine => {
+        const optimizedSchedule = finalOneMachineSchedules.find(schedule => schedule.machineNr === machine.machineNr);
+
+        if (optimizedSchedule.scheduledJobs.length) {
+          const nextJobForMachine = this.jobs.find(job => job.id === optimizedSchedule.scheduledJobs[0].id);
+
+          // If each operation of the next job before the operation on this machine is finished:
+          if (nextJobForMachine.nextMachineNr === machine.machineNr) {
+            machine.jobQueue.push(this.jobs.find(job => job.id === nextJobForMachine.id));
+            optimizedSchedule.scheduledJobs.shift();
+          }
+        }
+      });
+
+      this.machines
+        .filter(machine => !machine.currentJob && machine.jobQueue.length)
+        .forEach(machine => {
+          machine.startProductionOfNext(schedulingTimestamp);
+          this.logSchedulingProcedure(machine.machineNr, 'Beginn der Abarbeitung von Auftrag ' +
+            this.jobStringForLogging(machine.currentJob), LogEventType.PRODUCTION_START, schedulingTimestamp);
+        });
+      schedulingTimestamp++;
+    } while (this.jobs.some(job => job.nextMachineNr !== undefined));
+    this.currentTimestampInScheduling = schedulingTimestamp;
   }
 
   private getBestPermutationByBranchAndBound(jobs: RelaxableOneMachineScheduledJob[]): RelaxableOneMachineScheduledJob[] {
