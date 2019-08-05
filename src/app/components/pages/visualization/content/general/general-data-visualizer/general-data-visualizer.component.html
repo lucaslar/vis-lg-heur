@@ -13,3 +13,12 @@
            [xLabel]="data.totalJobTimes.xLabel"
            [colors]="data.totalJobTimes.colors"
 ></app-chart>
+<app-chart *ngIf="data.jobWeightings"
+           [title]="data.jobWeightings.title"
+           [type]="data.jobWeightings.visualizableAs"
+           [labels]="data.jobWeightings.labels"
+           [datasets]="data.jobWeightings.datasets"
+           [yLabel]="data.jobWeightings.yLabel"
+           [xLabel]="data.jobWeightings.xLabel"
+           [colors]="data.jobWeightings.colors"
+></app-chart>

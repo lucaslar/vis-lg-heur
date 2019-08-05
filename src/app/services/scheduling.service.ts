@@ -42,7 +42,6 @@ export class SchedulingService {
   private logging: SchedulingLogEntry[];
 
   // TODO also add gamma to general data result % 0.005?
-  // TODO Add weight comparison chart
   // TODO Round results in avg. setup times diagrams
 
   constructor(public storage: StorageService) {
@@ -1014,6 +1013,14 @@ export class SchedulingService {
     const data = new VisualizableGeneralData();
     data.totalDurationsOnMachines = this.generateTotalDurationsOnMachinesVisualization();
     data.totalJobTimes = this.generateTotalJobTimesVisualization();
+
+    if (this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
+      data.jobWeightings = this.generateJobWeightingsVisualization();
+    }
+
     return data;
   }
 
@@ -1062,6 +1069,24 @@ export class SchedulingService {
       dueDatesDataset.label = 'Gewünschter Fertigstellungstermin';
       visualization.datasets.push(dueDatesDataset);
     }
+
+    return visualization;
+  }
+
+  private generateJobWeightingsVisualization(): ChartData {
+    const sortedJobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
+    const dataset = new Dataset();
+    dataset.data = sortedJobs.map(job => job.weight);
+    dataset.label = 'Gewichtung';
+
+    const visualization = new ChartData();
+    visualization.visualizableAs = ChartType.CJS_BAR;
+    visualization.colors = this.getColorsAsSpecifiedInGanttFirstMachine().map(color => 'rgba(' + color + ',0.8)');
+    visualization.title = 'Auftragsgewichtungen';
+    visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
+    visualization.datasets = [dataset];
+    visualization.xLabel = 'Aufträge';
+    visualization.yLabel = 'Gewichtungswert';
 
     return visualization;
   }

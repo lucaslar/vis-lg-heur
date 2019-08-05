@@ -155,6 +155,7 @@ export class VisualizableGeneralData {
 
   private _totalDurationsOnMachines: ChartData;
   private _totalJobTimes: ChartData;
+  private _jobWeightings: ChartData;
 
   get totalDurationsOnMachines(): ChartData {
     return this._totalDurationsOnMachines;
@@ -170,6 +171,14 @@ export class VisualizableGeneralData {
 
   set totalJobTimes(value: ChartData) {
     this._totalJobTimes = value;
+  }
+
+  get jobWeightings(): ChartData {
+    return this._jobWeightings;
+  }
+
+  set jobWeightings(value: ChartData) {
+    this._jobWeightings = value;
   }
 }
 
