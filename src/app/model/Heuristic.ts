@@ -12,7 +12,6 @@ export class Heuristic {
   private readonly _requiredValuesForObjectiveFunctions: Map<ObjectiveFunction, DefinableValue[]>;
   private readonly _machineConfigRequiresFunction: Map<MachineConfig, ObjectiveFunction[]>;
 
-  // TODO: Add complexity?
   // TODO: add description of algorithmic procedure?
 
   constructor(name: string,
@@ -137,7 +136,6 @@ export class Heuristic {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.CYCLE_TIME, []);
 
-    // TODO Shifting bottleneck possible for more than cycle time?
     return new Heuristic(
       'Shifting-Bottleneck-Heuristik (auf Basis von Branch and Bound)',
       definer,

@@ -63,7 +63,6 @@ export class SchedulingResult {
 
 export class GeneralSchedulingData {
 
-  // TODO Add complexity here? (and set in scheduling service)
   private _priorityRules: PriorityRule[];
   private _machineConfig: MachineConfig;
   private _numberOfMachines: number;

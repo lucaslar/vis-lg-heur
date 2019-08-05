@@ -14,7 +14,7 @@ import {StorageService} from './services/storage.service';
 })
 export class AppComponent implements OnInit {
 
-  // TODO: Extract larger strings?
+  // TODO: Extract larger text content sources such as dialogs?
 
   @ViewChild('snav', {static: false}) private snav: MatSidenav;
   mobileQuery: MediaQueryList;

@@ -41,8 +41,8 @@ export class SchedulingService {
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
 
-  // TODO also add gamma to general data result % 0.005?
-  // TODO Round results in avg. setup times diagrams
+  // TODO also add gamma to general data result
+  // TODO Round results in avg. setup times diagrams % 0.005?
 
   constructor(public storage: StorageService) {
   }
@@ -53,7 +53,7 @@ export class SchedulingService {
     const tStart = performance.now();
     if (heuristicDefiner === HeuristicDefiner.SHIFTING_BOTTLENECK) {
       this.scheduleByShiftingBottleneckHeuristic();
-    } else if (this.isDynamicallySolvable()) {
+    } else if (this.heuristicType === HeuristicDefiner.PRIORITY_RULES || this.heuristicType === HeuristicDefiner.NEAREST_NEIGHBOUR) {
       do {
         this.proceedDynamicScheduling();
         this.currentTimestampInScheduling++;
@@ -98,11 +98,6 @@ export class SchedulingService {
     delete this.currentTimestampInScheduling;
     delete this.heuristicType;
     delete this.priorityRules;
-  }
-
-  private isDynamicallySolvable(): boolean {
-    // TODO: More static procedures? add here:
-    return this.heuristicType !== HeuristicDefiner.NEH_HEURISTIC && this.heuristicType !== HeuristicDefiner.LOCAL_SEARCH;
   }
 
   // Static scheduling:
@@ -412,10 +407,6 @@ export class SchedulingService {
       return this.compareJobsByPriorityRules(jobA, jobB, machineNr);
     } else if (this.heuristicType === HeuristicDefiner.NEAREST_NEIGHBOUR) {
       return this.compareJobsBySetupTimes(jobA, jobB, machineNr);
-    } else {
-      // TODO: Implement more heuristics by implementing sorting here
-      console.error('Implement me (' + this.heuristicType + '!)');
-      return 0;
     }
   }
 
@@ -769,8 +760,6 @@ export class SchedulingService {
     let currentBestSolution: RelaxableOneMachineScheduledJob[] = jobs.sort((j1, j2) => j1.onMachineAvailability - j2.onMachineAvailability);
     let upperBound: number = this.getMaxLatenessForSortedOneMachineJobs(jobs);
     const totalLowerBound: number = this.getMaxLatenessForRelaxedOneMachineJobs(jobs);
-
-    // TODO: Case upper bound = lower bound: return current list?
 
     const proceedOnBranch = (branch: number[], _lowerBound: number) => {
       if (branch.length < jobs.length) {
