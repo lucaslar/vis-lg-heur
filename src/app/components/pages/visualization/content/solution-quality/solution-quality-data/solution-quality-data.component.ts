@@ -11,6 +11,8 @@ import {DefinitionStatus} from '../../../../../../model/internal/value-definitio
 })
 export class SolutionQualityDataComponent implements OnInit {
 
+  // TODO: Add note that due dates where not considered in the calculation?
+
   @Input() data: Kpi[];
 
   private _isEachDueDateConfigured: boolean;
