@@ -1,6 +1,6 @@
 export class Job {
 
-  // TODO Can this be private?
+  // TODO internal feature: Can this be private?
 
   id: number;
   name: string;

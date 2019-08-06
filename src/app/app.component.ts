@@ -14,7 +14,7 @@ import {StorageService} from './services/storage.service';
 })
 export class AppComponent implements OnInit {
 
-  // TODO: Extract larger text content sources such as dialogs?
+  // TODO internal feature: Extract larger text content sources such as dialogs?
 
   @ViewChild('snav', {static: false}) private snav: MatSidenav;
   mobileQuery: MediaQueryList;
@@ -54,7 +54,6 @@ export class AppComponent implements OnInit {
     this.dialog.open(AboutThisAppComponent);
   }
 
-  // TODO: Extract to info pop up?
   openGithubPage(): void {
     window.open('https://github.com/lucaslar/vis-lg-heur');
   }

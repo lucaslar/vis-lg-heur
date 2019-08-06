@@ -74,7 +74,7 @@ export class ScheduledJob extends Job {
 
   getSpttForTimestamp(timestamp: number): number {
     const cot = this.currentProcessingTime;
-    const r = 99; // TODO: Discuss: which weight? r <-> sopn
+    const r = 99; // TODO functionality: Discuss: which weight? r <-> sopn
     return Math.min(cot + r, this.getSopnForTimestamp(timestamp));
   }
 
@@ -100,7 +100,7 @@ export class ScheduledJob extends Job {
   }
 
   private getMachineAvailability(): number {
-    // TODO: MV = Verfügbarkeit an Station j? Immer 1 oder 0?
+    // TODO functionality: MV = Verfügbarkeit an Station j? Immer 1 oder 0?
     return 0;
   }
 

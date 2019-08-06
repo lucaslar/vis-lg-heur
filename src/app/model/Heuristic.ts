@@ -12,7 +12,7 @@ export class Heuristic {
   private readonly _requiredValuesForObjectiveFunctions: Map<ObjectiveFunction, DefinableValue[]>;
   private readonly _machineConfigRequiresFunction: Map<MachineConfig, ObjectiveFunction[]>;
 
-  // TODO: add description of algorithmic procedure?
+  // TODO content: add description of algorithmic procedure?
 
   constructor(name: string,
               heuristicDefiner: HeuristicDefiner,

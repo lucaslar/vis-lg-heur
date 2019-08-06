@@ -7,12 +7,12 @@
   </div>
 </div>
 
-<!-- TODO: Shorter button names -->
-<!-- TODO: (For all pages): button tooltip in button and only in span for disabled buttons -->
-<!-- TODO: rethink layout -->
-<!-- TODO: Descriptional text as in other pages? -->
-<!-- TODO: Max of 100 (?) jobs? -->
-<!-- TODO: Previous state instead of readding/deleting jobs? -->
+<!-- TODO feature: Shorter button names -->
+<!-- TODO feature: (For all pages) button tooltip in button and only in span for disabled buttons -->
+<!-- TODO feature: rethink layout -->
+<!-- TODO content: Descriptional text as in other pages? -->
+<!-- TODO functionality: Max of 100 (?) jobs? -->
+<!-- TODO internal feature: Previous state instead of readding/deleting jobs? -->
 
 <div class="row">
   <div class="col-md-12">
@@ -123,7 +123,7 @@
 <div class="row jobs-list">
   <div class="col-md-12">
 
-    <!-- TODO: Extract to new component? -->
+    <!-- TODO internal feature: Extract to new component? -->
     <mat-accordion *ngIf="jobs.length > 0; else noJobs">
       <mat-expansion-panel *ngFor="let job of jobs">
         <mat-expansion-panel-header #header>

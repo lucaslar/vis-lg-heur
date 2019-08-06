@@ -41,8 +41,8 @@ export class SchedulingService {
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
 
-  // TODO also add gamma to general data result
-  // TODO Round results in avg. setup times diagrams % 0.005?
+  // TODO content: also add gamma to general data result
+  // TODO content: Round results in avg. setup times diagrams % 0.005?
 
   constructor(public storage: StorageService) {
   }
@@ -209,7 +209,7 @@ export class SchedulingService {
       });
 
       this.localSearchBestValuesForIterations.push(currentBestValue);
-      // TODO: Log local search
+      // TODO content: Log local search
     } while (currentBestValue < startValue);
 
     return bestPermutationYet;
@@ -543,7 +543,7 @@ export class SchedulingService {
 
   private scheduleByShiftingBottleneckHeuristic(): void {
 
-    // TODO: Log process
+    // TODO content: Log process
     let lowerBoundMakespan = Math.max.apply(Math, this.jobs.map(job => job.totalMachiningTime));
 
     const schedulingIgnoringMachineCapacity = this.getSchedulingIgnoringMachineCapacity(lowerBoundMakespan);
@@ -551,7 +551,7 @@ export class SchedulingService {
       .filter(machine => machine.some(jobsAtTimestamp => jobsAtTimestamp.length > 1));
 
     if (!isOptimalSolution) {
-      // TODO: Log that best solution has not been found
+      // TODO content: Log that best solution has not been found
 
       const finalOneMachineSchedules: SchedulingPlanForMachine[] = [];
       let remainingOneMachineSchedules = this.initializeOneMachineSchedules(lowerBoundMakespan);
@@ -568,7 +568,7 @@ export class SchedulingService {
       }
       this.startProductionWithGivenOneMachineSchedules(finalOneMachineSchedules);
     } else {
-      // TODO: Log that best solution is found!
+      // TODO content: Log that best solution is found!
       this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
     }
   }
@@ -629,7 +629,7 @@ export class SchedulingService {
 
     this.updateRelationTables(invertedBottleneckRelations, bottleneckRelations, finalSchedule);
 
-    // TODO: Log new relations/values for p, r, d?
+    // TODO content: Log new relations/values for p, r, d?
     schedulesToUpdate.forEach(schedule =>
       schedule.scheduledJobs.forEach(job => {
         const longestPastBranch = this.getLongestTimeForPathStarting(job.id, schedule.machineNr, invertedBottleneckRelations);
@@ -715,7 +715,7 @@ export class SchedulingService {
     schedulingPlans.forEach(schedule => {
       schedule.scheduledJobs = this.getBestPermutationByBranchAndBound(schedule.scheduledJobs);
 
-      // TODO: For testing only, remove both code and curly brackets after final implementation: Or log?
+      // TODO internal: For testing only, remove both code and curly brackets after final implementation: Or log?
       console.log(schedule.machineNr + '. Maschine, Lmax: ' + this.getMaxLatenessForSortedOneMachineJobs(schedule.scheduledJobs) + ' f.: '
         + schedule.scheduledJobs.map(j => j.id).join('->'));
 
@@ -768,7 +768,7 @@ export class SchedulingService {
 
         if (currentBranchLowerBound < upperBound) {
 
-          // TODO: Log all proceeding jobs? if so: this line
+          // TODO content: Log all proceeding jobs? if so: this line
           // console.log('proceed: ' + branch.join('->'));
 
           // if both the lower bound is smaller than the current upper bound and all jobs are produced without pausing:

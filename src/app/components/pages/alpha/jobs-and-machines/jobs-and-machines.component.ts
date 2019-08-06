@@ -19,7 +19,7 @@ import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 })
 export class JobsAndMachinesComponent implements OnInit {
 
-  // TODO: store machine times on reducing machine nr.?
+  // TODO feature: store machine times on reducing machine nr.?
 
   private _definableValue = DefinableValue;
   private _configurationStatus = DefinitionStatus;
