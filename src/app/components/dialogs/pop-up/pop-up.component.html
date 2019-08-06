@@ -1,11 +1,15 @@
-<h1 mat-dialog-title [ngClass]="{'status-warning' : data.type === type.ERROR}">
+<h1 mat-dialog-title
+    [ngClass]="{'status-warning' : data.type === type.ERROR, 'status-confirm' : data.type === type.CONFIRM_WARNING}">
   <span class="pull-right">
     <mat-icon *ngIf="data.type === type.INFO" class="align-middle">info_outline</mat-icon>
     <mat-icon *ngIf="data.type === type.QUESTION" class="align-middle">help_outline</mat-icon>
     <mat-icon *ngIf="data.type === type.ERROR" class="align-middle">error_outline</mat-icon>
+    <mat-icon *ngIf="data.type === type.CONFIRM_WARNING" class="align-middle">warning</mat-icon>
   </span>
   {{data.header}}
 </h1>
+
+<!-- TODO feature: confirm warning instead of question for delete actions? -->
 
 <!-- content as paragraphs-->
 <mat-dialog-content class="mat-typography">
