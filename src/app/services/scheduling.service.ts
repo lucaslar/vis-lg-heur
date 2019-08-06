@@ -23,6 +23,8 @@ import {DefinitionStatus} from '../model/internal/value-definition/DefinitionSta
 import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
 import {SchedulingPlanForMachine} from '../model/SchedulingPlanForMachine';
 import {BottleneckRelation} from '../model/internal/relations/BottleneckRelation';
+import {DialogContent} from '../model/internal/dialog/DialogContent';
+import {DialogType} from '../model/internal/dialog/DialogType';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +47,16 @@ export class SchedulingService {
   // TODO content: Round results in avg. setup times diagrams % 0.005?
 
   constructor(public storage: StorageService) {
+  }
+
+  getComplexityWarning(heuristicDefiner: HeuristicDefiner): DialogContent | undefined {
+    if (heuristicDefiner === HeuristicDefiner.LOCAL_SEARCH) {
+      return this.getLocalSearchWarningIfNeeded();
+    } else if (heuristicDefiner === HeuristicDefiner.SHIFTING_BOTTLENECK) {
+      return this.getShiftingBottleneckWarningIfNeeded();
+    } else {
+      return undefined;
+    }
   }
 
   scheduleUsingHeuristic(heuristicDefiner: HeuristicDefiner): SchedulingResult {
@@ -72,6 +84,63 @@ export class SchedulingService {
 
     this.deleteTemporarilyStoredData();
     return schedulingData;
+  }
+
+  private getLocalSearchWarningIfNeeded(): DialogContent | undefined {
+    if (this.storage.jobs.length >= 35) {
+      return new DialogContent(
+        'Lösen des Reihenfolgeproblems bestätigen',
+        [
+          'Das aktuelle Problem ist zwar mithilfe einer lokalen Suche lösbar, mit seinen ' + this.storage.jobs.length +
+          ' Aufträgen allerdings recht komplex.',
+          'Derzeit würden pro Iteration ' + ((this.storage.jobs.length * (this.storage.jobs.length - 1)) / 2) +
+          ' Aufträge miteinander verglichen werden, wobei ungewiss ist, wie viele Iterationen ingesamt zur Lösungsfindung benötigt ' +
+          'werden. Aus diesem Grund könnte die Problemlösung einige Zeit in Anspruch nehmen bzw. Ihre Ressourcen dafür nicht ausreichen.',
+          'Es wird empfohlen, die Größe des Problems zu minimieren (weniger Aufträge). ' +
+          'Möchten Sie dennoch das aktuelle Problem mithilfe einer lokalen Suche lösen?'
+        ],
+        DialogType.CONFIRM_WARNING
+      )
+        ;
+    } else {
+      return undefined;
+    }
+  }
+
+  private getShiftingBottleneckWarningIfNeeded(): DialogContent | undefined {
+    const faculty = (n: number) => {
+      if (n <= 1) {
+        return n;
+      }
+      return n * faculty(n - 1);
+    };
+
+    const currentMaxComplexity = faculty(this.storage.jobs.length) * ((this.storage.nrOfMachines * (this.storage.nrOfMachines + 1)) / 2);
+    const recommendedMaxComplexity = 156920924160000; // faculty(15) * ((15 * (15 + 1)) / 2)
+
+    if (currentMaxComplexity > recommendedMaxComplexity) {
+      return new DialogContent(
+        'Lösen des Reihenfolgeproblems bestätigen',
+        [
+          'Das aktuelle Problem ist zwar mithilfe der Shifting-Bottleneck-Heuristik lösbar, mit seinen ' + this.storage.jobs.length +
+          ' Aufträgen und ' + this.storage.nrOfMachines + ' Maschinen allerdings recht komplex.',
+          'Zwar handelt es sich beim gewählten Verfahren um eine Heuristik, allerdings werden zum Finden einer Lösung Hilfsprobleme ' +
+          'mithilfe eines exakten Verfahrens (Branch and Bound) gelöst, sodass also im schlimmsten Falle alle ihrer ' +
+          'Kombinationsmöglichkeiten geprüft werden. Aus diesem Grund könnte die Problemlösung einige Zeit in Anspruch nehmen bzw. Ihre ' +
+          'Ressourcen dafür nicht ausreichen.',
+          'Es wird empfohlen, die Größe des Problems zu minimieren (weniger Aufträge/weniger Maschinen). ' +
+          'Möchten Sie dennoch das aktuelle Problem mithilfe der Shifting-Bottleneck-Heuristik lösen?'
+        ],
+        DialogType.CONFIRM_WARNING,
+        [
+          'Empfohlene maximale Menge an Schritten: ' + recommendedMaxComplexity + ' (entspricht 15 Aufträgen auf 15 Maschinen)',
+          'Derzeitige maximale Menge an Schritten: ' + currentMaxComplexity
+        ]
+      )
+        ;
+    } else {
+      return undefined;
+    }
   }
 
   private initialize(heuristicDefiner: HeuristicDefiner): void {

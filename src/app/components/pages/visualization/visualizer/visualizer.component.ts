@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {SchedulingService} from '../../../../services/scheduling.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HeuristicDefiner} from '../../../../model/enums/HeuristicDefiner';
 import {SchedulingResult} from '../../../../model/internal/visualization/SchedulingResult';
 import {Heuristic} from '../../../../model/Heuristic';
+import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-visualizer',
@@ -24,18 +26,37 @@ export class VisualizerComponent implements OnInit {
   private _isLoggingVisible = false;
 
   constructor(public scheduling: SchedulingService,
-              private route: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private router: Router,
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(() => {
-      const heuristicDefiner = <HeuristicDefiner>this.route.snapshot.paramMap.get('heuristic');
+    this.activatedRoute.params.subscribe(() => {
+      const heuristicDefiner = <HeuristicDefiner>this.activatedRoute.snapshot.paramMap.get('heuristic');
       if (!this.usedHeuristic || this.usedHeuristic.heuristicDefiner !== heuristicDefiner) {
         this._usedHeuristic = Heuristic.getHeuristicByDefiner(heuristicDefiner);
         this._result = undefined;
-        setTimeout(() => this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner), 0);
+
+        const complexityWarning = this.scheduling.getComplexityWarning(heuristicDefiner);
+
+        if (complexityWarning) {
+          this.dialog.open(PopUpComponent, {data: complexityWarning}).afterClosed().subscribe(result => {
+            if (result) {
+              this.startScheduling(heuristicDefiner);
+            } else {
+              this.router.navigate(['']);
+            }
+          });
+        } else {
+          this.startScheduling(heuristicDefiner);
+        }
       }
     });
+  }
+
+  private startScheduling(heuristicDefiner: HeuristicDefiner): void {
+    setTimeout(() => this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner), 0);
   }
 
   get result(): SchedulingResult {
