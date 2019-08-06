@@ -1417,9 +1417,9 @@ export class SchedulingService {
     dataset.data = [];
     dataset.label = this.objectiveFunction;
 
-    for (let i = 0; i < this.localSearchBestValuesForIterations.length; i++) {
+    for (let i = 1; i <= this.localSearchBestValuesForIterations.length; i++) {
       labels.push('' + i);
-      dataset.data.push(this.localSearchBestValuesForIterations[i]);
+      dataset.data.push(this.localSearchBestValuesForIterations[i - 1]);
     }
 
     const visualization = new ChartData();
