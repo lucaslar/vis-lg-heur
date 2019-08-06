@@ -59,7 +59,10 @@ export class StorageService {
 
   getMessageIfExactlySolvableProblem(): DialogContent | undefined {
     // based on Blazewicz, Ecker et al. 2019 – Handbook on Scheduling, p. 274/353
-    if (this.objectiveFunction === ObjectiveFunction.CYCLE_TIME && (this.nrOfMachines === 2 || this.isExacltySolvableThreeMachineFs())) {
+    if (this.jobs.length
+      && this.objectiveFunction === ObjectiveFunction.CYCLE_TIME
+      && (this.nrOfMachines === 2 || this.isExacltySolvableThreeMachineFs())) {
+
       return new DialogContent(
         'Reihenfolgeproblem exakt lösbar',
         [
