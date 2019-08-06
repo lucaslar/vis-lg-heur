@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSidenav} from '@angular/material/sidenav';
@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
   @ViewChild('snav', {static: false}) private snav: MatSidenav;
   mobileQuery: MediaQueryList;
 
+  private isLargeHeader: boolean;
+
   constructor(media: MediaMatcher,
               private changeDetector: ChangeDetectorRef,
               private dialog: MatDialog,
@@ -28,7 +30,13 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.onResize();
     this.changeDetector.detectChanges();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.isLargeHeader = window.innerWidth > 350;
   }
 
   openHeuristicsList(): void {
@@ -57,5 +65,3 @@ export class AppComponent implements OnInit {
     }
   }
 }
-
-// TODO Hide github button on small devices?

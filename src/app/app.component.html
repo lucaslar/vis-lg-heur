@@ -28,7 +28,8 @@
         <i class="fas fa-home"></i>
       </button>
       <!-- TODO: Extract to info pop up? -->
-      <button mat-icon-button
+      <button *ngIf="isLargeHeader"
+              mat-icon-button
               matTooltip="Projekt auf GitHub öffnen"
               (click)="openGithubPage()">
         <i class="fab fa-github"></i>
