@@ -6,11 +6,7 @@ import {Kpi} from '../../../../../model/internal/visualization/SchedulingResult'
 @Component({
   selector: 'app-scheduling-kpi',
   templateUrl: './scheduling-kpi.component.html',
-  styleUrls: [
-    './scheduling-kpi.component.css',
-    '../../../pages-styles.css',
-    '../shared-chart-styles.css'
-  ]
+  styleUrls: ['./scheduling-kpi.component.css', '../../../pages-styles.css']
 })
 export class SchedulingKpiComponent implements OnInit, DoCheck {
 

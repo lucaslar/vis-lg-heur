@@ -22,7 +22,8 @@ export class SolutionQualityDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.data = this.data.filter(data => !!data);
-    this._isEachDueDateConfigured = this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED;
+    this._isEachDueDateConfigured =
+      this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED;
   }
 
   get isEachDueDateConfigured(): boolean {
