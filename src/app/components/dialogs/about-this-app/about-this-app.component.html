@@ -12,15 +12,12 @@
     Lorem ipsum...
   </div>
 
-  <br>
-  <br>
-
   <h3>Entstehung des Programms</h3>
   <div>
-    Diese Anwendung wurde im Sommersemester 2019 im Rahmen einer Bachelorarbeit
-    (Wirtschaftsinformatik) an der Hochschule für Technik und Wirtschaft Berlin entwickelt:
-    <br>
-    <br>
+    <p class="text-justify">
+      Diese Anwendung wurde im Sommersemester 2019 im Rahmen einer Bachelorarbeit
+      (Wirtschaftsinformatik) an der Hochschule für Technik und Wirtschaft Berlin entwickelt:
+    </p>
 
     <!-- Listed thesis data -->
     <div class="container-fluid thesis-information">
@@ -62,14 +59,62 @@
     </div>
   </div>
 
-  <br>
-  <br>
-
   <h3>Technische Informationen</h3>
   <div class="text-justify">
-    <!-- TODO content: Add information? Keep? Add GitHub-link? -->
-    Lorem ipsum...
+    <p>
+      Die vorliegende Webapplikation wurde rein clientseitig mit dem Frontend-Framework
+      <a class="app-color" (click)="onAngularClicked()">Angular</a>
+      (Version 8) entwickelt. Die verwendeten Sprachen beschränken sich daher auf TypeScript, HTML und CSS. Darüber
+      hinaus fanden folgende in alphabetischer Reihenfolge gelisteten Technologien Verwendung:
+    </p>
+    <ul>
+      <li>
+        <a class="app-color" (click)="onAngularMaterialClicked()">Angular Material: </a>
+        Komponenten und Icons
+      </li>
+      <li>
+        <a class="app-color" (click)="onAngularBootstrapClicked()">Angular Bootstrap</a>
+        Komponenten
+      </li>
+      <li>
+        <a class="app-color" (click)="onBootstrapClicked()">Bootstrap: </a>
+        Responsive Webdesign und Komponenten
+      </li>
+      <li>
+        <a class="app-color" (click)="onChartJsClicked()">Chart.js: </a>
+        Diagramme
+      </li>
+      <li>
+        <a class="app-color" (click)="onFontAwesomeClicked()">Font Awesome: </a>
+        Icons
+      </li>
+      <li>
+        <a class="app-color" (click)="onGitHubClicked()">GitHub: </a>
+        Versionsverwaltung und Hosten der Anwendung
+      </li>
+      <li>
+        <a class="app-color" (click)="onGoogleChartsClicked()">Google Charts: </a>
+        Gantt-Diagramm
+      </li>
+      <li>
+        <a class="app-color" (click)="onMaterialDesignClicked()">Material Design: </a>
+        Icons
+      </li>
+      <li>
+        <a class="app-color" (click)="onMockUPhoneClicked()">MockUPhone: </a>
+        Generieren von Screenshots einzelner Endgeräte
+      </li>
+    </ul>
+
+    <div class="text-center">
+      <a class="app-color" (click)="onGithubProjectClicked()">
+        <i class="fab fa-github"></i>
+        Dieses Projekt auf GitHub öffnen
+      </a>
+    </div>
+
   </div>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

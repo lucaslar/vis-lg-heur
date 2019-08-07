@@ -1,6 +1,18 @@
+a {
+  cursor: pointer;
+}
+
+li {
+  padding-bottom: 8px;
+}
+
+h3:not(:first-child) {
+  margin-top: 32px;
+}
+
 .thesis-information {
   border: 1px solid #cccccc;
-  border-radius: 8px;
+  border-radius: 4px;
   background-color: #eeeeee;
 }
 
@@ -11,4 +23,8 @@
 
 .thesis-information .row :first-child {
   font-weight: bolder;
+}
+
+.app-color {
+  color: var(--color-main) !important;
 }
