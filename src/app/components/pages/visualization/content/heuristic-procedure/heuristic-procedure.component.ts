@@ -13,7 +13,7 @@ export class HeuristicProcedureComponent {
 
   private readonly _heuristic = HeuristicDefiner;
 
-  get heuristic(): HeuristicDefiner {
+  get heuristic(): any {
     return this._heuristic;
   }
 }
