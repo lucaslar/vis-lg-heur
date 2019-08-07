@@ -74,14 +74,17 @@ export class ScheduledJob extends Job {
 
   getSpttForTimestamp(timestamp: number): number {
     const cot = this.currentProcessingTime;
-    const r = 99; // TODO functionality: Discuss: which weight? r <-> sopn
+    const r = 10;
+    console.log(this.getSopnForTimestamp(timestamp), cot);
     return Math.min(cot + r, this.getSopnForTimestamp(timestamp));
   }
 
   getSoonestEndingTime(timestamp: number): number {
     const av = this.getJobAvailabilityForTimestamp(timestamp);
-    const mv = this.getMachineAvailability();
-    return Math.max(av, mv) + this.currentProcessingTime;
+    // Machine availability does not make sense with the limited given data of this application
+    // const mv = this.getMachineAvailability();
+    // return Math.max(av, mv) + this.currentProcessingTime;
+    return av + this.currentProcessingTime;
   }
 
   getTCornerForTimestamp(timestamp: number): number {
@@ -97,11 +100,6 @@ export class ScheduledJob extends Job {
 
   private getRemainingOperations(): number {
     return this.machineTimes.length - this.finishedOperationsCounter;
-  }
-
-  private getMachineAvailability(): number {
-    // TODO functionality: MV = Verfügbarkeit an Station j? Immer 1 oder 0?
-    return 0;
   }
 
   private getJobAvailabilityForTimestamp(timestamp: number): number {
