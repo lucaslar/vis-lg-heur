@@ -9,12 +9,6 @@ i, .average {
   font-size: xx-large;
 }
 
-.centered {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .right-line {
   border-right: 1px solid white;
 }
