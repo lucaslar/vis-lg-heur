@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StorageService} from '../../../../services/storage.service';
 import {Job, MachineTimeForJob, SetupTime} from '../../../../model/Job';
 import {DefinableValue} from '../../../../model/internal/value-definition/DefinableValue';
@@ -15,6 +15,7 @@ export class AddJobComponent implements OnInit {
   private _isAutomaticallyGenerateTimes: boolean;
   private _isShuffleMachineOrder: boolean;
 
+  @Input() isMaxJobsConfigured: boolean;
   @Output() autoGenerateTimesChanged: EventEmitter<boolean> = new EventEmitter();
   @Output() newCreatedJob: EventEmitter<Job> = new EventEmitter();
 

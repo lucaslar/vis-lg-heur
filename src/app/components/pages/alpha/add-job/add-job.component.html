@@ -2,9 +2,10 @@
   <form (submit)="createNewJob()">
     <mat-form-field>
       <input matInput
-             placeholder="Neuer Auftrag"
+             placeholder="{{isMaxJobsConfigured ? 'Maximale Auftragszahl (50) erreicht' : 'Neuer Auftrag'}}"
              name="jobNameInput"
-             [(ngModel)]="jobNameInput">
+             [(ngModel)]="jobNameInput"
+             [disabled]="isMaxJobsConfigured">
 
       <button mat-icon-button
               matSuffix
@@ -20,6 +21,7 @@
     <div class="text-left row ord-text">
       <div class="col-md-6">
         <mat-checkbox name="checkboxAutoGenerateTimes"
+                      [disabled]="isMaxJobsConfigured"
                       [(ngModel)]="isAutomaticallyGenerateTimes"
                       class="small">
           Automatisch zufällige Zeiten für Arbeitsgänge generieren
@@ -28,8 +30,8 @@
       <div class="col-md-6">
         <mat-checkbox name="checkboxShuffleMachineOrder"
                       [(ngModel)]="isShuffleMachineOrder"
-                      [disabled]="storage.nrOfMachines < 2"
-                      matTooltip="{{storage.nrOfMachines === 1 ? 'Diese Option ist nur bei mehreren Maschinen wählbar' : ''}}"
+                      [disabled]="storage.nrOfMachines < 2 || isMaxJobsConfigured"
+                      matTooltip="{{storage.nrOfMachines === 1 && !isMaxJobsConfigured ? 'Diese Option ist nur bei mehreren Maschinen wählbar' : ''}}"
                       #shuffleBox
                       class="small">
           Zufällige Reihenfolge der Arbeitsgänge

@@ -11,7 +11,6 @@
 <!-- TODO feature: (For all pages) button tooltip in button and only in span for disabled buttons -->
 <!-- TODO feature: rethink layout -->
 <!-- TODO content: Descriptional text as in other pages? -->
-<!-- TODO functionality: Max of 100 (?) jobs? -->
 <!-- TODO internal feature: Previous state instead of readding/deleting jobs? -->
 
 <div class="row">
@@ -22,7 +21,8 @@
 
 <div class="row add-job">
   <div class="col-md-12">
-    <app-add-job (autoGenerateTimesChanged)="onAutoTimeGenerationChanged($event)"
+    <app-add-job [isMaxJobsConfigured]="jobs.length >= 50"
+                 (autoGenerateTimesChanged)="onAutoTimeGenerationChanged($event)"
                  (newCreatedJob)="onNewJobCreated($event)"></app-add-job>
   </div>
 </div>
@@ -134,9 +134,12 @@
               <i class="fas fa-trash"></i>
             </button>
             <button mat-icon-button
+                    [disabled]="jobs.length >= 50"
                     (click)="copyJob(job, header)"
                     matTooltip="Auftrag kopieren">
-              <i class="fa fa-clone"></i>
+              <i class="fa fa-clone"
+                 matTooltip="{{jobs.length >= 50 ? 'Maximale Auftragszahl (50) erreicht' : ''}}">
+              </i>
             </button>
             <span class="information">(ID: {{job.id}})</span>
             <!-- Tooltip, since long job names may be cut off on smaller devices. -->
