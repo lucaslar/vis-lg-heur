@@ -1,5 +1,21 @@
 <div #container>
 
+  <div class="text-justify">
+    <p>
+      Mithilfe des Gantt-Diagramms lässt sich der ermittelte Maschinenbelegungsplan übersichtlich visualisieren.
+      Jeder Balken steht hierbei für einen Abarbeitungsschritt eines Auftrags, dessen Dauer durch die Balkenlänge
+      dargestellt wird.
+    </p>
+    <p>
+      Für eine bessere Übersichtlichkeit ist jedem Auftrag in diesem Diagramm eine (eindeutige) Farbe zugeordnet.
+    </p>
+    <p>
+      Nähere Informationen zu den einzelnen Abarbeitungsschritten werden nach dem Auswählen des entsprechenden Balkens
+      im
+      Fenster unterhalb des Diagramms dargestellt.
+    </p>
+  </div>
+
   <div *ngIf="!detectChartVisibility()"
        [style.height.px]="contentHeight"
        class="loading-container">
@@ -8,19 +24,6 @@
       <mat-spinner [diameter]="contentHeight < 150 ? 40 : 100"></mat-spinner>
     </div>
   </div>
-
-  <p>
-    Mithilfe des Gantt-Diagramms lässt sich der ermittelte Maschinenbelegungsplan übersichtlich visualisieren.
-    Jeder Balken steht hierbei für einen Abarbeitungsschritt eines Auftrags, dessen Dauer durch die Balkenlänge
-    dargestellt wird.
-  </p>
-  <p>
-    Für eine bessere Übersichtlichkeit ist jedem Auftrag in diesem Diagramm eine (eindeutige) Farbe zugeordnet.
-  </p>
-  <p>
-    Nähere Informationen zu den einzelnen Abarbeitungsschritten werden nach dem Auswählen des entsprechenden Balkens im
-    Fenster unterhalb des Diagramms dargestellt.
-  </p>
 
   <div class="solution-diagram">
     <!-- TODO internal feature: on window nav bar hidden due to resizing: detect changes? -->
