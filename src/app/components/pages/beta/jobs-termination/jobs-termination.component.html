@@ -40,14 +40,14 @@
 <div class="row">
   <div *ngFor="let job of jobs" class="col-md-6 ord-text card-container">
     <mat-card>
-      <div class="no-wrap-text-ellipsis">
-        <span>Auftrag mit ID: {{job.id}}</span>
-        <!-- Tooltip, since long job names may be cut off on smaller devices. -->
-        <span matTooltip="{{job.name}}">
+      <mat-card-content>
+        <div class="no-wrap-text-ellipsis">
+          <span>Auftrag mit ID: {{job.id}}</span>
+          <!-- Tooltip, since long job names may be cut off on smaller devices. -->
+          <span matTooltip="{{job.name}}">
             ({{job.name}})
           </span>
-      </div>
-      <mat-card-content>
+        </div>
         <div class="row">
           <div class="col-md-12 job-config-input-container">
             <app-icon-number-input

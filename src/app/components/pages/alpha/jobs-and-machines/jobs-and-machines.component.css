@@ -24,6 +24,7 @@ mat-expansion-panel-header {
 .jobs-actions:first-child, .jobs-actions mat-divider, .information, .add-job {
   padding-top: 8px;
   /* TODO feature: Fix padding issue */
+  /* TODO feature: Fix padding issue in small device machines drag and drop*/
 }
 
 .jobs-list {
