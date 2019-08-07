@@ -41,13 +41,8 @@ export class MachineConfigComponent {
         'Erhöhen Sie die Anzahl an Maschinen, ergäbe sich ein Flowshop.'];
     } else if (currentCOnfiguration === MachineConfig.FLOWSHOP) {
       configInWords = 'Flowshop mit ' + this.storage.nrOfMachines + ' Maschinen';
-      let machineOrderAsString = 'Erst M. ';
-      this.storage.jobs[0].machineTimes.map(m => m.machineNr).forEach(
-        machineNr => machineOrderAsString += machineNr + (
-          this.storage.jobs[0].machineTimes.findIndex(m => m.machineNr === machineNr) === this.storage.nrOfMachines - 1 ?
-            '.' : ', dann M. '
-        )
-      );
+      const machineOrderAsString = 'Erst ' +
+        this.storage.jobs[0].machineTimes.map(mt => 'M. ' + mt.machineNr).join(', dann ') + '.';
       whatDoesConfigMean = [
         (this.storage.jobs.length > 1 ?
             'Die ' + this.storage.jobs[0].machineTimes.length + ' Arbeitsgänge aller ' + this.storage.jobs.length +
