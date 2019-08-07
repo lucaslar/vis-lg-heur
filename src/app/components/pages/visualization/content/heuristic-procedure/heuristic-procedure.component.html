@@ -1,0 +1,21 @@
+<p>heuristic-procedure works!</p>
+<!-- TODO content: Add content -->
+<ng-container *ngIf="chosenHeuristic.heuristicDefiner === heuristic.PRIORITY_RULES">
+  A
+</ng-container>
+
+<ng-container *ngIf="chosenHeuristic.heuristicDefiner === heuristic.NEAREST_NEIGHBOUR">
+  B
+</ng-container>
+
+<ng-container *ngIf="chosenHeuristic.heuristicDefiner === heuristic.NEH_HEURISTIC">
+  C
+</ng-container>
+
+<ng-container *ngIf="chosenHeuristic.heuristicDefiner === heuristic.LOCAL_SEARCH">
+  D
+</ng-container>
+
+<ng-container *ngIf="chosenHeuristic.heuristicDefiner === heuristic.SHIFTING_BOTTLENECK">
+  E
+</ng-container>

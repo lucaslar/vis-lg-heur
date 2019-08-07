@@ -48,6 +48,9 @@
         </mat-checkbox>
       </li>
       <li>
+        <mat-checkbox [(ngModel)]="isHeuristicProcedureVisible">Heuristisches Vorgehen</mat-checkbox>
+      </li>
+      <li>
         <mat-checkbox [(ngModel)]="isMachineTablesVisible">Produktionsdaten pro Maschine</mat-checkbox>
       </li>
       <li>
@@ -146,6 +149,25 @@
       <div class="content">
         <app-solution-quality-visualizer
           [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Subtitle: Heuristic procedure -->
+    <mat-expansion-panel [expanded]="isHeuristicProcedureVisible">
+      <mat-expansion-panel-header
+        (click)="isHeuristicProcedureVisible = !isHeuristicProcedureVisible">
+        <div class="row title">
+          <div class="col-md-12">
+            <h4
+              matTooltip="{{'Heuristisches Vorgehen '+(isHeuristicProcedureVisible ? 'ausblenden':'einblenden')}}">
+              Heuristisches Vorgehen
+            </h4>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+      <mat-divider></mat-divider>
+      <div class="content">
+        <app-heuristic-procedure [chosenHeuristic]="usedHeuristic"></app-heuristic-procedure>
       </div>
     </mat-expansion-panel>
 

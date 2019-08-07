@@ -44,6 +44,7 @@ import {AddJobComponent} from './components/pages/alpha/add-job/add-job.componen
 import {JobsWeightingComponent} from './components/pages/beta/jobs-weighting/jobs-weighting.component';
 import {BetaFormalPipe} from './pipes/beta-formal.pipe';
 import {GammaFormalPipe} from './pipes/gamma-formal.pipe';
+import { HeuristicProcedureComponent } from './components/pages/visualization/content/heuristic-procedure/heuristic-procedure.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import {GammaFormalPipe} from './pipes/gamma-formal.pipe';
     AddJobComponent,
     JobsWeightingComponent,
     BetaFormalPipe,
-    GammaFormalPipe
+    GammaFormalPipe,
+    HeuristicProcedureComponent
   ],
   imports: [
     BrowserModule,

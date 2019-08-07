@@ -22,6 +22,7 @@ export class VisualizerComponent implements OnInit {
   private _isSolutionQualityDataVisible = true;
   private _isVisualizableGeneralDataVisible = true;
   private _isVisualizableSolutionQualityDataVisible = true;
+  private _isHeuristicProcedureVisible = false;
   private _isMachineTablesVisible = false;
   private _isLoggingVisible = false;
 
@@ -101,6 +102,14 @@ export class VisualizerComponent implements OnInit {
 
   set isVisualizableSolutionQualityDataVisible(value: boolean) {
     this._isVisualizableSolutionQualityDataVisible = value;
+  }
+
+  get isHeuristicProcedureVisible(): boolean {
+    return this._isHeuristicProcedureVisible;
+  }
+
+  set isHeuristicProcedureVisible(value: boolean) {
+    this._isHeuristicProcedureVisible = value;
   }
 
   get isMachineTablesVisible(): boolean {
