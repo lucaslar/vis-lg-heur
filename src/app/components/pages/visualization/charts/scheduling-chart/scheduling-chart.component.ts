@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ChartType, Dataset} from '../../../../../model/internal/visualization/VisualizableData';
 
 @Component({
-  selector: 'app-chart',
+  selector: 'app-scheduling-chart',
   templateUrl: './scheduling-chart.component.html',
   styleUrls: [
     './scheduling-chart.component.css',

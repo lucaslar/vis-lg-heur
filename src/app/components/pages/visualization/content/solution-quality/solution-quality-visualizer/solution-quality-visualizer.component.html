@@ -2,73 +2,73 @@
 
 <!-- General diagrams here: -->
 
-<app-chart [title]="data.finishedJobsAtTimestamp.title"
-           [type]="data.finishedJobsAtTimestamp.visualizableAs"
-           [labels]="data.finishedJobsAtTimestamp.labels"
-           [datasets]="data.finishedJobsAtTimestamp.datasets"
-           [yLabel]="data.finishedJobsAtTimestamp.yLabel"
-           [xLabel]="data.finishedJobsAtTimestamp.xLabel"
-></app-chart>
+<app-scheduling-chart [title]="data.finishedJobsAtTimestamp.title"
+                      [type]="data.finishedJobsAtTimestamp.visualizableAs"
+                      [labels]="data.finishedJobsAtTimestamp.labels"
+                      [datasets]="data.finishedJobsAtTimestamp.datasets"
+                      [yLabel]="data.finishedJobsAtTimestamp.yLabel"
+                      [xLabel]="data.finishedJobsAtTimestamp.xLabel"
+></app-scheduling-chart>
 
 <!-- Due date based: -->
 <ng-container *ngIf="data.comparisonFinishTimestampAndDueDate">
-  <app-chart [title]="data.cumulatedDelaysAtTimestamps.title"
-             [type]="data.cumulatedDelaysAtTimestamps.visualizableAs"
-             [labels]="data.cumulatedDelaysAtTimestamps.labels"
-             [datasets]="data.cumulatedDelaysAtTimestamps.datasets"
-             [yLabel]="data.cumulatedDelaysAtTimestamps.yLabel"
-             [xLabel]="data.cumulatedDelaysAtTimestamps.xLabel"
-  ></app-chart>
-  <app-chart [title]="data.comparisonDelayedAndInTimeJobs.title"
-             [type]="data.comparisonDelayedAndInTimeJobs.visualizableAs"
-             [labels]="data.comparisonDelayedAndInTimeJobs.labels"
-             [datasets]="data.comparisonDelayedAndInTimeJobs.datasets"
-             [yLabel]="data.comparisonDelayedAndInTimeJobs.yLabel"
-             [xLabel]="data.comparisonDelayedAndInTimeJobs.xLabel"
-  ></app-chart>
-  <app-chart [title]="data.comparisonFinishTimestampAndDueDate.title"
-             [type]="data.comparisonFinishTimestampAndDueDate.visualizableAs"
-             [labels]="data.comparisonFinishTimestampAndDueDate.labels"
-             [datasets]="data.comparisonFinishTimestampAndDueDate.datasets"
-             [yLabel]="data.comparisonFinishTimestampAndDueDate.yLabel"
-             [xLabel]="data.comparisonFinishTimestampAndDueDate.xLabel"
-             [colors]="data.comparisonFinishTimestampAndDueDate.colors"
-  ></app-chart>
+  <app-scheduling-chart [title]="data.cumulatedDelaysAtTimestamps.title"
+                        [type]="data.cumulatedDelaysAtTimestamps.visualizableAs"
+                        [labels]="data.cumulatedDelaysAtTimestamps.labels"
+                        [datasets]="data.cumulatedDelaysAtTimestamps.datasets"
+                        [yLabel]="data.cumulatedDelaysAtTimestamps.yLabel"
+                        [xLabel]="data.cumulatedDelaysAtTimestamps.xLabel"
+  ></app-scheduling-chart>
+  <app-scheduling-chart [title]="data.comparisonDelayedAndInTimeJobs.title"
+                        [type]="data.comparisonDelayedAndInTimeJobs.visualizableAs"
+                        [labels]="data.comparisonDelayedAndInTimeJobs.labels"
+                        [datasets]="data.comparisonDelayedAndInTimeJobs.datasets"
+                        [yLabel]="data.comparisonDelayedAndInTimeJobs.yLabel"
+                        [xLabel]="data.comparisonDelayedAndInTimeJobs.xLabel"
+  ></app-scheduling-chart>
+  <app-scheduling-chart [title]="data.comparisonFinishTimestampAndDueDate.title"
+                        [type]="data.comparisonFinishTimestampAndDueDate.visualizableAs"
+                        [labels]="data.comparisonFinishTimestampAndDueDate.labels"
+                        [datasets]="data.comparisonFinishTimestampAndDueDate.datasets"
+                        [yLabel]="data.comparisonFinishTimestampAndDueDate.yLabel"
+                        [xLabel]="data.comparisonFinishTimestampAndDueDate.xLabel"
+                        [colors]="data.comparisonFinishTimestampAndDueDate.colors"
+  ></app-scheduling-chart>
 </ng-container>
 
 <!-- Specific diagrams here: -->
 
 <!-- Setup times based: -->
 <ng-container *ngIf="data.cumulatedSetupTimesAtTimetamps">
-  <app-chart [title]="data.cumulatedSetupTimesAtTimetamps.title"
-             [type]="data.cumulatedSetupTimesAtTimetamps.visualizableAs"
-             [labels]="data.cumulatedSetupTimesAtTimetamps.labels"
-             [datasets]="data.cumulatedSetupTimesAtTimetamps.datasets"
-             [yLabel]="data.cumulatedSetupTimesAtTimetamps.yLabel"
-             [xLabel]="data.cumulatedSetupTimesAtTimetamps.xLabel"
-  ></app-chart>
-  <app-chart [title]="data.comparisonMeanSetupTimes.title"
-             [type]="data.comparisonMeanSetupTimes.visualizableAs"
-             [labels]="data.comparisonMeanSetupTimes.labels"
-             [datasets]="data.comparisonMeanSetupTimes.datasets"
-             [yLabel]="data.comparisonMeanSetupTimes.yLabel"
-             [xLabel]="data.comparisonMeanSetupTimes.xLabel"
-  ></app-chart>
-  <app-chart [title]="data.comparisonSelectedAndMeanSetupTime.title"
-             [type]="data.comparisonSelectedAndMeanSetupTime.visualizableAs"
-             [labels]="data.comparisonSelectedAndMeanSetupTime.labels"
-             [datasets]="data.comparisonSelectedAndMeanSetupTime.datasets"
-             [yLabel]="data.comparisonSelectedAndMeanSetupTime.yLabel"
-             [xLabel]="data.comparisonSelectedAndMeanSetupTime.xLabel"
-  ></app-chart>
+  <app-scheduling-chart [title]="data.cumulatedSetupTimesAtTimetamps.title"
+                        [type]="data.cumulatedSetupTimesAtTimetamps.visualizableAs"
+                        [labels]="data.cumulatedSetupTimesAtTimetamps.labels"
+                        [datasets]="data.cumulatedSetupTimesAtTimetamps.datasets"
+                        [yLabel]="data.cumulatedSetupTimesAtTimetamps.yLabel"
+                        [xLabel]="data.cumulatedSetupTimesAtTimetamps.xLabel"
+  ></app-scheduling-chart>
+  <app-scheduling-chart [title]="data.comparisonMeanSetupTimes.title"
+                        [type]="data.comparisonMeanSetupTimes.visualizableAs"
+                        [labels]="data.comparisonMeanSetupTimes.labels"
+                        [datasets]="data.comparisonMeanSetupTimes.datasets"
+                        [yLabel]="data.comparisonMeanSetupTimes.yLabel"
+                        [xLabel]="data.comparisonMeanSetupTimes.xLabel"
+  ></app-scheduling-chart>
+  <app-scheduling-chart [title]="data.comparisonSelectedAndMeanSetupTime.title"
+                        [type]="data.comparisonSelectedAndMeanSetupTime.visualizableAs"
+                        [labels]="data.comparisonSelectedAndMeanSetupTime.labels"
+                        [datasets]="data.comparisonSelectedAndMeanSetupTime.datasets"
+                        [yLabel]="data.comparisonSelectedAndMeanSetupTime.yLabel"
+                        [xLabel]="data.comparisonSelectedAndMeanSetupTime.xLabel"
+  ></app-scheduling-chart>
 </ng-container>
 
 <!-- Local search based: -->
-<app-chart *ngIf="data.valueToMinimizeAtIterations"
-           [title]="data.valueToMinimizeAtIterations.title"
-           [type]="data.valueToMinimizeAtIterations.visualizableAs"
-           [labels]="data.valueToMinimizeAtIterations.labels"
-           [datasets]="data.valueToMinimizeAtIterations.datasets"
-           [yLabel]="data.valueToMinimizeAtIterations.yLabel"
-           [xLabel]="data.valueToMinimizeAtIterations.xLabel"
-></app-chart>
+<app-scheduling-chart *ngIf="data.valueToMinimizeAtIterations"
+                      [title]="data.valueToMinimizeAtIterations.title"
+                      [type]="data.valueToMinimizeAtIterations.visualizableAs"
+                      [labels]="data.valueToMinimizeAtIterations.labels"
+                      [datasets]="data.valueToMinimizeAtIterations.datasets"
+                      [yLabel]="data.valueToMinimizeAtIterations.yLabel"
+                      [xLabel]="data.valueToMinimizeAtIterations.xLabel"
+></app-scheduling-chart>
