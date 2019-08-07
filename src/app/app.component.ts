@@ -15,6 +15,7 @@ import {StorageService} from './services/storage.service';
 export class AppComponent implements OnInit {
 
   // TODO internal feature: Extract larger text content sources such as dialogs?
+  // TODO feature: App icon?
 
   @ViewChild('snav', {static: false}) private snav: MatSidenav;
   mobileQuery: MediaQueryList;
