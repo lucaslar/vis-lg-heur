@@ -23,6 +23,10 @@ mat-expansion-panel div.content {
   line-height: 1.5;
 }
 
+mat-expansion-panel div.content.no-padding-top {
+  padding-top: 0;
+}
+
 mat-expansion-panel div.content.no-padding-bottom {
   padding-bottom: 0;
 }
