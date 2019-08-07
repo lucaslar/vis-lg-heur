@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   @ViewChild('snav', {static: false}) private snav: MatSidenav;
   mobileQuery: MediaQueryList;
 
-  private isLargeHeader: boolean;
+  private _isLargeHeader: boolean;
 
   constructor(media: MediaMatcher,
               private changeDetector: ChangeDetectorRef,
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:resize')
   onResize() {
-    this.isLargeHeader = window.innerWidth > 350;
+    this._isLargeHeader = window.innerWidth > 350;
   }
 
   openHeuristicsList(): void {
@@ -62,5 +62,9 @@ export class AppComponent implements OnInit {
     if (this.snav.mode === 'over') {
       this.snav.close().then();
     }
+  }
+
+  get isLargeHeader(): boolean {
+    return this._isLargeHeader;
   }
 }
