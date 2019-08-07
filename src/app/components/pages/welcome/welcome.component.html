@@ -1,5 +1,3 @@
-<!-- TODO content: Add content -->
-
 <div class="row title">
   <div class="col-md-12 text-center">
     <h3>
@@ -9,42 +7,81 @@
   </div>
 </div>
 
-<div class="row">
-
-  <p class="col-md-12 text-justify">
-    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-    magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-    gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-    elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
-    eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+<div class="text-justify">
+  <p>
+    In der Reihenfolgeplanung werden in erster Linie heuristische anstelle exakter Verfahren verwendet, da letztere
+    meist mit unrealistischem rechnerischen bzw. zeitlichen Aufwand verbunden sind. Erhofft ist daher, dass in
+    vertretbarer Zeit gute, wenngleich nicht optimale, Lösungen gefunden werden.
+  </p>
+  <p>
+    Hierbei stellt sich die Frage, wie gut mithilfe von Heuristiken ermittelte Lösungen tatsächlich sind. Mit eben
+    dieser Problematik beschäftigt sich diese Anwendung, indem sie unterschiedliche Verfahren zur Lösung frei
+    konfigurierbarer Reihenfolgeprobleme anbietet und die Güte der ermittelten Lösung visualisiert.
   </p>
 </div>
 
-<div class="row center">
-  <div class="col-md-6">
+<!-- Steps -->
+<mat-card>
+  <mat-card-title>
     <div class="text-center title">
-      <h5>Heading 1</h5>
+      <h4>In wenigen Schritten zur Lösung und Visualisierung von Reihenfolgeproblemen</h4>
     </div>
-    <p>
-      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-      dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-      kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-      sadipscing elitr, sed diam
+  </mat-card-title>
+  <mat-card-content>
+    <p class="text-justify">
+      Das Aufstellen eines zu lösenden Reihenfolgeproblems über das Navigationsmenü (links) aufrufbaren Seiten erfordert
+      nur wenige Schritte:
     </p>
-  </div>
-  <div class="col-md-6">
-    <div class="text-center title">
-      <h5>Heading 2</h5>
+    <div class="step">
+      <div class="step-symbol my-auto text-center centered"><i class="fas fa-tasks"></i></div>
+      <div class="my-auto">Konfigurieren von Auftragslage und Maschinenumgebung</div>
     </div>
-    <p>
-      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-      dolore
-      magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-      gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-    </p>
-  </div>
+    <div class="col-md-12 divider">
+      <mat-divider></mat-divider>
+    </div>
+    <div class="step">
+      <div class="step-symbol my-auto text-center centered"><i class="fas fa-calendar-alt"></i></div>
+      <div class="my-auto">Konfigurieren zusätzlicher Ablaufeigenschaften (nicht zwingend erforderlich)</div>
+    </div>
+    <div class="col-md-12 divider">
+      <mat-divider></mat-divider>
+    </div>
+    <div class="step">
+      <div class="step-symbol my-auto text-center centered"><i class="fas fa-chart-line"></i></div>
+      <div class="my-auto">Festlegen des zu minimierenden Zielfunktionswerts</div>
+    </div>
+    <div class="information font-italic">oder</div>
+    <div class="step">
+      <div class="step-symbol my-auto text-center centered"><i class="fas fa-sort-numeric-down"></i></div>
+      <div class="my-auto">Festlegen von Prioritätsregeln</div>
+    </div>
+    <div class="col-md-12 divider">
+      <mat-divider></mat-divider>
+    </div>
+    <div class="step">
+      <div class="step-symbol my-auto text-center centered"><i class="far fa-chart-bar"></i></div>
+      <div class="my-auto">
+        Fertig. Sie können nun über den Button in der Toolbar ein passendes heuristisches Verfahren wählen und ihr
+        Problem lösen bzw. die Lösung visualisieren lassen.
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
 
-  <div class="col-md-12">
-    <img src="../../../../assets/VisLgHeur_devices.png">
-  </div>
-</div>
+<!-- Responsiveness -->
+<mat-card>
+  <img src="../../../../assets/VisLgHeur_devices.png" alt="VisLgHeur auf verschiedensten Endgeräten">
+  <mat-card-title>
+    <div class="text-center title">
+      <h4>Responsive und plattformübergreifend</h4>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <p class="text-justify">
+      Bei der Implementierung dieser Anwendung wurde darauf geachtet, dass sie auf unterschiedlichsten Endgeräten
+      verwendet
+      werden kann (Responsive Webdesign). Darüber hinaus ist sie als Webapplikation betriebssystem- sowie
+      browserübergreifend.
+    </p>
+  </mat-card-content>
+</mat-card>
