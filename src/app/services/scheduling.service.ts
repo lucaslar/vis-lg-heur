@@ -263,7 +263,7 @@ export class SchedulingService {
     let startValue: number;
     let bestPermutationYet = this.jobs;
     let currentBestValue = this.getCompareValueForPermutation(bestPermutationYet);
-    this.localSearchBestValuesForIterations = [currentBestValue];
+    this.localSearchBestValuesForIterations = [];
 
     do {
       iteration++;
