@@ -15,10 +15,6 @@ export class AboutThisAppComponent {
     window.open('https://material.angular.io/');
   }
 
-  onAngularBootstrapClicked(): void {
-    window.open('https://ng-bootstrap.github.io');
-  }
-
   onBootstrapClicked(): void {
     window.open('https://getbootstrap.com/');
   }
@@ -41,6 +37,10 @@ export class AboutThisAppComponent {
 
   onMaterialDesignClicked(): void {
     window.open('https://material.io/');
+  }
+
+  onMdBootstrapClicked(): void {
+    window.open('https://mdbootstrap.com/');
   }
 
   onMockUPhoneClicked(): void {
