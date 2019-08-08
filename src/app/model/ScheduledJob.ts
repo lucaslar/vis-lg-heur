@@ -75,7 +75,6 @@ export class ScheduledJob extends Job {
   getSpttForTimestamp(timestamp: number): number {
     const cot = this.currentProcessingTime;
     const r = 10;
-    console.log(this.getSopnForTimestamp(timestamp), cot);
     return Math.min(cot + r, this.getSopnForTimestamp(timestamp));
   }
 

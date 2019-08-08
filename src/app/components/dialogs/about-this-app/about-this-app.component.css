@@ -24,7 +24,3 @@ h3:not(:first-child) {
 .thesis-information .row :first-child {
   font-weight: bolder;
 }
-
-.app-color {
-  color: var(--color-main) !important;
-}
