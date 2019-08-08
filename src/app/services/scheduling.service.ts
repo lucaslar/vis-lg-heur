@@ -1238,17 +1238,12 @@ export class SchedulingService {
 
   private calculateMeanJobBacklogKpi(): Kpi {
     let sum = 0;
-    let maximum = 0;
-    this.jobs.forEach(job => {
-        sum += job.finishedAtTimestamp;
-        maximum = job.finishedAtTimestamp > maximum ? job.finishedAtTimestamp : maximum;
-      }
-    );
+    this.jobs.forEach(job => sum += job.finishedAtTimestamp);
 
     const kpi = new Kpi();
     kpi.iconClasses = ['fas', 'fa-cubes'];
     kpi.title = 'Mittlerer Auftragsbestand';
-    kpi.kpi = +(sum / maximum);
+    kpi.kpi = +(sum / (this.currentTimestampInScheduling - 1));
     return kpi;
   }
 
