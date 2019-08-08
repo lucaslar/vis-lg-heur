@@ -25,6 +25,7 @@ import {SchedulingPlanForMachine} from '../model/SchedulingPlanForMachine';
 import {BottleneckRelation} from '../model/internal/relations/BottleneckRelation';
 import {DialogContent} from '../model/internal/dialog/DialogContent';
 import {DialogType} from '../model/internal/dialog/DialogType';
+import {BetaFormalPipe} from '../pipes/beta-formal.pipe';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +44,6 @@ export class SchedulingService {
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
 
-  // TODO content: also add gamma to general data result
   // TODO content: Round results in avg. setup times diagrams % 0.005?
 
   constructor(public storage: StorageService) {
@@ -985,6 +985,8 @@ export class SchedulingService {
     data.machineConfig = this.storage.machineConfigParam;
     data.numberOfJobs = this.jobs.length;
     data.numberOfMachines = this.machines.length;
+    data.formalBeta = new BetaFormalPipe().transform(this.jobs, this.objectiveFunction);
+    data.objectiveFunction = this.objectiveFunction;
     data.priorityRules = this.priorityRules; // may be undefined
 
     if (this.heuristicType === HeuristicDefiner.LOCAL_SEARCH) {
