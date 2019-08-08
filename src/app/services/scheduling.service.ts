@@ -44,8 +44,6 @@ export class SchedulingService {
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
 
-  // TODO content: Round results in avg. setup times diagrams % 0.005?
-
   constructor(public storage: StorageService) {
   }
 
@@ -266,18 +264,29 @@ export class SchedulingService {
     do {
       iteration++;
       startValue = currentBestValue;
-      const possiblePermutations: ScheduledJob[][] = this.createPermutationsBySwappingJobs(bestPermutationYet);
+
+      this.logSchedulingProcedure(1, 'Beginn der ' + iteration + '. Iteration mit zu minimierendem Zielfunktionswert ' +
+        'für derzeitige Permutation: ' + startValue + ' (' + this.objectiveFunction + ')',
+        LogEventType.HEURISTIC_BASED_SORTING);
+
+      const possiblePermutations: ScheduledJob[][] = this.createPermutationsBySwappingJobs(bestPermutationYet, iteration);
       possiblePermutations.forEach(permutation => {
         const comparisonValue = this.getCompareValueForPermutation(permutation);
         if (comparisonValue < currentBestValue) {
+          this.logSchedulingProcedure(1, 'Verbesserter zu minimierender Zielfunktionswert: ' + comparisonValue +
+            ' anstatt ' + currentBestValue + ' (' + this.objectiveFunction + ') bei Abarbeitung von Permutation: '
+            + this.jobListStringForLogging(permutation), LogEventType.HEURISTIC_BASED_SORTING);
+
           currentBestValue = comparisonValue;
           bestPermutationYet = permutation;
         }
       });
-
       this.localSearchBestValuesForIterations.push(currentBestValue);
-      // TODO content: Log local search
     } while (currentBestValue < startValue);
+
+    this.logSchedulingProcedure(1, this.localSearchBestValuesForIterations.length + '. Iteration: Keine Permutation ' +
+      'gefunden, die den zu minimierenden Zielfunktionswert  (' + this.objectiveFunction + ') verbessern würde, finaler Wert: '
+      + currentBestValue, LogEventType.HEURISTIC_BASED_SORTING);
 
     return bestPermutationYet;
   }
@@ -309,15 +318,25 @@ export class SchedulingService {
     return permutations;
   }
 
-  private createPermutationsBySwappingJobs(existingPermutation: ScheduledJob[]): ScheduledJob[][] {
+  private createPermutationsBySwappingJobs(existingPermutation: ScheduledJob[], iteration: number): ScheduledJob[][] {
+    this.logSchedulingProcedure(1, iteration + '. Iteration: Beginn der Aufstellung von Permutationen ausgehend von ' +
+      this.jobListStringForLogging(existingPermutation), LogEventType.HEURISTIC_BASED_SORTING);
+
     const permutations: ScheduledJob[][] = [];
     for (let i = 0; i < existingPermutation.length; i++) {
       for (let j = i + 1; j < existingPermutation.length; j++) {
         const copiedPermutation = existingPermutation.map(job => new ScheduledJob(job));
         [copiedPermutation [i], copiedPermutation[j]] = [copiedPermutation[j], copiedPermutation[i]];
         permutations.push(copiedPermutation);
+        this.logSchedulingProcedure(1, iteration + '. Iteration: Aufgestellte Permutation durch das Tauschen von ' +
+          this.jobStringForLogging(copiedPermutation[i]) + ' & ' + this.jobStringForLogging(copiedPermutation[j]) + ': ' +
+          this.jobListStringForLogging(copiedPermutation), LogEventType.HEURISTIC_BASED_SORTING);
       }
     }
+
+    this.logSchedulingProcedure(1, iteration + '. Iteration: Alle möglichen Permutationen aufgestellt (' +
+      permutations.length + ' Stück)', LogEventType.HEURISTIC_BASED_SORTING);
+
     return permutations;
   }
 
