@@ -610,15 +610,19 @@ export class SchedulingService {
 
   private scheduleByShiftingBottleneckHeuristic(): void {
 
-    // TODO content: Log process
     let lowerBoundMakespan = Math.max.apply(Math, this.jobs.map(job => job.totalMachiningTime));
+
+    this.logSchedulingProcedure(1, 'Maschinenunabhängiges Ermitteln der kleinstmöglichen Gesamtbearbeitungszeit ' +
+      '(längste Gesamtbearbeitungszeit eines Auftrags): ' + lowerBoundMakespan, LogEventType.HEURISTIC_BASED_SORTING);
 
     const schedulingIgnoringMachineCapacity = this.getSchedulingIgnoringMachineCapacity(lowerBoundMakespan);
     const isOptimalSolution = !schedulingIgnoringMachineCapacity
-      .filter(machine => machine.some(jobsAtTimestamp => jobsAtTimestamp.length > 1));
+      .filter(machine => machine.some(jobsAtTimestamp => jobsAtTimestamp.length > 1)).length;
 
     if (!isOptimalSolution) {
-      // TODO content: Log that best solution has not been found
+      this.logSchedulingProcedure(1, 'Es konnte keine optimale Lösung ermittelt werden, da sich Zeiten an den ' +
+        'einzelnen Maschinen überschneiden würden, Beginn der Aufstellung von Ein-Maschinen-Problemen (1|rj|Lmax)',
+        LogEventType.HEURISTIC_BASED_SORTING);
 
       const finalOneMachineSchedules: SchedulingPlanForMachine[] = [];
       let remainingOneMachineSchedules = this.initializeOneMachineSchedules(lowerBoundMakespan);
@@ -635,7 +639,14 @@ export class SchedulingService {
       }
       this.startProductionWithGivenOneMachineSchedules(finalOneMachineSchedules);
     } else {
-      // TODO content: Log that best solution is found!
+      this.logSchedulingProcedure(1, 'Es konnte eine optimale Lösung ermittelt werden, da sich keine Zeiten ' +
+        'an den einzelnen Maschinen überschneiden', LogEventType.HEURISTIC_BASED_SORTING);
+
+      for (let i = 0; i < this.machines.length; i++) {
+        this.logSchedulingProcedure(i + 1, 'Fertig bestimmte Warteschlange: ' + this.jobListStringForLogging(
+          // There must be only one job at [0] if this part of code is reached.
+          [...new Set(schedulingIgnoringMachineCapacity[i].map(job => job[0]))]), LogEventType.JOB_QUEUE);
+      }
       this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
     }
   }
@@ -696,7 +707,6 @@ export class SchedulingService {
 
     this.updateRelationTables(invertedBottleneckRelations, bottleneckRelations, finalSchedule);
 
-    // TODO content: Log new relations/values for p, r, d?
     schedulesToUpdate.forEach(schedule =>
       schedule.scheduledJobs.forEach(job => {
         const longestPastBranch = this.getLongestTimeForPathStarting(job.id, schedule.machineNr, invertedBottleneckRelations);
@@ -762,6 +772,10 @@ export class SchedulingService {
 
   private getSchedulingIgnoringMachineCapacity(maxTime: number): ScheduledJob[][][] {
     const schedulingIgnoringMachineCapacity = this.machines.map(() => new Array(maxTime));
+
+    this.logSchedulingProcedure(1, 'Maschinenübergreifendes Aufstellen von Ablaufplänen ohne Berücksichtigung von ' +
+      'Maschinenkapazitäten', LogEventType.HEURISTIC_BASED_SORTING);
+
     this.jobs.forEach(job => {
       let countedTime = 0;
       job.machineTimes.forEach(mt => {
@@ -778,17 +792,23 @@ export class SchedulingService {
   }
 
   private getScheduleWithHighestOptimalLmax(schedulingPlans: SchedulingPlanForMachine[]): SchedulingPlanForMachine {
-    // No .reduce() in order to return first optimum and not last (as in literature).
     schedulingPlans.forEach(schedule => {
       schedule.scheduledJobs = this.getBestPermutationByBranchAndBound(schedule.scheduledJobs);
 
-      // TODO internal: For testing only, remove both code and curly brackets after final implementation: Or log?
-      console.log(schedule.machineNr + '. Maschine, Lmax: ' + this.getMaxLatenessForSortedOneMachineJobs(schedule.scheduledJobs) + ' f.: '
-        + schedule.scheduledJobs.map(j => j.id).join('->'));
+      this.logSchedulingProcedure(schedule.machineNr, 'Ermittelte optimale Reihenfolge des Ein-Maschinen-Problems (1|rj|Lmax ' +
+        'optimal gelöst mit Branch & Bound): ' + this.jobListStringForLogging(schedule.scheduledJobs) + ', Lmax = ' +
+        this.getMaxLatenessForSortedOneMachineJobs(schedule.scheduledJobs), LogEventType.HEURISTIC_BASED_SORTING);
 
     });
-    return schedulingPlans.find(schedule => this.getMaxLatenessForSortedOneMachineJobs(schedule.scheduledJobs) ===
-      Math.max.apply(Math, schedulingPlans.map(_schedule => this.getMaxLatenessForSortedOneMachineJobs(_schedule.scheduledJobs))));
+    const scheduleWithHighestOptimalLmax = schedulingPlans.find(schedule => this.getMaxLatenessForSortedOneMachineJobs(
+      schedule.scheduledJobs) === Math.max.apply(Math,
+      schedulingPlans.map(_schedule => this.getMaxLatenessForSortedOneMachineJobs(_schedule.scheduledJobs))));
+
+    this.logSchedulingProcedure(scheduleWithHighestOptimalLmax.machineNr, 'Maschine wird fortan nicht mehr betrachtet, da ' +
+      'größter Wert für Lmax, fertig bestimmte Warteschlange: ' +
+      this.jobListStringForLogging(scheduleWithHighestOptimalLmax.scheduledJobs), LogEventType.JOB_QUEUE);
+
+    return scheduleWithHighestOptimalLmax;
   }
 
   private startProductionWithGivenOneMachineSchedules(finalOneMachineSchedules: SchedulingPlanForMachine[]): void {
@@ -834,9 +854,6 @@ export class SchedulingService {
         const currentBranchLowerBound = lowerBoundAndProductionList[0];
 
         if (currentBranchLowerBound < upperBound) {
-
-          // TODO content: Log all proceeding jobs? if so: this line
-          // console.log('proceed: ' + branch.join('->'));
 
           // if both the lower bound is smaller than the current upper bound and all jobs are produced without pausing:
           if (currentBranchLowerBound < upperBound && lowerBoundAndProductionList[1]) {
