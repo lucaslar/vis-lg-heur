@@ -17,6 +17,7 @@ export class SchedulingLogComponent implements OnInit {
 
   @Input() heuristic: HeuristicDefiner;
   @Input() data: SchedulingLogEntry[];
+  @Input() nrOfMachines: number;
 
   private _machinesShown: boolean[];
 
@@ -29,15 +30,14 @@ export class SchedulingLogComponent implements OnInit {
 
   private _logEventType = LogEventType;
 
-  constructor(private dialog: MatDialog,
-              public storage: StorageService) {
+  constructor(private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     if (this.data) {
       registerLocaleData(localeDe, 'de');
       this._machinesShown = [];
-      for (let i = 1; i <= this.storage.nrOfMachines; i++) {
+      for (let i = 1; i <= this.nrOfMachines; i++) {
         this._machinesShown.push(true);
       }
 

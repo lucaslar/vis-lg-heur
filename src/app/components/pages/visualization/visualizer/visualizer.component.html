@@ -75,7 +75,8 @@
       <mat-divider></mat-divider>
       <div class="content">
         <app-scheduling-gantt
-          [timelineData]="result.schedulingTimesData.allMachineOperationsTimeline"></app-scheduling-gantt>
+          [timelineData]="result.schedulingTimesData.allMachineOperationsTimeline"
+          [nrOfMachines]="result.generalData.numberOfMachines"></app-scheduling-gantt>
       </div>
     </mat-expansion-panel>
 
@@ -110,7 +111,9 @@
       </mat-expansion-panel-header>
       <mat-divider></mat-divider>
       <div class="content no-padding-bottom">
-        <app-solution-quality-data [data]="result.solutionQualityData"></app-solution-quality-data>
+        <app-solution-quality-data
+          [isEachDueDateConfigured]="result.generalData.isEachDueDateConfigured"
+          [data]="result.solutionQualityData"></app-solution-quality-data>
       </div>
     </mat-expansion-panel>
 
@@ -132,7 +135,7 @@
       </div>
     </mat-expansion-panel>
 
-    <!-- Subtitle: General data visualization -->
+    <!-- Subtitle: solution quality data visualization -->
     <mat-expansion-panel [expanded]="isVisualizableSolutionQualityDataVisible">
       <mat-expansion-panel-header
         (click)="isVisualizableSolutionQualityDataVisible = !isVisualizableSolutionQualityDataVisible">
@@ -207,6 +210,7 @@
       <div class="content">
         <app-scheduling-log-component
           [heuristic]="usedHeuristic.heuristicDefiner"
+          [nrOfMachines]="result.generalData.numberOfMachines"
           [data]="result.schedulingLogging"></app-scheduling-log-component>
       </div>
     </mat-expansion-panel>

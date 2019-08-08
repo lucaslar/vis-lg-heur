@@ -26,6 +26,7 @@ import {BottleneckRelation} from '../model/internal/relations/BottleneckRelation
 import {DialogContent} from '../model/internal/dialog/DialogContent';
 import {DialogType} from '../model/internal/dialog/DialogType';
 import {BetaFormalPipe} from '../pipes/beta-formal.pipe';
+import {MachineConfig} from '../model/enums/MachineConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,9 @@ export class SchedulingService {
 
   private isLoggingConfigured: boolean;
   private logging: SchedulingLogEntry[];
+
+  private isEachDueDateConfigured: boolean;
+  private machineConfigParam: MachineConfig;
 
   constructor(public storage: StorageService) {
   }
@@ -150,6 +154,10 @@ export class SchedulingService {
       this.priorityRules = <PriorityRule[]>JSON.parse(JSON.stringify(this.storage.priorityRules));
     }
     this.objectiveFunction = this.storage.objectiveFunction;
+    this.isEachDueDateConfigured =
+      this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED;
+    this.machineConfigParam = this.storage.machineConfigParam;
+
     this.isLoggingConfigured = this.storage.isLoggingConfigured;
     if (this.isLoggingConfigured) {
       this.logging = [];
@@ -1018,12 +1026,13 @@ export class SchedulingService {
 
   private generateGeneralSchedulingData(): GeneralSchedulingData {
     const data = new GeneralSchedulingData();
-    data.machineConfig = this.storage.machineConfigParam;
+    data.machineConfig = this.machineConfigParam;
     data.numberOfJobs = this.jobs.length;
     data.numberOfMachines = this.machines.length;
     data.formalBeta = new BetaFormalPipe().transform(this.jobs, this.objectiveFunction);
     data.objectiveFunction = this.objectiveFunction;
     data.priorityRules = this.priorityRules; // may be undefined
+    data.isEachDueDateConfigured = this.isEachDueDateConfigured;
 
     if (this.heuristicType === HeuristicDefiner.LOCAL_SEARCH) {
       const iterationsKpi = new Kpi();
@@ -1138,8 +1147,6 @@ export class SchedulingService {
   }
 
   private generateTotalJobTimesVisualization(): ChartData {
-    const isMindDueDates = this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED;
-
     const sortedJobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
     const dataset = new Dataset();
     dataset.data = sortedJobs
@@ -1151,13 +1158,14 @@ export class SchedulingService {
     const visualization = new ChartData();
     visualization.visualizableAs = ChartType.CJS_BAR;
     visualization.colors = this.getColorsAsSpecifiedInGanttFirstMachine().map(color => 'rgba(' + color + ',0.8)');
-    visualization.title = 'Gesamtbearbeitungsdauer ' + (isMindDueDates ? 'und gewünschte Fertigstellungstermine ' : '') + 'aller Aufträge';
+    visualization.title = 'Gesamtbearbeitungsdauer ' + (this.isEachDueDateConfigured ? 'und gewünschte Fertigstellungstermine ' : '')
+      + 'aller Aufträge';
     visualization.labels = sortedJobs.map(job => job.name + ' (ID: ' + job.id + ')');
     visualization.datasets = [dataset];
     visualization.xLabel = 'Aufträge';
     visualization.yLabel = 'Zeiteinheiten';
 
-    if (isMindDueDates) {
+    if (this.isEachDueDateConfigured) {
       const dueDatesDataset = new Dataset();
       dueDatesDataset.data = sortedJobs.map(job => job.dueDate);
       dueDatesDataset.label = 'Gewünschter Fertigstellungstermin';
@@ -1193,7 +1201,7 @@ export class SchedulingService {
     data.push(this.calculateMeanJobBacklogKpi());
 
     // Either none or all jobs must have a due date
-    if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED) {
+    if (this.isEachDueDateConfigured) {
       data.push(this.calculateMeanDelayKpi());
       data.push(this.calculateStandardDeviationOfDelayKpi());
       data.push(this.calculateSumOfDelaysKpi());
@@ -1307,7 +1315,7 @@ export class SchedulingService {
 
     data.finishedJobsAtTimestamp = this.generateFinishedJobsAtTimestampVisualization();
 
-    if (this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED) {
+    if (this.isEachDueDateConfigured) {
       data.comparisonFinishTimestampAndDueDate = this.generateComparisonFinishTimestampAndDueDate();
       data.cumulatedDelaysAtTimestamps = this.generateCumulatedDelaysVisualization();
       data.comparisonDelayedAndInTimeJobs = this.generateComparisonDelayedAndInTimeVisualization();

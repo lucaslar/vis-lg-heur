@@ -71,6 +71,7 @@ export class GeneralSchedulingData {
   private _durationInMillisKpi: Kpi;
   private _formalBeta: string;
   private _objectiveFunction: ObjectiveFunction;
+  private _isEachDueDateConfigured: boolean;
   private _iterations: Kpi; // only for local searches
 
   get priorityRules(): PriorityRule[] {
@@ -127,6 +128,14 @@ export class GeneralSchedulingData {
 
   set objectiveFunction(value: ObjectiveFunction) {
     this._objectiveFunction = value;
+  }
+
+  get isEachDueDateConfigured(): boolean {
+    return this._isEachDueDateConfigured;
+  }
+
+  set isEachDueDateConfigured(value: boolean) {
+    this._isEachDueDateConfigured = value;
   }
 
   get iterations(): Kpi {

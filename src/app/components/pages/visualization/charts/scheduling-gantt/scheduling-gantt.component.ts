@@ -1,5 +1,4 @@
 import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {StorageService} from '../../../../../services/storage.service';
 import TimelineOptions = google.visualization.TimelineOptions;
 import {OperationOnConsole} from '../../../../../model/internal/visualization/OperationOnConsole';
 import {TimelineData} from '../../../../../model/internal/visualization/VisualizableData';
@@ -26,6 +25,8 @@ export class SchedulingGanttComponent implements OnInit {
     };
   }
 
+  @Input() nrOfMachines: number;
+
   @ViewChild('container', {static: false}) container: ElementRef;
   @ViewChild('chartContainer', {static: false}) chartContainer: ElementRef;
   @ViewChild('chartConsole', {static: false}) operationConsole: ElementRef;
@@ -40,15 +41,14 @@ export class SchedulingGanttComponent implements OnInit {
   options: TimelineOptions;
   data: [string, string, Date, Date][];
 
-  constructor(private changeDetector: ChangeDetectorRef,
-              public storage: StorageService) {
+  constructor(private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
-    const firstMachineOps = this.data.filter(operation => this.data.indexOf(operation) % this.storage.nrOfMachines === 0);
+    const firstMachineOps = this.data.filter(operation => this.data.indexOf(operation) % this.nrOfMachines === 0);
 
     const sortedFirstMachineOps = this.data
-      .filter(operation => this.data.indexOf(operation) % this.storage.nrOfMachines === 0)
+      .filter(operation => this.data.indexOf(operation) % this.nrOfMachines === 0)
       .sort((o1, o2) => (<Date>o1[3]).getMilliseconds() - (<Date>o2[3]).getMilliseconds());
 
     for (let i = 0; i < firstMachineOps.length; i++) {
@@ -91,12 +91,12 @@ export class SchedulingGanttComponent implements OnInit {
   }
 
   private getColorOfRow(row: number): string {
-    const index = Math.floor(row / this.storage.nrOfMachines);
+    const index = Math.floor(row / this.nrOfMachines);
     return this.colorMap.get(index);
   }
 
   get contentHeight(): number {
-    return this.storage.nrOfMachines * 41 + 8 + 64; // rows, padding and console
+    return this.nrOfMachines * 41 + 8 + 64; // rows, padding and console
   }
 
   get consoleText(): string {

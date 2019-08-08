@@ -14,19 +14,10 @@ export class SolutionQualityDataComponent implements OnInit {
   // TODO content: Add note that due dates where not considered in the calculation?
 
   @Input() data: Kpi[];
-
-  private _isEachDueDateConfigured: boolean;
-
-  constructor(public storage: StorageService) {
-  }
+  @Input() isEachDueDateConfigured: boolean;
 
   ngOnInit(): void {
     this.data = this.data.filter(data => !!data);
-    this._isEachDueDateConfigured =
-      this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED;
   }
 
-  get isEachDueDateConfigured(): boolean {
-    return this._isEachDueDateConfigured;
-  }
 }
