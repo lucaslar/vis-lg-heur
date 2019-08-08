@@ -165,7 +165,7 @@ export class JobsAndMachinesComponent implements OnInit {
       data: new DialogContent(
         'Löschen bestätigen',
         ['Möchten Sie wirklich die Zeiten der Arbeitsgänge aller Aufträge löschen?', 'Diese Aktion kann nicht rückgängig gemacht werden'],
-        DialogType.QUESTION)
+        DialogType.CONFIRM_WARNING)
     }).afterClosed().subscribe(result => {
       if (result) {
         this.jobs.forEach(job => job.machineTimes.forEach(mT => delete mT.timeOnMachine));
@@ -187,7 +187,7 @@ export class JobsAndMachinesComponent implements OnInit {
       data: new DialogContent(
         'Löschen bestätigen',
         ['Möchten Sie wirklich alle Aufträge löschen?', 'Diese Aktion kann nicht rückgängig gemacht werden'],
-        DialogType.QUESTION)
+        DialogType.CONFIRM_WARNING)
     }).afterClosed().subscribe(result => {
       if (result) {
         this.jobs = [];

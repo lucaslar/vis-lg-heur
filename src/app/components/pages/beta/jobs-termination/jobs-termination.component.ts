@@ -84,7 +84,7 @@ export class JobsTerminationComponent implements OnInit {
       data: new DialogContent(
         'Löschen bestätigen',
         ['Möchten Sie wirklich alle gewünschten Fertigstellungstermine löschen?', 'Diese Aktion kann nicht rückgängig gemacht werden'],
-        DialogType.QUESTION)
+        DialogType.CONFIRM_WARNING)
     }).afterClosed().subscribe(result => {
       if (result) {
         this.jobs.forEach(job => delete job.dueDate);

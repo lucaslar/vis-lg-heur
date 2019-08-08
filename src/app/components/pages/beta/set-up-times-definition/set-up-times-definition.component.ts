@@ -80,7 +80,7 @@ export class SetUpTimesDefinitionComponent implements OnInit, OnDestroy {
       data: new DialogContent(
         'Löschen bestätigen',
         ['Möchten Sie wirklich alle Rüstzeiten löschen?', 'Diese Aktion kann nicht rückgängig gemacht werden'],
-        DialogType.QUESTION)
+        DialogType.CONFIRM_WARNING)
     }).afterClosed().subscribe(result => {
       if (result) {
         this.jobs.forEach(job => job.setupTimesToOtherJobs
