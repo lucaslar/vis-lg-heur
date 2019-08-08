@@ -1,7 +1,5 @@
 export class Job {
 
-  // TODO internal feature: Can this be private?
-
   id: number;
   name: string;
   machineTimes: MachineTimeForJob[];
