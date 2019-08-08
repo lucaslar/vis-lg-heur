@@ -35,8 +35,8 @@ export class MachineConfigComponent {
     if (currentCOnfiguration === MachineConfig.ONE_MACHINE) {
       configInWords = 'Es gibt genau eine Maschine';
       whatDoesConfigMean = [
-        'Es kann nur einen Arbeitsgang an genau einer Maschine geben. Somit erübigt es sich, ' +
-        'einen Vergleich der Reihenfolge der Arbeitsgänge zu ziehen.',
+        'Es kann nur einen Arbeitsgang an genau einer Maschine geben. Somit erübrigt es sich, ' +
+        'die Reihenfolge der Arbeitsgänge zu vergleichen.',
         'Flow- bzw. Jobshop setzen mindestens zwei Maschinen voraus. ' +
         'Erhöhen Sie die Anzahl an Maschinen, ergäbe sich ein Flowshop.'];
     } else if (currentCOnfiguration === MachineConfig.FLOWSHOP) {
