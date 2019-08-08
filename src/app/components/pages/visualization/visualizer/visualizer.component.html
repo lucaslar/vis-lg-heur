@@ -206,6 +206,7 @@
       <mat-divider></mat-divider>
       <div class="content">
         <app-scheduling-log-component
+          [heuristic]="usedHeuristic.heuristicDefiner"
           [data]="result.schedulingLogging"></app-scheduling-log-component>
       </div>
     </mat-expansion-panel>

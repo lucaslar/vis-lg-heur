@@ -6,6 +6,7 @@ import {LogEventType} from '../../../../../model/enums/LogEventType';
 import {SchedulingLogEntry} from '../../../../../model/internal/visualization/SchedulingResult';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import {HeuristicDefiner} from '../../../../../model/enums/HeuristicDefiner';
 
 @Component({
   selector: 'app-scheduling-log-component',
@@ -14,6 +15,7 @@ import localeDe from '@angular/common/locales/de';
 })
 export class SchedulingLogComponent implements OnInit {
 
+  @Input() heuristic: HeuristicDefiner;
   @Input() data: SchedulingLogEntry[];
 
   private _machinesShown: boolean[];
@@ -23,6 +25,7 @@ export class SchedulingLogComponent implements OnInit {
   private _isHeuristicBasedSortingSelected = true;
 
   private _isScheduledInFirstMachineOnly: boolean;
+  private _isPartlyScheduledInFirstMachine: boolean;
 
   private _logEventType = LogEventType;
 
@@ -41,6 +44,8 @@ export class SchedulingLogComponent implements OnInit {
       this._isScheduledInFirstMachineOnly =
         this.data.filter(data => data.machineNr === 1 && data.eventType === LogEventType.HEURISTIC_BASED_SORTING).length
         === this.data.filter(data => data.eventType === LogEventType.HEURISTIC_BASED_SORTING).length;
+
+      this._isPartlyScheduledInFirstMachine = this.heuristic === HeuristicDefiner.SHIFTING_BOTTLENECK;
     }
   }
 
@@ -73,9 +78,12 @@ export class SchedulingLogComponent implements OnInit {
 
   isNoEntryForMachine(): boolean {
     if (this.isScheduledInFirstMachineOnly) {
-      const onlySortingSelected = this.isHeuristicBasedSortingSelected && !this.isJobQueueSelected && !this.isProductionStartSelected;
+      const isNoContentSelected = (((this.isHeuristicBasedSortingSelected || this.isJobQueueSelected)
+          && (this.heuristic === HeuristicDefiner.LOCAL_SEARCH || this.heuristic === HeuristicDefiner.NEH_HEURISTIC)
+        ) || (this.isHeuristicBasedSortingSelected && !this.isJobQueueSelected && this.heuristic === HeuristicDefiner.SHIFTING_BOTTLENECK))
+        && !this.isProductionStartSelected;
       const machineOneNotSelected = !this.machinesShown[0];
-      return onlySortingSelected && machineOneNotSelected;
+      return isNoContentSelected && machineOneNotSelected;
     } else {
       return false;
     }
@@ -123,5 +131,9 @@ export class SchedulingLogComponent implements OnInit {
 
   get isScheduledInFirstMachineOnly(): boolean {
     return this._isScheduledInFirstMachineOnly;
+  }
+
+  get isPartlyScheduledInFirstMachine(): boolean {
+    return this._isPartlyScheduledInFirstMachine;
   }
 }
