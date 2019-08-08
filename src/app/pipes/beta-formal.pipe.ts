@@ -17,7 +17,8 @@ export class BetaFormalPipe implements PipeTransform {
       || objectiveFunction === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES
       || objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
       || objectiveFunction === ObjectiveFunction.SUM_DELAYED_WORK
-      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK) {
+      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
+      || objectiveFunction === ObjectiveFunction.MAX_DELAY) {
       betaFormal.push('d<sub>j</sub>');
     }
 
