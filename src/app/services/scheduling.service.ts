@@ -1341,12 +1341,14 @@ export class SchedulingService {
     dataset.label = 'Kumulierte Verspätungszeiten';
 
     for (let i = 1; i < this.currentTimestampInScheduling; i++) {
-      const jobFinishedAtTimestamp = this.jobs.find(job => job.finishedAtTimestamp === i);
-      const isDataToBeAdded = jobFinishedAtTimestamp && (jobFinishedAtTimestamp.delay || i === this.currentTimestampInScheduling - 1);
+      const jobsFinishedAtTimestamp = this.jobs.filter(job => job.finishedAtTimestamp === i);
+      const isDataToBeAdded = jobsFinishedAtTimestamp.length &&
+        (jobsFinishedAtTimestamp.some(job => !!job.delay) || i === this.currentTimestampInScheduling - 1);
       labels.push(isDataToBeAdded ? '' + i : '');
 
       dataset.data.push(isDataToBeAdded ?
-        Math.max(...dataset.data.filter(d => d !== undefined)) + jobFinishedAtTimestamp.delay : undefined);
+        Math.max(...dataset.data.filter(d => d !== undefined)) +
+        jobsFinishedAtTimestamp.map(job => job.delay).reduce((d1, d2) => d1 + d2) : undefined);
     }
 
     const visualization = new ChartData();
