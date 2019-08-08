@@ -1,8 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Kpi} from '../../../../../../model/internal/visualization/SchedulingResult';
-import {StorageService} from '../../../../../../services/storage.service';
-import {DefinableValue} from '../../../../../../model/internal/value-definition/DefinableValue';
-import {DefinitionStatus} from '../../../../../../model/internal/value-definition/DefinitionStatus';
+import {ObjectiveFunction} from '../../../../../../model/enums/ObjectiveFunction';
 
 @Component({
   selector: 'app-solution-quality-data',
@@ -11,13 +9,23 @@ import {DefinitionStatus} from '../../../../../../model/internal/value-definitio
 })
 export class SolutionQualityDataComponent implements OnInit {
 
-  // TODO content: Add note that due dates where not considered in the calculation?
-
   @Input() data: Kpi[];
   @Input() isEachDueDateConfigured: boolean;
+  @Input() objectiveFunction: ObjectiveFunction;
 
   ngOnInit(): void {
     this.data = this.data.filter(data => !!data);
   }
+
+  isDueDatesConsidered(): boolean {
+    return (this.objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_DELAYED_WORK
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
+      || this.objectiveFunction === ObjectiveFunction.MAX_DELAY);
+  }
+
 
 }

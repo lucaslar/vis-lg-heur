@@ -3,7 +3,7 @@
   Unterkapitel gelistet werden.
 </p>
 
-<div class="info-box" *ngIf="!isEachDueDateConfigured">
+<div class="info-box" *ngIf="!isEachDueDateConfigured; else dueDateConsideration">
   <h6>
     <i class="fas fa-info-circle"></i>
     Hinweis
@@ -13,6 +13,20 @@
     werden, da Fertigstellungstermine gar nicht oder nicht für alle Aufträge definiert sind.
   </div>
 </div>
+
+<ng-template #dueDateConsideration>
+  <div class="info-box" *ngIf="!isDueDatesConsidered()">
+    <h6>
+      <i class="fas fa-info-circle"></i>
+      Hinweis
+    </h6>
+    <div class="information text-justify">
+      Soll-Fertigstellungstermine wurden zwar beim Lösen des Reihenfolgeproblems aufgrund des gewählten
+      Zielfunktionswerts nicht berücksichtigt, darauf basierende Kennzahlen zum Visualisieren der Lösungsgüte der
+      Heuristik allerdings dennnoch ermittelt.
+    </div>
+  </div>
+</ng-template>
 
 <div class="row">
   <div class="col-md-12">
