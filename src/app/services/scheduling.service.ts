@@ -100,8 +100,7 @@ export class SchedulingService {
           'Möchten Sie dennoch das aktuelle Problem mithilfe einer lokalen Suche lösen?'
         ],
         DialogType.CONFIRM_WARNING
-      )
-        ;
+      );
     } else {
       return undefined;
     }
@@ -136,8 +135,7 @@ export class SchedulingService {
           'Empfohlene maximale Menge an Schritten: ' + recommendedMaxComplexity + ' (entspricht 15 Aufträgen auf 15 Maschinen)',
           'Derzeitige maximale Menge an Schritten: ' + currentMaxComplexity
         ]
-      )
-        ;
+      );
     } else {
       return undefined;
     }
@@ -1297,10 +1295,10 @@ export class SchedulingService {
 
     const sortedJobs = this.getJobsSortedByFinishingDate();
     for (let i = 1; i < this.currentTimestampInScheduling; i++) {
-      const jobFinishedAtTimestamp = sortedJobs.find(job => job.finishedAtTimestamp === i);
-      labels.push(jobFinishedAtTimestamp ? '' + i : '');
-      dataset.data.push(jobFinishedAtTimestamp ?
-        sortedJobs.indexOf(jobFinishedAtTimestamp) + 1 : undefined);
+      const jobsFinishedAtTimestamp = sortedJobs.filter(job => job.finishedAtTimestamp === i);
+      labels.push(jobsFinishedAtTimestamp.length ? '' + i : '');
+      dataset.data.push(jobsFinishedAtTimestamp.length ?
+        sortedJobs.indexOf(jobsFinishedAtTimestamp[0]) + jobsFinishedAtTimestamp.length : undefined);
     }
 
     const visualization = new ChartData();
