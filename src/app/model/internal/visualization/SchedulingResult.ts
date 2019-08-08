@@ -2,6 +2,7 @@ import {MachineConfig} from '../../enums/MachineConfig';
 import {PriorityRule} from '../../enums/PriorityRule';
 import {ChartData, TimelineData} from './VisualizableData';
 import {LogEventType} from '../../enums/LogEventType';
+import {ObjectiveFunction} from '../../enums/ObjectiveFunction';
 
 export class SchedulingResult {
 
@@ -68,6 +69,8 @@ export class GeneralSchedulingData {
   private _numberOfMachines: number;
   private _numberOfJobs: number;
   private _durationInMillisKpi: Kpi;
+  private _formalBeta: string;
+  private _objectiveFunction: ObjectiveFunction;
   private _iterations: Kpi; // only for local searches
 
   get priorityRules(): PriorityRule[] {
@@ -108,6 +111,22 @@ export class GeneralSchedulingData {
 
   set durationInMillisKpi(value: Kpi) {
     this._durationInMillisKpi = value;
+  }
+
+  get formalBeta(): string {
+    return this._formalBeta;
+  }
+
+  set formalBeta(value: string) {
+    this._formalBeta = value;
+  }
+
+  get objectiveFunction(): ObjectiveFunction {
+    return this._objectiveFunction;
+  }
+
+  set objectiveFunction(value: ObjectiveFunction) {
+    this._objectiveFunction = value;
   }
 
   get iterations(): Kpi {
