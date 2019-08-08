@@ -254,7 +254,8 @@ export class SchedulingService {
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
       preSortBasedOn = 'der gewichteten Summe ihrer Bearbeitungszeiten';
     } else if (this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
-      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK) {
       preSortBasedOn = 'ihren gewichteten gewünschten Fertigstellungsterminen';
     }
 
@@ -311,7 +312,8 @@ export class SchedulingService {
     } else if (this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS) {
       return job.totalMachiningTime / job.weight;
     } else if (this.objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
-      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
+      || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK) {
       return job.dueDate / job.weight;
     }
   }
