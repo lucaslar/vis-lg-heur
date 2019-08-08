@@ -268,7 +268,7 @@ export class SchedulingService {
     let startValue: number;
     let bestPermutationYet = this.jobs;
     let currentBestValue = this.getCompareValueForPermutation(bestPermutationYet);
-    this.localSearchBestValuesForIterations = [];
+    this.localSearchBestValuesForIterations = [currentBestValue];
 
     do {
       iteration++;
@@ -1038,7 +1038,7 @@ export class SchedulingService {
 
     if (this.heuristicType === HeuristicDefiner.LOCAL_SEARCH) {
       const iterationsKpi = new Kpi();
-      iterationsKpi.kpi = this.localSearchBestValuesForIterations.length;
+      iterationsKpi.kpi = this.localSearchBestValuesForIterations.length - 1;
       iterationsKpi.iconClasses = ['fas', 'fa-redo'];
       iterationsKpi.title = 'Iterationen bis zur Lösungsfindung';
       data.iterations = iterationsKpi;
@@ -1529,9 +1529,9 @@ export class SchedulingService {
     dataset.data = [];
     dataset.label = this.objectiveFunction;
 
-    for (let i = 1; i <= this.localSearchBestValuesForIterations.length; i++) {
+    for (let i = 0; i < this.localSearchBestValuesForIterations.length; i++) {
       labels.push('' + i);
-      dataset.data.push(this.localSearchBestValuesForIterations[i - 1]);
+      dataset.data.push(this.localSearchBestValuesForIterations[i]);
     }
 
     const visualization = new ChartData();
