@@ -25,6 +25,10 @@ mat-expansion-panel-header {
   margin-bottom: 8px !important;
 }
 
+.jobs-list {
+  margin-top: 8px;
+}
+
 .add-job {
   margin-top: 16px;
   margin-bottom: 16px;
