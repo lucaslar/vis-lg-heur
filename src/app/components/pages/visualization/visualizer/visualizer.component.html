@@ -132,7 +132,9 @@
       </mat-expansion-panel-header>
       <mat-divider></mat-divider>
       <div class="content no-padding-top">
-        <app-general-data-visualizer [data]="result.visualizableGeneralData"></app-general-data-visualizer>
+        <app-general-data-visualizer
+          [objectiveFunction]="result.generalData.objectiveFunction"
+          [data]="result.visualizableGeneralData"></app-general-data-visualizer>
       </div>
     </mat-expansion-panel>
 

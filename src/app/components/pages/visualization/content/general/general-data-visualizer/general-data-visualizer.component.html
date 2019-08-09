@@ -1,24 +1,92 @@
-<app-scheduling-chart [title]="data.totalDurationsOnMachines.title"
-                      [type]="data.totalDurationsOnMachines.visualizableAs"
-                      [labels]="data.totalDurationsOnMachines.labels"
-                      [datasets]="data.totalDurationsOnMachines.datasets"
-                      [yLabel]="data.totalDurationsOnMachines.yLabel"
-                      [xLabel]="data.totalDurationsOnMachines.xLabel"
-></app-scheduling-chart>
-<app-scheduling-chart [title]="data.totalJobTimes.title"
-                      [type]="data.totalJobTimes.visualizableAs"
-                      [labels]="data.totalJobTimes.labels"
-                      [datasets]="data.totalJobTimes.datasets"
-                      [yLabel]="data.totalJobTimes.yLabel"
-                      [xLabel]="data.totalJobTimes.xLabel"
-                      [colors]="data.totalJobTimes.colors"
-></app-scheduling-chart>
-<app-scheduling-chart *ngIf="data.jobWeightings"
-                      [title]="data.jobWeightings.title"
-                      [type]="data.jobWeightings.visualizableAs"
-                      [labels]="data.jobWeightings.labels"
-                      [datasets]="data.jobWeightings.datasets"
-                      [yLabel]="data.jobWeightings.yLabel"
-                      [xLabel]="data.jobWeightings.xLabel"
-                      [colors]="data.jobWeightings.colors"
-></app-scheduling-chart>
+<div class="row">
+  <div class="col-md-12 text-justify general-descr">
+    <p>
+      Die folgenden Diagramme visualisieren das gelöste Reihenfolgeproblem als solches.
+    </p>
+    <div>
+      Zunächst wird die gesamte Auslastung der einzelnen Maschinen gegenübergestellt.
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <app-scheduling-chart [title]="data.totalDurationsOnMachines.title"
+                          [type]="data.totalDurationsOnMachines.visualizableAs"
+                          [labels]="data.totalDurationsOnMachines.labels"
+                          [datasets]="data.totalDurationsOnMachines.datasets"
+                          [yLabel]="data.totalDurationsOnMachines.yLabel"
+                          [xLabel]="data.totalDurationsOnMachines.xLabel"
+    ></app-scheduling-chart>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 text-justify">
+    <p>
+      Nicht nur die summierte Dauer der Arbeitsgänge pro Maschine sind interessant, auch können die
+      Gesamtbearbeitungszeiten der Aufträge selbst miteinander verglichen werden.
+    </p>
+    <div *ngIf="data.totalJobTimes.datasets.length=== 2; else onlyMakespans">
+      <p>
+        Jedem Auftrag ist zusätzlich der für ihn definierte Soll-Fertigstellungstermin gegenübergestellt
+        <span *ngIf="!isDueDatesConsidered()">(wenngleich bei der Lösungsfindung unberücksichtigt)</span>.
+      </p>
+      <div>
+        Hierbei wurden für die Aufträge zur besseren Nachvollziehbarkeit dieselben Farben wie im Gantt-Diagramm
+        verwendet. Auch lassen sich die beiden Balkengruppen über ihre jeweilige Beschriftung ein- und ausblenden,
+        sodass Gesamtbearbeitungsdauer Soll-Fertigstellungszeitpunkte auch unabhängig voneinander betrachten
+        werden können.
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <app-scheduling-chart [title]="data.totalJobTimes.title"
+                          [type]="data.totalJobTimes.visualizableAs"
+                          [labels]="data.totalJobTimes.labels"
+                          [datasets]="data.totalJobTimes.datasets"
+                          [yLabel]="data.totalJobTimes.yLabel"
+                          [xLabel]="data.totalJobTimes.xLabel"
+                          [colors]="data.totalJobTimes.colors"
+    ></app-scheduling-chart>
+  </div>
+</div>
+
+<ng-container *ngIf="data.jobWeightings">
+  <div class="row">
+    <div class="col-md-12 text-justify">
+      <div>
+        Da im konkreten Fall Auftragsgewichtungen berücksichtigt wurden, ist auch ein Überblick darüber von Interesse,
+        welcher Auftrag wie stark gewichtet ist. Das folgende Balkendiagramm stellt die diese Information grafisch
+        dar.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-scheduling-chart [title]="data.jobWeightings.title"
+                            [type]="data.jobWeightings.visualizableAs"
+                            [labels]="data.jobWeightings.labels"
+                            [datasets]="data.jobWeightings.datasets"
+                            [yLabel]="data.jobWeightings.yLabel"
+                            [xLabel]="data.jobWeightings.xLabel"
+                            [colors]="data.jobWeightings.colors"
+      ></app-scheduling-chart>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #onlyMakespans>
+  <div class="info-box">
+    <h6>
+      <i class="fas fa-info-circle"></i>
+      Hinweis
+    </h6>
+    <div class="information text-justify">
+      Obgleich gewünschte Fertigstellungstermine im aktuellen Fall nicht beim Ermitteln der Reihenfolge betrachtet
+      wurden, könnten, wenn definiert, in diesem Diagramm zusätzlich die Soll-Fertigstellungszeitpunkte aufgezeigt
+      werden.
+    </div>
+  </div>
+</ng-template>
