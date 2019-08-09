@@ -152,6 +152,7 @@
       <mat-divider></mat-divider>
       <div class="content no-padding-top">
         <app-solution-quality-visualizer
+          [objectiveFunction]="result.generalData.objectiveFunction"
           [data]="result.visualizableSolutionQualityData"></app-solution-quality-visualizer>
       </div>
     </mat-expansion-panel>

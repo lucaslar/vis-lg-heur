@@ -26,6 +26,4 @@ export class SolutionQualityDataComponent implements OnInit {
       || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
       || this.objectiveFunction === ObjectiveFunction.MAX_DELAY);
   }
-
-
 }

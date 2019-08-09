@@ -1,0 +1,7 @@
+.text-justify:not(.information), .info-box {
+  margin-top: 16px;
+}
+
+.general-descr {
+  padding-top: 8px;
+}

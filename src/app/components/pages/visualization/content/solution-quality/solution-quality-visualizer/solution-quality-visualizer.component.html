@@ -1,74 +1,238 @@
-<!-- TODO content: Add text, rows and note if diagram not visible -->
+<!-- General diagram: -->
+<div class="row">
+  <div class="col-md-12 text-justify general-descr">
+    <p>
+      Die Güte der ermittelten Lösung ist anhand verschiedener Faktoren messbar.
+    </p>
+    <div>
+      Das folgende Diagramm stellt die Summe der fertiggestellten Aufträge zu jedem Fertigstellungszeitpunkt dar, was
+      insbesondere dann interessant ist, wenn der Auftragsbestand eine Rolle spielt.
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <app-scheduling-chart [title]="data.finishedJobsAtTimestamp.title"
+                          [type]="data.finishedJobsAtTimestamp.visualizableAs"
+                          [labels]="data.finishedJobsAtTimestamp.labels"
+                          [datasets]="data.finishedJobsAtTimestamp.datasets"
+                          [yLabel]="data.finishedJobsAtTimestamp.yLabel"
+                          [xLabel]="data.finishedJobsAtTimestamp.xLabel"
+    ></app-scheduling-chart>
+  </div>
+</div>
 
-<!-- General diagrams here: -->
-
-<app-scheduling-chart [title]="data.finishedJobsAtTimestamp.title"
-                      [type]="data.finishedJobsAtTimestamp.visualizableAs"
-                      [labels]="data.finishedJobsAtTimestamp.labels"
-                      [datasets]="data.finishedJobsAtTimestamp.datasets"
-                      [yLabel]="data.finishedJobsAtTimestamp.yLabel"
-                      [xLabel]="data.finishedJobsAtTimestamp.xLabel"
-></app-scheduling-chart>
-
-<!-- Due date based: -->
-<ng-container *ngIf="data.comparisonFinishTimestampAndDueDate">
-  <app-scheduling-chart [title]="data.cumulatedDelaysAtTimestamps.title"
-                        [type]="data.cumulatedDelaysAtTimestamps.visualizableAs"
-                        [labels]="data.cumulatedDelaysAtTimestamps.labels"
-                        [datasets]="data.cumulatedDelaysAtTimestamps.datasets"
-                        [yLabel]="data.cumulatedDelaysAtTimestamps.yLabel"
-                        [xLabel]="data.cumulatedDelaysAtTimestamps.xLabel"
-  ></app-scheduling-chart>
-  <app-scheduling-chart [title]="data.comparisonDelayedAndInTimeJobs.title"
-                        [type]="data.comparisonDelayedAndInTimeJobs.visualizableAs"
-                        [labels]="data.comparisonDelayedAndInTimeJobs.labels"
-                        [datasets]="data.comparisonDelayedAndInTimeJobs.datasets"
-                        [yLabel]="data.comparisonDelayedAndInTimeJobs.yLabel"
-                        [xLabel]="data.comparisonDelayedAndInTimeJobs.xLabel"
-  ></app-scheduling-chart>
-  <app-scheduling-chart [title]="data.comparisonFinishTimestampAndDueDate.title"
-                        [type]="data.comparisonFinishTimestampAndDueDate.visualizableAs"
-                        [labels]="data.comparisonFinishTimestampAndDueDate.labels"
-                        [datasets]="data.comparisonFinishTimestampAndDueDate.datasets"
-                        [yLabel]="data.comparisonFinishTimestampAndDueDate.yLabel"
-                        [xLabel]="data.comparisonFinishTimestampAndDueDate.xLabel"
-                        [colors]="data.comparisonFinishTimestampAndDueDate.colors"
-  ></app-scheduling-chart>
-</ng-container>
-
-<!-- Specific diagrams here: -->
+<!-- Specific diagrams starting here: -->
 
 <!-- Setup times based: -->
 <ng-container *ngIf="data.cumulatedSetupTimesAtTimetamps">
-  <app-scheduling-chart [title]="data.cumulatedSetupTimesAtTimetamps.title"
-                        [type]="data.cumulatedSetupTimesAtTimetamps.visualizableAs"
-                        [labels]="data.cumulatedSetupTimesAtTimetamps.labels"
-                        [datasets]="data.cumulatedSetupTimesAtTimetamps.datasets"
-                        [yLabel]="data.cumulatedSetupTimesAtTimetamps.yLabel"
-                        [xLabel]="data.cumulatedSetupTimesAtTimetamps.xLabel"
-  ></app-scheduling-chart>
-  <app-scheduling-chart [title]="data.comparisonMeanSetupTimes.title"
-                        [type]="data.comparisonMeanSetupTimes.visualizableAs"
-                        [labels]="data.comparisonMeanSetupTimes.labels"
-                        [datasets]="data.comparisonMeanSetupTimes.datasets"
-                        [yLabel]="data.comparisonMeanSetupTimes.yLabel"
-                        [xLabel]="data.comparisonMeanSetupTimes.xLabel"
-  ></app-scheduling-chart>
-  <app-scheduling-chart [title]="data.comparisonSelectedAndMeanSetupTime.title"
-                        [type]="data.comparisonSelectedAndMeanSetupTime.visualizableAs"
-                        [labels]="data.comparisonSelectedAndMeanSetupTime.labels"
-                        [datasets]="data.comparisonSelectedAndMeanSetupTime.datasets"
-                        [yLabel]="data.comparisonSelectedAndMeanSetupTime.yLabel"
-                        [xLabel]="data.comparisonSelectedAndMeanSetupTime.xLabel"
-  ></app-scheduling-chart>
+
+  <div class="row">
+    <div class="col-md-12 text-justify">
+      <p>
+        Die nächsten drei Diagramme beziehen sich auf die durch den gewählten zu minimierenden Zielfunktionswert
+        berücksichtigten reihenfolgeabhängigen Rüstzeiten der einzelnen Aufträge.
+      </p>
+      <div>
+        Die kummulierten Rüstzeiten, im folgenden Diagramm dargestellt, stellen die durch das heuristische Verfahren
+        gewählten Rüstzeiten, d.h. den jeweils besten Nachbar, im Verlauf bzw. kumuliert grafisch dar. Dadruch bietet
+        sich die Visualisierung auch an, um einen Trend abzulesen.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-scheduling-chart [title]="data.cumulatedSetupTimesAtTimetamps.title"
+                            [type]="data.cumulatedSetupTimesAtTimetamps.visualizableAs"
+                            [labels]="data.cumulatedSetupTimesAtTimetamps.labels"
+                            [datasets]="data.cumulatedSetupTimesAtTimetamps.datasets"
+                            [yLabel]="data.cumulatedSetupTimesAtTimetamps.yLabel"
+                            [xLabel]="data.cumulatedSetupTimesAtTimetamps.xLabel"
+      ></app-scheduling-chart>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 text-justify">
+      <p>
+        Im nächsten Balkendiagramm werden der Durchschnitt der Rüstzeiten aller Aufträge dem Durchschnitt der jeweils
+        gewählten Rüstzeiten gegenübergestellt. Somit lässt sich die ermittelte Lösung in einen Kontext setzen und
+        vergleichen.
+      </p>
+      <div>
+        Hierbei ist anzumerken, dass um den Durchschnitt der gewählten Rüstzeiten zu ermitteln, die Summe der gewählten
+        Rüstzeiten bei n Aufträgen durch n-1 geteilt wird. Dies begründet sich dadurch, dass zum Zeitpunkt 0 direkt mit
+        dem ersten Auftrag gestartet werden kann und sich alle Rüstzeiten erst auf die folgenden Aufträge beziehen.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-scheduling-chart [title]="data.comparisonMeanSetupTimes.title"
+                            [type]="data.comparisonMeanSetupTimes.visualizableAs"
+                            [labels]="data.comparisonMeanSetupTimes.labels"
+                            [datasets]="data.comparisonMeanSetupTimes.datasets"
+                            [yLabel]="data.comparisonMeanSetupTimes.yLabel"
+                            [xLabel]="data.comparisonMeanSetupTimes.xLabel"
+      ></app-scheduling-chart>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 text-justify">
+      <p>
+        Die letzte an dieser Stelle in Bezug auf Rüstzeiten aufgezeigte Visualisierung ermöglicht es erneut, die
+        ermittelte Lösung mit dem Durchschnittswert zu vergleichen. Hier wurde allerdings nicht der Durchschnitt aller
+        Rüstzeiten berechnet, sondern der (reihenfolgeunabhängige) Durchschnitt der Rüstzeiten zu jedem Auftrag (grau)
+        der gewählten, reihenfolgebedingten Rüstzeit gegenübergestellt (farbig). Demnach sind Aufträge auch in der
+        Reihenfolge gelistet, in der sie bearbeitet wurden.
+      </p>
+      <p>
+        Dadurch lässt sich auch ablesen, ob eine durch das gierige (greedy) Vorgehen gewählte Rüstzeit ggf. nur ein
+        lokales Optimum dargestellt hat, sich allerdings im gesamten Kontext betrachtet negativ auf die Gesamtdauer
+        auswirkt. Auch lässt sich ablesen, wie sinnvoll der gewählte Startwert ist.
+      </p>
+      <div>
+        Über die Bezeichnung der jeweiligen Linien lassen sie sich ein- und ausblenden, sodass auch nur die
+        durchschnittlichen bzw. die gewählten Rüstzeiten betrachtet werden können.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-scheduling-chart [title]="data.comparisonSelectedAndMeanSetupTime.title"
+                            [type]="data.comparisonSelectedAndMeanSetupTime.visualizableAs"
+                            [labels]="data.comparisonSelectedAndMeanSetupTime.labels"
+                            [datasets]="data.comparisonSelectedAndMeanSetupTime.datasets"
+                            [yLabel]="data.comparisonSelectedAndMeanSetupTime.yLabel"
+                            [xLabel]="data.comparisonSelectedAndMeanSetupTime.xLabel"
+      ></app-scheduling-chart>
+    </div>
+  </div>
+
 </ng-container>
 
 <!-- Local search based: -->
-<app-scheduling-chart *ngIf="data.valueToMinimizeAtIterations"
-                      [title]="data.valueToMinimizeAtIterations.title"
-                      [type]="data.valueToMinimizeAtIterations.visualizableAs"
-                      [labels]="data.valueToMinimizeAtIterations.labels"
-                      [datasets]="data.valueToMinimizeAtIterations.datasets"
-                      [yLabel]="data.valueToMinimizeAtIterations.yLabel"
-                      [xLabel]="data.valueToMinimizeAtIterations.xLabel"
-></app-scheduling-chart>
+<ng-container *ngIf="data.valueToMinimizeAtIterations">
+  <div class="row">
+    <div class="col-md-12">
+      <p class="text-justify">
+        Das folgende Visualisierung bezieht sich auf die lokale Suche, genauer auf den in jeder Iteration minimierten
+        Zielfunktionswert. So wird ersichtlich, wie erfolgreich das Verfahren bzw. wie genau die Startlösung war. Wobei
+        dennoch zu
+        erwähnen ist, dass die ermittelte Lösung ein lokales Optimum, nicht zwingend ein globales darstellt.
+      </p>
+      <div>
+        Der erste Wert (0) stellt in diesem Sinne den betrachteten Zielfunktionswert der unsortierten Aufträge dar.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-scheduling-chart [title]="data.valueToMinimizeAtIterations.title"
+                            [type]="data.valueToMinimizeAtIterations.visualizableAs"
+                            [labels]="data.valueToMinimizeAtIterations.labels"
+                            [datasets]="data.valueToMinimizeAtIterations.datasets"
+                            [yLabel]="data.valueToMinimizeAtIterations.yLabel"
+                            [xLabel]="data.valueToMinimizeAtIterations.xLabel"
+      ></app-scheduling-chart>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Due date based: -->
+<ng-container *ngIf="data.comparisonFinishTimestampAndDueDate; else noDueDates">
+
+  <div class="row">
+    <div class="col-md-12 text-justify">
+      <p *ngIf="!isDueDatesConsidered(); else dueDatesConsidered">
+        Auch wenn gewünschte Fertigstellungstermine beim Ermitteln der Lösung nicht berücksichtigt wurden, lässt sich
+        anhand der folgenden drei Visualisierungen die Lösungsgüte in Bezug auf Verspätungen darstellen.
+      </p>
+      <div>
+        Die kummulierten Verspätungszeiten stellen grafisch dar, wie sich die Summe der Verspätungszeiten zusammensetzt.
+        Das ist dann interessant, wenn neben der Summe auch relevant ist, um wie viele Zeiteinheiten die einzelnen
+        Aufträge verspätet sind.
+      </div>
+
+      <ng-template #dueDatesConsidered>
+        <p>
+          Anhand der folgenden drei Visualisierungen lässt sich die Lösungsgüte in Bezug auf Verspätungen Arbeit
+          darstellen, die sich aus den gewünschten Fertigstellungsterminen ergeben, die beim Ermitteln der Lösung
+          berücksichtigt wurden.
+        </p>
+      </ng-template>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-scheduling-chart [title]="data.cumulatedDelaysAtTimestamps.title"
+                            [type]="data.cumulatedDelaysAtTimestamps.visualizableAs"
+                            [labels]="data.cumulatedDelaysAtTimestamps.labels"
+                            [datasets]="data.cumulatedDelaysAtTimestamps.datasets"
+                            [yLabel]="data.cumulatedDelaysAtTimestamps.yLabel"
+                            [xLabel]="data.cumulatedDelaysAtTimestamps.xLabel"
+      ></app-scheduling-chart>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 text-justify">
+      Sofern nur wichtig ist, ob ein Auftrag verspätet ist, nicht aber, um wie viele Zeiteinheiten, ist die nächste
+      Visualisierung von Interesse. Hier wird die Anzahl der rechtzeitig fertiggestellten der Anzahl der verspätet
+      fertiggestellten Aufträge gegenübergestellt.
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-scheduling-chart [title]="data.comparisonDelayedAndInTimeJobs.title"
+                            [type]="data.comparisonDelayedAndInTimeJobs.visualizableAs"
+                            [labels]="data.comparisonDelayedAndInTimeJobs.labels"
+                            [datasets]="data.comparisonDelayedAndInTimeJobs.datasets"
+                            [yLabel]="data.comparisonDelayedAndInTimeJobs.yLabel"
+                            [xLabel]="data.comparisonDelayedAndInTimeJobs.xLabel"
+      ></app-scheduling-chart>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 text-justify">
+      <p>
+        Abschließend wird der Fertigstellungszeitpunkt der Aufträge in Relation ihren Soll-Fertigstellungszeitpunkten
+        gesetzt , indem die Soll- (grau) den Ist-Fertigstellungsterminen (farbig) gegenübergestellt werden.
+      </p>
+      <div>
+        Hierbei sind die Aufträge zur besseren Nachvollziehbarkeit in denselben Farben wie auch in den vorherigen
+        Diagrammen hinterlegt. Auch lassen sich die beiden Balkengruppen über ihre jeweilige Beschriftung ein- und
+        ausklappen, sodass Ist- und Soll-Fertigstellungszeitpunkte auch unabhängig voneinander betrachten werden können.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-scheduling-chart [title]="data.comparisonFinishTimestampAndDueDate.title"
+                            [type]="data.comparisonFinishTimestampAndDueDate.visualizableAs"
+                            [labels]="data.comparisonFinishTimestampAndDueDate.labels"
+                            [datasets]="data.comparisonFinishTimestampAndDueDate.datasets"
+                            [yLabel]="data.comparisonFinishTimestampAndDueDate.yLabel"
+                            [xLabel]="data.comparisonFinishTimestampAndDueDate.xLabel"
+                            [colors]="data.comparisonFinishTimestampAndDueDate.colors"
+      ></app-scheduling-chart>
+    </div>
+  </div>
+
+</ng-container>
+
+<ng-template #noDueDates>
+  <div class="info-box">
+    <h6>
+      <i class="fas fa-info-circle"></i>
+      Hinweis
+    </h6>
+    <div class="information text-justify">
+      Obgleich gewünschte Fertigstellungstermine im aktuellen Fall nicht beim Ermitteln der Reihenfolge betrachtet
+      wurden, könnten an dieser Stelle mehr Diagramme angezeigt werden, wenn sie definiert wären.
+    </div>
+  </div>
+</ng-template>
