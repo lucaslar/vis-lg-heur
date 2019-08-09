@@ -19,7 +19,6 @@
   </div>
 </div>
 
-<!-- TODO feature: (For all pages) button tooltip in button and only in span for disabled buttons -->
 <!-- TODO feature: rethink layout -->
 <!-- TODO feature: Previous state instead of readding/deleting jobs (possibility to undo delete all)? -->
 
@@ -45,25 +44,27 @@
     </div>
     <mat-divider></mat-divider>
     <button mat-stroked-button
+            matTooltip="Alle fehlenden Zeiten der Arbeitsgänge der einzelnen Aufträge automatisch erzeugen"
             [disabled]="jobs.length < 1 || storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.COMPLETELY_DEFINED"
             (click)="addRandomTimesForUndefined()">
           <span class="align-middle"
                 matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst mindestens einen Auftrag hinzu'
-                  : storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) !== configurationStatus.COMPLETELY_DEFINED ? 'Alle fehlenden Zeiten der Arbeitsgänge der einzelnen Aufträge automatisch erzeugen'
-                  : 'Aktuell sind die Zeiten für die Arbeitsgänge aller Aufträge definiert'
+                  : storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.COMPLETELY_DEFINED ?
+                  'Aktuell sind die Zeiten für die Arbeitsgänge aller Aufträge definiert' : ''
                 }}">
             <i class="fas fa-random"></i>
             Zufällige Zeiten für undefinierte Arbeitsgänge
           </span>
     </button>
     <button mat-stroked-button
+            matTooltip="Aktuell sind keine Zeiten für Arbeitsgänge definiert, die gelöscht werden könnten"
             [disabled]="jobs.length < 1 || storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.NOT_DEFINED"
             (click)="deleteAllExistingJobTimes()"
             class="status-warning">
           <span class="align-middle"
                 matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst mindestens einen Auftrag hinzu'
-                  : storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) !== configurationStatus.NOT_DEFINED ? 'Alle Zeiten für die Arbeitsgänge der einzelnen Aufträge löschen'
-                  : 'Aktuell sind keine Zeiten für Arbeitsgänge definiert, die gelöscht werden könnten'
+                  : storage.getValueDefinitionStatus(definableValue.ALPHA_JOB_TIMES) === configurationStatus.NOT_DEFINED ?
+                  'Alle Zeiten für die Arbeitsgänge der einzelnen Aufträge löschen' : ''
                 }}">
             <i class="fas fa-trash"></i>
             Alle löschen
@@ -80,22 +81,24 @@
     </div>
     <mat-divider></mat-divider>
     <button mat-stroked-button
+            matTooltip="Arbeitsgänge aller Aufträge zufällig anordnen"
             [disabled]="jobs.length < 1 || storage.machineConfigParam === machineConfig.ONE_MACHINE"
             (click)="shuffleMachineOrderOfExistingJobs()">
           <span class="align-middle"
                 matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst Aufträge hinzu'
                   : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für diese Funktion werden mehrere Maschinen benötigt'
-                  : 'Arbeitsgänge aller Aufträge zufällig anordnen'
+                  : ''
                 }}">
             <i class="fas fa-random"></i>
             Für alle Aufträge mischen
           </span>
     </button>
     <button mat-stroked-button
+            matTooltip="Reihenfolge der Arbeitsgänge aller Aufträge vereinheitlichen und somit zu Flowshop wechseln"
             [disabled]="storage.machineConfigParam !== machineConfig.JOBSHOP"
             (click)="sortEachJobMachineOrder()">
           <span class="align-middle"
-                matTooltip="{{storage.machineConfigParam === machineConfig.JOBSHOP ? 'Reihenfolge der Arbeitsgänge aller Aufträge vereinheitlichen und somit zu Flowshop wechseln'
+                matTooltip="{{storage.machineConfigParam === machineConfig.JOBSHOP ? ''
                   : storage.machineConfigParam === machineConfig.FLOWSHOP ? 'Bei der aktuellen Konfiguration handelt es sich bereits um einen Flowshop'
                   : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für Flowshop wird mindestens eine weitere Maschine benötigt'
                   : 'Bitte fügen Sie zunächst Aufträge hinzu'
@@ -116,11 +119,12 @@
     </div>
     <mat-divider></mat-divider>
     <button mat-stroked-button
+            matTooltip="Alle bestehenden Aufträge löschen"
             [disabled]="jobs.length < 1"
             (click)="deleteAllExistingJobs()"
             class="status-warning">
           <span class="align-middle"
-                matTooltip="{{jobs.length > 0 ? 'Alle bestehenden Aufträge löschen'
+                matTooltip="{{jobs.length > 0 ? ''
                   : 'Aktuell existieren keine Aufträge, die gelöscht werden könnten'
                 }}">
             <i class="fas fa-trash"></i>

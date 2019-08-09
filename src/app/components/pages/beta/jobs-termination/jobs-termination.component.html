@@ -31,21 +31,23 @@
 <div class="row">
   <div class="col-md-12 jobs-actions">
     <button mat-stroked-button
+            matTooltip="Automatisch zufällige Fertigstellungstermine für alle Aufträge generieren"
             [disabled]="isDueDateOfEachJobConfigured()"
             (click)="addRandomDueDates()">
           <span class="align-middle"
-                matTooltip="{{!isDueDateOfEachJobConfigured() ? 'Automatisch zufällige Fertigstellungstermine für alle Aufträge generieren'
+                matTooltip="{{!isDueDateOfEachJobConfigured() ? ''
                 : 'Es sind bereits Fertigstellungstermine für alle Aufträge definiert'}}">
             <i class="fas fa-random"></i>
             Zufällige Fertigstellungstermine
           </span>
     </button>
     <button mat-stroked-button
+            matTooltip="Alle bestehenden Fertigstellungstermine löschen"
             [disabled]="isDueDateOfNoJobConfigured()"
             (click)="deleteAllExistingDueDates()"
             class="status-warning">
           <span class="align-middle"
-                matTooltip="{{!isDueDateOfNoJobConfigured() ? 'Alle bestehenden Fertigstellungstermine löschen'
+                matTooltip="{{!isDueDateOfNoJobConfigured() ? ''
                   : 'Aktuell existieren keine Fertigstellungstermine, die gelöscht werden könnten'
                 }}">
             <i class="fas fa-trash"></i>

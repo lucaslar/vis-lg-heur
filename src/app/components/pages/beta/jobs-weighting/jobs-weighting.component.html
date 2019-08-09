@@ -21,21 +21,23 @@
 <div class="row">
   <div class="col-md-12 jobs-actions">
     <button mat-stroked-button
+            matTooltip="Automatisch zufällige Gewichtungen für alle Aufträge generieren"
             [disabled]="isWeightOfEachJobConfigured()"
             (click)="addRandomWeights()">
           <span class="align-middle"
-                matTooltip="{{!isWeightOfEachJobConfigured() ? 'Automatisch zufällige Gewichtungen für alle Aufträge generieren'
+                matTooltip="{{!isWeightOfEachJobConfigured() ? ''
                 : 'Es sind bereits Gewichtungen für alle Aufträge definiert'}}">
             <i class="fas fa-random"></i>
             Zufällige Gewichtungen
           </span>
     </button>
     <button mat-stroked-button
+            matTooltip="Alle bestehenden Gewichtungen löschen"
             [disabled]="isWeightOfNoJobConfigured()"
             (click)="deleteAllExistingWeights()"
             class="status-warning">
           <span class="align-middle"
-                matTooltip="{{!isWeightOfNoJobConfigured() ? 'Alle bestehenden Gewichtungen löschen'
+                matTooltip="{{!isWeightOfNoJobConfigured() ? ''
                   : 'Aktuell existieren keine Gewichtungen, die gelöscht werden könnten'
                 }}">
             <i class="fas fa-trash"></i>

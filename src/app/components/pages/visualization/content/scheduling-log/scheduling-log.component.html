@@ -77,6 +77,7 @@
   <div class="row">
     <div class="col-md-12 text-center">
       <button mat-stroked-button
+              matTooltip="Geloggte Ereignisse mit gewählten Optionen anzeigen"
               [disabled]="!isAnyMachineSelected() || !isAnyLogTypeSelected() || isNoEntryForMachine()"
               (click)="showLog()">
   <span class="align-middle"
@@ -85,7 +86,7 @@
           : !isAnyMachineSelected() ? 'Bitte wählen Sie mindestens eine Maschine'
           : !isAnyLogTypeSelected() ? 'Bitte wählen Sie mindestens einen logbaren Ereigbnistypen'
           : isNoEntryForMachine() ? 'Informationen vollständig für Maschine 1 (maschinenübergreifend) dokumentiert'
-          : 'Geloggte Ereignisse mit gewählten Optionen anzeigen'
+          : ''
         }}">
     <i class="far fa-file-alt"></i>
     Log anzeigen
