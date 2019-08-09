@@ -21,8 +21,6 @@ mat-expansion-panel-header {
   font-size: larger;
 }
 
-/* TODO feature: Fix padding issue in small device machines drag and drop */
-
 .jobs-actions button, .jobs-actions mat-divider {
   margin-bottom: 8px !important;
 }
@@ -34,4 +32,11 @@ mat-expansion-panel-header {
 
 .add-padding-left {
   padding-left: 8px;
+}
+
+.drag-drop-box, .drag-drop-box div {
+  margin-left: 0;
+  padding-left: 0;
+  margin-right: 0;
+  padding-right: 0;
 }
