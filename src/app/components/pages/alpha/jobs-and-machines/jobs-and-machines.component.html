@@ -21,7 +21,7 @@
 
 <!-- TODO feature: (For all pages) button tooltip in button and only in span for disabled buttons -->
 <!-- TODO feature: rethink layout -->
-<!-- TODO internal feature: Previous state instead of readding/deleting jobs? -->
+<!-- TODO feature: Previous state instead of readding/deleting jobs (possibility to undo delete all)? -->
 
 <div class="row">
   <div class="col-md-12">
@@ -133,7 +133,7 @@
 <div class="row jobs-list">
   <div class="col-md-12">
 
-    <!-- TODO internal feature: Extract to new component? -->
+    <!-- TODO internal: Extract to new component? -->
     <mat-accordion *ngIf="jobs.length > 0; else noJobs">
       <mat-expansion-panel *ngFor="let job of jobs">
         <mat-expansion-panel-header #header>
