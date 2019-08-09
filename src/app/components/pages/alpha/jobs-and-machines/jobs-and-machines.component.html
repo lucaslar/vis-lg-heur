@@ -19,7 +19,6 @@
   </div>
 </div>
 
-<!-- TODO feature: Shorter button names -->
 <!-- TODO feature: (For all pages) button tooltip in button and only in span for disabled buttons -->
 <!-- TODO feature: rethink layout -->
 <!-- TODO internal feature: Previous state instead of readding/deleting jobs? -->
@@ -67,7 +66,7 @@
                   : 'Aktuell sind keine Zeiten für Arbeitsgänge definiert, die gelöscht werden könnten'
                 }}">
             <i class="fas fa-trash"></i>
-            Zeiten aller Arbeitsgänge löschen
+            Alle löschen
           </span>
     </button>
   </div>
@@ -81,6 +80,18 @@
     </div>
     <mat-divider></mat-divider>
     <button mat-stroked-button
+            [disabled]="jobs.length < 1 || storage.machineConfigParam === machineConfig.ONE_MACHINE"
+            (click)="shuffleMachineOrderOfExistingJobs()">
+          <span class="align-middle"
+                matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst Aufträge hinzu'
+                  : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für diese Funktion werden mehrere Maschinen benötigt'
+                  : 'Arbeitsgänge aller Aufträge zufällig anordnen'
+                }}">
+            <i class="fas fa-random"></i>
+            Für alle Aufträge mischen
+          </span>
+    </button>
+    <button mat-stroked-button
             [disabled]="storage.machineConfigParam !== machineConfig.JOBSHOP"
             (click)="sortEachJobMachineOrder()">
           <span class="align-middle"
@@ -92,18 +103,6 @@
             Jobshop
             <mat-icon class="align-middle">arrow_right_alt</mat-icon>
             Flowshop
-          </span>
-    </button>
-    <button mat-stroked-button
-            [disabled]="jobs.length < 1 || storage.machineConfigParam === machineConfig.ONE_MACHINE"
-            (click)="shuffleMachineOrderOfExistingJobs()">
-          <span class="align-middle"
-                matTooltip="{{jobs.length < 1 ? 'Bitte fügen Sie zunächst Aufträge hinzu'
-                  : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für diese Funktion werden mehrere Maschinen benötigt'
-                  : 'Arbeitsgänge aller Aufträge zufällig anordnen'
-                }}">
-            <i class="fas fa-random"></i>
-            Reihenfolge der Arbeitsgänge aller Aufträge mischen
           </span>
     </button>
   </div>
