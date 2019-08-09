@@ -21,14 +21,15 @@ mat-expansion-panel-header {
   font-size: larger;
 }
 
-.jobs-actions:first-child, .jobs-actions mat-divider, .information, .add-job {
-  padding-top: 8px;
-  /* TODO feature: Fix padding issue */
-  /* TODO feature: Fix padding issue in small device machines drag and drop*/
+/* TODO feature: Fix padding issue in small device machines drag and drop */
+
+.jobs-actions button, .jobs-actions mat-divider {
+  margin-bottom: 8px !important;
 }
 
-.jobs-list {
-  padding-top: 12px;
+.add-job {
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 .add-padding-left {
