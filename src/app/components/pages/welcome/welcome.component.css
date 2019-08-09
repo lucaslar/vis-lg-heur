@@ -16,11 +16,11 @@ mat-card-title {
   padding-bottom: 8px;
 }
 
-.step {
+.symbol-text-container {
   display: flex;
 }
 
-.step-symbol {
+.symbol {
   color: white;
   background-color: var(--color-main);
   border-radius: 36px;
@@ -30,11 +30,11 @@ mat-card-title {
   font-size: large;
 }
 
-.step-symbol + div {
+.symbol + div {
   flex: 1;
   color: var(--color-main);
 }
 
-.step + .information {
+.symbol-text-container + .information {
   padding-left: 44px;
 }
