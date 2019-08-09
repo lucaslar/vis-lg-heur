@@ -92,8 +92,8 @@
         </div>
       </mat-expansion-panel-header>
       <mat-divider></mat-divider>
-      <div class="content">
-        <app-general-data [data]="result.generalData"></app-general-data>
+      <div class="content no-padding-bottom">
+        <app-general-data [data]="result.generalData" [heuristic]="usedHeuristic"></app-general-data>
       </div>
     </mat-expansion-panel>
 
