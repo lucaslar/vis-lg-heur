@@ -68,7 +68,7 @@ export class StorageService {
         [
           // Can only be three or two when returned
           'Das aktuelle Reihenfolgeproblem (zu minimierende Gesamtbearbeitungszeit in Maschinenumgebung: ' +
-          (this.machineConfigParam === MachineConfig.FLOWSHOP ? 'Flowshop' : 'Jobshop') + ' mit ' +
+          (this.machineConfigParam === MachineConfig.FLOWSHOP ? 'Flow Shop' : 'Job Shop') + ' mit ' +
           (this.nrOfMachines === 2 ? 'zwei' : 'drei') + ' Maschinen) ist mithilfe des Johnson-Algorithmus in Polynomialzeit exakt ' +
           'lösbar. Es besteht also kein Bedarf, ein heuristisches Verfahren zu verwenden.',
           this.nrOfMachines === 3 ? 'Normalerweise kann dieser Algorithmus nur für Zweimachinenprobleme verwendet werden. Im konkreten ' +
@@ -137,9 +137,9 @@ export class StorageService {
     const possibleMachineConfigs = [];
     heuristic.requiredMachineConfigs.forEach(config => {
       if (config === MachineConfig.FLOWSHOP) {
-        possibleMachineConfigs.push('Flowshop');
+        possibleMachineConfigs.push('Flow Shop');
       } else if (config === MachineConfig.JOBSHOP) {
-        possibleMachineConfigs.push('Jobshop');
+        possibleMachineConfigs.push('Job Shop');
       } else {
         possibleMachineConfigs.push('Eine Maschine');
       }

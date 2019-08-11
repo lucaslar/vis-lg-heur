@@ -5,7 +5,7 @@
       Das mit der gewählten Heuristik ({{heuristic.name}}) gelöste Problem umfasst {{data.numberOfJobs}} Aufträge, deren
       Abarbeitung an {{data.numberOfMachines > 1 ? data.numberOfMachines + ' Maschinen ': 'einer Maschine'}}
       ermittelt wurde. Es handelt sich dabei um ein {{data.machineConfig === machineCongig.ONE_MACHINE ?
-      'Ein-Maschinen' : data.machineConfig === machineCongig.FLOWSHOP ? 'Flowshop' : 'Jobshop'}}-Problem.
+      'Ein-Maschinen' : data.machineConfig === machineCongig.FLOWSHOP ? 'Flow Shop' : 'Job Shop'}}-Problem.
     </p>
 
     <p *ngIf="!data.priorityRules; else listPriorityRules">

@@ -37,10 +37,10 @@ export class MachineConfigComponent {
       whatDoesConfigMean = [
         'Es kann nur einen Arbeitsgang an genau einer Maschine geben. Somit erübrigt es sich, ' +
         'die Reihenfolge der Arbeitsgänge zu vergleichen.',
-        'Flow- bzw. Jobshop setzen mindestens zwei Maschinen voraus. ' +
-        'Erhöhen Sie die Anzahl an Maschinen, ergäbe sich ein Flowshop.'];
+        'Flow bzw. Job Shop setzen mindestens zwei Maschinen voraus. ' +
+        'Erhöhen Sie die Anzahl an Maschinen, ergäbe sich ein Flow Shop.'];
     } else if (currentCOnfiguration === MachineConfig.FLOWSHOP) {
-      configInWords = 'Flowshop mit ' + this.storage.nrOfMachines + ' Maschinen';
+      configInWords = 'Flow Shop mit ' + this.storage.nrOfMachines + ' Maschinen';
       const machineOrderAsString = 'Erst ' +
         this.storage.jobs[0].machineTimes.map(mt => 'M. ' + mt.machineNr).join(', dann ') + '.';
       whatDoesConfigMean = [
@@ -50,7 +50,7 @@ export class MachineConfigComponent {
             :
             'Da die Reihenfolge der ' + this.storage.jobs[0].machineTimes.length + ' Arbeitsgänge ' +
             'des aktuell einzigen Auftrags ' + 'nicht mit der Reihenfolge der Arbeitsgänge ' +
-            'anderer Aufträge verglichen werden kann, liegt formal ein Flowshop vor. ' +
+            'anderer Aufträge verglichen werden kann, liegt formal ein Flow Shop vor. ' +
             'Die (derzeit einzige) Reihenfolge der Arbeitsgänge ist: '
         ) +
         machineOrderAsString,
@@ -58,14 +58,14 @@ export class MachineConfigComponent {
             'Verschieben Sie '
             :
             'Fügen Sie mindestens einen Auftrag hinzu und verschieben anschließend '
-        ) + 'die Arbeitsgänge eines Auftrags, entsteht ein Jobshop.'
+        ) + 'die Arbeitsgänge eines Auftrags, entsteht ein Job Shop.'
       ];
     } else if (currentCOnfiguration === MachineConfig.JOBSHOP) {
-      configInWords = 'Jobshop mit ' + this.storage.nrOfMachines + ' Maschinen';
+      configInWords = 'Job Shop mit ' + this.storage.nrOfMachines + ' Maschinen';
       whatDoesConfigMean = [
         'Die Arbeitsgänge der ' + this.storage.jobs.length + ' Aufträge weisen nicht dieselbe Reihenfolge auf.',
         'Sorgen Sie dafür, dass die Reihenfolge der Arbeitsgänge aller Aufträge gleich ist, entsteht ein ' +
-        'Flowshop. Hierfür können Sie auch den dafür vorgesehenen Button unterhalb der Auftragseingabe nutzen.'
+        'Flow Shop. Hierfür können Sie auch den dafür vorgesehenen Button unterhalb der Auftragseingabe nutzen.'
       ];
     } else {
       configInWords = 'Aussage nicht möglich';

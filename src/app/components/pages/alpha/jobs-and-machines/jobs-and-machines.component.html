@@ -94,18 +94,18 @@
           </span>
     </button>
     <button mat-stroked-button
-            matTooltip="Reihenfolge der Arbeitsgänge aller Aufträge vereinheitlichen und somit zu Flowshop wechseln"
+            matTooltip="Reihenfolge der Arbeitsgänge aller Aufträge vereinheitlichen und somit zu Flow Shop wechseln"
             [disabled]="storage.machineConfigParam !== machineConfig.JOBSHOP"
             (click)="sortEachJobMachineOrder()">
           <span class="align-middle"
                 matTooltip="{{storage.machineConfigParam === machineConfig.JOBSHOP ? ''
-                  : storage.machineConfigParam === machineConfig.FLOWSHOP ? 'Bei der aktuellen Konfiguration handelt es sich bereits um einen Flowshop'
-                  : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für Flowshop wird mindestens eine weitere Maschine benötigt'
+                  : storage.machineConfigParam === machineConfig.FLOWSHOP ? 'Bei der aktuellen Konfiguration handelt es sich bereits um einen Flow Shop'
+                  : storage.machineConfigParam === machineConfig.ONE_MACHINE ? 'Für Flow Shop wird mindestens eine weitere Maschine benötigt'
                   : 'Bitte fügen Sie zunächst Aufträge hinzu'
                 }}">
-            Jobshop
+            Job Shop
             <mat-icon class="align-middle">arrow_right_alt</mat-icon>
-            Flowshop
+            Flow Shop
           </span>
     </button>
   </div>
