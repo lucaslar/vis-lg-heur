@@ -78,6 +78,7 @@ export class Heuristic {
     const machineConfigRequiresFunction = new Map<MachineConfig, ObjectiveFunction[]>();
     machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [
       ObjectiveFunction.MAX_DELAY,
+      ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS,
       ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES,
       ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES,
       ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES,
@@ -112,6 +113,7 @@ export class Heuristic {
     const machineConfigRequiresFunction = new Map<MachineConfig, ObjectiveFunction[]>();
     machineConfigRequiresFunction.set(MachineConfig.ONE_MACHINE, [
       ObjectiveFunction.MAX_DELAY,
+      ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS,
       ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES,
       ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES,
       ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES,
