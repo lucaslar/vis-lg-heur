@@ -439,7 +439,7 @@ export class SchedulingService {
       .filter(machine => !machine.currentJob && machine.jobQueue.length)
       .forEach(machine => {
 
-          // No sorting for each timestamp in NN-Heuristic (only once before setting up)
+          // No sorting for each timestamp in NN-Heuristic (only once after setting up)
           if (this.heuristicType !== HeuristicDefiner.NEAREST_NEIGHBOUR ||
             !machine.lastJob || machine.lastJob.finishedAtTimestamp === this.currentTimestampInScheduling) {
 

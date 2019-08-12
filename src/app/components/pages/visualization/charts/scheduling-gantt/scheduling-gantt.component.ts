@@ -49,7 +49,7 @@ export class SchedulingGanttComponent implements OnInit {
 
     const sortedFirstMachineOps = this.data
       .filter(operation => this.data.indexOf(operation) % this.nrOfMachines === 0)
-      .sort((o1, o2) => (<Date>o1[3]).getMilliseconds() - (<Date>o2[3]).getMilliseconds());
+      .sort((o1, o2) => (+(<Date>o1[3])) - (+(<Date>o2[3])));
 
     for (let i = 0; i < firstMachineOps.length; i++) {
       const index = firstMachineOps.indexOf(sortedFirstMachineOps[i]);

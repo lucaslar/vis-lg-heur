@@ -10,8 +10,8 @@ export class OperationOnConsole {
   constructor(row: (string | Date)[], color: string) {
     this._machine = 'Maschine ' + (<string>row[0]).substr(1);
     this._job = <string>row[1];
-    this._start = (<Date>row[2]).getMilliseconds();
-    this._end = (<Date>row[3]).getMilliseconds();
+    this._start = +(<Date>row[2]);
+    this._end = +(<Date>row[3]);
     this._duration = this._end - this._start;
     this._color = color;
   }
