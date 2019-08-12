@@ -21,12 +21,13 @@
     der Fertigstellung des jeweils vorherigen Auftrags als nächstes zu bearbeiten ist.
   </p>
   <p class="text-justify">
-    Der erste Auftrag wird hierbei dadurch bestimmt, wie klein die Rüstzeit zu einem diesem Auftrag folgenden Auftrag
-    wäre. Alle weiteren dadurch, wie klein die Rüstzeit vom vorherigen Auftrag zu ihnen wäre.
+    Die Abarbeitungsreihenfolge entsteht hierbei, indem zunächst derjenige als erster Auftrag bestimmt wird, für den die
+    Rüstzeit zu einem diesem Auftrag folgenden Auftrag am kleinsten ist. Vom jeweiligen betrachteten Auftrag ausgehend
+    wird derjenige als nächstes abgearbeitet, zu dem die reihenfolgeabhängige Rüstzeit am geringsten ist.
   </p>
   <p class="text-justify">
-    Die jeweiligen Rüstzeiten sind dabei zu minimieren. Allgemein gilt, dass wenn mehrere Aufträge in Frage kämen, der
-    erste mit der jeweiligen an dieser Stelle kleinsten Rüstzeit bevorzugt wird.
+    Allgemein gilt, dass wenn mehrere Aufträge in Frage kämen, der erste mit der jeweiligen an dieser Stelle kleinsten
+    Rüstzeit bevorzugt wird.
   </p>
 </ng-container>
 
@@ -37,15 +38,15 @@
   <p class="text-justify">
     Hierzu werden die Aufträge zunächst abhängig vom gewählten zu minimierenden Zielfunktionswert vorsortiert. Für die
     beiden Werte an erster Stelle wird anschließend ermittelt, in welcher Reihenfolge sie allein betrachtet abgearbeitet
-    werden müssten, um den betrachteten Zielfunktionswert zu minimieren. Diese Permutation wird anschließend weiter
-    betrachtet und sie stellt den (vorläufigen) Abarbeitungsplan dar.
+    werden müssten, um den betrachteten Zielfunktionswert zu minimieren. Diejenige Permutation stellt den (vorläufigen)
+    Abarbeitungsplan dar.
   </p>
   <p class="text-justify">
     Bis alle Aufträge behandelt worden sind, werden in jedem Schritt Permutationen gebildet, indem der jeweils nächste,
     unbearbeitete Auftrag in der vorsortierten Liste an jeder Stelle im bisherigen Abarbeitungsplan eingefügt wird.
-    Anschließend lässt sich für jede Permutation der Zielfunktionswert bestimmen und jene stellt fortan den
-    Abarbeitungsplan dar, für die dieser Wert minimal ist. Der finale Abarbeitungsplan ist also das Ergebnis nach
-    Einfügen des letzten Auftrags.
+    Anschließend lässt sich für jede Permutation der Zielfunktionswert bestimmen und jene wird fortan weiter betrachtet,
+    für die dieser Wert minimal ist. Der finale Abarbeitungsplan ist also das Ergebnis nach Einfügen des letzten
+    Auftrags bzw. der darauffolgenden Auswertung.
   </p>
   <p class="text-justify">
     Allgemein gilt, dass wenn mehrere Permutationen in Frage kämen, die erste mit dem jeweiligen an dieser Stelle
@@ -62,7 +63,7 @@
     Tauschen zweier Aufträge entstehen, und anschließend für jede dieser Permutationen geprüft, ob der zu minimierende
     Zielfunktionswert bei der Abarbeitung der Aufträge in eben dieser Reihenfolge kleiner wäre als bei der Abarbeitung
     in der durch die jeweilige Ausgangs-Permutation vorgegebenen Reihenfolge. Jene Permutation, für die der Wert am
-    kleinsten (und kleiner als bei der Ausgangs-Permutation) wäre, wird fortan betrachtet.
+    kleinsten (und kleiner als bei der Ausgangs-Permutation) ist, wird fortan betrachtet.
   </p>
   <p class="text-justify">
     Dieser Vorgang wird mit der gefundenen besseren Permutation als Startwert wiederholt bis der zu minimierende
@@ -94,12 +95,12 @@
     Aufträge. Formal handelt es sich bei den Hilfsproblemen je um: 1 | r<sub>j</sub> | L<sub>max</sub>
   </p>
   <p class="text-justify">
-    Aus der Menge der ermittelten Lösungen wird die Auftragsreihenfolge jener Maschine, für die der zu minimierende
-    Zielfunktionswert am größten ist, aufgenommen und ist im Umkehrschluss nicht mehr zu betrachten. Sofern noch nicht
-    jede Maschine aufgenommen worden sein sollte, werden basierend auf aus dem Ergebnis resultierenden Vor- und
-    Nachbeziehungen die Ankunfts- sowie Fertigstellungszeitpunkte der Aufträge in den verbleibenden Hilfsproblemen
-    aktualisiert. Das Verfahren wird solange durchgeführt bis die Reihenfolge für jede Maschine ermittelt worden ist
-    bzw. jedes Hilfsproblem gelöst wurde.
+    Aus der Menge der ermittelten Lösungen wird die Auftragsreihenfolge jener Maschine aufgenommen, für die der zu
+    minimierende Zielfunktionswert am größten ist, sodass sie im Umkehrschluss fortan nicht mehr betrachtet wird.
+    Sofern noch nicht jede Maschine aufgenommen worden sein sollte, werden basierend auf aus dem Ergebnis resultierenden
+    Vor- und Nachbeziehungen die Ankunfts- sowie Fertigstellungszeitpunkte der Aufträge in den verbleibenden
+    Hilfsproblemen aktualisiert. Das Verfahren wird solange durchgeführt bis die Reihenfolge für jede Maschine ermittelt
+    worden ist bzw. jedes Hilfsproblem gelöst wurde.
   </p>
   <p class=“text-justify“>
     Allgemein gilt, dass wenn L<sub>max</sub> für mehrere Reihenfolgen denselben Wert annimmt, die erste jeweilige
