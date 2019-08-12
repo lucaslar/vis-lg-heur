@@ -11,7 +11,7 @@
 
 <!-- content as paragraphs-->
 <mat-dialog-content class="mat-typography">
-  <p *ngFor="let t of data.text">
+  <p *ngFor="let t of data.text" class="text-justify">
     {{t}}
   </p>
   <ul *ngIf="data.listedElements && data.listedElements.length">
