@@ -13,7 +13,8 @@
       <span class="app-color">
         <span [innerHtml]="data.machineConfig"></span>
         <span *ngIf="data.numberOfMachines > 1"><sub>{{data.numberOfMachines}}</sub></span>
-        <span *ngIf="data.formalBeta" [innerHtml]="' | ' + data.formalBeta"></span>
+        |
+        <span *ngIf="data.formalBeta" [innerHtml]=data.formalBeta></span>
         |
         <span [innerHtml]="(data.objectiveFunction | objectiveFunctionFormal)"></span>
       </span>
