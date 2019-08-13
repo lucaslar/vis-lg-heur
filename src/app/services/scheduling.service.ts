@@ -1031,7 +1031,7 @@ export class SchedulingService {
     data.machineConfig = this.machineConfigParam;
     data.numberOfJobs = this.jobs.length;
     data.numberOfMachines = this.machines.length;
-    data.formalBeta = new BetaFormalPipe().transform(this.jobs, this.objectiveFunction);
+    data.formalBeta = new BetaFormalPipe().transform(this.objectiveFunction);
     data.objectiveFunction = this.objectiveFunction;
     data.priorityRules = this.priorityRules; // may be undefined
     data.isEachDueDateConfigured = this.isEachDueDateConfigured;

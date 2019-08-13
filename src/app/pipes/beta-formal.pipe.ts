@@ -7,31 +7,31 @@ import {Job} from '../model/scheduling/Job';
 })
 export class BetaFormalPipe implements PipeTransform {
 
-  transform(value: Job[], objectiveFunction: ObjectiveFunction): string {
+  transform(value: ObjectiveFunction): string {
 
     const betaFormal: string[] = [];
 
     // Add due dates:
-    if (objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES
-      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
-      || objectiveFunction === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES
-      || objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
-      || objectiveFunction === ObjectiveFunction.SUM_DELAYED_WORK
-      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
-      || objectiveFunction === ObjectiveFunction.MAX_DELAY) {
+    if (value === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES
+      || value === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES
+      || value === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES
+      || value === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
+      || value === ObjectiveFunction.SUM_DELAYED_WORK
+      || value === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
+      || value === ObjectiveFunction.MAX_DELAY) {
       betaFormal.push('d<sub>j</sub>');
     }
 
     // Add weights:
-    if (objectiveFunction === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
-      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS
-      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
-      || objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
+    if (value === ObjectiveFunction.WEIGHTED_NUMBER_DEADLINE_EXCEEDANCES
+      || value === ObjectiveFunction.SUM_WEIGHTED_FINISHING_TIMESTAMPS
+      || value === ObjectiveFunction.SUM_WEIGHTED_DELAYED_WORK
+      || value === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES) {
       betaFormal.push('w<sub>j</sub>');
     }
 
     // Add setup times:
-    if (objectiveFunction === ObjectiveFunction.SUM_SETUP_TIME) {
+    if (value === ObjectiveFunction.SUM_SETUP_TIME) {
       betaFormal.push('s<sub>jk</sub>');
     }
 
