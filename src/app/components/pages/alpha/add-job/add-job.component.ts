@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StorageService} from '../../../../services/storage.service';
-import {Job, MachineTimeForJob, SetupTime} from '../../../../model/Job';
+import {Job, MachineTimeForJob, SetupTime} from '../../../../model/scheduling/Job';
 import {DefinableValue} from '../../../../model/internal/value-definition/DefinableValue';
 import {DefinitionStatus} from '../../../../model/internal/value-definition/DefinitionStatus';
 

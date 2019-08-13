@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {StorageService} from './storage.service';
-import {Job} from '../model/Job';
+import {Job} from '../model/scheduling/Job';
 import {HeuristicDefiner} from '../model/enums/HeuristicDefiner';
 import {PriorityRule} from '../model/enums/PriorityRule';
-import {Machine} from '../model/Machine';
-import {RelaxableOneMachineScheduledJob, ScheduledJob} from '../model/ScheduledJob';
+import {Machine} from '../model/scheduling/Machine';
+import {RelaxableOneMachineScheduledJob, ScheduledJob} from '../model/scheduling/ScheduledJob';
 import {
   GeneralSchedulingData,
   Kpi,
@@ -21,8 +21,8 @@ import {LogEventType} from '../model/enums/LogEventType';
 import {DefinableValue} from '../model/internal/value-definition/DefinableValue';
 import {DefinitionStatus} from '../model/internal/value-definition/DefinitionStatus';
 import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
-import {SchedulingPlanForMachine} from '../model/SchedulingPlanForMachine';
-import {BottleneckRelation} from '../model/internal/relations/BottleneckRelation';
+import {SchedulingPlanForMachine} from '../model/scheduling/SchedulingPlanForMachine';
+import {BottleneckRelation} from '../model/scheduling/BottleneckRelation';
 import {DialogContent} from '../model/internal/dialog/DialogContent';
 import {DialogType} from '../model/internal/dialog/DialogType';
 import {BetaFormalPipe} from '../pipes/beta-formal.pipe';

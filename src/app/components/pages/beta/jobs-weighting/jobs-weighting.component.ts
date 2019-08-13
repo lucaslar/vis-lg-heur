@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {Job} from '../../../../model/Job';
+import {Job} from '../../../../model/scheduling/Job';
 import {StorageService} from '../../../../services/storage.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';

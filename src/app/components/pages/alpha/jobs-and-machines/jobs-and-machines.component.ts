@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {StorageService} from '../../../../services/storage.service';
-import {Job, MachineTimeForJob, SetupTime} from '../../../../model/Job';
+import {Job, MachineTimeForJob, SetupTime} from '../../../../model/scheduling/Job';
 import {MatDialog} from '@angular/material/dialog';
 import {MatExpansionPanelHeader} from '@angular/material/expansion';
 import {MatSnackBar} from '@angular/material/snack-bar';

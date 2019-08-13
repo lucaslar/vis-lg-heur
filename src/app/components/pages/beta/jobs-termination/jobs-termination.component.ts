@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {StorageService} from '../../../../services/storage.service';
-import {Job} from '../../../../model/Job';
+import {Job} from '../../../../model/scheduling/Job';
 import {DialogContent} from '../../../../model/internal/dialog/DialogContent';
 import {DialogType} from '../../../../model/internal/dialog/DialogType';
 import {DefinitionStatus} from '../../../../model/internal/value-definition/DefinitionStatus';

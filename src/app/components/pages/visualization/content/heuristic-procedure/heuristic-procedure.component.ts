@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {HeuristicDefiner} from '../../../../../model/enums/HeuristicDefiner';
-import {Heuristic} from '../../../../../model/Heuristic';
+import {Heuristic} from '../../../../../model/scheduling/Heuristic';
 
 @Component({
   selector: 'app-heuristic-procedure',

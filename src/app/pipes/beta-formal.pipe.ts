@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
-import {Job} from '../model/Job';
+import {Job} from '../model/scheduling/Job';
 
 @Pipe({
   name: 'betaFormal'

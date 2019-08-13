@@ -1,7 +1,7 @@
-import {HeuristicDefiner} from './enums/HeuristicDefiner';
-import {DefinableValue} from './internal/value-definition/DefinableValue';
-import {MachineConfig} from './enums/MachineConfig';
-import {ObjectiveFunction} from './enums/ObjectiveFunction';
+import {HeuristicDefiner} from '../enums/HeuristicDefiner';
+import {DefinableValue} from '../internal/value-definition/DefinableValue';
+import {MachineConfig} from '../enums/MachineConfig';
+import {ObjectiveFunction} from '../enums/ObjectiveFunction';
 
 export class Heuristic {
 

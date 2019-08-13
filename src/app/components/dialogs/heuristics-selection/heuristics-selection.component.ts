@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Heuristic} from '../../../model/Heuristic';
+import {Heuristic} from '../../../model/scheduling/Heuristic';
 import {HeuristicDefiner} from '../../../model/enums/HeuristicDefiner';
 import {MatDialogRef} from '@angular/material/dialog';
 import {StorageService} from '../../../services/storage.service';

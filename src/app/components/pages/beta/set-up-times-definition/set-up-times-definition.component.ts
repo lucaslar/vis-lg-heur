@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {Job, SetupTime} from '../../../../model/Job';
+import {Job, SetupTime} from '../../../../model/scheduling/Job';
 import {StorageService} from '../../../../services/storage.service';
 import {DefinableValue} from '../../../../model/internal/value-definition/DefinableValue';
 import {DefinitionStatus} from '../../../../model/internal/value-definition/DefinitionStatus';

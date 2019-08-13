@@ -3,7 +3,7 @@ import {SchedulingService} from '../../../../services/scheduling.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HeuristicDefiner} from '../../../../model/enums/HeuristicDefiner';
 import {SchedulingResult} from '../../../../model/internal/visualization/SchedulingResult';
-import {Heuristic} from '../../../../model/Heuristic';
+import {Heuristic} from '../../../../model/scheduling/Heuristic';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 import {MatDialog} from '@angular/material';
 

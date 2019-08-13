@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {GeneralSchedulingData} from '../../../../../../model/internal/visualization/SchedulingResult';
-import {Heuristic} from '../../../../../../model/Heuristic';
+import {Heuristic} from '../../../../../../model/scheduling/Heuristic';
 import {MachineConfig} from '../../../../../../model/enums/MachineConfig';
 
 @Component({
