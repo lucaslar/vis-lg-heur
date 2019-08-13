@@ -19,4 +19,8 @@ export class GeneralDataComponent {
   get machineCongig(): any {
     return this._machineCongig;
   }
+
+  getListedPriorityRules() {
+    return this.data.priorityRules.map(pRule => '"' + pRule + '"').join(', ');
+  }
 }
