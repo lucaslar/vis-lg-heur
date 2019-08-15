@@ -17,6 +17,9 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatRadioModule} from '@angular/material';
 
+/**
+ * Module used for declaring all Angular Material components used within this application.
+ */
 @NgModule({
   exports: [
     DragDropModule,

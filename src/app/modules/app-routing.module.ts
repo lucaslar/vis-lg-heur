@@ -11,6 +11,13 @@ import {ObjectiveFunctionDefinitionComponent} from '../components/pages/gamma/ob
 import {SetUpTimesDefinitionComponent} from '../components/pages/beta/set-up-times-definition/set-up-times-definition.component';
 import {JobsWeightingComponent} from '../components/pages/beta/jobs-weighting/jobs-weighting.component';
 
+/**
+ * All possible paths of the application.
+ * Please note:
+ * 1. beta-pages listed as children of beta and protected by {BetaEnoughJobsGuard} using the defined value minJobs
+ * 2. visualization page requires the specification of a heuristic (stated in {HeuristicDefiner}) and protected by {HeuristicsGuard}
+ * 3. No paths/unknown paths will lead to the start page
+ */
 const routes: Routes = [
   {path: 'alpha', component: JobsAndMachinesComponent},
   {path: 'priority-rules', component: PriorityRulesDefinitionComponent},
@@ -27,6 +34,9 @@ const routes: Routes = [
   {path: '**', redirectTo: ''}
 ];
 
+/**
+ * Module used for defining all possible paths in the application.
+ */
 @NgModule({
   imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})],
   exports: [RouterModule]
