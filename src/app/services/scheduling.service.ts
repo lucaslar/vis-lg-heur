@@ -1287,6 +1287,9 @@ export class SchedulingService {
   }
 
   // called after successful scheduling
+  /**
+   * @returns Generated result data for the found scheduling solution
+   */
   private generateSchedulingResult(): SchedulingResult {
     const result = new SchedulingResult();
     result.generalData = this.generateGeneralSchedulingData();
@@ -1299,7 +1302,9 @@ export class SchedulingService {
   }
 
   // result data generation starts here
-
+  /**
+   * @returns Generated general result data based on the found scheduling solution/heuristic/definitions
+   */
   private generateGeneralSchedulingData(): GeneralSchedulingData {
     const data = new GeneralSchedulingData();
     data.machineConfig = this.machineConfigParam;
@@ -1321,6 +1326,9 @@ export class SchedulingService {
     return data;
   }
 
+  /**
+   * @returns Generated scheduling times data for the found scheduling solution
+   */
   private generateSchedulingTimesData(): SchedulingTimesData {
     const data = new SchedulingTimesData();
     data.allMachineOperationsTimeline = this.generateAllMachineOperationsTimeline();
@@ -1328,6 +1336,9 @@ export class SchedulingService {
     return data;
   }
 
+  /**
+   * @returns Generated timeline data for the found scheduling solution with unique colors
+   */
   private generateAllMachineOperationsTimeline(): TimelineData {
     const visualization = new TimelineData();
     visualization.timelineData = [];
@@ -1350,6 +1361,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated machine table data for the found scheduling solution with unique colors (same as in timeline)
+   */
   private generateAllMachineTables(): MachineTableData[] {
     const data = [];
 
@@ -1379,6 +1393,10 @@ export class SchedulingService {
     return data;
   }
 
+  /**
+   * @param sortedFirstMachineJobStings Sorted strings representing the jobs produced on the first machine
+   * @returns Map containing each job string as key and respective colors as value (unique and same as in timeline)
+   */
   private generateColorMapForMachineTables(sortedFirstMachineJobStings: string[]): Map<string, string> {
     const colorMap: Map<string, string> = new Map();
     const colors = this.generateUniqueJobColorValues().map(rgb => 'rgb(' + rgb + ')');
@@ -1388,6 +1406,9 @@ export class SchedulingService {
     return colorMap;
   }
 
+  /**
+   * @returns Generated visualizable data concerning the solved problem itself
+   */
   private generateVisualizableGeneralData(): VisualizableGeneralData {
     const data = new VisualizableGeneralData();
     data.totalDurationsOnMachines = this.generateTotalDurationsOnMachinesVisualization();
@@ -1403,6 +1424,9 @@ export class SchedulingService {
     return data;
   }
 
+  /**
+   * @returns Generated data for visualizing the total durations on each machine
+   */
   private generateTotalDurationsOnMachinesVisualization(): ChartData {
     const sortedMachines = this.machines.sort((m1, m2) => m1.machineNr - m2.machineNr);
     const dataset = new Dataset();
@@ -1422,6 +1446,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated data for visualizing the total job times (and due dates if completely configured)
+   */
   private generateTotalJobTimesVisualization(): ChartData {
     const sortedJobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
     const dataset = new Dataset();
@@ -1451,6 +1478,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated data for visualizing the weighting of jobs
+   */
   private generateJobWeightingsVisualization(): ChartData {
     const sortedJobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
     const dataset = new Dataset();
@@ -1469,6 +1499,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated KPIs based on the found scheduling solution/heuristic/definitions
+   */
   private generateSolutionQualityData(): Kpi[] {
     const data = [];
 
@@ -1491,6 +1524,9 @@ export class SchedulingService {
     return data;
   }
 
+  /**
+   * @return Calculated total duration as KPI
+   */
   private calculateTotalDurationKpi(): Kpi {
     const kpi = new Kpi();
     kpi.iconClasses = ['fas', 'fa-stopwatch'];
@@ -1499,6 +1535,9 @@ export class SchedulingService {
     return kpi;
   }
 
+  /**
+   * @return Calculated mean cycle time as KPI
+   */
   private calculateMeanCycleTimeKpi(): Kpi {
     const kpi = new Kpi();
     kpi.iconClasses = ['fas', 'fa-hourglass-half'];
@@ -1510,6 +1549,9 @@ export class SchedulingService {
     return kpi;
   }
 
+  /**
+   * @return Calculated mean job backlog as KPI
+   */
   private calculateMeanJobBacklogKpi(): Kpi {
     let sum = 0;
     this.jobs.forEach(job => sum += job.finishedAtTimestamp);
@@ -1521,6 +1563,9 @@ export class SchedulingService {
     return kpi;
   }
 
+  /**
+   * @return Calculated mean delay as KPI
+   */
   private calculateMeanDelayKpi(): Kpi {
     const kpi = new Kpi();
     kpi.title = 'Mittlere Verspätung';
@@ -1531,6 +1576,9 @@ export class SchedulingService {
     return kpi;
   }
 
+  /**
+   * @return Calculated standard deviation of delay as KPI
+   */
   private calculateStandardDeviationOfDelayKpi(): Kpi {
     const mean = this.calculateMeanDelayKpi().kpi;
 
@@ -1547,6 +1595,9 @@ export class SchedulingService {
     return kpi;
   }
 
+  /**
+   * @return Calculated sum of delays as KPI
+   */
   private calculateSumOfDelaysKpi(): Kpi {
     const kpi = new Kpi();
     kpi.iconClasses = ['functions'];
@@ -1557,6 +1608,9 @@ export class SchedulingService {
     return kpi;
   }
 
+  /**
+   * @return Calculated maximum delay as KPI
+   */
   private calculateMaximumDelayKpi(): Kpi {
     const kpi = new Kpi();
     kpi.iconClasses = ['fas', 'fa-history'];
@@ -1567,6 +1621,9 @@ export class SchedulingService {
     return kpi;
   }
 
+  /**
+   * @return Calculated mean setup time as KPI
+   */
   private calculateMeanSetupTimeKpi(): Kpi {
     const kpi = new Kpi();
     kpi.iconClasses = ['fas', 'fa-cogs'];
@@ -1581,6 +1638,9 @@ export class SchedulingService {
     return kpi;
   }
 
+  /**
+   * @returns Generated visualizable data concerning found solution based on the used heuristic/definition of due dates
+   */
   private generateVisualizableSolutionQualityData(): VisualizableSolutionQualityData {
     const data = new VisualizableSolutionQualityData();
 
@@ -1604,6 +1664,9 @@ export class SchedulingService {
     return data;
   }
 
+  /**
+   * @returns Generated data for visualizing the finished jobs at each timestamp
+   */
   private generateFinishedJobsAtTimestampVisualization(): ChartData {
     const dataset = new Dataset();
     const labels = ['0'];
@@ -1629,6 +1692,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated data for visualizing the finish timestamps (in unique colors as in timeline) and due dates of jobs
+   */
   private generateComparisonFinishTimestampAndDueDate(): ChartData {
     const sortedJobs = this.jobs.sort((j1, j2) => j1.id - j2.id);
     const dataset1 = new Dataset();
@@ -1651,6 +1717,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated data for visualizing the cumulated delays of jobs
+   */
   private generateCumulatedDelaysVisualization(): ChartData {
     const dataset = new Dataset();
     const labels = ['0'];
@@ -1678,6 +1747,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated data for total number of delayed and not delayed jobs
+   */
   private generateComparisonDelayedAndInTimeVisualization(): ChartData {
     const dataset = new Dataset();
     const labels = ['Rechtzeitig', 'Verspätet'];
@@ -1698,6 +1770,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated data for visualizing the cumulated setup times of the whole production process
+   */
   private generateCumulatedSetupTimesVisualization(): ChartData {
     const dataset = new Dataset();
     const labels = ['0'];
@@ -1736,6 +1811,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated data for compating the global mean setup time and the mean setup time of the found solution
+   */
   private generateComparisonMeanSetupTimesVisualization(): ChartData {
     const dataset = new Dataset();
     const labels = ['Lösung', 'Problem (gesamt)'];
@@ -1762,6 +1840,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated data for visualizing the comparison of average setup times to a job and the selected setup time
+   */
   private generateComparisonSelectedAndMeanSetupTimeVisualization(): ChartData {
     const labels = [];
     const average = new Dataset();
@@ -1797,6 +1878,9 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Generated data for visualizing the value to be minimized after each iteration of a Local Search used for scheduling
+   */
   private generateValueToMinimizeAtIterations(): ChartData {
     const dataset = new Dataset();
     const labels = [];
@@ -1818,10 +1902,18 @@ export class SchedulingService {
     return visualization;
   }
 
+  /**
+   * @returns Jobs sorted by the timestamp they have been finished at
+   */
   private getJobsSortedByFinishingDate(): ScheduledJob[] {
     return this.jobs.sort((j1, j2) => j1.finishedAtTimestamp - j2.finishedAtTimestamp);
   }
 
+  /**
+   * Calculates unique colors based on the number of existing jobs. Uniqueness for many jobs is given by bleaching defined base colors.
+   *
+   * @returns Unique colors to be used for jobs
+   */
   private generateUniqueJobColorValues(): string[] {
 
     // Google Charts default colors
@@ -1862,6 +1954,9 @@ export class SchedulingService {
     return newRgbColors.map(rgb => rgb[0] + ', ' + rgb[1] + ', ' + rgb[2]);
   }
 
+  /**
+   * @returns Unique colors sorted as the produced jobs on the first machine
+   */
   private getColorsAsSpecifiedInGanttFirstMachine(): string[] {
 
     let colors = this.generateUniqueJobColorValues();
@@ -1878,6 +1973,14 @@ export class SchedulingService {
     return sortedColors;
   }
 
+  /**
+   * If logging is configured: creates a log entry to be stored in {logging}.
+   *
+   * @param machineNr Number of the machine the event to be logged took place
+   * @param description Description of the event to be logged
+   * @param type Type of the event to be logged
+   * @param time Timestamp of the event to be logged
+   */
   private logSchedulingProcedure(machineNr: number, description: string, type: LogEventType, time?: number): void {
     if (this.isLoggingConfigured) {
       time = time === undefined ? this.currentTimestampInScheduling : time;
@@ -1885,10 +1988,19 @@ export class SchedulingService {
     }
   }
 
+  /**
+   * @param job Job the string representation for logging is to be created for
+   * @returns String representation of a job for logging
+   *
+   */
   private jobStringForLogging(job: ScheduledJob): string {
     return '\'' + job.name + '\' (ID: ' + job.id + ')';
   }
 
+  /**
+   * @param jobs Permutation the string representation for logging is to be created for
+   * @returns String representation of a permutation for logging
+   */
   private jobListStringForLogging(jobs: ScheduledJob[]): string {
     return jobs.map(job => this.jobStringForLogging(job)).join(' -> ');
   }
