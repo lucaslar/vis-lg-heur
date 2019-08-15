@@ -46,6 +46,9 @@ import {BetaFormalPipe} from './pipes/beta-formal.pipe';
 import {GammaFormalPipe} from './pipes/gamma-formal.pipe';
 import { HeuristicProcedureComponent } from './components/pages/visualization/content/heuristic-procedure/heuristic-procedure.component';
 
+/**
+ * Default Module used for declaring components, further modules and pipes.
+ */
 @NgModule({
   declarations: [
     AppComponent,
