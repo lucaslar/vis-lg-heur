@@ -21,12 +21,30 @@ export class JobsAndMachinesComponent implements OnInit {
 
   // TODO feature: store machine times on reducing machine nr.?
 
+  /**
+   * Stores all enum values: DefinableValue
+   */
   private _definableValue = DefinableValue;
+
+  /**
+   * Stores all enum values: DefinitionStatus
+   */
   private _configurationStatus = DefinitionStatus;
 
+  /**
+   * Current machine configuration
+   */
   private readonly _machineConfig = MachineConfig;
 
+
+  /**
+   * Existing jobs
+   */
   private _jobs: Job[];
+
+  /**
+   * Represents whether machining times are to be generated automatically on adding machines/jobs
+   */
   private isAutomaticallyGenerateTimes: boolean;
 
   constructor(
@@ -37,10 +55,18 @@ export class JobsAndMachinesComponent implements OnInit {
   ) {
   }
 
+  /**
+   * Loads jobs from storage on initialization.
+   */
   ngOnInit(): void {
     this._jobs = this.storage.jobs;
   }
 
+  /**
+   * Due to a new machine nr: Updates all job operations, due dates (if not realistic anymore) and informs the user about changes.
+   *
+   * @param newMachineNr New number of machines
+   */
   onMachineNrChanged(newMachineNr: number): void {
     const messages = [];
     this.storage.nrOfMachines = newMachineNr;
@@ -61,6 +87,12 @@ export class JobsAndMachinesComponent implements OnInit {
     this.openSnackBar(5, 'Maschinenzahl auf ' + newMachineNr + ' aktualisiert', 'OK');
   }
 
+  /**
+   * Sets [isAutomaticallyGenerateTimes} and opens the auto-generate-dialog in case of activating the option and having jobs with
+   * undefined machining times.
+   *
+   * @param newValue true if times are to be generated automatically, false if not
+   */
   onAutoTimeGenerationChanged(newValue: boolean): void {
     this.isAutomaticallyGenerateTimes = newValue;
     if (this.isAutomaticallyGenerateTimes) {
@@ -68,10 +100,19 @@ export class JobsAndMachinesComponent implements OnInit {
     }
   }
 
+  /**
+   * @param job Job to be stored
+   */
   onNewJobCreated(job: Job): void {
     this.addJob(job);
   }
 
+  /**
+   * Deletes a job from the current list, updates all dependencies to this deleted job and shows a pop-up informing the user.
+   *
+   * @param job Job to be deleted
+   * @param isMessageToBeHidden (optional) if true, no pop up will be shown
+   */
   deleteJob(job: Job, isMessageToBeHidden?: boolean): void {
     this._jobs = this.jobs.filter(j => j !== job);
     let i = 0;
@@ -91,6 +132,13 @@ export class JobsAndMachinesComponent implements OnInit {
     }
   }
 
+  /**
+   * Copies a job (except for its ID), updates dependencies of other jobs to the original and thus also the copied job and shows a pop-up
+   * informing the user.
+   *
+   * @param job Job to be copied
+   * @param header Expansion header of the original job (in list)
+   */
   copyJob(job: Job, header: MatExpansionPanelHeader): void {
     header._toggle();
     const copy: Job = <Job>JSON.parse(JSON.stringify(job));
@@ -103,16 +151,31 @@ export class JobsAndMachinesComponent implements OnInit {
       .onAction().subscribe(() => this.deleteJob(copy, true));
   }
 
+  /**
+   * Changes the machine order of a job based on a Drag and Drop Event and stores job list after change.
+   *
+   * @param job Job the machine order is to be changed of
+   * @param event Changement of machine order
+   */
   changeMachineOrderOfJob(job: Job, event: CdkDragDrop<string[]>): void {
     moveItemInArray(job.machineTimes, event.previousIndex, event.currentIndex);
     this.storage.jobs = this.jobs;
   }
 
+  /**
+   * Sets a new value for a specific machine time and stores job list after change.
+   * @param machine Machine the operation time on has has been changed
+   * @param newValue New operation time
+   */
   onTimeOnMachineChange(machine: MachineTimeForJob, newValue: number): void {
     machine.timeOnMachine = newValue;
     this.storage.jobs = this.jobs;
   }
 
+  /**
+   * Adds random times for undefined operations of jobs. Configured due dates are considered which means that no times are generated that
+   * will make them not realistic anymore.
+   */
   addRandomTimesForUndefined(): void {
     this.jobs.forEach(job => {
       let nrOfUndefinedTimes = job.machineTimes.filter(m => m.timeOnMachine === undefined).length;
@@ -143,6 +206,9 @@ export class JobsAndMachinesComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
+  /**
+   * Sorts the machine orders for each job and opens a pop-up informing the user.
+   */
   sortEachJobMachineOrder(): void {
     this.jobs.forEach(job => {
       job.machineTimes = job.machineTimes.sort(
@@ -160,6 +226,9 @@ export class JobsAndMachinesComponent implements OnInit {
     this.storage.jobs = this.jobs;
   }
 
+  /**
+   * Opens a confirmation dialog for confirming to delete all job times. If accepted, the desired action is performed
+   */
   deleteAllExistingJobTimes(): void {
     this.dialog.open(PopUpComponent, {
       data: new DialogContent(
@@ -176,12 +245,18 @@ export class JobsAndMachinesComponent implements OnInit {
     });
   }
 
+  /**
+   * Shuffles the machine orders for each job and opens a pop-up informing the user.
+   */
   shuffleMachineOrderOfExistingJobs(): void {
     this.jobs.forEach(job => job.machineTimes = job.machineTimes.sort(() => Math.random() - 0.5));
     this.openSnackBar(3, 'Abarbeitungsreihenfolge der Arbeitsgänge aller Aufträge zufällig angeordnet');
     this.storage.jobs = this.jobs;
   }
 
+  /**
+   * Opens a confirmation dialog for confirming to delete all jobs. If accepted, the desired action is performed
+   */
   deleteAllExistingJobs(): void {
     this.dialog.open(PopUpComponent, {
       data: new DialogContent(
@@ -197,6 +272,11 @@ export class JobsAndMachinesComponent implements OnInit {
     });
   }
 
+  /**
+   * @param job Job the maximum possible configurable machine time is to returned of
+   * @param machine Machine the maximum time for the job is to be calculated for
+   * @return returns undefined if no due date is configured for the job or else the due date - all other machine times (undefined ones: 1)
+   */
   calculateMaxMachineTimeForJob(job: Job, machine: MachineTimeForJob): number | undefined {
     if (job.dueDate) {
       return job.dueDate - job.machineTimes
@@ -208,6 +288,13 @@ export class JobsAndMachinesComponent implements OnInit {
     }
   }
 
+  /**
+   * Adds a job to the job list. In case of adding a job that already existed (added due to 'Undo'-action), the relevant job dependencies
+   * are updated.
+   *
+   * @param job Job to be added
+   * @param isMessageToBeHidden (optional) If true, no informing message is shown
+   */
   private addJob(job: Job, isMessageToBeHidden?: boolean): void {
     if (job.id) {
       this.jobs.forEach(jobInList => {
@@ -238,6 +325,9 @@ export class JobsAndMachinesComponent implements OnInit {
     }
   }
 
+  /**
+   * In case of undefined times for jobs: Opens a dialog that for, if confirmed, automatically generating these missing times.
+   */
   private openAutoGenDialogIfNeeded(): void {
     if (this.storage.getValueDefinitionStatus(DefinableValue.ALPHA_JOB_TIMES) !== DefinitionStatus.COMPLETELY_DEFINED) {
       this.dialog.open(PopUpComponent, {
@@ -259,10 +349,21 @@ export class JobsAndMachinesComponent implements OnInit {
     }
   }
 
+  /**
+   * @param max Maximum value to be returned
+   * @returns Random value between 1 and specified maximum
+   */
   private randomTime(max: number): number {
     return Math.floor(Math.random() * max) + 1;
   }
 
+  /**
+   * Adds new times for new machines to a job. Configured due dates are tried to be maintained. Nevertheless, if they are not realistic in
+   * any case, they are updated.
+   *
+   * @param job Job the new machine times are to be added for
+   * @returns message if due date had to be changed, undefined if not
+   */
   private addNewMachineTimesToJob(job: Job): string | undefined {
     const previousDueDate = job.dueDate;
     const nrOfMachines = this.storage.nrOfMachines;
@@ -297,7 +398,12 @@ export class JobsAndMachinesComponent implements OnInit {
     }
   }
 
-  private openChangedDueDatesInfoIfNeeded(messages: string[]) {
+  /**
+   * In case of messages: Opens a dialog informing about due dates that had to be changed inevitably.
+   *
+   * @param messages Messages concerning due dates for jobs that had to be changed
+   */
+  private openChangedDueDatesInfoIfNeeded(messages: string[]): void {
     if (messages.length > 0) {
       this.dialog.open(PopUpComponent, {
         data: new DialogContent(
@@ -310,6 +416,14 @@ export class JobsAndMachinesComponent implements OnInit {
     }
   }
 
+  /**
+   * Opens a snackbar.
+   *
+   * @param seconds Duration the snackbar is to be shown in seconds
+   * @param message Message to be shown
+   * @param actionMessage Message of the action buttton
+   * @returns Snackbar ref
+   */
   private openSnackBar(seconds: number, message: string, actionMessage?: string) {
     return this.snackBar.open(message, actionMessage ? actionMessage : 'OK',
       {

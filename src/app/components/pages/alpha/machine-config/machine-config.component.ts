@@ -14,11 +14,17 @@ import {MatDialog} from '@angular/material';
 })
 export class MachineConfigComponent {
 
+  /**
+   * Emitter for a new machine number
+   */
   @Output() machineNrChanged: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(public storage: StorageService, private dialog: MatDialog) {
   }
 
+  /**
+   * Opens the machine pop up and returns emits a new selected number (if a new number was selected) after closing.
+   */
   openMachinePopUp(): void {
     this.dialog.open(MachineNrPopupComponent).afterClosed().subscribe(result => {
       if (result) {
@@ -27,6 +33,9 @@ export class MachineConfigComponent {
     });
   }
 
+  /**
+   * Opens a Pop-Up informing about the current machine configuration.
+   */
   openMachinesDescription(): void {
     const currentCOnfiguration = this.storage.machineConfigParam;
     let configInWords: string;
