@@ -33,24 +33,71 @@ import {MachineConfig} from '../model/enums/MachineConfig';
 })
 export class SchedulingService {
 
+  /**
+   * Selected objective function to be minimized
+   */
   private objectiveFunction: ObjectiveFunction;
+
+  /**
+   * Definer of the heuristic used for scheduling
+   */
   private heuristicType: HeuristicDefiner;
+
+  /**
+   * Specified priority rules (in this order) if the same named heuristic is applied
+   */
   private priorityRules: PriorityRule[];
 
+
+  /**
+   * Jobs to be scheduled
+   */
   private jobs: ScheduledJob[];
+
+  /**
+   * All machines the jobs are to beschuedled on
+   */
   private machines: Machine[];
+
+  /**
+   * Timestamp to be when producing
+   */
   private currentTimestampInScheduling: number;
+
+  /**
+   * For local search only: Array containing the best value to be minimized after each iteration
+   */
   private localSearchBestValuesForIterations: number[];
 
+
+  /**
+   * The user's logging configuration to be considered in scheduling
+   */
   private isLoggingConfigured: boolean;
+
+  /**
+   * All logs for scheduling
+   */
   private logging: SchedulingLogEntry[];
 
+  /**
+   * True if all due dates of the jobs to be scheduled are configured, false if not
+   */
   private isEachDueDateConfigured: boolean;
+
+  /**
+   * Machine configuration (as formal/alpha param)
+   */
   private machineConfigParam: MachineConfig;
 
   constructor(public storage: StorageService) {
   }
 
+  /**
+   * @param heuristicDefiner Definer of the heuristic a potential warning is to be created for
+   * @returns Content of a confirm dialog concerning scheduling if a heuristic may take too long to find a solution due to complexity or
+   *          undefined if no warning/confirmation is needed
+   */
   getComplexityWarning(heuristicDefiner: HeuristicDefiner): DialogContent | undefined {
     if (heuristicDefiner === HeuristicDefiner.LOCAL_SEARCH) {
       return this.getLocalSearchWarningIfNeeded();
@@ -61,6 +108,12 @@ export class SchedulingService {
     }
   }
 
+  /**
+   * Starts the scheduling process with a given heuristic and returns the result data (diagrams, content etc.) of the found solution.
+   *
+   * @param heuristicDefiner Definer of the heuristic to be used for scheduling
+   * @returns Result data of the solution found by scheduling with the given heuristic
+   */
   scheduleUsingHeuristic(heuristicDefiner: HeuristicDefiner): SchedulingResult {
     this.initialize(heuristicDefiner);
 
@@ -88,6 +141,9 @@ export class SchedulingService {
     return schedulingData;
   }
 
+  /**
+   * @returns Warning/confirm dialog content (for running local search) if 35 jobs or more a configured or undefined in case of less
+   */
   private getLocalSearchWarningIfNeeded(): DialogContent | undefined {
     if (this.storage.jobs.length >= 35) {
       return new DialogContent(
@@ -108,6 +164,13 @@ export class SchedulingService {
     }
   }
 
+  /**
+   * Checks the maximum complexity the shifting bottleneck heuristic might have concerning the current jobs/machines configuration and
+   * returns a warning in case of exceeding a recommended maximum complexity.
+   *
+   * @returns Warning/confirm dialog content (for running shifting bottleneck heuristic) if the calculated maximum complexity is higher
+   *          than the recommended one (comparison of complexities included in dialog)
+   */
   private getShiftingBottleneckWarningIfNeeded(): DialogContent | undefined {
     const faculty = (n: number) => {
       if (n <= 1) {
@@ -143,6 +206,13 @@ export class SchedulingService {
     }
   }
 
+  /**
+   * Initializes all (relevant) objects to be used for scheduling and/or generating the result data based on the heuristic to be used for
+   * scheduling. By deep copying values from the {StorageService} the logic of this class is decapsulatethed from the rest of the
+   * application.
+   *
+   * @param heuristicDefiner Definer of the heuristic to be used for scheduling
+   */
   private initialize(heuristicDefiner: HeuristicDefiner): void {
     // (Deep) copied values from storage cannot be undefined when this code is reached
     const deepCopiedJobs: Job[] = JSON.parse(JSON.stringify(this.storage.jobs));
@@ -164,6 +234,10 @@ export class SchedulingService {
     }
   }
 
+  /**
+   * Deletes all objects and values used for scheduling and/or generating the result data. Implemented since this service is not destroyed
+   * after successful scheduling/returning result data.
+   */
   private deleteTemporarilyStoredData(): void {
     delete this.jobs;
     delete this.machines;
@@ -171,10 +245,18 @@ export class SchedulingService {
     delete this.currentTimestampInScheduling;
     delete this.heuristicType;
     delete this.priorityRules;
+    delete this.objectiveFunction;
+    delete this.isEachDueDateConfigured;
+    delete this.machineConfigParam;
+    delete this.isLoggingConfigured;
+    delete this.logging;
   }
 
   // Static scheduling:
 
+  /**
+   * Basic logic for running NEH heuristic or Local Search: Finding of the best permutation and then running this solution.
+   */
   private scheduleStatically(): void {
     this.logSchedulingProcedure(1, 'Bestimmen der maschinenübergreifenden Abarbeitungsreihenfolge', LogEventType.JOB_QUEUE);
 
@@ -193,6 +275,9 @@ export class SchedulingService {
     this.currentTimestampInScheduling = this.mockProductionOfPermutation(this.jobs, true);
   }
 
+  /**
+   * @returns Best permutation found by the NEH-heuristic
+   */
   private bestPermutationNeh(): ScheduledJob[] {
     const presortedJobs = this.preSortJobs();
 
@@ -208,6 +293,11 @@ export class SchedulingService {
     return bestPermutationYet;
   }
 
+  /**
+   * (Pre)sorts jobs based on the selected objective function to be minimized and returns the sorted list.
+   *
+   * @returns (Pre)sorted jobs to be used in the NEH-heuristic
+   */
   private preSortJobs(): ScheduledJob[] {
     this.logPreSortingBasedOnObjectiveFunction();
 
@@ -240,6 +330,9 @@ export class SchedulingService {
     return sortedJobs;
   }
 
+  /**
+   * Logs (Scheduling Log) that presortng jobs is started and the respective value the jobs are sorted by
+   */
   private logPreSortingBasedOnObjectiveFunction(): void {
     let preSortBasedOn: string;
 
@@ -263,6 +356,9 @@ export class SchedulingService {
       LogEventType.HEURISTIC_BASED_SORTING);
   }
 
+  /**
+   * @returns Best permutation found by the Local Search
+   */
   private bestPermutationLocalSearch(): ScheduledJob[] {
     let iteration = 0;
     let startValue: number;
@@ -300,6 +396,17 @@ export class SchedulingService {
     return bestPermutationYet;
   }
 
+  /**
+   * Checks which value of a job is to be considered in order to compare jobs based on objective function to be minimized.
+   * That is:
+   * - due date
+   * - total machining time
+   * - due date / job weight
+   * - total machining time / job weight
+   *
+   * @param job Job the value for comparison is to be returned of
+   * @returns Value of the given job that is considered for comparison
+   */
   private getCompareValueForPresortingBasedOnObjectiveFunction(job: ScheduledJob): number {
     if (this.objectiveFunction === ObjectiveFunction.NUMBER_DEADLINE_EXCEEDANCES
       || this.objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES
@@ -318,6 +425,11 @@ export class SchedulingService {
     }
   }
 
+  /**
+   * @param existingPermutation Permutation based on which new permutations are to be created
+   * @param newJob Job to be added on each position in permutation
+   * @returns All possible permutations by adding the given new job on each position of the given permutation
+   */
   private createPermutationsByAddingJob(existingPermutation: ScheduledJob[], newJob: ScheduledJob): ScheduledJob[][] {
     const permutations: ScheduledJob[][] = [];
     for (let i = 0; i <= existingPermutation.length; i++) {
@@ -328,6 +440,11 @@ export class SchedulingService {
     return permutations;
   }
 
+  /**
+   * @param existingPermutation Permutation based on which new permutations are to be created
+   * @param iteration Curent Local Search iteration used for logging
+   * @returns All possible permutations by swapping two jobs of the given permutation
+   */
   private createPermutationsBySwappingJobs(existingPermutation: ScheduledJob[], iteration: number): ScheduledJob[][] {
     this.logSchedulingProcedure(1, iteration + '. Iteration: Beginn der Aufstellung von Permutationen ausgehend von ' +
       this.jobListStringForLogging(existingPermutation), LogEventType.HEURISTIC_BASED_SORTING);
@@ -350,6 +467,13 @@ export class SchedulingService {
     return permutations;
   }
 
+  /**
+   * Compares given permutations by checking the objective function to be minimized after the (mocked) production of each.
+   * The permutation with the lowest value is returned (in case of several with the same value the first of these).
+   *
+   * @param permutations Permutations to be compared concerning the objective function to be minimized
+   * @returns Best permutation concerning the objective function to be minimized
+   */
   private getCurrentBestPermutation(permutations: ScheduledJob[][]): ScheduledJob[] {
 
     const permutationsAndValuesTuple = permutations.map(permutation => {
@@ -368,6 +492,10 @@ export class SchedulingService {
     return bestPermutation;
   }
 
+  /**
+   * @param permutation Permutation the compoare value is to be calculated of
+   * @returns Value to be minimized (considering objective function) in case of producing the given permutation
+   */
   private getCompareValueForPermutation(permutation: ScheduledJob[]): number {
     permutation = permutation.map(job => new ScheduledJob(job));
     const duration = this.mockProductionOfPermutation(permutation) - 1;
@@ -405,6 +533,13 @@ export class SchedulingService {
     }
   }
 
+  /**
+   * Mocks the production of a given permutation and returns the makespan + 1.
+   *
+   * @param permutation Permutation the production is to be mocked for
+   * @param isLog (optional) if true, the production will be logged (Scheduling log)
+   * @returns Makespan of production + 1
+   */
   private mockProductionOfPermutation(permutation: ScheduledJob[], isLog?: boolean): number {
     let mockTimestamp = 0;
 
@@ -430,6 +565,12 @@ export class SchedulingService {
 
   // Dynamic scheduling:
 
+  /**
+   * Contains each steps to be done at a timestamp in dynamic scheduling:
+   * - handle current jobs on each machine
+   * - add (new) jobs to machine queues
+   * - sorting of job relevant job queues and subsequent starting of new productions (also considers setup times in last step(s))
+   */
   private proceedDynamicScheduling(): void {
     this.handleEachCurrentJobOfMachine();
     this.addJobsToMachineQueues();
@@ -467,6 +608,11 @@ export class SchedulingService {
   }
 
   // Called for any executed heuristic (for dynamic heuristics: before calling the heuristic based sorting)
+  /**
+   * Checks for each currently producing machine if the respective job's operation is finished and if so frees these machine
+   *
+   * @param mockTimestamp (optional) given timestamp, if not defined, {currentTimestampInScheduling} will be considered
+   */
   private handleEachCurrentJobOfMachine(mockTimestamp?: number): void {
     // mock timestamp used for static procedures only
     const usedTimestamp = mockTimestamp === undefined ? this.currentTimestampInScheduling : mockTimestamp;
@@ -476,6 +622,12 @@ export class SchedulingService {
   }
 
   // Called for any dynamically executed heuristic (before calling the heuristic based sorting) and static procedure mocking
+  /**
+   * Adds each job that is neither finished nor currently in production to the queue of the machine of its respective next operation
+   * (Jobs that are already in this queue will not be added again).
+   *
+   * @param givenJobs (optional) Jobs to be considered, if not defined {jobs} will be used
+   */
   private addJobsToMachineQueues(givenJobs?: ScheduledJob[]): void {
     // Given jobs used for static procedures only
     const jobs = givenJobs ? givenJobs : this.jobs;
@@ -498,6 +650,14 @@ export class SchedulingService {
   }
 
   // Implementation of sorting based on heuristics starts here (for dynamically executed heuristics):
+  /**
+   * Compares two given jobs based on the selected heuristic/priority rules and returns the sorting result value.
+   *
+   * @param jobA First job to be compared
+   * @param jobB Second job to be compared
+   * @param machineNr (used for logging) Number of the machine on which the two jobs are compared
+   * @returns Sorting result value after comparing the two given jobs
+   */
   private dynamicComparisonResultForCurrentHeuristic(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number): number {
     if (this.heuristicType === HeuristicDefiner.PRIORITY_RULES) {
       return this.compareJobsByPriorityRules(jobA, jobB, machineNr);
@@ -506,6 +666,15 @@ export class SchedulingService {
     }
   }
 
+  /**
+   * Compares two jobs using the defined priority rules. In case of equal values, the jobs are compared using the respective next priority
+   * rule. In case of no next rule, the jobs first job is preferred (-> "first come, first serve")
+   *
+   * @param jobA First job to be compared
+   * @param jobB Second job to be compared
+   * @param machineNr (used for logging) Number of the machine on which the two jobs are compared
+   * @returns Sorting result value after comparing the two given jobs using the defined priority rules
+   */
   private compareJobsByPriorityRules(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number): number {
     for (const priorityRule of this.priorityRules) {
       if (priorityRule === PriorityRule.FCFS) {
@@ -543,6 +712,11 @@ export class SchedulingService {
     return 0;
   }
 
+  /**
+   * @param job Job the respective value for comparing is to be calculated/checked and returned of
+   * @param priorityRule Priority rule defining the value based on which the job is to compared
+   * @returns Value for a job to be considered in sorting based on a given priority rule
+   */
   private getPriorityValueForJob(job: ScheduledJob, priorityRule:
     // All rules except for FCFS
     PriorityRule.KOZ | PriorityRule.KPZ | PriorityRule.CRSPT | PriorityRule.MOD | PriorityRule.CR |
@@ -588,7 +762,17 @@ export class SchedulingService {
 
   }
 
-  private compareJobsBySetupTimes(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number) {
+  /**
+   * Compares the setup times for two given jobs. That is:
+   * - in case of no previously produced job: The smallest setup time from the respective job to any other
+   * - in case of a previously produced job: The setup time from the previously produced job to the given job
+   *
+   * @param jobA First job to be compared
+   * @param jobB Second job to be compared
+   * @param machineNr (used for logging) Number of the machine on which the two jobs are compared
+   * @returns Difference between the considered setup times of the two jobs (usable for sorting)
+   */
+  private compareJobsBySetupTimes(jobA: ScheduledJob, jobB: ScheduledJob, machineNr: number): number {
 
     const previousJob = this.machines.find(machine => machine.machineNr === machineNr).lastJob;
 
@@ -637,6 +821,18 @@ export class SchedulingService {
     return lowestValueOfA - lowestValueOfB;
   }
 
+  /**
+   * Schedules the jobs using the Shifting-Bottleneck-Heuristic.
+   * Basic procedure:
+   * - check if the problem has to be solved using the heuristic (if not: Direct start of production (not considered in the further course))
+   * - creation of one machine problems, the following steps are to be seen as iterating as long as any machine has an
+   *   undefined scheduling plan:
+   *   - exact solving of these problems (1 | rj | Lmax)
+   *   - selecting the permutation for which Lmax is the hightest and considering this permutation as the scheduling plan on the respective
+   *     machine
+   *   - updating the consequent new job relations for the remaining One machine problems and the Lower Bound
+   * After successful scheduling: Production with given permutations for each machine.
+   */
   private scheduleByShiftingBottleneckHeuristic(): void {
 
     let lowerBoundMakespan = Math.max.apply(Math, this.jobs.map(job => job.totalMachiningTime));
@@ -680,6 +876,10 @@ export class SchedulingService {
     }
   }
 
+  /**
+   * @param lowerBoundMakespan Minimum possible makespan
+   * @returns Scheduling plans for each machine
+   */
   private initializeOneMachineSchedules(lowerBoundMakespan: number): SchedulingPlanForMachine[] {
     return this.machines
       .map(machine => new SchedulingPlanForMachine(machine.machineNr,
@@ -690,6 +890,9 @@ export class SchedulingService {
       );
   }
 
+  /**
+   * @returns Initialized array containing relations between jobs (precedence constraints (prec)).
+   */
   private initializeBottleneckRelations(): BottleneckRelation[] {
     const relations: BottleneckRelation[] = [];
     this.jobs.forEach(job => {
@@ -709,6 +912,9 @@ export class SchedulingService {
     return relations;
   }
 
+  /**
+   * @returns Initialized array containing the inverted relations between jobs for finding the "backward-longest-path"
+   */
   private initializeInvertedBottleneckRelations(): BottleneckRelation[] {
     const relations: BottleneckRelation[] = [];
     this.jobs.forEach(job => {
@@ -728,11 +934,22 @@ export class SchedulingService {
     return relations;
   }
 
+  /**
+   * Calls method to update the relation arrays based on a new final schedule and the consequent new precedence constraints at first.
+   * Later on, the due date and the availability of each job in the yet to solve scheduling plans is updated based on these values. In order
+   * to do so, each maximum path (backward and forward) of each job is calculated.
+   *
+   * @param schedulesToUpdate Array containing all schedules to be updated
+   * @param finalSchedule Exactly solved schedule the new relations based on which the new relations are to be created
+   * @param invertedBottleneckRelations Inverted precedence constraints to be updated
+   * @param bottleneckRelations Precedence constraints to be updated
+   * @param lowerBound Lower bound of the (total) problem
+   */
   private updateUnscheduledRelations(schedulesToUpdate: SchedulingPlanForMachine[],
                                      finalSchedule: SchedulingPlanForMachine,
                                      invertedBottleneckRelations: BottleneckRelation[],
                                      bottleneckRelations: BottleneckRelation[],
-                                     lmax: number): void {
+                                     lowerBound: number): void {
 
     this.updateRelationTables(invertedBottleneckRelations, bottleneckRelations, finalSchedule);
 
@@ -741,11 +958,18 @@ export class SchedulingService {
         const longestPastBranch = this.getLongestTimeForPathStarting(job.id, schedule.machineNr, invertedBottleneckRelations);
         const longestFutureBranch = this.getLongestTimeForPathStarting(job.id, schedule.machineNr, bottleneckRelations);
         job.onMachineAvailability = longestPastBranch;
-        job.onMachineDueDate = lmax - longestFutureBranch;
+        job.onMachineDueDate = lowerBound - longestFutureBranch;
       })
     );
   }
 
+  /**
+   * Updates the relation arrays based on a new final schedule and the consequent new precedence constraints.
+   *
+   * @param invertedBottleneckRelations Inverted precedence constraints to be updated
+   * @param bottleneckRelations Precedence constraints to be updated
+   * @param finalSchedule Exactly solved schedule the new relations based on which the new relations are to be created
+   */
   private updateRelationTables(invertedBottleneckRelations: BottleneckRelation[],
                                bottleneckRelations: BottleneckRelation[],
                                finalSchedule: SchedulingPlanForMachine): void {
@@ -778,6 +1002,12 @@ export class SchedulingService {
 
   }
 
+  /**
+   * @param jobId Id of the job for which the path with the maximum value is to be calculated
+   * @param machineNr Number of the machine the path is to be started on (for the given job)
+   * @param bottleneckRelations All existing relations (may be inverted relations, too)
+   * @returns Maximum value for any path starting from a certain job node
+   */
   private getLongestTimeForPathStarting(jobId: number, machineNr: number,
                                         bottleneckRelations: BottleneckRelation[]): number {
     let longestTimeYet = 0;
@@ -799,6 +1029,11 @@ export class SchedulingService {
     return longestTimeYet;
   }
 
+  /**
+   * @param maxTime Maximum total job time
+   * @returns Three dimensional array representing jobs on machines for each timestamp (multiple jobs on a machine possibe as machine
+   *          capacity is ignored)
+   */
   private getSchedulingIgnoringMachineCapacity(maxTime: number): ScheduledJob[][][] {
     const schedulingIgnoringMachineCapacity = this.machines.map(() => new Array(maxTime));
 
@@ -820,6 +1055,13 @@ export class SchedulingService {
     return schedulingIgnoringMachineCapacity;
   }
 
+  /**
+   * Calculates the exact best permutations for given scheduling plans (reducing Lmax) and returns the one with the highest Lmax.
+   * In case of many permutations with the same value for Lmax, the first one ist returned.
+   *
+   * @param schedulingPlans Scheduling plans to be optimized
+   * @returns Optimally scheduled permutation with the highest value for Lmax
+   */
   private getScheduleWithHighestOptimalLmax(schedulingPlans: SchedulingPlanForMachine[]): SchedulingPlanForMachine {
     schedulingPlans.forEach(schedule => {
       schedule.scheduledJobs = this.getBestPermutationByBranchAndBound(schedule.scheduledJobs);
@@ -840,37 +1082,16 @@ export class SchedulingService {
     return scheduleWithHighestOptimalLmax;
   }
 
-  private startProductionWithGivenOneMachineSchedules(finalOneMachineSchedules: SchedulingPlanForMachine[]): void {
-    let schedulingTimestamp = 0;
-
-    do {
-      this.handleEachCurrentJobOfMachine(schedulingTimestamp);
-      this.machines.forEach(machine => {
-        const optimizedSchedule = finalOneMachineSchedules.find(schedule => schedule.machineNr === machine.machineNr);
-
-        if (optimizedSchedule.scheduledJobs.length) {
-          const nextJobForMachine = this.jobs.find(job => job.id === optimizedSchedule.scheduledJobs[0].id);
-
-          // If each operation of the next job before the operation on this machine is finished:
-          if (nextJobForMachine.nextMachineNr === machine.machineNr) {
-            machine.jobQueue.push(this.jobs.find(job => job.id === nextJobForMachine.id));
-            optimizedSchedule.scheduledJobs.shift();
-          }
-        }
-      });
-
-      this.machines
-        .filter(machine => !machine.currentJob && machine.jobQueue.length)
-        .forEach(machine => {
-          machine.startProductionOfNext(schedulingTimestamp);
-          this.logSchedulingProcedure(machine.machineNr, 'Beginn der Abarbeitung von Auftrag ' +
-            this.jobStringForLogging(machine.currentJob), LogEventType.PRODUCTION_START, schedulingTimestamp);
-        });
-      schedulingTimestamp++;
-    } while (this.jobs.some(job => job.nextMachineNr !== undefined));
-    this.currentTimestampInScheduling = schedulingTimestamp;
-  }
-
+  /**
+   * Exactly solves a problem by using the Branch and Bound algorithm and returns the optimal schedule.
+   * Basic procedure:
+   * - determine current best solution, lower and upper bound
+   * - follow branches that may deliver the best solution (better than the current) and dynamically update current best solution, LB and UB
+   * - repeat step two for new branches (or nodes starting branches) as long as they may contain a better solution
+   *
+   * @param jobs Jobs to scheduled
+   * @returns Optimal schedule for given jobs
+   */
   private getBestPermutationByBranchAndBound(jobs: RelaxableOneMachineScheduledJob[]): RelaxableOneMachineScheduledJob[] {
     // Sort jobs:
     let currentBestSolution: RelaxableOneMachineScheduledJob[] = jobs.sort((j1, j2) => j1.onMachineAvailability - j2.onMachineAvailability);
@@ -915,6 +1136,10 @@ export class SchedulingService {
     return currentBestSolution;
   }
 
+  /**
+   * @param jobs Jobs the maximum lateness of is to be calculated (in order for production)
+   * @returns Maximum lateness for production of given jobs
+   */
   private getMaxLatenessForSortedOneMachineJobs(jobs: RelaxableOneMachineScheduledJob[]): number {
 
     let currentTimestamp = 0;
@@ -941,6 +1166,11 @@ export class SchedulingService {
     return currentMaxDelay;
   }
 
+  /**
+   * @param jobs Relaxable jobs the maximum lateness of is to be calculated (each job is possible to be paused in its production in order
+   *        to produce another one instead (in order to minimize its delay))
+   * @returns Maximum lateness for production of given jobs
+   */
   private getMaxLatenessForRelaxedOneMachineJobs(jobs: RelaxableOneMachineScheduledJob[]): number {
     jobs.forEach(job => job.initializeRelaxedProduction());
     let currentTimestamp = 0;
@@ -960,6 +1190,14 @@ export class SchedulingService {
     return Math.max.apply(Math, jobs.map(job => job.onMachineDelay));
   }
 
+  /**
+   * Calculates the maximum lateness of given, partly fixed, jobs.
+   * First, all fixed jobs are produced, the relaxable jobs are following.
+   *
+   * @param jobs Partly relaxable jobs the maximum lateness of is to be calculated
+   * @param fixtures Ids of those jobs that cannot be paused in their production
+   * @returns Maximum lateness for production of given jobs
+   */
   private getMaxLatenessForPartlyFixedRelaxedJobs(jobs: RelaxableOneMachineScheduledJob[], fixtures: number[])
     : [number, RelaxableOneMachineScheduledJob[]] {
 
@@ -1010,6 +1248,42 @@ export class SchedulingService {
     const totalMax = Math.max.apply(Math, [nonFixedMaxDelay, maxDelayOfFixedJobs]);
 
     return [totalMax, productionLine.length === jobs.length ? productionLine : undefined];
+  }
+
+  /**
+   * Production with given schedules for each machine.
+   *
+   * @param finalOneMachineSchedules Schedules defining the order in which jobs are to produced on each machine
+   */
+  private startProductionWithGivenOneMachineSchedules(finalOneMachineSchedules: SchedulingPlanForMachine[]): void {
+    let schedulingTimestamp = 0;
+
+    do {
+      this.handleEachCurrentJobOfMachine(schedulingTimestamp);
+      this.machines.forEach(machine => {
+        const optimizedSchedule = finalOneMachineSchedules.find(schedule => schedule.machineNr === machine.machineNr);
+
+        if (optimizedSchedule.scheduledJobs.length) {
+          const nextJobForMachine = this.jobs.find(job => job.id === optimizedSchedule.scheduledJobs[0].id);
+
+          // If each operation of the next job before the operation on this machine is finished:
+          if (nextJobForMachine.nextMachineNr === machine.machineNr) {
+            machine.jobQueue.push(this.jobs.find(job => job.id === nextJobForMachine.id));
+            optimizedSchedule.scheduledJobs.shift();
+          }
+        }
+      });
+
+      this.machines
+        .filter(machine => !machine.currentJob && machine.jobQueue.length)
+        .forEach(machine => {
+          machine.startProductionOfNext(schedulingTimestamp);
+          this.logSchedulingProcedure(machine.machineNr, 'Beginn der Abarbeitung von Auftrag ' +
+            this.jobStringForLogging(machine.currentJob), LogEventType.PRODUCTION_START, schedulingTimestamp);
+        });
+      schedulingTimestamp++;
+    } while (this.jobs.some(job => job.nextMachineNr !== undefined));
+    this.currentTimestampInScheduling = schedulingTimestamp;
   }
 
   // called after successful scheduling
