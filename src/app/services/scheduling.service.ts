@@ -28,6 +28,10 @@ import {DialogType} from '../model/internal/dialog/DialogType';
 import {BetaFormalPipe} from '../pipes/beta-formal.pipe';
 import {MachineConfig} from '../model/enums/MachineConfig';
 
+/**
+ * Service used in order schedule jobs using a given heuristic and generate the data to be displayed.
+ * Created as Service in order to decapsulatethe this procedure from the rest of the application.
+ */
 @Injectable({
   providedIn: 'root'
 })
