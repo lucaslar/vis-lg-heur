@@ -10,13 +10,20 @@ import {DialogContent} from '../../../model/internal/dialog/DialogContent';
 })
 export class PopUpComponent {
 
+  /**
+   * Stores all enum values
+   */
   private readonly _type = DialogType;
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: DialogContent
-  ) {
+  /**
+   * @param data Dialog content to be shown
+   */
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogContent) {
   }
 
+  /**
+   * Getter for {_type}
+   */
   get type(): any {
     return this._type;
   }

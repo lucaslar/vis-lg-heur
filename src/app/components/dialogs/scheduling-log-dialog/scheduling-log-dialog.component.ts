@@ -10,11 +10,20 @@ import {SchedulingLogEntry} from '../../../model/internal/visualization/Scheduli
 })
 export class SchedulingLogDialogComponent {
 
+  /**
+   * Stores all enum values
+   */
   private _logEventType = LogEventType;
 
+  /**
+   * @param data Log entries to be shown
+   */
   constructor(@Inject(MAT_DIALOG_DATA) public data: SchedulingLogEntry[]) {
   }
 
+  /**
+   * Getter for {_logEventType}
+   */
   get logEventType(): any {
     return this._logEventType;
   }

@@ -12,21 +12,39 @@ import {DialogContent} from '../../../model/internal/dialog/DialogContent';
 })
 export class HeuristicsSelectionComponent implements OnInit {
 
+  /**
+   * Array of all implemented heuristics
+   */
   private heuristcs: Heuristic[];
+
+  /**
+   * Map containing an heuristic as key and if not applicable the message why as value
+   */
   private messagesMap: Map<Heuristic, string>;
 
   constructor(public storage: StorageService,
               private dialogRef: MatDialogRef<HeuristicsSelectionComponent>) {
   }
 
+  /**
+   * Initializes {messagesMap}.
+   */
   ngOnInit() {
     this.messagesMap = new Map<Heuristic, string>();
   }
 
+  /**
+   * Closes this dialog.
+   */
   closeDialog(): void {
     this.dialogRef.close();
   }
 
+  /**
+   * Sets values for {messagesMap} (if not defined yet) and returns all implemented heuristics.
+   *
+   * @returns All heuristics to be listed
+   */
   getHeuristics(): Heuristic[] {
     if (!this.heuristcs) {
       this.heuristcs = Object.values(HeuristicDefiner).map(definer => {
@@ -47,6 +65,10 @@ export class HeuristicsSelectionComponent implements OnInit {
     return this.heuristcs;
   }
 
+  /**
+   * @param heuristic Heuristic the message for is to be returned
+   * @returns undefined in case of no error message, otherwise the error message listed in {messagesMap} is returned
+   */
   getHeuristicMessage(heuristic: Heuristic): string | undefined {
     return this.messagesMap.get(heuristic);
   }

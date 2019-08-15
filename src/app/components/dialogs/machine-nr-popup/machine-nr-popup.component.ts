@@ -8,25 +8,44 @@ import {StorageService} from '../../../services/storage.service';
 })
 export class MachineNrPopupComponent implements OnInit {
 
+  /**
+   * Configured number of machines
+   */
   private _machineNr: number;
+
+  /**
+   * Each possible number of machines
+   */
   private _machines: number[];
 
   constructor(public storage: StorageService) {
   }
 
+  /**
+   * Initializes both the selected and all possible machine numbers
+   */
   ngOnInit(): void {
     this.machineNr = this.storage.nrOfMachines;
     this._machines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   }
 
+  /**
+   * Getter for {_machineNr}
+   */
   get machineNr(): number {
     return this._machineNr;
   }
 
+  /**
+   * @param machineNr Value to be set for {_machineNr}
+   */
   set machineNr(machineNr: number) {
     this._machineNr = machineNr;
   }
 
+  /**
+   * Getter for {_machines}
+   */
   get machines(): number[] {
     return this._machines;
   }
