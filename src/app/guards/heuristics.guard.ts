@@ -7,6 +7,9 @@ import {DialogType} from '../model/internal/dialog/DialogType';
 import {PopUpComponent} from '../components/dialogs/pop-up/pop-up.component';
 import {DialogContent} from '../model/internal/dialog/DialogContent';
 
+/**
+ * Guard to be used in order to protect the visualization page.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +20,14 @@ export class HeuristicsGuard implements CanActivate {
               private dialog: MatDialog) {
   }
 
+  /**
+   * Checks if the stated heuristic exists, is applicable and the current problem is not exactly solvable in a realistic amount of time
+   * and returns this value. If not, false is returned, the user cannot pass and a dialog is shown.
+   *
+   * @param route Snapshot of the the current route
+   * @returns true if the stated heuristic exists, is applicable and the current problem is not exactly solvable in a realistic amount of
+   *          time
+   */
   canActivate(route: ActivatedRouteSnapshot): boolean {
 
     const statedHeuristic = route.paramMap.get('heuristic');
@@ -47,6 +58,9 @@ export class HeuristicsGuard implements CanActivate {
     return isApplicableHeuristic;
   }
 
+  /**
+   * @return Content of the dialog to be shown if the heuristic stated in the route does not exist
+   */
   private noSuchHeuristicDialog(): DialogContent {
     return new DialogContent(
       'Heuristik nicht bekannt',

@@ -6,6 +6,9 @@ import {PopUpComponent} from '../components/dialogs/pop-up/pop-up.component';
 import {DialogContent} from '../model/internal/dialog/DialogContent';
 import {DialogType} from '../model/internal/dialog/DialogType';
 
+/**
+ * Guard to be used in order to protect each child page of beta.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +19,13 @@ export class BetaEnoughJobsGuard implements CanActivateChild {
               private dialog: MatDialog) {
   }
 
+  /**
+   * Checks if enough jobs (number specified in route data) are defined in order to open a child (beta) and returns this value.
+   * If not, false is returned, the user cannot pass and a dialog is shown.
+   *
+   * @param route snapshot of the the current route
+   * @returns true if enough jobs are defined in order to open a child (beta)
+   */
   canActivateChild(route: ActivatedRouteSnapshot): boolean {
 
     const minJobsNeeded = route.data.minJobs as number;
@@ -40,6 +50,11 @@ export class BetaEnoughJobsGuard implements CanActivateChild {
     return isEnoughJobsConfigured;
   }
 
+  /**
+   * @param configuredJobs Number of currently configured jobs
+   * @param minJobsNeeded Minimum number of jobs that have to be configured in order to pass
+   * @returns Information why passing is not possible
+   */
   private getNoAccessText(configuredJobs: number, minJobsNeeded: number): string[] {
     return [
       'Für den Zugriff auf diese Option existieren derzeit ' +
