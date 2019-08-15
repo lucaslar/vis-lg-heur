@@ -10,24 +10,80 @@ import {Heuristic} from '../model/scheduling/Heuristic';
 import {DialogType} from '../model/internal/dialog/DialogType';
 import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
 
+/**
+ * Service used in order to manage storing and storage-concerning globally usable logic.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
+  // Storable values:
+
+  /**
+   * Jobs configured by the user
+   */
   private _jobs: Job[];
+
+  /**
+   * Numer of machines defined by the user
+   */
   private _nrOfMachines: number;
+
+  /**
+   * Objective function to be minimized selected by the user
+   */
   private _objectiveFunction: ObjectiveFunction;
+
+  /**
+   * Priority rules selected by the user (in this order)
+   */
   private _priorityRules: PriorityRule[];
+
+  /**
+   * Represents the user's logging configuration
+   */
   private _isLoggingConfigured: boolean;
 
+  // Keys:
+
+  /**
+   * String to be appended to each key for storing data of this application
+   */
   private readonly PREFIX_KEY = 'VISLGHEUR_';
+
+  /**
+   * Key for storable value: jobs
+   */
   private readonly JOBS = 'JOBS';
+
+  /**
+   * Key for storable value: number of machines
+   */
   private readonly NR_OF_MACHINES = 'NR_OF_MACHINES';
+
+  /**
+   * Key for storable value: objective function
+   */
   private readonly OBJECTIVE_FUNCTION = 'OBJECTIVE_FUNCTION';
+
+  /**
+   * Key for storable value: priority rules
+   */
   private readonly PRIORITY_RULES = 'PRIORITY_RULES';
+
+  /**
+   * Key for storable value: logging configuration
+   */
   private readonly IS_LOGGING = 'IS_LOGGING';
 
+  /**
+   * Checks the values of a certain given type concerning whether all/the definable data is stated completely, partly or not at all and
+   * returns the respective value.
+   *
+   * @param definableValue Type the definition status of is to be checked.
+   * @returns Definition status for given definable value
+   */
   getValueDefinitionStatus(definableValue: DefinableValue): DefinitionStatus {
     let expectedDefinitions: number;
     let existingDefinitions: number;
@@ -57,8 +113,12 @@ export class StorageService {
         : DefinitionStatus.PARTLY_DEFINED;
   }
 
+  /**
+   * (Based on Blazewicz, Ecker et al. 2019 – Handbook on Scheduling, p. 274/353)
+   *
+   * @returns Dialog content informing that the current problem is exactly solvable in a realistic amount of time or undefined if not.
+   */
   getMessageIfExactlySolvableProblem(): DialogContent | undefined {
-    // based on Blazewicz, Ecker et al. 2019 – Handbook on Scheduling, p. 274/353
     if (this.jobs.length
       && this.objectiveFunction === ObjectiveFunction.CYCLE_TIME
       && (this.nrOfMachines === 2 || this.isExacltySolvableThreeMachineFs())) {
@@ -81,6 +141,20 @@ export class StorageService {
     return undefined;
   }
 
+  /**
+   * Checks whether a given heuristic is applicable in the current case and returns false/an informative dialog if not, if so true and
+   * undefined respectively. Being applicable means:
+   * - at least 4 configured jobs
+   * - matching required machine configuration
+   * - all values needed for calculating defined
+   * - the current machine configuration allows to minimize the current objective function (using the given heuristic)
+   *
+   * @param definer Definer of the heuristic to be checked concerning being currently applicable or not
+   * @param isDialogRequired (optional) If true, an informative dialog (if not applicable) or undefined will be
+   *        returned instead of a boolean
+   * @return True if a given heuristic is applicable in the current case, false if not. (if {isDialogRequired} is set to true, a
+   *         dialog/undefined ist returned)
+   */
   isHeuristicApplicable(definer: HeuristicDefiner, isDialogRequired?: boolean): boolean | DialogContent | undefined {
     // only schedule for at least four jobs:
     if (this.jobs.length >= 4) {
@@ -117,6 +191,13 @@ export class StorageService {
     }
   }
 
+  /**
+   * Checks whether all definable values needed in order to use a heuristic are defined.
+   *
+   * @param heuristic Heuristic the needed values for are to be checked
+   * @returns undefined if no definition is missing, in case of a lacking definition
+   *          type of the value at least one definition of is missing
+   */
   private checkValuesForHeuristic(heuristic: Heuristic): DefinableValue | undefined {
     for (const value of heuristic.requiredValues) {
       if (this.getValueDefinitionStatus(value) !== DefinitionStatus.COMPLETELY_DEFINED) {
@@ -133,6 +214,11 @@ export class StorageService {
     return undefined;
   }
 
+  /**
+   * @param heuristic Heuristic that cannot be applied due to the machine configuration
+   * @returns Content for a dialog informing that the given heuristic is not applicable due to the machine configuration
+   *          (naming both the needed and the current machine configuration)
+   */
   private getNotApplicableDueToMachineConfigDialog(heuristic: Heuristic): DialogContent {
     const possibleMachineConfigs = [];
     heuristic.requiredMachineConfigs.forEach(config => {
@@ -156,6 +242,11 @@ export class StorageService {
     );
   }
 
+  /**
+   * @param heuristic Heuristic that cannot be applied due to the wrong/missing objective function to be minimized
+   * @returns Content for a dialog informing that the given heuristic is not applicable due to a wrong/missing objective function to
+   *          be minmized (naming both the needed and the currently selected objective function)
+   */
   private getNotApplicableDueToWrongOrMissingFunction(heuristic: Heuristic): DialogContent {
     return new DialogContent(
       'Zielfunktionswert nicht passend',
@@ -174,6 +265,12 @@ export class StorageService {
     );
   }
 
+  /**
+   * @param heuristic Heuristic that cannot be applied due to the wrong objective function in the given machine configuration
+   * @returns Content for a dialog informing that the given heuristic is not applicable due to the wrong objective function in the
+   *          given machine configuration be minmized (naming both the possible (for current machine configuration) and
+   *          the currently selected objective function(s))
+   */
   private getNotApplicableDueToMachineConfigRequiringFunctionDialog(heuristic: Heuristic): DialogContent {
     return new DialogContent(
       'Zielfunktionswert nicht zu aktueller Maschinenkonfiguration passend',
@@ -188,6 +285,11 @@ export class StorageService {
     );
   }
 
+  /**
+   * @param missingValue The currently missing value in order to be able to use the given heuristic
+   * @param heuristic Heuristic that cannot be applied due to a missing value
+   * @returns Content for a dialog informing that the given heuristic is not applicable due to a missing value which is specifically named
+   */
   private getNotApplicableDueToValueDialog(missingValue: DefinableValue, heuristic: Heuristic): DialogContent {
     return new DialogContent(
       'Werte für Berechnung unvollständig',
@@ -208,6 +310,9 @@ export class StorageService {
     );
   }
 
+  /**
+   * @returns Total number of defined machine times defined for all jobs
+   */
   private getJobTimesDefinitions(): number {
     let existingDefinitions = 0;
     this.jobs
@@ -222,6 +327,9 @@ export class StorageService {
     return existingDefinitions;
   }
 
+  /**
+   * @returns true if the machine order of each job is the same, false if not
+   */
   private isSameMachineOrderForEachJob(): boolean {
     let lastCheckedIndex = 0;
     // cannot be undefined in this place
@@ -249,6 +357,9 @@ export class StorageService {
     return true;
   }
 
+  /**
+   * @returns true in case of a Flow Shop problem with exactly three machines the second (middle machine) of is no bottleneck
+   */
   private isExacltySolvableThreeMachineFs(): boolean {
     if (this.nrOfMachines === 3 && this.machineConfigParam === MachineConfig.FLOWSHOP) {
       const firstMachineMin = Math.min.apply(Math, this.jobs.map(job => job.machineTimes[0].timeOnMachine));
@@ -260,6 +371,9 @@ export class StorageService {
     }
   }
 
+  /**
+   * @returns Current machine configuration (as formal/alpha param)
+   */
   get machineConfigParam(): MachineConfig {
     if (!this.jobs || this.jobs.length === 0) {
       return MachineConfig.NONE;
@@ -272,6 +386,9 @@ export class StorageService {
     }
   }
 
+  /**
+   * @returns Configured number of machines (default of 1 returned in case of no stored machine number)
+   */
   get nrOfMachines(): number {
     if (!this._nrOfMachines) {
       const nrOfMachines = localStorage.getItem(this.PREFIX_KEY + this.NR_OF_MACHINES);
@@ -280,11 +397,17 @@ export class StorageService {
     return this._nrOfMachines;
   }
 
+  /**
+   * @param nrOfMachines Number of machines to be set both locally (for faster further usage in current session) and to be stored long term
+   */
   set nrOfMachines(nrOfMachines: number) {
     this._nrOfMachines = nrOfMachines;
     localStorage.setItem(this.PREFIX_KEY + this.NR_OF_MACHINES, nrOfMachines.toString());
   }
 
+  /**
+   * @returns Configured jobs (empty array is returned as default in case of no stored jobs)
+   */
   get jobs(): Job[] {
     if (!this._jobs) {
       const jobs = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.JOBS));
@@ -293,11 +416,17 @@ export class StorageService {
     return this._jobs;
   }
 
+  /**
+   * @param jobs Jobs to be set both locally (for faster further usage in current session) and to be stored long term
+   */
   set jobs(jobs: Job[]) {
     this._jobs = jobs;
     localStorage.setItem(this.PREFIX_KEY + this.JOBS, JSON.stringify(jobs));
   }
 
+  /**
+   * @returns Configured objective function to be minimized (no default value to be returned in case of no stored value)
+   */
   get objectiveFunction(): ObjectiveFunction {
     if (this._objectiveFunction === undefined) { // would be null if parsed from JSON
       this._objectiveFunction = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.OBJECTIVE_FUNCTION));
@@ -305,11 +434,17 @@ export class StorageService {
     return this._objectiveFunction;
   }
 
+  /**
+   * @param value Objective function to be set both locally (for faster further usage in current session) and to be stored long term
+   */
   set objectiveFunction(value: ObjectiveFunction) {
     this._objectiveFunction = value;
     localStorage.setItem(this.PREFIX_KEY + this.OBJECTIVE_FUNCTION, JSON.stringify(this.objectiveFunction));
   }
 
+  /**
+   * @returns Configured priority rules (empty array is returned as default in case of no stored priority rules)
+   */
   get priorityRules(): PriorityRule[] {
     if (!this._priorityRules) {
       const priorityRules = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.PRIORITY_RULES));
@@ -318,11 +453,17 @@ export class StorageService {
     return this._priorityRules;
   }
 
+  /**
+   * @param priorityRules Priority rules to be set both locally (for faster further usage in current session) and to be stored long term
+   */
   set priorityRules(priorityRules: PriorityRule[]) {
     this._priorityRules = priorityRules;
     localStorage.setItem(this.PREFIX_KEY + this.PRIORITY_RULES, JSON.stringify(priorityRules));
   }
 
+  /**
+   * @returns Current logging configuration (true is returned as default in case of no stored logging configuration)
+   */
   get isLoggingConfigured(): boolean {
     if (this._isLoggingConfigured === undefined) {
       const isLoggingConfigured = JSON.parse(localStorage.getItem(this.PREFIX_KEY + this.IS_LOGGING));
@@ -331,6 +472,9 @@ export class StorageService {
     return this._isLoggingConfigured;
   }
 
+  /**
+   * @param value Logging configuration to be set both locally (for faster further usage in current session) and to be stored long term
+   */
   set isLoggingConfigured(value: boolean) {
     this._isLoggingConfigured = value;
     localStorage.setItem(this.PREFIX_KEY + this.IS_LOGGING, JSON.stringify(value));
