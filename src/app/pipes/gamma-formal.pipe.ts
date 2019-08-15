@@ -1,11 +1,18 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
 
+/**
+ * Pipe to be used in order to get the formal definition of a given objective function.
+ */
 @Pipe({
   name: 'objectiveFunctionFormal'
 })
 export class GammaFormalPipe implements PipeTransform {
 
+  /**
+   * @param value Objective function to be formally defined
+   * @returns Formal definition of the given objective function
+   */
   transform(value: ObjectiveFunction): string {
     if (value === ObjectiveFunction.CYCLE_TIME) {
       return 'C<sub>max</sub>';

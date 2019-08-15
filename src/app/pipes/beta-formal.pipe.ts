@@ -1,12 +1,18 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {ObjectiveFunction} from '../model/enums/ObjectiveFunction';
-import {Job} from '../model/scheduling/Job';
 
+/**
+ * Pipe to be used in order to get the formal definition of beta-values needed for minimizing a given objective function.
+ */
 @Pipe({
   name: 'betaFormal'
 })
 export class BetaFormalPipe implements PipeTransform {
 
+  /**
+   * @param value Objective function the needed beta-values are to be returned of
+   * @returns Formal definition of needed beta-values
+   */
   transform(value: ObjectiveFunction): string {
 
     const betaFormal: string[] = [];
