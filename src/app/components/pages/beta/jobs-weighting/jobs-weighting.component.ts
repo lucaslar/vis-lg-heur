@@ -23,24 +23,41 @@ export class JobsWeightingComponent implements OnInit {
               private changeDetector: ChangeDetectorRef) {
   }
 
+  /**
+   * On initialization, the jobs are loaded from the storage and a dialog offering to automatically generate job weightings is opened in
+   * case of undefined values.
+   */
   ngOnInit(): void {
     this._jobs = this.storage.jobs;
     this.openAutoGenerationDialogIfNeeded();
   }
 
+  /**
+   * @param job Job the weight is to be stored for
+   * @param weight New weight
+   */
   onWeightChanged(job: Job, weight: number): void {
     job.weight = weight;
     this.storage.jobs = this.jobs;
   }
 
+  /**
+   * @returns true if each job weighting is configured
+   */
   isWeightOfEachJobConfigured(): boolean {
     return this.storage.getValueDefinitionStatus(DefinableValue.BETA_WEIGHTS) === DefinitionStatus.COMPLETELY_DEFINED;
   }
 
+  /**
+   * @returns true if no job weighting is configured
+   */
   isWeightOfNoJobConfigured(): boolean {
     return this.storage.getValueDefinitionStatus(DefinableValue.BETA_WEIGHTS) === DefinitionStatus.NOT_DEFINED;
   }
 
+  /**
+   * Opens a confirmation dialog for confirming to delete all existing job weighting. If accepted, the desired action is performed.
+   */
   deleteAllExistingWeights(): void {
     this.dialog.open(PopUpComponent, {
       data: new DialogContent(
@@ -59,6 +76,9 @@ export class JobsWeightingComponent implements OnInit {
     });
   }
 
+  /**
+   * Adds random weightings for each job the weighting of is undefined.
+   */
   addRandomWeights(): void {
     this.jobs
       .filter(job => !job.weight)
@@ -70,6 +90,9 @@ export class JobsWeightingComponent implements OnInit {
     );
   }
 
+  /**
+   * Opens a dialog offering to automatically generate job weightings in case of any undefined values.
+   */
   private openAutoGenerationDialogIfNeeded(): void {
     if (!this.isWeightOfEachJobConfigured()) {
       this.dialog.open(PopUpComponent, {

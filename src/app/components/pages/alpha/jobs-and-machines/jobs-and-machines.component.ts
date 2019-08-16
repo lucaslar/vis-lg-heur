@@ -227,7 +227,7 @@ export class JobsAndMachinesComponent implements OnInit {
   }
 
   /**
-   * Opens a confirmation dialog for confirming to delete all job times. If accepted, the desired action is performed
+   * Opens a confirmation dialog for confirming to delete all job times. If accepted, the desired action is performed.
    */
   deleteAllExistingJobTimes(): void {
     this.dialog.open(PopUpComponent, {
@@ -255,7 +255,7 @@ export class JobsAndMachinesComponent implements OnInit {
   }
 
   /**
-   * Opens a confirmation dialog for confirming to delete all jobs. If accepted, the desired action is performed
+   * Opens a confirmation dialog for confirming to delete all jobs. If accepted, the desired action is performed.
    */
   deleteAllExistingJobs(): void {
     this.dialog.open(PopUpComponent, {

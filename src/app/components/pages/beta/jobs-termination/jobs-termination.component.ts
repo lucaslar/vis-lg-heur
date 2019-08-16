@@ -16,6 +16,9 @@ import {MatSnackBar} from '@angular/material';
 })
 export class JobsTerminationComponent implements OnInit {
 
+  /**
+   * Job list
+   */
   private _jobs: Job[];
 
   constructor(public storage: StorageService,
@@ -24,6 +27,10 @@ export class JobsTerminationComponent implements OnInit {
               private changeDetector: ChangeDetectorRef) {
   }
 
+  /**
+   * On initialization, the jobs are loaded from the storage and a dialog offering to automatically generate due dates is opened in case of
+   * undefined values.
+   */
   ngOnInit(): void {
     this._jobs = this.storage.jobs;
     if (!this.isDueDateOfEachJobConfigured()) {
@@ -54,6 +61,10 @@ export class JobsTerminationComponent implements OnInit {
     }
   }
 
+  /**
+   * @param job Job the minimum due date is to be calculated for
+   * @returns Lowest possible (due to machine times) due date for a job
+   */
   calculateMinimumDueDateForJob(job: Job): number {
     let minDueDate = job.machineTimes.length;
     job.machineTimes.forEach(
@@ -66,19 +77,32 @@ export class JobsTerminationComponent implements OnInit {
     return minDueDate;
   }
 
+  /**
+   * @param job Job the due date is to be stored for
+   * @param dueDate New due date
+   */
   onDueDateChanged(job: Job, dueDate: number): void {
     job.dueDate = dueDate;
     this.storage.jobs = this.jobs;
   }
 
+  /**
+   * @returns true if each due date is configured
+   */
   isDueDateOfEachJobConfigured(): boolean {
     return this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.COMPLETELY_DEFINED;
   }
 
+  /**
+   * @returns true if no due date is configured
+   */
   isDueDateOfNoJobConfigured(): boolean {
     return this.storage.getValueDefinitionStatus(DefinableValue.BETA_DUE_DATES) === DefinitionStatus.NOT_DEFINED;
   }
 
+  /**
+   * Opens a confirmation dialog for confirming to delete all existing due dates. If accepted, the desired action is performed.
+   */
   deleteAllExistingDueDates(): void {
     this.dialog.open(PopUpComponent, {
       data: new DialogContent(
@@ -97,6 +121,10 @@ export class JobsTerminationComponent implements OnInit {
     });
   }
 
+  /**
+   * Adds random (realistic) due dates for each job the due date of is undefined. The further way how they are calculated is documented
+   * in this code and in the descriptional pop-up for automatically generating due dates.
+   */
   addRandomDueDates(): void {
     let sumOfFirstSteps = this.jobs
       .filter(job => job.dueDate)
