@@ -10,22 +10,40 @@ import {StorageService} from '../../../../services/storage.service';
 })
 export class ObjectiveFunctionDefinitionComponent implements OnInit {
 
+  /**
+   * List of all objective functions as string array
+   */
   private _objectiveFunctionsAsStrings: string[];
+
+  /**
+   * The objective function selected by the user
+   */
   private _selectedFunction: ObjectiveFunction;
 
   constructor(public storage: StorageService) {
   }
 
+  /**
+   * Initialized {_objectiveFunctionsAsStrings} and {_selectedFunction}.
+   */
   ngOnInit(): void {
     this._objectiveFunctionsAsStrings = Object.values(ObjectiveFunction);
     this.selectedFunction = this.storage.objectiveFunction;
   }
 
+  /**
+   * Deletes the selected objective function.
+   */
   deleteObjectiveFunction() {
     this.selectedFunction = undefined;
     this.storage.objectiveFunction = null;
   }
 
+  /**
+   * Changes the objective function based on the user's selection.
+   *
+   * @param event Selection event
+   */
   onSelectionChange(event: MatRadioChange): void {
     this.storage.objectiveFunction = event.value;
   }
