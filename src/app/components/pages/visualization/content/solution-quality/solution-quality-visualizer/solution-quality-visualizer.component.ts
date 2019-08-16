@@ -9,9 +9,19 @@ import {ObjectiveFunction} from '../../../../../../model/enums/ObjectiveFunction
 })
 export class SolutionQualityVisualizerComponent {
 
+  /**
+   * Solution quality data to be visualized
+   */
   @Input() data: VisualizableSolutionQualityData;
+
+  /**
+   * Stores all Enum values
+   */
   @Input() objectiveFunction: ObjectiveFunction;
 
+  /**
+   * True if the current objective function considers due dates
+   */
   isDueDatesConsidered(): boolean {
     return (this.objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES
       || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES

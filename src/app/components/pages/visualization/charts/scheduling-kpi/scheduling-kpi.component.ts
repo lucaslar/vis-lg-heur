@@ -10,16 +10,32 @@ import {Kpi} from '../../../../../model/internal/visualization/SchedulingResult'
 })
 export class SchedulingKpiComponent implements OnInit, DoCheck {
 
+  /**
+   * Reference to the icon to be shown
+   */
   @ViewChild('icon', {static: true}) icon: ElementRef;
+
+  /**
+   * Reference to the wrapping card
+   */
   @ViewChild('card', {static: true}) card: ElementRef;
 
+  /**
+   * Kpi to be displayed.
+   */
   @Input() kpi: Kpi;
 
+  /**
+   * Boolean whether the KPI is to be displayed in a row
+   */
   private _isRow: boolean;
 
   constructor(private changeDetector: ChangeDetectorRef) {
   }
 
+  /**
+   * On initialization, the locale for displaying the number is registered and the icon to be shown is set.
+   */
   ngOnInit(): void {
     registerLocaleData(localeDe, 'de');
     // Font Awesome icons
@@ -36,6 +52,9 @@ export class SchedulingKpiComponent implements OnInit, DoCheck {
     } // else: &oslash;
   }
 
+  /**
+   * Sets {isRow} according to the ratio of the card.
+   */
   ngDoCheck(): void {
     this._isRow = this.card.nativeElement.offsetHeight / this.card.nativeElement.offsetWidth < 0.5;
     this.changeDetector.detectChanges();

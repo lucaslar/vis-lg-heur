@@ -9,8 +9,14 @@ import {Heuristic} from '../../../../../model/scheduling/Heuristic';
 })
 export class HeuristicProcedureComponent {
 
+  /**
+   * Heuristic more information about is to be shown
+   */
   @Input() chosenHeuristic: Heuristic;
 
+  /**
+   * Stores all Enum values
+   */
   private readonly _heuristic = HeuristicDefiner;
 
   get heuristic(): any {

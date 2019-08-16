@@ -10,17 +10,29 @@ import {MachineConfig} from '../../../../../../model/enums/MachineConfig';
 })
 export class GeneralDataComponent {
 
+  /**
+   * Data to be shown in the component
+   */
   @Input() data: GeneralSchedulingData;
+
+  /**
+   * Heuristic used for scheduling
+   */
   @Input() heuristic: Heuristic;
 
+  /**
+   * Stores all Enum values
+   */
   private readonly _machineCongig = MachineConfig;
 
+  /**
+   * @returns Selected priority rules as one string.
+   */
+  getListedPriorityRules() {
+    return this.data.priorityRules.map(pRule => '"' + pRule + '"').join(', ');
+  }
 
   get machineCongig(): any {
     return this._machineCongig;
-  }
-
-  getListedPriorityRules() {
-    return this.data.priorityRules.map(pRule => '"' + pRule + '"').join(', ');
   }
 }

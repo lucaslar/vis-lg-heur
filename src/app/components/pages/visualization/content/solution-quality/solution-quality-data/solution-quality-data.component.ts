@@ -9,14 +9,31 @@ import {ObjectiveFunction} from '../../../../../../model/enums/ObjectiveFunction
 })
 export class SolutionQualityDataComponent implements OnInit {
 
+  /**
+   * KPIs to be displayed
+   */
   @Input() data: Kpi[];
+
+  /**
+   * true if all due dates are configured, false if not
+   */
   @Input() isEachDueDateConfigured: boolean;
+
+  /**
+   * Stores all Enum values
+   */
   @Input() objectiveFunction: ObjectiveFunction;
 
+  /**
+   * On initialization, all undefined KPIs are excluded.
+   */
   ngOnInit(): void {
     this.data = this.data.filter(data => !!data);
   }
 
+  /**
+   * True if the current objective function considers due dates
+   */
   isDueDatesConsidered(): boolean {
     return (this.objectiveFunction === ObjectiveFunction.SUM_DEADLINE_EXCEEDANCES
       || this.objectiveFunction === ObjectiveFunction.SUM_WEIGHTED_DEADLINE_EXCEEDANCES

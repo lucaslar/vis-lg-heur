@@ -8,6 +8,9 @@ import {MachineTableData} from '../../../../../model/internal/visualization/Sche
 })
 export class MachineTablesComponent {
 
+  /**
+   * Table data to be shown
+   */
   @Input() data: MachineTableData[];
 
 }

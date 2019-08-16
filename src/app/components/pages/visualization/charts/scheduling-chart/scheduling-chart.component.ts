@@ -13,16 +13,51 @@ import {ChartType, Dataset} from '../../../../../model/internal/visualization/Vi
 
 export class SchedulingChartComponent implements OnInit {
 
+  /**
+   * Further chart options
+   */
   private _options;
+
+  /**
+   * Colors to be used for visualizing the dataset(s)
+   */
   private _colors: Array<any>;
 
+  /**
+   * Title of the container/diagram
+   */
   @Input() title: string;
+
+  /**
+   * Chart type
+   */
   @Input() type: ChartType;
+
+  /**
+   * Dataset to be visualized
+   */
   @Input() datasets: Dataset[];
+
+  /**
+   * Labels to be displayed
+   */
   @Input() labels: string[];
+
+  /**
+   * Label for the x-axis
+   */
   @Input() yLabel: string;
+
+  /**
+   * Label for the y-axis
+   */
   @Input() xLabel: string;
 
+  /**
+   * Can be undefined due to other method.
+   *
+   * @param colors Colors to be set
+   */
   @Input() set colors(colors: string[]) {
     this._colors = [
       {
@@ -32,6 +67,9 @@ export class SchedulingChartComponent implements OnInit {
   }
 
 
+  /**
+   * On initialization, options are initialized and color if not specified for the current diagram.
+   */
   ngOnInit(): void {
 
     this.initOptions();
@@ -41,6 +79,9 @@ export class SchedulingChartComponent implements OnInit {
     }
   }
 
+  /**
+   * Initialized the options concerning the diagram to be shown.
+   */
   private initOptions(): void {
     this._options = {
       responsive: true,
@@ -65,6 +106,9 @@ export class SchedulingChartComponent implements OnInit {
     };
   }
 
+  /**
+   * Initializes the specified default colors for bar/line charts.
+   */
   private initDefaultColors(): void {
     this._colors = [
       { // Indigo accent (Angular Material) with less opacity:

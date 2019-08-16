@@ -14,16 +14,55 @@ import {MatDialog} from '@angular/material';
 })
 export class VisualizerComponent implements OnInit {
 
+  /**
+   * Heuristic used in order to solve the scheduling problem
+   */
   private _usedHeuristic: Heuristic;
+
+  /**
+   * Result containing displayable data after successful scheduling
+   */
   private _result: SchedulingResult;
 
+
+  /**
+   * Represents whether the Gantt chart chapter is opened or closed
+   */
   private _isGanttChartVisible = true;
+
+  /**
+   * Represents whether the general data chapter is opened or closed
+   */
   private _isGeneralDataVisible = true;
+
+  /**
+   * Represents whether the solution quality chapter is opened or closed
+   */
   private _isSolutionQualityDataVisible = true;
+
+  /**
+   * Represents whether the visualizable general data chapter is opened or closed
+   */
   private _isVisualizableGeneralDataVisible = true;
+
+  /**
+   * Represents whether the visualizable solution quality chapter is opened or closed
+   */
   private _isVisualizableSolutionQualityDataVisible = true;
+
+  /**
+   * Represents whether the heuristic procedure chapter is opened or closed
+   */
   private _isHeuristicProcedureVisible = false;
+
+  /**
+   * Represents whether the machine tables chapter is opened or closed
+   */
   private _isMachineTablesVisible = false;
+
+  /**
+   * Represents whether the scheduling log chapter is opened or closed
+   */
   private _isLoggingVisible = false;
 
   constructor(public scheduling: SchedulingService,
@@ -32,6 +71,12 @@ export class VisualizerComponent implements OnInit {
               private dialog: MatDialog) {
   }
 
+  /**
+   * On initialization, by subscribing to the activatedRoute params, it is enabled to reload child components.
+   * This means the user can choose to solve the problem with procedure B while on this page having used procedure A.
+   *
+   * In case of a complexity warning, the user is asked to confirm scheduling.
+   */
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(() => {
       const heuristicDefiner = <HeuristicDefiner>this.activatedRoute.snapshot.paramMap.get('heuristic');
@@ -56,6 +101,12 @@ export class VisualizerComponent implements OnInit {
     });
   }
 
+  /**
+   * Starts scheduling and thus sets the scheduling result. Wrapped inside setTimeout in order to
+   * show spinner in case of longer calculations. (Timeout 0)
+   *
+   * @param heuristicDefiner Heuristic to be used for scheduling
+   */
   private startScheduling(heuristicDefiner: HeuristicDefiner): void {
     setTimeout(() => this._result = this.scheduling.scheduleUsingHeuristic(heuristicDefiner), 0);
   }
