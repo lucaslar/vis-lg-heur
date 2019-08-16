@@ -21,9 +21,6 @@ export class PopUpComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogContent) {
   }
 
-  /**
-   * Getter for {_type}
-   */
   get type(): any {
     return this._type;
   }

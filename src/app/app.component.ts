@@ -93,9 +93,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-  /**
-   * Getter for: {_isLargeHeader}
-   */
   get isLargeHeader(): boolean {
     return this._isLargeHeader;
   }

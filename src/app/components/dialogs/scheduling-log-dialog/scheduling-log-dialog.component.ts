@@ -21,9 +21,6 @@ export class SchedulingLogDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: SchedulingLogEntry[]) {
   }
 
-  /**
-   * Getter for {_logEventType}
-   */
   get logEventType(): any {
     return this._logEventType;
   }

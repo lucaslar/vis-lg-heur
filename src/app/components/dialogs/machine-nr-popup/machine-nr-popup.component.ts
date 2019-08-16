@@ -29,23 +29,14 @@ export class MachineNrPopupComponent implements OnInit {
     this._machines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   }
 
-  /**
-   * Getter for {_machineNr}
-   */
   get machineNr(): number {
     return this._machineNr;
   }
 
-  /**
-   * @param machineNr Value to be set for {_machineNr}
-   */
   set machineNr(machineNr: number) {
     this._machineNr = machineNr;
   }
 
-  /**
-   * Getter for {_machines}
-   */
   get machines(): number[] {
     return this._machines;
   }
