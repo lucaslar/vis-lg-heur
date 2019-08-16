@@ -11,15 +11,33 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class PriorityRulesDefinitionComponent implements OnInit {
 
+  /**
+   * List of priority rules stored by the user
+   */
   private _storedRules: PriorityRule[];
+
+  /**
+   * List of priority rules not stored by the user
+   */
   private _otherRules: PriorityRule[];
 
+
+  /**
+   * Reference to the list of stored priority rules
+   */
   @ViewChild('storedList', {static: false}) private storedList: CdkDropList<PriorityRule[]>;
+
+  /**
+   * Reference to the list of other priority rules
+   */
   @ViewChild('othersList', {static: false}) private othersList: CdkDropList<PriorityRule[]>;
 
   constructor(public storage: StorageService, private snackBar: MatSnackBar) {
   }
 
+  /**
+   * Initializes stored and not stored priority rules.
+   */
   ngOnInit(): void {
     this.storedRules = this.storage.priorityRules;
     this.otherRules = Object.values(PriorityRule).filter(
@@ -27,6 +45,11 @@ export class PriorityRulesDefinitionComponent implements OnInit {
     );
   }
 
+  /**
+   * Calls method to change arrays on dropping.
+   *
+   * @param event Dropping event
+   */
   drop(event: CdkDragDrop<PriorityRule[]>): void {
     this.changeArrays(
       event.previousContainer,
@@ -36,6 +59,11 @@ export class PriorityRulesDefinitionComponent implements OnInit {
     );
   }
 
+  /**
+   * Adds a priority rule to the list of stored priority rules.
+   *
+   * @param index Index of the priority rule to be added (in list: "others")
+   */
   add(index: number): void {
     this.changeArrays(
       this.othersList,
@@ -45,6 +73,11 @@ export class PriorityRulesDefinitionComponent implements OnInit {
     );
   }
 
+  /**
+   * Deletes a priority rule from the list of stored priority rules.
+   *
+   * @param index Index of the priority rule to be deleted (in list: "stored")
+   */
   delete(index: number): void {
     this.changeArrays(
       this.storedList,
@@ -54,6 +87,20 @@ export class PriorityRulesDefinitionComponent implements OnInit {
     );
   }
 
+  /**
+   * Changes array(s) either by changing or by sorting content. Possible/allowed actions:
+   * - Sorting of stored priority rules
+   * - Drag and drop for adding rules
+   * - Drag and drop for deleting rules
+   *
+   * Thus, sorting the array of other priority rules is not allowed.
+   *
+   * @param previousContainer Outgoing list (can be the same as container)
+   * @param container Receiving list (can be the same as previousContainer)
+   * @param previousIndex Index of item in outgoing list
+   * @param currentIndex Index of item in receiving list (dropped position)
+   * @param isMessageToBeHidden (optional) if true, no snackbars will be shown after performing the action
+   */
   private changeArrays(previousContainer: CdkDropList<PriorityRule[]>,
                        container: CdkDropList<PriorityRule[]>,
                        previousIndex: number,
@@ -79,6 +126,14 @@ export class PriorityRulesDefinitionComponent implements OnInit {
     }
   }
 
+  /**
+   * Opens a snackbar informing about a performed action and allowing to undo actions.
+   *
+   * @param previousContainer Outgoing list (can be the same as container)
+   * @param container Receiving list (can be the same as previousContainer)
+   * @param previousIndex Index of item in outgoing list
+   * @param currentIndex Index of item in receiving list (dropped position)
+   */
   private openSnackBar(previousContainer: CdkDropList<PriorityRule[]>,
                        container: CdkDropList<PriorityRule[]>,
                        previousIndex: number,
