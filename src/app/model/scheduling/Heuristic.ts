@@ -5,11 +5,34 @@ import {ObjectiveFunction} from '../enums/ObjectiveFunction';
 
 export class Heuristic {
 
+  /**
+   * Name of the heuristic procedure
+   */
   private readonly _name: string;
+
+  /**
+   * Internally used definer of the heuristic
+   */
   private readonly _heuristicDefiner: HeuristicDefiner;
+
+  /**
+   * Values that need to be defined in order to be able to use the heuristic
+   */
   private readonly _requiredValues: DefinableValue[];
+
+  /**
+   * Required machine config(s) in order to be able to use the heuristic
+   */
   private readonly _requiredMachineConfigs: MachineConfig[];
+
+  /**
+   * Required values for specific objective functions
+   */
   private readonly _requiredValuesForObjectiveFunctions: Map<ObjectiveFunction, DefinableValue[]>;
+
+  /**
+   * Machine configs with limited possible objective functions / only possible objective functions for certain machine configs
+   */
   private readonly _machineConfigRequiresFunction: Map<MachineConfig, ObjectiveFunction[]>;
 
   constructor(name: string,
@@ -26,6 +49,10 @@ export class Heuristic {
     this._machineConfigRequiresFunction = machineConfigRequiresFunction;
   }
 
+  /**
+   * @param definer Definer of heuristic to be returned
+   * @returns Heuristic determined by internal definer
+   */
   static getHeuristicByDefiner(definer: HeuristicDefiner): Heuristic {
     if (definer === HeuristicDefiner.PRIORITY_RULES) {
       return this.priorityRulesHeuristic(definer);
@@ -40,6 +67,10 @@ export class Heuristic {
     }
   }
 
+  /**
+   * @param definer Definer of the heuristic
+   * @returns Concrete heuristic: Priority rules
+   */
   private static priorityRulesHeuristic(definer: HeuristicDefiner): Heuristic {
     return new Heuristic(
       'Prioritätsregeln',
@@ -49,6 +80,10 @@ export class Heuristic {
     );
   }
 
+  /**
+   * @param definer Definer of the heuristic
+   * @returns Concrete heuristic: Nearest-Neighbour-Heuristic
+   */
   private static nearestNeighbourHeuristic(definer: HeuristicDefiner) {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.SUM_SETUP_TIME, []);
@@ -62,6 +97,10 @@ export class Heuristic {
     );
   }
 
+  /**
+   * @param definer Definer of the heuristic
+   * @returns Concrete heuristic: NEH-Heuristic
+   */
   private static nehHeuristic(definer: HeuristicDefiner) {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.CYCLE_TIME, []);
@@ -97,6 +136,10 @@ export class Heuristic {
     );
   }
 
+  /**
+   * @param definer Definer of the heuristic
+   * @returns Concrete heuristic: Local Search
+   */
   private static localSearchHeuristic(definer: HeuristicDefiner): Heuristic {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.CYCLE_TIME, []);
@@ -132,6 +175,10 @@ export class Heuristic {
     );
   }
 
+  /**
+   * @param definer Definer of the heuristic
+   * @returns Concrete heuristic: Shifting-Bottleneck-Heuristic
+   */
   private static shiftingBottleneck(definer: HeuristicDefiner): Heuristic {
     const functions = new Map<ObjectiveFunction, DefinableValue[]>();
     functions.set(ObjectiveFunction.CYCLE_TIME, []);

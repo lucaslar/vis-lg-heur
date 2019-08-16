@@ -1,10 +1,28 @@
 import {DialogType} from './DialogType';
 
+/**
+ * Content to be shown in a basic dialog (unified component).
+ */
 export class DialogContent {
 
+  /**
+   * Header of the dialog
+   */
   private _header: string;
+
+  /**
+   * Text to be shown, each string is a paragraph
+   */
   private _text: string[];
+
+  /**
+   * Type of the dialog which also defines the color and the buttons (alert/confirm) of the component
+   */
   private _type: DialogType;
+
+  /**
+   * Additional (optional) elements to be listed
+   */
   private _listedElements: string[];
 
   constructor(header: string, text: string[], type: DialogType, listedElements?: string[]) {

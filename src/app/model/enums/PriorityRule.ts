@@ -1,3 +1,6 @@
+/**
+ * List of all selectable priority rules.
+ */
 export enum PriorityRule {
   FCFS = 'First come, first serve',
   KOZ = 'Kürzeste-Operationszeit-Regel',
@@ -11,5 +14,8 @@ export enum PriorityRule {
   SOPN = 'Pufferzeit pro verbleibende Operationen',
   SOPT = 'Pufferzeit pro verbleibender Bearbeitungszeit',
   SPTT = 'Shortest Processing Time Truncated',
-  SZ = 'Schlupfzeitregel (verbleibende Schlupfzeit)', // Used in excel, not stated in the book
+
+  // Additional implementation / Not stated in the Herrmann: Übungsbuch Losbildung und Fertigungssteuerung (2018):
+  SZ = 'Schlupfzeitregel (verbleibende Schlupfzeit)'
+
 }

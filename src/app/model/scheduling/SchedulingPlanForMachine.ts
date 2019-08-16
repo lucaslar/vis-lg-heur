@@ -1,8 +1,18 @@
 import {RelaxableOneMachineScheduledJob} from './ScheduledJob';
 
+/**
+ * Fixed scheduling plan to be used for a single machine.
+ */
 export class SchedulingPlanForMachine {
 
+  /**
+   * Number of the machine this plan refers to
+   */
   private readonly _machineNr: number;
+
+  /**
+   * Jobs in correct order
+   */
   private _scheduledJobs: RelaxableOneMachineScheduledJob[];
 
   constructor(machineNr: number, scheduledJobs: RelaxableOneMachineScheduledJob[]) {

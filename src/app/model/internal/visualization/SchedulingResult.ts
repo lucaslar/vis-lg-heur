@@ -4,6 +4,10 @@ import {ChartData, TimelineData} from './VisualizableData';
 import {LogEventType} from '../../enums/LogEventType';
 import {ObjectiveFunction} from '../../enums/ObjectiveFunction';
 
+/**
+ * Class to be used for defining all result data after successful scheduling.
+ * No need to describe more than the classes themselves due to speaking attributes.
+ */
 export class SchedulingResult {
 
   private _generalData: GeneralSchedulingData;
@@ -62,6 +66,9 @@ export class SchedulingResult {
   }
 }
 
+/**
+ * General information about the solved problem.
+ */
 export class GeneralSchedulingData {
 
   private _priorityRules: PriorityRule[];
@@ -147,6 +154,9 @@ export class GeneralSchedulingData {
   }
 }
 
+/**
+ * (Visualizable) context related KPI
+ */
 export class Kpi {
 
   private _title: string;
@@ -178,6 +188,9 @@ export class Kpi {
   }
 }
 
+/**
+ * Diagrams in relation to general data of a problem.
+ */
 export class VisualizableGeneralData {
 
   private _totalDurationsOnMachines: ChartData;
@@ -209,6 +222,9 @@ export class VisualizableGeneralData {
   }
 }
 
+/**
+ * Diagrams in relation to the solution quality.
+ */
 export class VisualizableSolutionQualityData {
 
   private _finishedJobsAtTimestamp: ChartData;
@@ -291,6 +307,9 @@ export class VisualizableSolutionQualityData {
   }
 }
 
+/**
+ * Time related scheduling result data
+ */
 export class SchedulingTimesData {
   private _allMachineOperationsTimeline: TimelineData;
   private _machineTables: MachineTableData[];
@@ -312,6 +331,9 @@ export class SchedulingTimesData {
   }
 }
 
+/**
+ * Machine table with listed jobs/production timestamps.
+ */
 export class MachineTableData {
   private _machineNr: number;
   private _machineTableEntries: MachineTableEntry[];
@@ -333,6 +355,9 @@ export class MachineTableData {
   }
 }
 
+/**
+ * Single entry in a table listing production timestamps for a certain machine.
+ */
 export class MachineTableEntry {
   private _timestampStart: number;
   private _timestampEnd: number;
@@ -372,6 +397,9 @@ export class MachineTableEntry {
   }
 }
 
+/**
+ * Class displaying a single entry in the scheduling log.
+ */
 export class SchedulingLogEntry {
 
   private readonly _timestamp: number;

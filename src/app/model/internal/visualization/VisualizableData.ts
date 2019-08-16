@@ -1,4 +1,13 @@
+import {Input} from '@angular/core';
+
+/**
+ * Parent class for unifying specific classes implemented in order to simplify working with charts.
+ */
 export class VisualizableData {
+
+  /**
+   * Colors to be used in the chart
+   */
   private _colors: string[];
 
   get colors(): string[] {
@@ -10,12 +19,39 @@ export class VisualizableData {
   }
 }
 
+/**
+ * Implemented in order to simplify working with Chart.js.
+ */
 export class ChartData extends VisualizableData {
+
+  /**
+   * Title of the diagram (container it is implemented in)
+   */
   private _title: string;
+
+  /**
+   * Chart type
+   */
   private _visualizableAs: ChartType;
+
+  /**
+   * Datasets to be visualized
+   */
   private _datasets: Dataset[];
+
+  /**
+   * Labels to be displayed
+   */
   private _labels: string[];
+
+  /**
+   * Label for the x-axis
+   */
   private _xLabel: string;
+
+  /**
+   * Label for the y-axis
+   */
   private _yLabel: string;
 
   get title(): string {
@@ -67,7 +103,14 @@ export class ChartData extends VisualizableData {
   }
 }
 
+/**
+ * Implemented in order to simplify working with Google Timeline.
+ */
 export class TimelineData extends VisualizableData {
+
+  /**
+   * Machine, operation/job, start of operation, end of operation[]
+   */
   private _timelineData: [string, string, Date, Date][];
 
   get timelineData(): [string, string, Date, Date][] {
@@ -79,14 +122,27 @@ export class TimelineData extends VisualizableData {
   }
 }
 
+/**
+ * Dataset used in Chart.js-diagrams
+ */
 export class Dataset {
-  // Attributes cannot be private (Chart.js)
+  // Attributes cannot be private
+
+  /**
+   * Data to be displayed
+   */
   data: number[];
+
+  /**
+   * Label of the current dataset
+   */
   label: string;
 }
 
+/**
+ * Chart.js: Types of charts that are implemented in this application.
+ */
 export enum ChartType {
-  // Chart.js types:
   CJS_LINE = 'line',
   CJS_BAR = 'bar',
 }

@@ -1,3 +1,7 @@
+/**
+ * List of all internally used definers for heuristics.
+ * (also part of paths: visualize/[definer])
+ */
 export enum HeuristicDefiner {
   PRIORITY_RULES = 'priority-rules',
   NEAREST_NEIGHBOUR = 'nearest-neighbour',

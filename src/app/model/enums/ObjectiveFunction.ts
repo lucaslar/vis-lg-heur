@@ -1,3 +1,6 @@
+/**
+ * List of all selectable objective functions.
+ */
 export enum ObjectiveFunction {
   CYCLE_TIME = 'Gesamtdauer',
   MAX_DELAY = 'Maximale Verspätung',
@@ -10,5 +13,4 @@ export enum ObjectiveFunction {
   SUM_DELAYED_WORK = 'Summe der verspäteten Arbeit',
   SUM_WEIGHTED_DELAYED_WORK = 'Summe der gewichteten verspäteten Arbeit',
   SUM_SETUP_TIME = 'Summe der Rüstzeiten',
-
 }

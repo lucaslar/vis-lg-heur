@@ -34,7 +34,7 @@ export class SchedulingChartComponent implements OnInit {
   @Input() type: ChartType;
 
   /**
-   * Dataset to be visualized
+   * Datasets to be visualized
    */
   @Input() datasets: Dataset[];
 
