@@ -15,7 +15,7 @@ export enum PriorityRule {
   SOPT = 'Pufferzeit pro verbleibender Bearbeitungszeit',
   SPTT = 'Shortest Processing Time Truncated',
 
-  // Additional implementation / Not stated in the Herrmann: Übungsbuch Losbildung und Fertigungssteuerung (2018):
+  // Additional implementation / Not stated in Herrmann: Übungsbuch Losbildung und Fertigungssteuerung (2018):
   SZ = 'Schlupfzeitregel (verbleibende Schlupfzeit)'
 
 }

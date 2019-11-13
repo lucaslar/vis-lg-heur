@@ -212,7 +212,7 @@ export class SchedulingService {
 
   /**
    * Initializes all (relevant) objects to be used for scheduling and/or generating the result data based on the heuristic to be used for
-   * scheduling. By deep copying values from the {StorageService} the logic of this class is decapsulatethed from the rest of the
+   * scheduling. By deep copying values from the {StorageService} the logic of this class is decapsulated from the rest of the
    * application.
    *
    * @param heuristicDefiner Definer of the heuristic to be used for scheduling
@@ -497,7 +497,7 @@ export class SchedulingService {
   }
 
   /**
-   * @param permutation Permutation the compoare value is to be calculated of
+   * @param permutation Permutation the compare value is to be calculated of
    * @returns Value to be minimized (considering objective function) in case of producing the given permutation
    */
   private getCompareValueForPermutation(permutation: ScheduledJob[]): number {
@@ -832,7 +832,7 @@ export class SchedulingService {
    * - creation of one machine problems, the following steps are to be seen as iterating as long as any machine has an
    *   undefined scheduling plan:
    *   - exact solving of these problems (1 | rj | Lmax)
-   *   - selecting the permutation for which Lmax is the hightest and considering this permutation as the scheduling plan on the respective
+   *   - selecting the permutation for which Lmax is the highest and considering this permutation as the scheduling plan on the respective
    *     machine
    *   - updating the consequent new job relations for the remaining One machine problems and the Lower Bound
    * After successful scheduling: Production with given permutations for each machine.

@@ -257,7 +257,7 @@ export class StorageService {
         '\', aktuell gewählt ist allerdings' +
         (this.objectiveFunction ? ': \'' + this.objectiveFunction + '\'.' : ' kein Zielfunktionswert.') +
         ' Bitte wählen Sie ' + ([...heuristic.requiredValuesForObjectiveFunctions.keys()].length > 1 ?
-          'eine' : 'die') + ' gennnte Funktion, um fortfahren zu können.',
+          'eine' : 'die') + ' genannte Funktion, um fortfahren zu können.',
         'Das Lösen von Reihenfolgeproblemen mithilfe von Prioritätsregeln stellt hierbei eine Besonderheit dar, da ' +
         'durch die Wahl unterschiedlicher Regeln unterschiedliche Zielwerte betrachtet werden und diese frei kombinierbar sind.'
       ],
