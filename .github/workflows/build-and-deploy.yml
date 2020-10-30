@@ -18,17 +18,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install `Angular CLI gh-pages`
-        run: npm install angular-cli-ghpages — save-dev
+        run: npm install angular-cli-ghpages --save-dev
 
       - name: Build
         run: |
           npm install
-          ng build --prod --base-href
+          ng build --prod --base-href "https://lucaslar.github.io/vis-lg-heur/"
       
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3
-        with: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: build
-          CLEAN: true
+        run: npx angular-cli-ghpages --dir=dist/vis-lg-heur
