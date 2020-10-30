@@ -5,7 +5,7 @@ import {MachineConfig} from '../../../../model/enums/MachineConfig';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 import {DialogContent} from '../../../../model/internal/dialog/DialogContent';
 import {DialogType} from '../../../../model/internal/dialog/DialogType';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-machine-config',

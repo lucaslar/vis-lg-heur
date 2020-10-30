@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ObjectiveFunction} from '../../../../model/enums/ObjectiveFunction';
-import {MatRadioChange} from '@angular/material';
 import {StorageService} from '../../../../services/storage.service';
+import {MatRadioChange} from '@angular/material/radio';
 
 @Component({
   selector: 'app-objective-function-definition',

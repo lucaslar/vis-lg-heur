@@ -7,7 +7,7 @@ import {DialogType} from '../../../../model/internal/dialog/DialogType';
 import {DefinitionStatus} from '../../../../model/internal/value-definition/DefinitionStatus';
 import {DefinableValue} from '../../../../model/internal/value-definition/DefinableValue';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-jobs-termination',

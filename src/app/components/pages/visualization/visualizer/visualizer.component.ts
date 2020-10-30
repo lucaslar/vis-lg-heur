@@ -5,7 +5,7 @@ import {HeuristicDefiner} from '../../../../model/enums/HeuristicDefiner';
 import {SchedulingResult} from '../../../../model/internal/visualization/SchedulingResult';
 import {Heuristic} from '../../../../model/scheduling/Heuristic';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-visualizer',

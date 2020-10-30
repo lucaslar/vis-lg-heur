@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material';
 import {LogEventType} from '../../../model/enums/LogEventType';
 import {SchedulingLogEntry} from '../../../model/internal/visualization/SchedulingResult';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-scheduling-log-dialog',

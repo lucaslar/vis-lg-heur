@@ -1,12 +1,13 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Job} from '../../../../model/scheduling/Job';
 import {StorageService} from '../../../../services/storage.service';
-import {MatDialog, MatSnackBar} from '@angular/material';
 import {PopUpComponent} from '../../../dialogs/pop-up/pop-up.component';
 import {DialogContent} from '../../../../model/internal/dialog/DialogContent';
 import {DialogType} from '../../../../model/internal/dialog/DialogType';
 import {DefinableValue} from '../../../../model/internal/value-definition/DefinableValue';
 import {DefinitionStatus} from '../../../../model/internal/value-definition/DefinitionStatus';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-jobs-weighting',

@@ -1,12 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
 import {SchedulingLogDialogComponent} from '../../../../dialogs/scheduling-log-dialog/scheduling-log-dialog.component';
-import {StorageService} from '../../../../../services/storage.service';
 import {LogEventType} from '../../../../../model/enums/LogEventType';
 import {SchedulingLogEntry} from '../../../../../model/internal/visualization/SchedulingResult';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import {HeuristicDefiner} from '../../../../../model/enums/HeuristicDefiner';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-scheduling-log-component',
