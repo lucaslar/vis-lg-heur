@@ -4,7 +4,7 @@ import {StorageService} from '../../../services/storage.service';
 @Component({
   selector: 'app-machine-nr-popup',
   templateUrl: './machine-nr-popup.component.html',
-  styleUrls: ['./machine-nr-popup.component.css', '/../shared-dialog-styles.css']
+  styleUrls: ['./machine-nr-popup.component.css', '../shared-dialog-styles.css']
 })
 export class MachineNrPopupComponent implements OnInit {
 
