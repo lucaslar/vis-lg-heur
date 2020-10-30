@@ -136,8 +136,8 @@ export class SchedulingGanttComponent implements OnInit {
    * @param event Selected operation
    */
   onJobOperationSelected(event): void {
-    const row = this.data[event[0].row];
-    const color = this.getColorOfRow(event[0].row);
+    const row = this.data[event.selection[0].row];
+    const color = this.getColorOfRow(event.selection[0].row);
     this.selectedOperation = new OperationOnConsole(row, color);
   }
 

@@ -31,7 +31,7 @@
     <div #chartContainer>
       <google-chart (ready)="onChartReady()"
                     (select)="onJobOperationSelected($event)"
-                    (mouseenter)="onJobOperationMouseEnter($event)"
+                    (mouseover)="onJobOperationMouseEnter($event)"
                     (mouseleave)="onJobOperationMouseLeave()"
                     [type]="'Timeline'"
                     [data]="data"
