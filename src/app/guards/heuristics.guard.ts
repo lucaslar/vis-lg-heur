@@ -34,7 +34,7 @@ export class HeuristicsGuard implements CanActivate {
     let responseDialog: DialogContent | undefined;
 
     // Check if stated heuristic exists in enum:
-    if (Object.values(HeuristicDefiner).includes(statedHeuristic)) {
+    if (Object.values(HeuristicDefiner).includes(statedHeuristic as HeuristicDefiner)) {
       const exactlySolvableInfo = this.storage.getMessageIfExactlySolvableProblem();
       responseDialog = exactlySolvableInfo !== undefined ? exactlySolvableInfo :
         <DialogContent | undefined> this.storage.isHeuristicApplicable(<HeuristicDefiner>statedHeuristic, true);
