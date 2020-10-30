@@ -17,6 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install `Angular CLI`
+        run: npm install -g @angular/cli
+        
       - name: Install `Angular CLI gh-pages`
         run: npm install angular-cli-ghpages --save-dev
 
