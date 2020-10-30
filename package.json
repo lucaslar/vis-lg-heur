@@ -11,9 +11,6 @@
     "deploy": "ng build --prod --base-href=/vis-lg-heur/"
   },
   "private": true,
-  "resolutions": {
-    "@babel/preset-env": "7.5.5"
-  },
   "dependencies": {
     "@angular/animations": "^10.2.1",
     "@angular/cdk": "^10.2.6",
