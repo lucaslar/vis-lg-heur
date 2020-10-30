@@ -28,7 +28,6 @@ jobs:
 
     - name: Build
       run: |
-        npm install @angular-devkit/build-angular@0.803.24
         npx npm-force-resolutions
         npm install
         npm run-script deploy
