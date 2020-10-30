@@ -6,27 +6,34 @@ on:
   pull_request:
     branches: [ master ]
 
+# steps, see: https://dev.to/angular/build-deploy-angular-apps-in-github-pages-using-github-actions-e7a
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  build-and-deploy:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Install `Angular CLI`
-        run: npm install -g @angular/cli
-        
-      - name: Install `Angular CLI gh-pages`
-        run: npm install angular-cli-ghpages --save-dev
-
-      - name: Build
-        run: |
-          npm install
-          ng build --prod --base-href "https://lucaslar.github.io/vis-lg-heur/"
+    - name: Checkout
+      uses: actions/checkout@v1
       
-      - name: Deploy
-        run: npx angular-cli-ghpages --dir=dist/vis-lg-heur
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-    
+          
+    - name: Build
+      run: |
+        npm install
+        npm run-script deploy
+        
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: dist/vis-lg-heur
