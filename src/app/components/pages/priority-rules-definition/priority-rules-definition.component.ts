@@ -25,12 +25,12 @@ export class PriorityRulesDefinitionComponent implements OnInit {
   /**
    * Reference to the list of stored priority rules
    */
-  @ViewChild('storedList', {static: false}) private storedList: CdkDropList<PriorityRule[]>;
+  @ViewChild('storedList') private storedList: CdkDropList<PriorityRule[]>;
 
   /**
    * Reference to the list of other priority rules
    */
-  @ViewChild('othersList', {static: false}) private othersList: CdkDropList<PriorityRule[]>;
+  @ViewChild('othersList') private othersList: CdkDropList<PriorityRule[]>;
 
   constructor(public storage: StorageService, private snackBar: MatSnackBar) {
   }

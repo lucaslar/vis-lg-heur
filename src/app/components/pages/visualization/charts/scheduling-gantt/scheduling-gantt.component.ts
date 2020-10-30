@@ -37,17 +37,17 @@ export class SchedulingGanttComponent implements OnInit {
   /**
    * Reference to the conainer of this component
    */
-  @ViewChild('container', {static: false}) container: ElementRef;
+  @ViewChild('container') container: ElementRef;
 
   /**
    * Reference to the chart container
    */
-  @ViewChild('chartContainer', {static: false}) chartContainer: ElementRef;
+  @ViewChild('chartContainer') chartContainer: ElementRef;
 
   /**
    * Reference to the console below the chart
    */
-  @ViewChild('chartConsole', {static: false}) operationConsole: ElementRef;
+  @ViewChild('chartConsole') operationConsole: ElementRef;
 
   /**
    * Represents whether the chart is visible or not

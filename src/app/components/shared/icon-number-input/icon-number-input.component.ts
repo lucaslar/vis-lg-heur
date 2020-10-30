@@ -10,7 +10,7 @@ export class IconNumberInputComponent implements OnInit {
   /**
    * Reference to the input field itself
    */
-  @ViewChild('inputField', {static: false}) inputFieldRef: ElementRef;
+  @ViewChild('inputField') inputFieldRef: ElementRef;
 
   /**
    * Reference to the icon displayed next to the input field

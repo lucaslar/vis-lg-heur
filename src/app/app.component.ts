@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   /**
    * Side navigation bar
    */
-  @ViewChild('snav', {static: false}) private snav: MatSidenav;
+  @ViewChild('snav') private snav: MatSidenav;
 
   /**
    * Query to be used in order to check the screen size/if elements have to be adjusted
